@@ -1,0 +1,30 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+//@import '~bootstrap/scss/utilities';
+@import '~bootstrap/scss/mixins';
+
+
+// Style statistics card content for mobile visualization
+.statistics-card-body {
+  height: 400px;
+}
+
+
+.statistics-card-body {
+  // TODO Style statistics card content for desktop visualization
+  @include media-breakpoint-up(md) {
+    // Update height
+    height: 400px;
+  }
+}
+
+//// Set style for plot
+//plotly-plot {
+//  display: block;
+//  //width: 100%;
+//  height: 100%;
+//}
+
+
+
+

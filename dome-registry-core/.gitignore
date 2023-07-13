@@ -1,0 +1,7 @@
+
+# Project exclude paths
+.idea
+/dist/
+/node_modules/
+/src/review.d.ts
+/index.d.ts

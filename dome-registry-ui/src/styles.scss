@@ -1,0 +1,100 @@
+@import "styles/theme";
+@import "styles/validation";
+@import "styles/animations";
+@import "styles/scrollbar";
+@import "styles/overflow";
+@import "styles/cursor";
+
+// Define gradient background
+.bg-primary.bg-gradient {
+  background: linear-gradient(90deg, shift-color($primary, 60%), $primary) !important;
+}
+
+// Define gradient progress
+.progress.progress-gradient {
+  // Set positioning
+  position: relative;
+  // Set display as flex
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  // Make children start from opposite parts
+  justify-content: flex-start;
+  // Make children fill the whole height
+  align-items: stretch;
+  // Do not set background
+  background: transparent;
+  // Set foreground as transparent
+  .progress-bar {
+    // Show bar
+    display: block;
+    // Allow progress bar to get all the space required
+    flex-shrink: 0;
+    // Show what's behind
+    background: transparent;
+  }
+}
+.progress.progress-gradient:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: .375rem;
+  border: 1px solid white;
+  background: linear-gradient(90deg, $danger, lighten($primary, 25%));
+}
+.progress.progress-gradient:after {
+  // No content
+  content: '';
+  position: relative;
+  // Fit remaining content
+  flex-grow: 1;
+  // Hide what's behind
+  background: $light;
+  // Set border to match progress bar
+  border: 1px solid white;
+  border-left: 0;
+  // Define border radius
+  border-radius: 0 .375rem .375rem 0;
+  //// Set z-index
+  //z-index: 1;
+}
+
+// Apply invalid style to all invalid fields
+.ng-invalid.ng-touched {
+  // Apply style to input fields
+  textarea, input, select {
+    // Select only invalid fields
+    &.ng-invalid:not(.ng-untouched) {
+      @extend .is-invalid;
+      background-color: tint-color($form-feedback-invalid-color, 90%) !important;
+    }
+  }
+}
+
+// Define ORCID-coloured button
+.btn-orcid {
+  @include button-variant($orcid-green, darken($orcid-green, 7.5%), $white, lighten($orcid-green, 5%), lighten($orcid-green, 10%), darken($orcid-green, 30%));
+}
+// Define ORCID-coloured outline button
+.btn-outline-orcid {
+  @include button-outline-variant($orcid-green, #222222, lighten($orcid-green, 5%), $orcid-green);
+}
+// Define ORCID text
+.orcid-text {
+  color: $orcid-green;
+}
+
+// Define logos
+.logo-sm {
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+.logo-lg {
+  display: inline-block;
+  height: 8rem;
+  width: 8rem;
+}

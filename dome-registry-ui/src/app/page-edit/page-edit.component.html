@@ -1,0 +1,490 @@
+<!-- Outer scaffold -->
+<div class="d-flex flex-column h-100 w-100">
+  <!-- Retrieve review, if any -->
+  <ng-container *ngIf="review$ | async as review">
+    <!-- Case user is authorized, show edit form -->
+    <ng-container *ngIf="user?.auth || review.uuid; else signInFirst">
+      <!-- Inner scaffold   -->
+      <div class="container-fluid flex-grow-1 bg-light overflow-auto" [root]="element" [target]="'#links'" scroll-spy>
+        <div class="row position-relative">
+          <!-- Left shoulder -->
+          <div class="col-2 d-none d-md-block position-fixed h-100 overflow-auto">
+            <!-- Vertical navigation -->
+            <card-nav id="links" class="d-block mt-3 mb-3">
+              <a class="nav-link" [routerLink]="[]" fragment="publication" link>Publication</a>
+              <a class="nav-link" [routerLink]="[]" fragment="dataset" link>Dataset</a>
+              <a class="nav-link" [routerLink]="[]" fragment="optimization" link>Optimization</a>
+              <a class="nav-link" [routerLink]="[]" fragment="model" link>Model</a>
+              <a class="nav-link" [routerLink]="[]" fragment="evaluation" link>Evaluation</a>
+            </card-nav>
+            <!-- Score wrapper -->
+            <card-template id="scores" class="d-block mb-3">
+              <!-- Define card title -->
+              <h4 title>Score</h4>
+              <!-- Define card body -->
+              <div class="d-block w-100 h-auto p-1" body>
+                <!-- Table header -->
+                <div class="d-flex flex-row flex-nowrap text-capitalize w-100 h-auto">
+                  <strong class="text-primary" style="flex: 1;">Section</strong>
+                  <strong class="text-primary" style="flex: 0 0 8rem;">Score</strong>
+                </div>
+                <!-- Table body -->
+                <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
+                  <!-- Define name for current field -->
+                  <ng-container *ngIf="kv.key as name">
+                    <!-- Define statistics for current field -->
+                    <ng-container *ngIf="kv.value as score">
+                      <!-- Define container -->
+                      <div class="d-flex flex-row flex-nowrap text-capitalize w-100 h-auto"
+                           [class.fw-bold]="name == 'total'">
+                        <span style="flex: 1">{{name}}</span>
+                        <span style="flex: 0 0 8rem">{{score.done}} / {{score.done + score.skip}} ({{score.percentage!.toFixed(0)}}%)</span>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+                <!-- Describe DOME score -->
+                <small class="d-block text-muted w-100 h-auto mt-1">
+                  The DOME score is compute as the number of valid fields, divided by the total number of fields
+                </small>
+              </div>
+            </card-template>
+          </div>
+          <!-- Main content -->
+          <div class="col-12 col-md-8 offset-md-2 position-relative">
+            <form [formGroup]="updates">
+              <!-- 1st section: publication -->
+              <card-section id="publication" formGroupName="publication" class="d-block py-3">
+                <!-- Section title -->
+                <h4 title>Publication <i class="bi bi-file-earmark-text-fill"></i></h4>
+                <!-- Section form -->
+                <div fields>
+                  <!-- Publication title -->
+                  <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <textarea class="form-control" id="title" aria-describedby="title-help" formControlName="title"
+                              [readonly]="review.public"></textarea>
+                    <div id="title-help" class="form-text">Title of the article</div>
+                  </div>
+                  <!-- Authors -->
+                  <div class="mb-3">
+                    <label for="authors" class="form-label">Authors</label>
+                    <textarea class="form-control" id="authors" aria-describedby="authors-help" formControlName="authors"
+                              [readonly]="review.public"></textarea>
+                    <div id="authors-help" class="form-text">Authors which contributes to the article</div>
+                  </div>
+                  <!-- Publication journal -->
+                  <div class="mb-3">
+                    <label for="journal" class="form-label">Publication journal</label>
+                    <input type="text" class="form-control" id="journal" aria-describedby="journal-help"
+                           formControlName="journal" [readonly]="review.public">
+                    <div id="journal-help" class="form-text">Name of the journal where the paper has been published</div>
+                  </div>
+                  <!-- Publication year -->
+                  <div class="mb-3">
+                    <label for="year" class="form-label">Publication year</label>
+                    <input type="text" class="form-control" id="year" aria-describedby="year-help" formControlName="year"
+                           [readonly]="review.public">
+                    <div id="year-help" class="form-text">Year of publication, as a number</div>
+                  </div>
+                  <!-- Publication PubMed ID -->
+                  <div class="mb-3">
+                    <label for="pmid" class="form-label">PubMed ID</label>
+                    <input type="text" class="form-control" id="pmid" aria-describedby="pmid-help" formControlName="pmid"
+                           [readonly]="review.public">
+                    <div id="pmid-help" class="form-text">Unique identifier of the reviewed article within PubMed</div>
+                  </div>
+                  <!-- Publication DOI -->
+                  <div class="mb-3">
+                    <label for="doi" class="form-label">DOI</label>
+                    <input type="text" class="form-control" id="doi" aria-describedby="doi-help" formControlName="doi"
+                           [readonly]="review.public">
+                    <div id="doi-help" class="form-text">DOI of the published article</div>
+                  </div>
+                </div>
+              </card-section>
+              <!-- 2nd section: dataset -->
+              <card-section id="dataset" formGroupName="dataset" class="d-block pb-3">
+                <!-- Section title -->
+                <h4 title>Dataset <i class="bi bi-server"></i></h4>
+                <!-- Section fields -->
+                <div fields>
+                  <!-- Dataset source -->
+                  <div class="mb-3">
+                    <label for="data-source" class="form-label">Dataset source</label>
+                    <textarea class="form-control" id="data-source" aria-describedby="data-source-help"
+                              formControlName="provenance" [readonly]="review.public"></textarea>
+                    <div id="data-source-help" class="form-text">
+                      <ul>
+                        <li>Source of the dataset?</li>
+                        <li>Number of data points?</li>
+                        <li>Data used in previous paper and/or by community?</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Dataset splits -->
+                  <div class="mb-3">
+                    <label for="data-splits" class="form-label">Dataset splits</label>
+                    <textarea class="form-control" id="data-splits" aria-describedby="data-splits-help"
+                              formControlName="splits" [readonly]="review.public"></textarea>
+                    <div id="data-splits-help" class="form-text">
+                      <ul>
+                        <li>How many data splits?</li>
+                        <li>How many data points in each split?</li>
+                        <li>
+                          If number of data splits is greater than two (2), what where other splits? (e.g.
+                          cross-validation,
+                          validation set, independent test)
+                        </li>
+                        <li>
+                          What is the distribution of data points in each data split? (e.g. number of + and - cases in
+                          classification or frequency distribution in regression)?
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Dataset redundancy -->
+                  <div class="mb-3">
+                    <label for="data-redundancy" class="form-label">Dataset redundancy</label>
+                    <textarea class="form-control" id="data-redundancy" aria-describedby="data-redundancy-help"
+                              formControlName="redundancy" [readonly]="review.public"></textarea>
+                    <div id="data-redundancy-help" class="form-text">
+                      <ul>
+                        <li>How were the datasets split?</li>
+                        <li>Are the training and test sets independent?</li>
+                        <li>How was this enforced (e.g. redundancy reduction to less than x% pairwise identity)?</li>
+                        <li>How does the distribution compare to previously published ML datasets in the biological field?
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- TODO Dataset ava -->
+                  <div class="mb-3">
+                    <label for="data-redundancy" class="form-label">Dataset availability</label>
+                    <textarea class="form-control" id="data-availability" aria-describedby="data-redundancy-help"
+                              formControlName="availability" [readonly]="review.public"></textarea>
+                    <div id="data-availability-help" class="form-text">
+                      <ul>
+                        <li>How were the datasets split?</li>
+                        <li>Are the training and test sets independent?</li>
+                        <li>How was this enforced (e.g. redundancy reduction to less than x% pairwise identity)?</li>
+                        <li>How does the distribution compare to previously published ML datasets in the biological field?
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </card-section>
+              <!-- 3rd section: optimization -->
+              <card-section id="optimization" formGroupName="optimization" class="d-block pb-3">
+                <h4 title>Optimization <i class="bi bi-graph-up-arrow"></i></h4>
+                <div fields>
+                  <!-- Optimization algorithm -->
+                  <div class="mb-3">
+                    <label for="optim-algorithm" class="form-label">Optimization algorithm</label>
+                    <textarea class="form-control" id="optim-algorithm" aria-describedby="optim-algorithm-help"
+                              formControlName="algorithm" [readonly]="review.public"></textarea>
+                    <div id="optim-algorithm-help" class="form-text">
+                      <ul>
+                        <li>What is the machine-learning algorithm class used?</li>
+                        <li>Is the machine-learning algorithm new?</li>
+                        <li>
+                          If it is a new ML algorithm, why was it not published in a machine-learning journal,
+                          and why was it chosen over better known alternatives?
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Meta-predictor -->
+                  <div class="mb-3">
+                    <div class="form-check pb-2">
+                      <input class="form-check-input" type="checkbox" value="" id="optim-is-meta">
+                      <label class="form-check-label" for="optim-is-meta">
+                        Is the algorithm a meta-predictor?
+                      </label>
+                    </div>
+                    <textarea class="form-control" id="optim-meta-desc" aria-describedby="optim-meta-desc-help"
+                              formControlName="meta" [readonly]="review.public"></textarea>
+                    <div id="optim-meta-desc-help" class="form-text">
+                      <ul>
+                        <li>Does the model use data from other machine-learning algorithms as input (i.e. it is a
+                          meta-predictor)?
+                        </li>
+                        <li>If it is a meta-predictor, which machine-learning methods constitute the whole?</li>
+                        <li>
+                          If it is a meta-predictor, is it completely clear that training data of initial predictors and
+                          meta-predictor is independent of test data for the meta-predictor?
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Data encoding -->
+                  <div class="mb-3">
+                    <label for="optim-encoding" class="form-label">Data encoding</label>
+                    <textarea class="form-control" id="optim-encoding" aria-describedby="optim-encoding-help"
+                              formControlName="encoding" [readonly]="review.public"></textarea>
+                    <div id="optim-encoding-help" class="form-text">
+                      How was the data encoded and pre-processed for the machine-learning algorithm?
+                    </div>
+                  </div>
+                  <!-- Input parameters -->
+                  <div class="mb-3">
+                    <label for="optim-params" class="form-label">Input parameters</label>
+                    <textarea class="form-control" id="optim-params" aria-describedby="optim-params-help"
+                              formControlName="parameters" [readonly]="review.public"></textarea>
+                    <div id="optim-params-help" class="form-text">
+                      <ul>
+                        <li>How many parameters (p) are used in the model?</li>
+                        <li>How was p selected?</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Input features -->
+                  <div class="mb-3">
+                    <label for="optim-features" class="form-label">Input features</label>
+                    <textarea class="form-control" id="optim-features" aria-describedby="optim-features-help"
+                              formControlName="features" [readonly]="review.public"></textarea>
+                    <div id="optim-features-help" class="form-text">
+                      <ul>
+                        <li>How many features (f) are used as input?</li>
+                        <li>Was feature selection performed?</li>
+                        <li>If feature selection performed, was it done using the training set only?</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Fitting method -->
+                  <div class="mb-3">
+                    <label for="optim-fitting" class="form-label">Fitting method</label>
+                    <textarea class="form-control" id="optim-fitting" aria-describedby="optim-fitting-help"
+                              formControlName="fitting" [readonly]="review.public"></textarea>
+                    <div id="optim-fitting-help" class="form-text">
+                      <ul>
+                        <li>
+                          Is the number of parameters (p) much larger than the number of training points and/or is the
+                          number of features (f) large (e.g. in classification is p>>(Npos+Nneg) and/or f>100)?
+                        </li>
+                        <li>If yes to previous question, how was over-fitting ruled out?</li>
+                        <li>
+                          Conversely, if the number of training points seem very much larger than p and/or f is small how
+                          was under-fitting ruled out?
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Regularization method -->
+                  <div class="mb-3">
+                    <label for="optim-regular" class="form-label">Regularization method</label>
+                    <textarea class="form-control" id="optim-regular" aria-describedby="optim-regular-help"
+                              formControlName="regularization" [readonly]="review.public"></textarea>
+                    <div id="optim-regular-help" class="form-text">
+                      <ul>
+                        <li>Were any over-fitting prevention techniques performed (e.g. early stopping using a validation
+                          set)?
+                        </li>
+                        <li>If yes, which ones?</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Configuration availability -->
+                  <div class="mb-3">
+                    <label for="optim-config" class="form-label">Configuration available</label>
+                    <textarea class="form-control" id="optim-config" aria-describedby="optim-config-help"
+                              formControlName="config" [readonly]="review.public"></textarea>
+                    <div id="optim-config-help" class="form-text">
+                      <ul>
+                        <li>
+                          Are the hyper-parameter configurations, optimization schedule, model files and optimization
+                          parameters reported available?
+                        </li>
+                        <li>
+                          If yes, where (e.g. URL) and how (license)?
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </card-section>
+              <!-- 4th section: model -->
+              <card-section id="model" formGroupName="model" class="d-block pb-3">
+                <h4 title>Model <i class="bi bi-gear-wide-connected"></i></h4>
+                <div fields>
+                  <!-- Model interpretability -->
+                  <div class="mb-3">
+                    <label for="model-inter" class="form-label">Interpretability</label>
+                    <textarea class="form-control" id="model-inter" aria-describedby="model-inter-help"
+                              formControlName="interpretability" [readonly]="review.public"></textarea>
+                    <div id="model-inter-help" class="form-text">
+                      <ul>
+                        <li>Is the model blackbox or transparent?</li>
+                        <li>If the model is transparent, can you give clear examples for this?</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Model output -->
+                  <div class="mb-3">
+                    <label for="model-out" class="form-label">Output</label>
+                    <textarea class="form-control" id="model-out" aria-describedby="model-out-help"
+                              formControlName="output" [readonly]="review.public"></textarea>
+                    <div id="model-out-help" class="form-text">
+                      Is the model classification or regression?
+                    </div>
+                  </div>
+                  <!-- Execution time -->
+                  <div class="mb-3">
+                    <label for="model-time" class="form-label">Execution time</label>
+                    <input type="text" class="form-control" id="model-time" aria-describedby="model-time-help"
+                           formControlName="duration" [readonly]="review.public">
+                    <div id="model-time-help" class="form-text">
+                      How much time did it take for the model to run
+                    </div>
+                  </div>
+                  <!-- Software availability -->
+                  <div class="mb-3">
+                    <label for="model-avail" class="form-label">Software availability</label>
+                    <textarea class="form-control" id="model-avail" aria-describedby="model-avail-help"
+                              formControlName="availability" [readonly]="review.public"></textarea>
+                    <div id="model-avail-help" class="form-text">
+                      <ul>
+                        <li>Is the source code released?</li>
+                        <li>Is a method to run the algorithm such as executable, web server, virtual machine or container
+                          instance released?
+                        </li>
+                        <li>If yes to public release, where (e.g. URL) and how (license)?</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </card-section>
+              <!-- 5th section: evaluation -->
+              <card-section id="evaluation" formGroupName="evaluation" class="d-block pb-3">
+                <h4 title>Evaluation <i class="bi bi-clipboard2-check-fill"></i></h4>
+                <div fields>
+                  <!-- Evaluation method -->
+                  <div class="mb-3">
+                    <label for="eval-method" class="form-label">Evaluation method</label>
+                    <textarea class="form-control" id="eval-method" aria-describedby="eval-method-help"
+                              formControlName="method" [readonly]="review.public"></textarea>
+                    <div id="eval-method-help" class="form-text">
+                      How was the method evaluated? (E.g. cross-validation, independent dataset, novel experiments)
+                    </div>
+                  </div>
+                  <!-- Performance measures -->
+                  <div class="mb-3">
+                    <label for="model-out" class="form-label">Performance measures</label>
+                    <textarea class="form-control" id="eval-perform" aria-describedby="eval-perform-help"
+                              formControlName="measure" [readonly]="review.public"></textarea>
+                    <div id="eval-perform-help" class="form-text">
+                      <ul>
+                        <li>Which performance metrics are reported?</li>
+                        <li>Is this set of metrics representative (e.g. compared to the literature)?</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Methods comparison -->
+                  <div class="mb-3">
+                    <label for="eval-comparison" class="form-label">Methods comparison</label>
+                    <input type="text" class="form-control" id="eval-comparison" aria-describedby="eval-comparison-help"
+                           formControlName="comparison" [readonly]="review.public">
+                    <div id="eval-comparison-help" class="form-text">
+                      <ul>
+                        <li>Was a comparison to publicly available methods performed on benchmark datasets?</li>
+                        <li>Was a comparison to simpler baselines performed?</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Evaluation confidence -->
+                  <div class="mb-3">
+                    <label for="eval-confidence" class="form-label">Evaluation confidence</label>
+                    <textarea class="form-control" id="eval-confidence" aria-describedby="eval-confidence-help"
+                              formControlName="confidence" [readonly]="review.public"></textarea>
+                    <div id="eval-confidence-help" class="form-text">
+                      <ul>
+                        <li>Do the performance metrics have confidence intervals?</li>
+                        <li>
+                          Are the results statistically significant to claim that the method
+                          is superior to others and baselines?
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- Evaluation availability -->
+                  <div class="mb-3">
+                    <label for="eval-available" class="form-label">Evaluation availability</label>
+                    <textarea class="form-control" id="eval-available" aria-describedby="eval-available-help"
+                              formControlName="availability" [readonly]="review.public"></textarea>
+                    <div id="eval-available-help" class="form-text">
+                      <ul>
+                        <li>
+                          Are the raw evaluation files (e.g. assignments for comparison and baselines,
+                          statistical code, confusion matrices) available?
+                        </li>
+                        <li>If public released, where (e.g. URL) and how (license)?</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </card-section>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom container, actions -->
+      <div class="container-fluid flex-shrink-0 bg-white shadow-sm overflow-hidden" *ngIf="user?.auth && !review.public">
+        <!-- Actions form -->
+        <form [formGroup]="actions" class="row py-3 py-1">
+          <!-- UUID of current review -->
+          <div class="col-12 col-md-6 py-1">
+            <!-- Case review is set -->
+            <small>Unique identifer</small><br>
+            <strong [class.text-primary]="!!review.uuid" [class.text-muted]="!review.uuid">
+              {{ review.uuid || '-' }}
+            </strong>
+          </div>
+          <!-- Buttons -->
+          <div class="col-12 col-md-6 d-flex flex-row flex-nowrap py-1">
+            <!-- Delete button -->
+            <button class="btn btn-danger ms-auto me-0" type="button" [disabled]="!review.uuid" (click)="onDeleteClick($event)">
+              Delete&nbsp;<i class="bi bi-x-square d-none d-md-inline"></i>
+            </button>
+            <!-- Save button -->
+            <button class="btn btn-primary ms-3 me-0" type="button" (click)="onSaveClick($event)">
+              Save&nbsp;<i class="bi bi-save d-none d-md-inline"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </ng-container>
+    <!-- Otherwise, ask user to sign in -->
+    <ng-template #signInFirst>
+      <!-- Inner scaffold -->
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12 col-md-8 offset-md-2">
+            <card-template class="d-block shadow-sm mt-3">
+              <!-- Set card title -->
+              <h4 title>Submit</h4>
+              <!-- Set card body -->
+              <div body>
+                <p class="d-block mb-3">
+                  DOME registry allows you submit your own annotations. Submitted annotations will go through a manual
+                  revision process and will eventually be published. Published annotations will be made publicly available
+                  and will no longer be editable. Instead, unpublished annotations can only be viewed, edited or deleted
+                  by you.
+                </p>
+                <p class="d-block mb-3">
+                  However, only authorized users can access this functionality.
+                  Therefore, please sign in through ORCID if you want to use the service.
+                </p>
+                <div class="d-flex flex-row flex-wrap justify-content-center align-items-center">
+                  <a class="btn btn-orcid" [href]="login" role="button">
+                    Sign in&nbsp;<i class="bi bi-person-circle"></i>
+                  </a>
+                </div>
+              </div>
+            </card-template>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </ng-container>
+</div>

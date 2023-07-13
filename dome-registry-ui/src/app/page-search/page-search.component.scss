@@ -1,0 +1,18 @@
+@import "/src/styles/cursor";
+@import "/src/styles/flip";
+
+.sort-item {
+  @extend .cursor-pointer;
+}
+
+.sort-item > i {
+  visibility: hidden;
+}
+
+.sort-item.sort-asc > i {
+  @extend .flip-180;
+}
+
+.sort-item.sort-selected > i {
+  visibility: visible !important;
+}

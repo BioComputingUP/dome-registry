@@ -1,0 +1,133 @@
+<!-- Outer scaffold -->
+<div class="d-flex flex-column flex-nowrap h-100 w-100 bg-light">
+  <!-- Search input -->
+  <div class="d-block position-relative flex-shrink-0 bg-white py-3 mb-3">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 col-md-8 offset-md-2">
+          <form class="d-flex flex-row flex-nowrap align-items-center">
+            <!-- Search text -->
+            <div class="flex-grow-1 ms-0 me-3">
+              <input type="text" class="form-control" placeholder="Search..." id="search-text" (keyup)="onTextChange($event)">
+            </div>
+            <!-- Public switch -->
+            <div class="flex-shrink-0 ms-0 me-0">
+              <div class="form-check form-switch" *ngIf="public$ | async as public_">
+                <input class="form-check-input" type="checkbox" id="search-public" (click)="onPublicChange(public_ !== 'true')" [disabled]="!auth" checked>
+                <label class="form-check-label" for="search-public">Public</label>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Search results -->
+  <div class="d-block position-relative flex-grow-1 bg-light">
+    <!-- Table body (scrollable) -->
+    <div class="position-absolute left-0 top-0 w-100 h-100 bg-transparent overflow-scroll" scroll-end (end$)="onScrollEnd()">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12 col-md-8 offset-md-2">
+            <!-- Main card -->
+            <div class="card shadow-sm mb-2" style="pointer-events: all">
+              <!-- Card header -->
+              <div class="card-header text-white bg-primary">
+                <h4 class="d-block w-100 h-auto">Annotations</h4>
+                <div class="d-flex flex-row flex-nowrap justify-content-around w-100">
+                  <div>Title <i class="bi bi-caret-down-fill"></i></div>
+                  <div>Authors <i class="bi bi-caret-down-fill"></i></div>
+                  <div>Year <i class="bi bi-caret-down-fill"></i></div>
+                  <div>Score <i class="bi bi-caret-down-fill"></i></div>
+                </div>
+              </div>
+              <!-- Card body -->
+              <div class="card-body">
+                <div class="d-block mb-3" *ngFor="let review of results$ | async">
+                  <!-- Show review title -->
+                  <h4 class="text-primary cursor-pointer mb-0" [routerLink]="['/review', review.uuid]">
+                    {{review.publication.title || 'Undefined'}}
+                  </h4>
+                  <!-- Show matching fields -->
+                  <ng-container *ngIf="review.matches!.size > 0">
+                    <p class="mb-0">
+                      <strong>Matching fields</strong>
+                    </p>
+                    <p class="cursor-pointer ps-1 mb-0" *ngFor="let item of review.matches | keyvalue" [routerLink]="['/review', review.uuid]" [fragment]="item.key.split('/').pop()">
+                      <!-- Show field name -->
+                      <strong>{{item.key}}&nbsp;</strong>
+                      <!-- Show matching value -->
+                      <ng-container *ngIf="item.value as match">
+                        <span>{{match.prefix}}</span>
+                        <mark>{{match.match}}</mark>
+                        <span>{{match.suffix}}</span>
+                      </ng-container>
+                    </p>
+                  </ng-container>
+                  <!-- Show authors -->
+                  <p class="mb-0">
+                    <strong>Authors&nbsp;</strong>
+                    <span>{{review.publication.authors}}</span>
+                  </p>
+                  <!-- Show DOI, journal name and date-->
+                  <p class="mb-0">
+                    <strong>Publication&nbsp;</strong>
+                    <!-- Case DOI is set -->
+                    <a *ngIf="review.publication.doi" [href]="'https://pubmed.ncbi.nlm.nih.gov/' + review.publication.pmid">
+                      {{review.publication.doi}}<i class="bi bi-link-45deg"></i>
+                    </a>
+                    <!-- Show journal and date -->
+                    <span>{{review.publication.journal || '-'}}, {{review.publication.year || '-'}}</span>
+                  </p>
+                  <!-- Show DOME score -->
+                  <div class="d-flex flex-row flex-nowrap align-items-center align-content-stretch mb-0">
+                    <strong class="d-block">Score&nbsp;</strong>
+                    <div class="d-block">{{review.score!.toFixed(2)}}&nbsp;</div>
+                    <!-- Container for progress bar -->
+                    <div class="d-block h-100" style="width: 10rem">
+                      <div class="progress progress-gradient">
+                        <div class="progress-bar" role="progressbar" aria-label="DOME score" [style.width]="(review.score! * 100).toFixed(0) + '%'" [attr.aria-valuenow]="(review.score! * 100).toFixed(2)" [attr.aria-valuemin]="0" [attr.aria-valuemax]="100"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Table header (fixed) -->
+    <div class="position-absolute left-0 top-0 w-100 h-auto bg-transparent overflow-scroll invisible" style="pointer-events: none">
+      <div class="container-fluid bg-light visible">
+        <div class="row">
+          <div class="col-12 col-md-8 offset-md-2">
+            <div class="card" style="pointer-events: all">
+              <div class="card-header text-white bg-primary">
+                <h4 class="d-block w-100 h-auto">Annotations</h4>
+                <div class="d-flex flex-row flex-nowrap justify-content-around w-100">
+                  <!-- Get current query -->
+                  <ng-container *ngIf="sort$ | async as sort">
+                    <!-- List sort options -->
+                    <div class="sort-item" [class.sort-asc]="sort.asc === 'true'" [class.sort-selected]="sort.by === 'publication.title'" (click)="onSortChange('publication.title')">
+                      Title <i class="bi bi-caret-down-fill"></i>
+                    </div>
+                    <div class="sort-item" [class.sort-asc]="sort.asc === 'true'" [class.sort-selected]="sort.by === 'publication.authors'" (click)="onSortChange('publication.authors')">
+                      Authors <i class="bi bi-caret-down-fill"></i>
+                    </div>
+                    <div class="sort-item" [class.sort-asc]="sort.asc === 'true'" [class.sort-selected]="sort.by === 'publication.year'" (click)="onSortChange('publication.year')">
+                      Year <i class="bi bi-caret-down-fill"></i>
+                    </div>
+                    <div class="sort-item" [class.sort-asc]="sort.asc === 'true'" [class.sort-selected]="sort.by === 'score'" (click)="onSortChange('score')">
+                      Score <i class="bi bi-caret-down-fill"></i>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

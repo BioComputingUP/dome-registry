@@ -1,0 +1,105 @@
+<!-- Outer scaffold -->
+<div class="container-fluid overflow-y-scroll h-100" [root]="element" [target]="'#links'" scroll-spy>
+  <!-- 1st layer: static content -->
+  <div class="row position-relative mt-3">
+    <!-- Define leftmost column -->
+    <div class="col-2 d-none d-md-block position-fixed">
+      <!-- Navbar scaffold -->
+      <card-nav id="links" class="d-block mb-3">
+        <a class="nav-link active" [routerLink]="[]" fragment="journal" link>Journal</a>
+        <a class="nav-link" [routerLink]="[]" fragment="score" link>Score</a>
+        <a class="nav-link ms-3" [routerLink]="[]" fragment="score-total" link>Total</a>
+        <a class="nav-link ms-3" [routerLink]="[]" fragment="score-publication" link>Publication</a>
+        <!--        <a class="nav-link ms-3" [routerLink]="[]" fragment="score-dataset" link>Dataset</a>-->
+        <a class="nav-link ms-3" [routerLink]="[]" fragment="score-optimization" link>Optimization</a>
+        <a class="nav-link ms-3" [routerLink]="[]" fragment="score-model" link>Model</a>
+        <a class="nav-link ms-3" [routerLink]="[]" fragment="score-evaluation" link>Evaluation</a>
+        <a class="nav-link" [routerLink]="[]" fragment="year" link>Year</a>
+        <!--        <a class="nav-link" [routerLink]="[]" fragment="user" link>Annotator</a>-->
+      </card-nav>
+    </div>
+    <!-- Define middle column -->
+    <div class="col-12 col-md-8 offset-md-2 h-auto">
+      <!-- 1st section: number of papers per journal -->
+      <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'Journal', id: 'journal', graph: journal$ | async }"></ng-container>
+      <!-- 2nd section: DOME score distribution, for each section -->
+      <ng-container id="score">
+        <!-- DOME score: total distribution -->
+<!--        <card-template id="score-total" class="d-block mb-3" *ngIf="score['total'] as graph">-->
+<!--          <h4 title>DOME score (overall)</h4>-->
+<!--          <div body>-->
+<!--            <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>-->
+<!--          </div>-->
+<!--        </card-template>-->
+        <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['total'] }"></ng-container>
+         <!-- DOME score: dataset distribution -->
+        <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (dataset)', id: 'score-dataset', graph: (score$ | async)?.['dataset'] }"></ng-container>
+<!--        <card-template *ngIf="score['dataset'] as graph" id="score-dataset" class="d-block mb-3">-->
+<!--          <h4 title>DOME score (section: dataset)</h4>-->
+<!--          <div body>-->
+<!--            <plotly-plot [data]="graph.data" [layout]="graph.layout" [useResizeHandler]="true"></plotly-plot>-->
+<!--          </div>-->
+<!--        </card-template>-->
+        <!-- DOME score: optimization distribution -->
+<!--        <card-template *ngIf="score['optimization'] as graph" id="score-optimization" class="d-block mb-3">-->
+<!--          <h4 title>DOME score (section: optimization)</h4>-->
+<!--          <div body>-->
+<!--            <plotly-plot [data]="graph.data" [layout]="graph.layout" [useResizeHandler]="true"></plotly-plot>-->
+<!--          </div>-->
+<!--        </card-template>-->
+        <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (optimization)', id: 'score-optimization', graph: (score$ | async)?.['optimization'] }"></ng-container>
+        <!-- DOME score: model distribution -->
+<!--        <card-template *ngIf="score['model'] as graph" id="score-model" class="d-block mb-3">-->
+<!--          <h4 title>DOME score (section: model)</h4>-->
+<!--          <div body>-->
+<!--            <plotly-plot [data]="graph.data" [layout]="graph.layout" [useResizeHandler]="true"></plotly-plot>-->
+<!--          </div>-->
+<!--        </card-template>-->
+        <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (model)', id: 'score-model', graph: (score$ | async)?.['model'] }"></ng-container>
+        <!-- DOME score: evaluation distribution -->
+<!--        <card-template *ngIf="score['evaluation'] as graph" id="score-evaluation" class="d-block mb-3">-->
+<!--          <h4 title>DOME score (section: evaluation)</h4>-->
+<!--          <div body>-->
+<!--            <plotly-plot [data]="graph.data" [layout]="graph.layout" [useResizeHandler]="true"></plotly-plot>-->
+<!--          </div>-->
+<!--        </card-template>-->
+        <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (evaluation)', id: 'score-evaluation', graph: (score$ | async)?.['evaluation'] }"></ng-container>
+      </ng-container>
+      <!-- 3rd section: number of papers per year -->
+      <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'Year', id: 'year', graph: (year$ | async) }"></ng-container>
+      <!--      <card-template id="year" class="d-block mb-3">-->
+<!--        <h4 title>Year</h4>-->
+<!--        <div body>-->
+<!--          <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config" *ngIf="year$ | async as graph" ></plotly-plot>-->
+<!--        </div>-->
+<!--      </card-template>-->
+    </div>
+  </div>
+</div>
+
+<!-- Define template for graph -->
+<ng-template let-id='id' let-title='title' let-graph='graph' #section>
+  <!-- Actual card -->
+  <card-template class="d-block mb-3" id="{{id}}">
+    <!-- Set card title -->
+    <h4 title>{{title}}</h4>
+    <!-- Set card body -->
+    <div body>
+      <!-- Define statistics card body -->
+      <div class="statistics-card-body">
+        <!-- Case graph is not set -->
+        <div class="d-flex align-items-center justify-content-center w-100 h-100" *ngIf="!graph">
+          <!-- Show spinner -->
+          <div class="spinner-grow text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        <!-- Otherwise -->
+        <div class="d-block overflow-hidden w-100 h-100" *ngIf="!!graph">
+          <!-- Show graph -->
+          <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
+        </div>
+      </div>
+    </div>
+  </card-template>
+</ng-template>

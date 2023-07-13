@@ -1,0 +1,24 @@
+// Import bootstrap variables
+@import '../styles/theme';
+
+// Works on Firefox
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $primary $light;
+}
+
+// Works on Chrome, Edge, and Safari
+*::-webkit-scrollbar {
+  width: .5rem;
+  height: .5rem;
+}
+
+*::-webkit-scrollbar-track {
+  background: $light;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: $dark;
+  border-radius: 1rem;
+  border: 1rem solid $primary;
+}
