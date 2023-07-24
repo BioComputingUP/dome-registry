@@ -2,8 +2,10 @@ import {Controller, Get, Post, Req, Res, UseGuards} from "@nestjs/common";
 import {ConfigService} from "@nestjs/config";
 import {JwtAuthService} from "../jwt-auth/jwt-auth.service";
 import {OrcidOauthGuard} from "./orcid-oauth.guard";
+import { ApiTags, ApiOperation, ApiOAuth2 } from "@nestjs/swagger";
 
 
+@ApiTags('auth/orcid')
 @Controller("auth/orcid")
 export class OrcidOauthController {
 

@@ -7,8 +7,11 @@ import {JwtAuthGuard} from "../jwt-auth/jwt-auth.guard";
 import {UserInterceptor} from "../user/user.interceptor";
 import {UserService} from "../user/user.service";
 import {User} from "../user/user.decorator";
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 
+
+@ApiTags('Reviews')
 @Controller('review')
 @UseInterceptors(UserInterceptor)  // Add non-blocking user retrieval pipeline
 export class ReviewController {
@@ -19,7 +22,10 @@ export class ReviewController {
         private readonly userService: UserService,
     ) {}
 
+
+    //**----------Get All revies-------- **/
     @Get()
+    @ApiOperation({summary: 'Get reviews from the API '})
     async findAll(@Query() query: ListReviewsDto, @User() user) {
         // Define search parameters
         let _query = {
@@ -34,7 +40,24 @@ export class ReviewController {
         return this.reviewService.findAll(_query, _sort, user);
     }
 
+
+
+//**---------------Get Review by short-id ------------**/
     @Get(':uuid')
+    @ApiOperation({summary: 'find one review'})
+   
+    @ApiResponse({
+        status: 403,
+        description: 'Forbidden',
+    })
+    @ApiResponse({
+        status: 404,
+        description: 'Data not found',
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Review',
+    })
     async findOne(@Param('uuid') uuid: string, @User() user) {
         // Try retrieving review
         let review = await this.reviewService.findOne(uuid);
@@ -52,15 +75,31 @@ export class ReviewController {
         throw new NotFoundException();
     }
 
+
     @Post()
+    @ApiOperation({summary: 'Insert new review in the database '})
+    
+    @ApiBody({
+               type:CreateReviewDto,
+            })
+
+    @ApiResponse({
+        status: 201,
+        description: 'success review updated ',
+            })
+
     @UseGuards(JwtAuthGuard)
     async create(@Body() createReviewDto: CreateReviewDto, @User() user) {
         // Insert a new review in the database
         return this.reviewService.create(createReviewDto, user);
     }
 
+
+
+     // **------- update a revieww -------**//
     @Patch(':uuid')
     @UseGuards(JwtAuthGuard)
+    @ApiOperation({summary: 'Get updated review '})
     async update(@Param('uuid') uuid: string, @Body() updateReviewDto: UpdateReviewDto, @User() user) {
         // Get updated review, if any
         let review = await this.reviewService.update(Object.assign(updateReviewDto, {uuid}), user);
@@ -73,8 +112,15 @@ export class ReviewController {
         return review;
     }
 
+    
+ //**---------Delete A review-------**/
     @Delete(':uuid')
     @UseGuards(JwtAuthGuard)
+    @ApiOperation({summary: 'Delete review'})
+    @ApiResponse({
+        status: 200,
+        description: 'Review removed successfuly',
+    })   
     async remove(@Param('uuid') uuid: string, @User() user) {
         return this.reviewService.remove(uuid, user);
     }

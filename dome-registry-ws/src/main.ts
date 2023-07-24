@@ -3,6 +3,7 @@ import {ValidationPipe} from "@nestjs/common";
 import {ConfigService} from "@nestjs/config";
 import * as cookieParser from 'cookie-parser';
 import {AppModule} from "./app.module";
+import { swaggerSetup } from "./swagger/swagger";
 
 
 async function bootstrap() {
@@ -20,6 +21,9 @@ async function bootstrap() {
     });
     // Enable DTO validation
     app.useGlobalPipes(new ValidationPipe({transform: true, skipNullProperties: false}));
+
+    // SWAGGER API lunch
+    swaggerSetup(app);
     // Run application synchronously on given port
     await app.listen(configService.get<number>('server.port'));
 }
