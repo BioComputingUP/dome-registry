@@ -143,7 +143,7 @@ export class PageStatsComponent implements OnInit {
     private elementRef: ElementRef,
   ) {
   }
-
+ ///home/omar/DomeBioComp/dome-registry/dome-registry-core
   ngOnInit(): void {
   }
 

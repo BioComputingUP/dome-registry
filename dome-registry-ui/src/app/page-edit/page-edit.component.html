@@ -35,7 +35,7 @@
                     <!-- Define statistics for current field -->
                     <ng-container *ngIf="kv.value as score">
                       <!-- Define container -->
-                      <div class="d-flex flex-row flex-nowrap text-capitalize w-100 h-auto"
+                      <div class="d-flex flex-row flex-wrap text-capitalize w-100 h-auto"
                            [class.fw-bold]="name == 'total'">
                         <span style="flex: 1">{{name}}</span>
                         <span style="flex: 0 0 8rem">{{score.done}} / {{score.done + score.skip}} ({{score.percentage!.toFixed(0)}}%)</span>
