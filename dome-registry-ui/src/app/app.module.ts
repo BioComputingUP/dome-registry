@@ -17,6 +17,8 @@ import {CardTemplateComponent} from './card-template/card-template.component';
 import {AuthInterceptor} from "./auth.interceptor";
 import {ScrollEndDirective} from './scroll-end.directive';
 import {CookieModule} from "ngx-cookie";
+import { SwaggerAPiComponent } from './swagger-api/swagger-api.component';
+import { AboutPageComponent } from './about-page/about-page.component';
 
 
 // Set Plotly.js from CDN
@@ -38,6 +40,8 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     CardNavComponent,
     CardTemplateComponent,
     ScrollEndDirective,
+    SwaggerAPiComponent,
+    AboutPageComponent,
   ],
   imports: [
     PlotlyViaCDNModule,
