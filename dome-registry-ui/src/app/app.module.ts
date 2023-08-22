@@ -7,6 +7,7 @@ import {PageEditComponent} from './page-edit/page-edit.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ReactiveFormsModule} from "@angular/forms";
+//import { SwaggerUIModule } from 'angular-swagger-ui';
 import {PageIntroComponent} from './page-intro/page-intro.component';
 import {ScrollSpyDirective} from './scroll-spy.directive';
 import {PageStatsComponent} from './page-stats/page-stats.component';
@@ -50,6 +51,8 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     HttpClientModule,
     AppRoutingModule,
     NgbModule,
+   
+    
     CookieModule.forRoot(),
   ],
   providers: [

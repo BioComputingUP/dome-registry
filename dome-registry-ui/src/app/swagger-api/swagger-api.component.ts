@@ -14,7 +14,7 @@ export class SwaggerAPiComponent implements OnInit {
   constructor(private http:HttpClient) { }
 
   ngOnInit(): void {
-    this.http.get('http://localhost:8118/swagger/#/')  // Adjust the URL
+    this.http.get('http://localhost:8118/api/#/')  // Adjust the URL
       .subscribe(
         (swaggerSpec: any) => {
           const swaggerUi = SwaggerUIBundle({

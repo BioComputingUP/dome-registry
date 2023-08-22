@@ -80,7 +80,7 @@ export class PageSearchComponent {
       // Update results
       map((results) => this.results = [...this.results, ...results]),
     );
-
+     console.log(this.results.length);
   }
 
   public onTextChange(event: KeyboardEvent) {
@@ -109,5 +109,8 @@ export class PageSearchComponent {
   public onScrollEnd() {
     // Emit new offset
     this.offset$.emit({skip: this.results.length, limit: 100});
+  }
+  public numberofentries (){
+   console.log(this.results.length);
   }
 }

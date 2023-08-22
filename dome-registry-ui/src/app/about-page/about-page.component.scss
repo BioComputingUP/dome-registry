@@ -1,3 +1,45 @@
-div{
-    margin: 10px;
+
+
+h4 {
+    margin-top:5px;
+    margin-bottom: auto;
+    padding: 5px;
+    
 }
+h5{
+    
+    margin-top:5px;
+}
+h1{
+    text-align: center;
+}
+
+.card {
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px; /* Added */
+}
+div{
+    margin: auto;
+}
+p,h4,h5,h1{
+    margin-left: 20px;
+   
+}
+table, th, td {
+    border:1px solid black;
+  }
+
+
+  ul.nav {
+    padding-left: 0px;
+  
+    
+  }
+  ul.nav > li {
+    display: inline-block;
+    padding: 10px 20px;
+  }
+  
+ 
+  

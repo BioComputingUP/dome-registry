@@ -44,7 +44,7 @@ export class ReviewController {
 
 //**---------------Get Review by short-id ------------**/
     @Get(':uuid')
-    @ApiOperation({summary: 'find one review'})
+    @ApiOperation({summary: 'Find one review'})
    
     @ApiResponse({
         status: 403,
