@@ -23,7 +23,7 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe({transform: true, skipNullProperties: false}));
 
     // SWAGGER API lunch
-    swaggerSetup(app);
+    swaggerSetup(app,configService.get<string>('API_PREFIX'));
     // Run application synchronously on given port
     await app.listen(configService.get<number>('server.port'));
 }

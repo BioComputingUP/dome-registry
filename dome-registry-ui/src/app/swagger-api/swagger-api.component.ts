@@ -14,18 +14,7 @@ export class SwaggerAPiComponent implements OnInit {
   constructor(private http:HttpClient) { }
 
   ngOnInit(): void {
-    this.http.get('http://localhost:8118/api/#/')  // Adjust the URL
-      .subscribe(
-        (swaggerSpec: any) => {
-          const swaggerUi = SwaggerUIBundle({
-            spec: swaggerSpec,
-            dom_id: '#swagger-ui-container'
-          });
-        },
-        (error) => {
-          console.error('Error fetching Swagger spec:', error);
-        }
-      );
+    
   }
 
 

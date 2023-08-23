@@ -24,7 +24,7 @@ const routes: Routes = [
   {...params, path: 'review', component: PageEditComponent},
   {...params, path: 'review/:uuid', component: PageEditComponent},
   // set path to swagger page 
-  {...params, path:'api', component:SwaggerAPiComponent},
+ /*  {...params, path:'api', redirectTo: ''}, */
 
   // set path to about page
   {...params,path : 'about', component:AboutPageComponent},

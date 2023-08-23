@@ -27,9 +27,13 @@ export interface Review {
 // Define invalid strings
 // NOTE Those have been defined as the most common N.A. values
 export const notDefinedValues = [
-    '', 'nd', 'na', 'not applicable', 'not available', 'not defined', 'not stated.', 'not specified', 'none',
+    '', 'nd', 'na', 'not applicable', 'not available', 'not defined', 'not stated', 'not specified', 'none',
     'not mentioned', 'not explicitly stated', 'not provided', 'not reported', 'not reported', 'not stated', 'not given',
-    'none provided', 'not available', 'unclear', 'not known', 'unknown', 'not applicable', 'not discussed'
+    'none provided', 'not available', 'unclear', 'not known', 'unknown', 'not applicable', 'not discussed', 'Inaccessible',
+     'Inaccessible', 'Unreachable', 'Unattainable', 'Unobtainable', 'Unacquirable', 'Unreachable', 'Unreachable', 
+     'Unavailable', 'Unobtainable', 'Unreachable', 'Unretrievable', 'Unapproachable', 'Unreachable', 'Unachievable', 
+     'Ungettable', 'Unsecurable', 'Unforthcoming', 'Ungettable',
+     'Unreachable', 'Unretrievable','no','No','',
 ];
 
 // True if field is not defined

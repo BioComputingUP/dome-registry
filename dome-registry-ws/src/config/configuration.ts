@@ -6,7 +6,7 @@ import {join} from 'path';
 // https://docs.nestjs.com/techniques/configuration#custom-configuration-files
 export const configuration = () => {
     // Define environment name
-    let env = process.env.NODE_ENV;
+    let env = process.env.NODE_ENV ?? 'development';
     // Compute configuration file path
     let path = join(__dirname, `environments`, `${env}.yaml`);
     // Load YAML configuration file
