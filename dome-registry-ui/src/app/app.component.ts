@@ -42,7 +42,7 @@ export class AppComponent {
   }
   
    public readonly pagecopm = new PageSearchComponent(this.reviewwService,this.authService);
-  public readonly rs = this.pagecopm.numberofentries();
+  //public readonly rs = this.pagecopm.numberofentries();
   
 
   // Define login URL

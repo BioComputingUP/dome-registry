@@ -19,25 +19,27 @@
         <!-- Collapsable content -->
         <div class="navbar-collapse collapse" id="navbar-supported-content">
           <!-- Left side -->
-          <ul class="navbar-nav ms-0 me-auto">
-            <li class="nav-item">
-              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/intro'">Home</a>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item  ">
+              <a class="nav-link " [routerLinkActive]="['active']" [routerLink]="'/intro'"><b>Home</b></a>
+            
             </li>
             <li class="nav-item">
-              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/stats'">Statistics</a>
+              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/stats'"><b>Statistics</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/search'">Browse</a>
+              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/search'"><b>Browse</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/review'">Submit</a>
+              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/review'"><b>Submit</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" [routerLinkActive]="['active']" href="/api/">API</a>
+              <a class="nav-link" [routerLinkActive]="['active']" href="/api/"><b>API</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/about'">About</a>
+              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/about'"><b>About</b></a>
             </li>
+            
           </ul>
           <!-- Right side -->
           <ul class="navbar-nav ms-auto me-0">
@@ -55,7 +57,7 @@
                     <li>
                       <a class="dropdown-item">
                         <div>{{user.name || 'Unknown user'}}</div>
-                        <div class="small"><i class="bi bi-person-circle text-orcid"></i>&nbsp;{{user.orcid}}</div>
+                        <div class="small"><i class="bi bi-person-circle text-orcid"></i><b>&nbsp;{{user.orcid}}</b></div>
                         <div class="small"><i class="bi bi-envelope text-orcid"></i>&nbsp;{{user.email || '-'}}</div>
                       </a>
                     </li>
@@ -110,7 +112,7 @@
   </main>
   <!-- Bottom footer (sticky) -->
   <footer class="d-block flex-grow-0">
-    <div class="d-flex flex-row align-items-center bg-primary bg-gradient text-white py-2">
+    <div class="d-flex flex-row align-items-center  bg-gradient  py-2">
   <span class="d-inline ms-3 me-auto">
     <span class="d-none d-sm-inline">Supported by&nbsp;</span>
     <a href="https://elixir-europe.org/">
@@ -119,7 +121,7 @@
   </span>
       <span class="d-inline me-3">
     <span class="d-none d-sm-inline">Developed and maintained by&nbsp;</span>
-    <a href="https://github.com/BioComputingUP" class="text-white">BioCompUP <i class="bi bi-github"></i></a>
+    <a class= "text-white"href="https://github.com/BioComputingUP" >BioCompUP <i class="bi bi-github"></i></a>
   </span>
     </div>
   </footer>

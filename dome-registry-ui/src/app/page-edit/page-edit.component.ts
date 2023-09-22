@@ -97,6 +97,8 @@ export class PageEditComponent {
 
   public readonly fetched$: Observable<Review | undefined>;
 
+  //public readonly Sharedscore$: Observable<string>;
+
   // = this.fetch$.pipe(
   //   // Get UUID out of parameters, if any
   //   map((params) => params.get('uuid')),
@@ -115,7 +117,7 @@ export class PageEditComponent {
   //   // Always return same review
   //   shareReplay(1),
   // );
-
+ 
   private readonly update$ = new EventEmitter<void>();
 
   public readonly updated$: Observable<Review>;
@@ -123,6 +125,7 @@ export class PageEditComponent {
   private readonly delete$ = new EventEmitter<void>();
 
   public readonly deleted$: Observable<undefined>;
+
 
   // Retrieve root element
   public get element() {
@@ -136,6 +139,8 @@ export class PageEditComponent {
 
   // Define login url
   public readonly login = this.authService.url;
+
+  
 
   constructor(
     private reviewService: ReviewService,
@@ -221,7 +226,10 @@ export class PageEditComponent {
       )),
       // Cache result
       shareReplay(1),
+      
     );
+
+
   }
 
   // Handle save click

@@ -1,7 +1,7 @@
 import {environment} from "../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from '@angular/core';
-import {map, Observable} from "rxjs";
+import {BehaviorSubject, map, Observable} from "rxjs";
 import * as core from "dome-registry-core";
 
 
@@ -49,10 +49,22 @@ export class ReviewService {
 
   // Define APIs endpoint
   public readonly url = environment.backend + '/review';
-
+  private dataSubject = new BehaviorSubject<string>('initial data');
+  data$ = this.dataSubject.asObservable();
   // Dependency injection
   constructor(private readonly httpClient: HttpClient) {
   }
+
+// Set data for the shared services 
+setData(data:string){
+  this.dataSubject.next(data);
+}
+
+// Get data for the shared service 
+getData(){
+  return this.dataSubject.getValue() ;
+}
+
 
   // Search for single review against database
   public getReview(uuid: string): Observable<Review> {
@@ -111,4 +123,25 @@ export class ReviewService {
     return this.httpClient.delete<void>(this.url + '/' + uuid);
   }
 
+
+
+  // Get the total number of the public entries 
+  public countElements() :Observable<number>{
+    return this.httpClient.get<number>(this.url + '/total').pipe(
+      map(response => response as number)
+    );
+  }
+
+
+  // Get the total number of the private entries 
+  public countPrivElements(): Observable<number>{
+     
+    return this.httpClient.get<number>(this.url +'/totalPrivate')
+  }
+
+
+
+
+
+  
 }

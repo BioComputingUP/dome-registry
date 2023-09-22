@@ -33,7 +33,7 @@
             </div>
             <!-- Title -->
             <div class="d-block flex-grow-1">
-              <h1 class="d-none d-md-block">DOME Registry</h1>
+              <h1 class="d-none d-md-block  ">DOME Registry</h1>
               <h5 class="d-block">A database of annotations for published papers describing machine learning methods in biology.</h5>
             </div>
           </div>
@@ -51,7 +51,11 @@
           </p>
           <!-- 2nd line -->
           <p class="d-block w-100">The DOME registry provides a curated set of annotations for ML papers following the DOME recommendations.</p>
+          
+          
+          <!-- <p class="counter-count">  {{ count$ | async }}   </p> -->
           <!-- 3rd line -->
+          
           <!-- Action buttons -->
           <div class="d-flex justify-content-center mt-3">
             <!-- Browse -->
@@ -59,6 +63,41 @@
           </div>
         </div>
       </div>
+
+      <div class="counter">
+        <div class="container">
+            <div class="row ">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="designer">
+                        <p class="counter-count "><b>{{countPreson | async}}</b></p>
+                        <p class="design "><i class="bi bi-people"></i><b> Users</b></p>
+                    </div>
+                </div>
+    
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="designer">
+                        <p class="counter-count  "><b>{{ countCounter$ | async }}</b></p>
+                       <p class="design"> <i class="bi bi-journals"></i><b> Entries</b></p>
+                    </div>
+                </div>
+    
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="designer">
+                        <p class="counter-count "><b>{{countProgres$ | async }}</b></p>
+                        <p class="design"><i class="bi bi-clock-history"></i><b> In progress</b></p>
+                    </div>
+                </div>
+    
+                
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
     </div>
     
   </div>

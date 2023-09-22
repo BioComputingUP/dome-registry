@@ -33,7 +33,7 @@
             <div class="card shadow-sm mb-2" style="pointer-events: all">
               <!-- Card header -->
               <div class="card-header text-white bg-primary">
-                <h4 class="d-block w-100 h-auto">Annotations</h4>
+                <h4 class="d-block w-100 h-auto text-center ">Annotations</h4>
                 <div class="d-flex flex-row flex-nowrap justify-content-around w-100">
                   <div>Title <i class="bi bi-caret-down-fill"></i></div>
                   <div>Authors <i class="bi bi-caret-down-fill"></i></div>
@@ -69,10 +69,7 @@
                     <strong>Authors&nbsp;</strong>
                     <span>{{review.publication.authors}}</span>
                   </p>
-                  <p class="mb-0">
-                    <strong>Authors&nbsp;</strong>
-                    <span></span>
-                  </p>
+                  
                   <!-- Show DOI, journal name and date-->
                   <p class="mb-0">
                     <strong>Publication&nbsp;</strong>
@@ -105,10 +102,13 @@
     <div class="position-absolute left-0 top-0 w-100 h-auto bg-transparent overflow-scroll invisible" style="pointer-events: none">
       <div class="container-fluid bg-light visible">
         <div class="row">
-          <div class="col-12 col-md-8 offset-md-2">
+          <div class="col-12 col-md-8 offset-md-2 ">
             <div class="card" style="pointer-events: all">
               <div class="card-header text-white bg-primary">
-                <h4 class="d-block w-100 h-auto">Annotations</h4>
+                <div class="text-center mb  ">
+                  <h4 class=" w-100 h-auto">Annotations</h4>
+                </div>
+                
                 <div class="d-flex flex-row flex-nowrap justify-content-around w-100">
                   <!-- Get current query -->
                   <ng-container *ngIf="sort$ | async as sort">

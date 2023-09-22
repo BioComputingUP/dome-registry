@@ -2,11 +2,17 @@ import {ChangeDetectionStrategy, Component, EventEmitter} from '@angular/core';
 import {Observable, BehaviorSubject, switchMap, combineLatest, distinctUntilChanged, debounceTime, map, tap, startWith} from "rxjs";
 import {Field, Offset, Query, Review, ReviewService, Sort} from "../review.service";
 import {AuthService} from "../auth.service";
-
+import { computeDomeScore } from 'dome-registry-core';
 
 type Reviews = Array<Review>;
 
-
+interface Score {
+  // Score factors
+  done: number;
+  skip: number;
+  // This must be computed
+  percentage?: number;
+}
 @Component({
   selector: 'app-page-search',
   templateUrl: './page-search.component.html',
@@ -25,6 +31,7 @@ export class PageSearchComponent {
 
   public readonly query$: Observable<Query>;
 
+  public readonly score$: Observable<Map<string, Score>>
   private results: Reviews;
 
   public readonly results$: Observable<Reviews>;
@@ -80,7 +87,7 @@ export class PageSearchComponent {
       // Update results
       map((results) => this.results = [...this.results, ...results]),
     );
-     console.log(this.results.length);
+     //console.log(this.results.length);
   }
 
   public onTextChange(event: KeyboardEvent) {
@@ -110,7 +117,8 @@ export class PageSearchComponent {
     // Emit new offset
     this.offset$.emit({skip: this.results.length, limit: 100});
   }
-  public numberofentries (){
-   console.log(this.results.length);
+  public UpdateScore (
+   
+){
   }
 }
