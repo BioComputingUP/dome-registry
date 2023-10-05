@@ -42,6 +42,9 @@ import { configuration } from "./config/configuration";
             useFactory: async (configService: ConfigService) => {
                 // Define mongo parameters
                 let mongo = configService.get<{host: string, port: number, user: string, secret: string, name: string}>('mongo');
+
+                console.log('Loaded Mongo Config', mongo)
+
                 // Define authorization part of URI
                 let auth = mongo.user && mongo.secret ? `${mongo.user}:${mongo.secret}@`: '';
                 // Define connection part of URI

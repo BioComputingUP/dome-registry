@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import {readFileSync} from 'fs';
 import {load as loadYamlFile} from 'js-yaml';
 import {join} from 'path';
@@ -7,6 +8,10 @@ import {join} from 'path';
 export const configuration = () => {
     // Define environment name
     let env = process.env.NODE_ENV ?? 'development';
+
+    const logger= new Logger('ConfigurationLogger');
+    logger.log(`Loading ${env} configuration...`)
+    
     // Compute configuration file path
     let path = join(__dirname, `environments`, `${env}.yaml`);
     // Load YAML configuration file

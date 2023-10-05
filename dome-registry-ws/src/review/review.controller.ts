@@ -1,14 +1,18 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, ForbiddenException, NotFoundException, Query} from "@nestjs/common";
-import {ReviewService} from './review.service';
-import {CreateReviewDto} from './dto/create-review.dto';
-import {UpdateReviewDto} from './dto/update-review.dto';
-import {ListReviewsDto} from "./dto/list-reviews.dto";
-import {JwtAuthGuard} from "../jwt-auth/jwt-auth.guard";
-import {UserInterceptor} from "../user/user.interceptor";
-import {UserService} from "../user/user.service";
-import {User} from "../user/user.decorator";
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, ForbiddenException, NotFoundException, Query } from "@nestjs/common";
+import { ReviewService } from './review.service';
+import { CreateReviewDto } from './dto/create-review.dto';
+import { UpdateReviewDto } from './dto/update-review.dto';
+import { ListReviewsDto } from "./dto/list-reviews.dto";
+import { JwtAuthGuard } from "../jwt-auth/jwt-auth.guard";
+import { UserInterceptor } from "../user/user.interceptor";
+import { UserService } from "../user/user.service";
+import { User } from "../user/user.decorator";
+import { v4 as UUID } from "uuid";
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
-
+import { Review } from "./review.schema";
+import { computeDomeScore } from "dome-registry-core";
+import mongodb from 'mongodb';
+import { SubmitWizards } from "./dto/submit-wizard.dto";
 
 
 @ApiTags('Reviews')
@@ -20,12 +24,12 @@ export class ReviewController {
     constructor(
         private readonly reviewService: ReviewService,
         private readonly userService: UserService,
-    ) {}
+    ) { }
 
 
-    //**----------Get All revies-------- **/
+    //**----------Get All reviews-------- **/
     @Get()
-    @ApiOperation({summary: 'Get reviews from the API '})
+    @ApiOperation({ summary: 'Get all reviews  ' })
     async findAll(@Query() query: ListReviewsDto, @User() user) {
         // Define search parameters
         let _query = {
@@ -42,10 +46,42 @@ export class ReviewController {
 
 
 
-//**---------------Get Review by short-id ------------**/
+    //**--------------- Get the number of entries in the database-----------  *//
+    @ApiOperation({ summary: 'Get the total number of Public entries' })
+    @ApiResponse({
+        status: 200,
+        description: 'we got it ',
+    })
+    @Get('total')
+    async getTotalEntries() {
+        //return 'test';
+        const totalEntries = await this.reviewService.countPub();
+        // console.log(totalEntries);
+        return totalEntries;
+    }
+
+
+
+    /* Get the number of the private entries in the database  */
+
+    @ApiOperation({ summary: 'Get the total number of the entries in progress (private)' })
+    @ApiResponse({
+        status: 200,
+        description: 'we got it ',
+    })
+    @Get('totalprivate')
+    async getTotalPrivEntries() {
+        //return 'test';
+        const totalEntries = await this.reviewService.countprivate();
+        // console.log(totalEntries);
+        return totalEntries;
+    }
+
+
+    //**---------------Get Review by Unique UID ------------**/
     @Get(':uuid')
-    @ApiOperation({summary: 'Find one review'})
-   
+    @ApiOperation({ summary: 'Find one review' })
+
     @ApiResponse({
         status: 403,
         description: 'Forbidden',
@@ -72,37 +108,41 @@ export class ReviewController {
             throw new ForbiddenException();
         }
         // Otherwise, return 404 Not Found
-        throw new NotFoundException();
+        throw new NotFoundException(null, 'not found');
     }
 
 
+    // Insert a new review in the database
     @Post()
-    @ApiOperation({summary: 'Insert new review in the database '})
-    
+    @ApiOperation({ summary: 'Insert new review in the database ' })
+
     @ApiBody({
-               type:CreateReviewDto,
-            })
+        type: CreateReviewDto,
+    })
 
     @ApiResponse({
         status: 201,
         description: 'success review updated ',
-            })
+    })
 
     @UseGuards(JwtAuthGuard)
     async create(@Body() createReviewDto: CreateReviewDto, @User() user) {
-        // Insert a new review in the database
+        console.log(createReviewDto);
+        console.log(user);
         return this.reviewService.create(createReviewDto, user);
     }
 
 
 
-     // **------- update a revieww -------**//
+
+    // **------- update a revieww -------**//
     @Patch(':uuid')
     @UseGuards(JwtAuthGuard)
-    @ApiOperation({summary: 'Get updated review '})
+    @ApiOperation({ summary: 'Get updated review ' })
     async update(@Param('uuid') uuid: string, @Body() updateReviewDto: UpdateReviewDto, @User() user) {
         // Get updated review, if any
-        let review = await this.reviewService.update(Object.assign(updateReviewDto, {uuid}), user);
+        console.log(user);
+        let review = await this.reviewService.update(Object.assign(updateReviewDto, { uuid }), user);
         // Case no review was returned
         if (!review) {
             // Then, return 404 Not Found
@@ -112,17 +152,50 @@ export class ReviewController {
         return review;
     }
 
-    
- //**---------Delete A review-------**/
+
+    //**---------Delete A review-------**/
     @Delete(':uuid')
     @UseGuards(JwtAuthGuard)
-    @ApiOperation({summary: 'Delete review'})
+    @ApiOperation({ summary: 'Delete review' })
     @ApiResponse({
         status: 200,
         description: 'Review removed successfuly',
-    })   
+    })
     async remove(@Param('uuid') uuid: string, @User() user) {
         return this.reviewService.remove(uuid, user);
     }
+
+    //**------------------Create a review threw Dome  Wizards ----------------------**//
+
+    @Post('wizards')
+    @ApiOperation({ summary: 'Get a  review from wizards' })
+    @ApiResponse({
+        status: 200,
+        description: 'we got it ',
+    })
+
+    async createRevieWizads(@Body() wizards: SubmitWizards) {
+        const {
+            user,
+            review
+        } = wizards;
+
+        // const userId = new mongodb.ObjectId('648c696c92c76639b8bb57cb');
+        // const user = await this.userService.findByOrcid('0009-0000-4401-6504');
+
+        const createdUser = await this.userService.upsertByOrcid(user);
+
+        console.log(wizards);
+        const reviewCreated = await this.reviewService.create(review, createdUser);
+
+        console.log({
+            reviewCreated
+        })
+
+        // const insert new this.
+
+    }
+
+
 
 }

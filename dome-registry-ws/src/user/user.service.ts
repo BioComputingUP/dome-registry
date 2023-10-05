@@ -23,4 +23,11 @@ export class UserService {
         // Just update document, no other action is required
         return this.userModel.findOneAndUpdate({orcid: user.orcid}, user, {new: true, upsert: true}).exec();
     }
+
+
+    async counUsers():Promise<number>{
+      
+            const bn = await this.userModel.count({public:true});
+            return bn; 
+      }
 }

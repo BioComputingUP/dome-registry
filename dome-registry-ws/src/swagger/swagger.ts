@@ -6,7 +6,7 @@ export function swaggerSetup(app:INestApplication, prefix: string) {
     const config = new DocumentBuilder()
       .setTitle('DOME API Documentation')
       // .addServer('http://localhost:8118/dome')
-      .setVersion('1.0')
+      .setVersion('2.0')
      
       .addBearerAuth()
       .build();
