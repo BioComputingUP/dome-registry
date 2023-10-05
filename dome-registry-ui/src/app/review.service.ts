@@ -1,7 +1,7 @@
 import {environment} from "../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, map, Observable} from "rxjs";
+import {BehaviorSubject, map, Observable, tap} from "rxjs";
 import * as core from "dome-registry-core";
 
 
@@ -78,6 +78,9 @@ getData(){
     let params: any = {...query, sort: query.by, by: undefined};
     // Return observable for search results
     return this.httpClient.get<Array<Review | {matches: Record<string, string>}>>(this.url, {params}).pipe(
+      tap((reviews) => {
+        console.log({ reviews })
+      }),
       // Parse matching strings to matching text
       map((reviews) => reviews.map((review) => {
         // Define query text

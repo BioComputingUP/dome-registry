@@ -84,6 +84,9 @@ export class PageSearchComponent {
       )),
       // Retrieve results
       switchMap((query) => this.reviewService.searchReviews(query)),
+      tap((results) => {
+        console.log({ results })
+      }),
       // Update results
       map((results) => this.results = [...this.results, ...results]),
     );
