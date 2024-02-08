@@ -1,14 +1,15 @@
 <!-- Outer scaffold -->
-<div class="d-flex flex-column h-100 w-100 overflow-auto">
+<div class="d-flex flex-column h-100 w-100 overflow-y-auto">
   <!-- Retrieve review, if any -->
   <ng-container *ngIf="review$ | async as review">
     <!-- Case user is authorized, show edit form -->
-    <ng-container *ngIf="user?.auth || review.uuid; else signInFirst">
+    <ng-container *ngIf="user.auth || review.uuid ; else signInFirst">
       <!-- Inner scaffold   -->
-      <div class="container-fluid flex-grow-1 bg-light overflow-auto" [root]="element" [target]="'#links'" scroll-spy>
+      <div class="container-fluid flex-grow-1 bg-light h-100 overflow-scroll" [root]="element" [target]="'#links'"
+        scroll-spy>
         <div class="row position-relative overflow-auto">
           <!-- Left shoulder -->
-          <div class="col-2 d-none d-md-block position-fixed h-100 py-6 overflow-auto" >
+          <div class="col-2 d-none d-md-block position-fixed h-100 py-6 overflow-scroll">
             <!-- Vertical navigation -->
             <card-nav id="links" class="d-block mt-3 mb-3 ">
               <a class="nav-link" [routerLink]="[]" fragment="publication" link>Publication</a>
@@ -18,13 +19,13 @@
               <a class="nav-link" [routerLink]="[]" fragment="evaluation" link>Evaluation</a>
             </card-nav>
             <!-- Score wrapper -->
-            <card-template id="scores" class="d-block mb-3  ">
+            <card-template id="scores" class="d-block mb-3 h-100 overflow-scroll ">
               <!-- Define card title -->
               <h4 title>Score</h4>
               <!-- Define card body -->
-              <div class="d-block w-100 h-auto p-1" body>
+              <div class="d-block w-100 h-100 p-1 overflow-auto" body>
                 <!-- Table header -->
-                <div class="d-flex flex-row flex-nowrap text-capitalize w-100 h-auto ">
+                <div class="d-flex flex-row flex-nowrap text-capitalize w-100  overflow-y-auto ">
                   <strong class="text-primary" style="flex: 1;">Section</strong>
                   <strong class="text-primary" style="flex: 0 0 8rem;">Score</strong>
                 </div>
@@ -33,20 +34,20 @@
                   <!-- Define name for current field -->
                   <ng-container *ngIf="kv.key as name">
                     <!-- Define statistics for current field -->
-                    <ng-container *ngIf="name != 'publication'" >
-                    <ng-container *ngIf="kv.value as score">
-                      <!-- Define container -->
-                      <div class="d-flex flex-row flex-wrap text-capitalize w-100 h-auto"
-                           [class.fw-bold]="name == 'total'">
-                        <span style="flex: 1">{{name}}</span>
-                        <span style="flex: 0 0 8rem">{{score.done }} / {{score.done  + score.skip}} ({{score.percentage!.toFixed(0)}}%)</span>
-                      </div>
+                    <ng-container *ngIf="name != 'publication'">
+                      <ng-container *ngIf="kv.value as score">
+                        <!-- Define container -->
+                        <div class="d-flex flex-row flex-wrap text-capitalize w-100 " [class.fw-bold]="name == 'total'">
+                          <span style="flex: 1">{{name}}</span>
+                          <span style="flex: 0 0 8rem">{{score.done }} / {{score.done + score.skip}}
+                            ({{score.percentage!.toFixed(0)}}%)</span>
+                        </div>
+                      </ng-container>
                     </ng-container>
-                    </ng-container> 
                   </ng-container>
                 </ng-container>
                 <!-- Describe DOME score -->
-                <small class="d-block text-muted w-100 h-auto mt-1">
+                <small class="d-block text-muted w-100 h-100 mb-5 overflow-y-scoll ">
                   The DOME score is compute as the number of valid fields, divided by the total number of fields
                 </small>
               </div>
@@ -65,42 +66,43 @@
                   <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <textarea class="form-control" id="title" aria-describedby="title-help" formControlName="title"
-                              [readonly]="review.public"></textarea>
+                      [readonly]="!user.roles?.includes('admin') &&  review.public"></textarea>
                     <div id="title-help" class="form-text">Title of the article</div>
                   </div>
                   <!-- Authors -->
                   <div class="mb-3">
                     <label for="authors" class="form-label">Authors</label>
-                    <textarea class="form-control" id="authors" aria-describedby="authors-help" formControlName="authors"
-                              [readonly]="review.public"></textarea>
+                    <textarea class="form-control" id="authors" aria-describedby="authors-help"
+                      formControlName="authors" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="authors-help" class="form-text">Authors which contributes to the article</div>
                   </div>
                   <!-- Publication journal -->
                   <div class="mb-3">
                     <label for="journal" class="form-label">Publication journal</label>
                     <input type="text" class="form-control" id="journal" aria-describedby="journal-help"
-                           formControlName="journal" [readonly]="review.public">
-                    <div id="journal-help" class="form-text">Name of the journal where the paper has been published</div>
+                      formControlName="journal" [readonly]="!user.roles?.includes('admin') && review.public">
+                    <div id="journal-help" class="form-text">Name of the journal where the paper has been published
+                    </div>
                   </div>
                   <!-- Publication year -->
                   <div class="mb-3">
                     <label for="year" class="form-label">Publication year</label>
-                    <input type="text" class="form-control" id="year" aria-describedby="year-help" formControlName="year"
-                           [readonly]="review.public">
+                    <input type="text" class="form-control" id="year" aria-describedby="year-help"
+                      formControlName="year" [readonly]="!user.roles?.includes('admin') && review.public">
                     <div id="year-help" class="form-text">Year of publication, as a number</div>
                   </div>
                   <!-- Publication PubMed ID -->
                   <div class="mb-3">
                     <label for="pmid" class="form-label">PubMed ID</label>
-                    <input type="text" class="form-control" id="pmid" aria-describedby="pmid-help" formControlName="pmid"
-                           [readonly]="review.public">
+                    <input type="text" class="form-control" id="pmid" aria-describedby="pmid-help"
+                      formControlName="pmid" [readonly]="!user.roles?.includes('admin') && review.public">
                     <div id="pmid-help" class="form-text">Unique identifier of the reviewed article within PubMed</div>
                   </div>
                   <!-- Publication DOI -->
                   <div class="mb-3">
                     <label for="doi" class="form-label">DOI</label>
                     <input type="text" class="form-control" id="doi" aria-describedby="doi-help" formControlName="doi"
-                           [readonly]="review.public">
+                      [readonly]="!user.roles?.includes('admin') && review.public">
                     <div id="doi-help" class="form-text">DOI of the published article</div>
                   </div>
                 </div>
@@ -115,7 +117,8 @@
                   <div class="mb-3">
                     <label for="data-source" class="form-label">Dataset source</label>
                     <textarea class="form-control" id="data-source" aria-describedby="data-source-help"
-                              formControlName="provenance" [readonly]="review.public"></textarea>
+                      formControlName="provenance"
+                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="data-source-help" class="form-text">
                       <ul>
                         <li>Source of the dataset?</li>
@@ -128,7 +131,7 @@
                   <div class="mb-3">
                     <label for="data-splits" class="form-label">Dataset splits</label>
                     <textarea class="form-control" id="data-splits" aria-describedby="data-splits-help"
-                              formControlName="splits" [readonly]="review.public"></textarea>
+                      formControlName="splits" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="data-splits-help" class="form-text">
                       <ul>
                         <li>How many data splits?</li>
@@ -149,13 +152,15 @@
                   <div class="mb-3">
                     <label for="data-redundancy" class="form-label">Dataset redundancy</label>
                     <textarea class="form-control" id="data-redundancy" aria-describedby="data-redundancy-help"
-                              formControlName="redundancy" [readonly]="review.public"></textarea>
+                      formControlName="redundancy"
+                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="data-redundancy-help" class="form-text">
                       <ul>
                         <li>How were the datasets split?</li>
                         <li>Are the training and test sets independent?</li>
                         <li>How was this enforced (e.g. redundancy reduction to less than x% pairwise identity)?</li>
-                        <li>How does the distribution compare to previously published ML datasets in the biological field?
+                        <li>How does the distribution compare to previously published ML datasets in the biological
+                          field?
                         </li>
                       </ul>
                     </div>
@@ -164,13 +169,14 @@
                   <div class="mb-3">
                     <label for="data-redundancy" class="form-label">Dataset availability</label>
                     <textarea class="form-control" id="data-availability" aria-describedby="data-redundancy-help"
-                              formControlName="availability" [readonly]="review.public"></textarea>
+                      formControlName="availability"
+                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="data-availability-help" class="form-text">
                       <ul>
                         <li>Are the data, including the data splits used, released in a public forum?</li>
                         <li>If yes, where (for example, supporting material, URL) and how (license)?</li>
                         <li>How was this enforced (e.g. redundancy reduction to less than x% pairwise identity)?</li>
-                        
+
                       </ul>
                     </div>
                   </div>
@@ -184,7 +190,8 @@
                   <div class="mb-3">
                     <label for="optim-algorithm" class="form-label">Optimization algorithm</label>
                     <textarea class="form-control" id="optim-algorithm" aria-describedby="optim-algorithm-help"
-                              formControlName="algorithm" [readonly]="review.public"></textarea>
+                      formControlName="algorithm"
+                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="optim-algorithm-help" class="form-text">
                       <ul>
                         <li>What is the machine-learning algorithm class used?</li>
@@ -205,7 +212,7 @@
                       </label>
                     </div>
                     <textarea class="form-control" id="optim-meta-desc" aria-describedby="optim-meta-desc-help"
-                              formControlName="meta" [readonly]="review.public"></textarea>
+                      formControlName="meta" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="optim-meta-desc-help" class="form-text">
                       <ul>
                         <li>Does the model use data from other machine-learning algorithms as input (i.e. it is a
@@ -223,7 +230,7 @@
                   <div class="mb-3">
                     <label for="optim-encoding" class="form-label">Data encoding</label>
                     <textarea class="form-control" id="optim-encoding" aria-describedby="optim-encoding-help"
-                              formControlName="encoding" [readonly]="review.public"></textarea>
+                      formControlName="encoding" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="optim-encoding-help" class="form-text">
                       How was the data encoded and pre-processed for the machine-learning algorithm?
                     </div>
@@ -232,7 +239,8 @@
                   <div class="mb-3">
                     <label for="optim-params" class="form-label">Input parameters</label>
                     <textarea class="form-control" id="optim-params" aria-describedby="optim-params-help"
-                              formControlName="parameters" [readonly]="review.public"></textarea>
+                      formControlName="parameters"
+                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="optim-params-help" class="form-text">
                       <ul>
                         <li>How many parameters (p) are used in the model?</li>
@@ -244,7 +252,7 @@
                   <div class="mb-3">
                     <label for="optim-features" class="form-label">Input features</label>
                     <textarea class="form-control" id="optim-features" aria-describedby="optim-features-help"
-                              formControlName="features" [readonly]="review.public"></textarea>
+                      formControlName="features" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="optim-features-help" class="form-text">
                       <ul>
                         <li>How many features (f) are used as input?</li>
@@ -257,7 +265,7 @@
                   <div class="mb-3">
                     <label for="optim-fitting" class="form-label">Fitting method</label>
                     <textarea class="form-control" id="optim-fitting" aria-describedby="optim-fitting-help"
-                              formControlName="fitting" [readonly]="review.public"></textarea>
+                      formControlName="fitting" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="optim-fitting-help" class="form-text">
                       <ul>
                         <li>
@@ -266,7 +274,8 @@
                         </li>
                         <li>If yes to previous question, how was over-fitting ruled out?</li>
                         <li>
-                          Conversely, if the number of training points seem very much larger than p and/or f is small how
+                          Conversely, if the number of training points seem very much larger than p and/or f is small
+                          how
                           was under-fitting ruled out?
                         </li>
                       </ul>
@@ -276,10 +285,12 @@
                   <div class="mb-3">
                     <label for="optim-regular" class="form-label">Regularization method</label>
                     <textarea class="form-control" id="optim-regular" aria-describedby="optim-regular-help"
-                              formControlName="regularization" [readonly]="review.public"></textarea>
+                      formControlName="regularization"
+                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="optim-regular-help" class="form-text">
                       <ul>
-                        <li>Were any over-fitting prevention techniques performed (e.g. early stopping using a validation
+                        <li>Were any over-fitting prevention techniques performed (e.g. early stopping using a
+                          validation
                           set)?
                         </li>
                         <li>If yes, which ones?</li>
@@ -290,7 +301,7 @@
                   <div class="mb-3">
                     <label for="optim-config" class="form-label">Configuration available</label>
                     <textarea class="form-control" id="optim-config" aria-describedby="optim-config-help"
-                              formControlName="config" [readonly]="review.public"></textarea>
+                      formControlName="config" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="optim-config-help" class="form-text">
                       <ul>
                         <li>
@@ -313,7 +324,8 @@
                   <div class="mb-3">
                     <label for="model-inter" class="form-label">Interpretability</label>
                     <textarea class="form-control" id="model-inter" aria-describedby="model-inter-help"
-                              formControlName="interpretability" [readonly]="review.public"></textarea>
+                      formControlName="interpretability"
+                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="model-inter-help" class="form-text">
                       <ul>
                         <li>Is the model blackbox or transparent?</li>
@@ -325,7 +337,7 @@
                   <div class="mb-3">
                     <label for="model-out" class="form-label">Output</label>
                     <textarea class="form-control" id="model-out" aria-describedby="model-out-help"
-                              formControlName="output" [readonly]="review.public"></textarea>
+                      formControlName="output" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="model-out-help" class="form-text">
                       Is the model classification or regression?
                     </div>
@@ -334,7 +346,7 @@
                   <div class="mb-3">
                     <label for="model-time" class="form-label">Execution time</label>
                     <input type="text" class="form-control" id="model-time" aria-describedby="model-time-help"
-                           formControlName="duration" [readonly]="review.public">
+                      formControlName="duration" [readonly]="!user.roles?.includes('admin') && review.public">
                     <div id="model-time-help" class="form-text">
                       How much time did it take for the model to run
                     </div>
@@ -343,11 +355,13 @@
                   <div class="mb-3">
                     <label for="model-avail" class="form-label">Software availability</label>
                     <textarea class="form-control" id="model-avail" aria-describedby="model-avail-help"
-                              formControlName="availability" [readonly]="review.public"></textarea>
+                      formControlName="availability"
+                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="model-avail-help" class="form-text">
                       <ul>
                         <li>Is the source code released?</li>
-                        <li>Is a method to run the algorithm such as executable, web server, virtual machine or container
+                        <li>Is a method to run the algorithm such as executable, web server, virtual machine or
+                          container
                           instance released?
                         </li>
                         <li>If yes to public release, where (e.g. URL) and how (license)?</li>
@@ -364,7 +378,7 @@
                   <div class="mb-3">
                     <label for="eval-method" class="form-label">Evaluation method</label>
                     <textarea class="form-control" id="eval-method" aria-describedby="eval-method-help"
-                              formControlName="method" [readonly]="review.public"></textarea>
+                      formControlName="method" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="eval-method-help" class="form-text">
                       How was the method evaluated? (E.g. cross-validation, independent dataset, novel experiments)
                     </div>
@@ -373,7 +387,7 @@
                   <div class="mb-3">
                     <label for="model-out" class="form-label">Performance measures</label>
                     <textarea class="form-control" id="eval-perform" aria-describedby="eval-perform-help"
-                              formControlName="measure" [readonly]="review.public"></textarea>
+                      formControlName="measure" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="eval-perform-help" class="form-text">
                       <ul>
                         <li>Which performance metrics are reported?</li>
@@ -385,7 +399,7 @@
                   <div class="mb-3">
                     <label for="eval-comparison" class="form-label">Methods comparison</label>
                     <input type="text" class="form-control" id="eval-comparison" aria-describedby="eval-comparison-help"
-                           formControlName="comparison" [readonly]="review.public">
+                      formControlName="comparison" [readonly]="!user.roles?.includes('admin') && review.public">
                     <div id="eval-comparison-help" class="form-text">
                       <ul>
                         <li>Was a comparison to publicly available methods performed on benchmark datasets?</li>
@@ -397,7 +411,8 @@
                   <div class="mb-3">
                     <label for="eval-confidence" class="form-label">Evaluation confidence</label>
                     <textarea class="form-control" id="eval-confidence" aria-describedby="eval-confidence-help"
-                              formControlName="confidence" [readonly]="review.public"></textarea>
+                      formControlName="confidence"
+                      [readonly]="!user.roles?.includes('user') && review.public"></textarea>
                     <div id="eval-confidence-help" class="form-text">
                       <ul>
                         <li>Do the performance metrics have confidence intervals?</li>
@@ -412,7 +427,8 @@
                   <div class="mb-3">
                     <label for="eval-available" class="form-label">Evaluation availability</label>
                     <textarea class="form-control" id="eval-available" aria-describedby="eval-available-help"
-                              formControlName="availability" [readonly]="review.public"></textarea>
+                      formControlName="availability"
+                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
                     <div id="eval-available-help" class="form-text">
                       <ul>
                         <li>
@@ -430,11 +446,13 @@
         </div>
       </div>
       <!-- Bottom container, actions -->
-      <div class="container-fluid flex-shrink-0 bg-white shadow-sm overflow-hidden" *ngIf="user?.auth && !review.public">
+      <!-- If the role is admin the modification and the delete are allowed -->
+      <div class="z-3 position-relative  container-fluid flex-shrink-0 bg-white shadow-sm overflow-hidden"
+        *ngIf="(user.roles?.includes('user') && !review.public) || user.roles?.includes('admin')">
         <!-- Actions form -->
-        <form [formGroup]="actions" class="row py-3 py-1">
+        <form id="Uidbar" [formGroup]="actions" class="row py-3 py-1">
           <!-- UUID of current review -->
-          <div class="col-12 col-md-6 py-1">
+          <div class=" col-12 col-md-6 py-1  ">
             <!-- Case review is set -->
             <small>Unique identifer</small><br>
             <strong [class.text-primary]="!!review.uuid" [class.text-muted]="!review.uuid">
@@ -442,18 +460,25 @@
             </strong>
           </div>
           <!-- Buttons -->
-          <div class="col-12 col-md-6 d-flex flex-row flex-nowrap py-1">
+          <div class="col-12 col-md-6 d-flex flex-row flex-nowrap py-1 justify-content-end g">
             <!-- Delete button -->
-            <button class="btn btn-danger ms-auto me-0" type="button" [disabled]="!review.uuid" (click)="onDeleteClick($event)">
+            <button class="btn btn-danger me-1" type="button" [disabled]="!review.uuid" (click)="onDeleteClick($event)">
               Delete&nbsp;<i class="bi bi-x-square d-none d-md-inline"></i>
             </button>
             <!-- Save button -->
-            <button class="btn btn-primary ms-3 me-0" type="button" (click)="onSaveClick($event)">
+            <button class="btn btn-primary me-1" type="button" (click)="onSaveClick($event)">
               Save&nbsp;<i class="bi bi-save d-none d-md-inline"></i>
             </button>
+
+            <button class="btn btn-success me-0 " *ngIf="user.roles?.includes('admin')" type="button"
+              [disabled]="!review.uuid" (click)=" onPublishClick($event)">
+              Publish &nbsp;<i class="bi bi-check2-circle"></i>
+            </button>
+
           </div>
         </form>
       </div>
+
     </ng-container>
     <!-- Otherwise, ask user to sign in -->
     <ng-template #signInFirst>
@@ -463,18 +488,21 @@
           <div class="col-12 col-md-8 offset-md-2">
             <card-template class="d-block shadow-sm mt-3">
               <!-- Set card title -->
-              <h4 title>Submit</h4>
+              <h4 class="text-center" title>Submit</h4>
               <!-- Set card body -->
               <div body>
                 <p class="d-block mb-3">
-                  DOME registry allows you submit your own annotations. Submitted annotations will go through a manual
-                  revision process and will eventually be published. Published annotations will be made publicly available
-                  and will no longer be editable. Instead, unpublished annotations can only be viewed, edited or deleted
-                  by you.
+                  The DOME registry affords the opportunity for users to contribute annotations. These submitted
+                  annotations will be subject to a rigorous manual review process,
+                  culminating in eventual publication. Published annotations will be accessible to the public but
+                  rendered immutable.
+                  Conversely, unpublished annotations will remain subject to user-driven viewing, editing, and deletion.
                 </p>
                 <p class="d-block mb-3">
-                  However, only authorized users can access this functionality.
-                  Therefore, please sign in through ORCID if you want to use the service.
+                  It is essential to underscore that access to this functionality is restricted solely to authorized
+                  users.
+                  Hence, we kindly request that you authenticate through ORCID if you intend to engage with this service
+                  in an academic capacity
                 </p>
                 <div class="d-flex flex-row flex-wrap justify-content-center align-items-center">
                   <a class="btn btn-orcid" [href]="login" role="button">

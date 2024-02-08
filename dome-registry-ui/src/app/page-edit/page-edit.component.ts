@@ -1,13 +1,14 @@
-import {ChangeDetectionStrategy, Component, ElementRef, EventEmitter} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn} from "@angular/forms";
-import {expand, map, merge, Observable, of, share, shareReplay, startWith, switchMap, tap,} from "rxjs";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Location} from "@angular/common";
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { expand, map, merge, Observable, of, share, shareReplay, startWith, Subject, switchMap, takeUntil, tap, } from "rxjs";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Location } from "@angular/common";
 
-import {ReviewService} from "../review.service";
-import {Review, computeDomeScore, isValidField} from "dome-registry-core";
-import {AuthService} from "../auth.service";
-import {initial} from "lodash";
+import { ReviewService } from "../review.service";
+import { Review, computeDomeScore, isValidField } from "dome-registry-core";
+import { AuthService } from "../auth.service";
+
+
 
 
 // Define score entry
@@ -24,7 +25,7 @@ interface Score {
 export function notDefinedValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     // Check field validity
-    return isValidField('', control.value + '') ? null : {notDefined: true};
+    return isValidField('', control.value + '') ? null : { notDefined: true };
   };
 }
 
@@ -33,9 +34,9 @@ export function notDefinedValidator(): ValidatorFn {
   selector: 'app-page-edit',
   templateUrl: './page-edit.component.html',
   styleUrls: ['./page-edit.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageEditComponent {
+export class PageEditComponent implements OnDestroy {
 
   private readonly initial: Partial<Review>;
 
@@ -88,6 +89,8 @@ export class PageEditComponent {
   });
 
   public review?: Review;
+  public show = false;
+  public autohide = true;
 
   public readonly review$: Observable<Review>;
 
@@ -117,7 +120,7 @@ export class PageEditComponent {
   //   // Always return same review
   //   shareReplay(1),
   // );
- 
+
   private readonly update$ = new EventEmitter<void>();
 
   public readonly updated$: Observable<Review>;
@@ -125,6 +128,7 @@ export class PageEditComponent {
   private readonly delete$ = new EventEmitter<void>();
 
   public readonly deleted$: Observable<undefined>;
+  private destroy$ = new Subject();
 
 
   // Retrieve root element
@@ -140,7 +144,7 @@ export class PageEditComponent {
   // Define login url
   public readonly login = this.authService.url;
 
-  
+
 
   constructor(
     private reviewService: ReviewService,
@@ -150,6 +154,7 @@ export class PageEditComponent {
     private elementRef: ElementRef,
     private location: Location,
     private router: Router,
+
   ) {
 
     // Define initial form value
@@ -172,7 +177,7 @@ export class PageEditComponent {
     // Define update pipeline
     this.updated$ = this.update$.pipe(
       // Define current review
-      map(() => ({...this.updates.value, uuid: this.review?.uuid} as Review)),
+      map(() => ({ ...this.updates.value, uuid: this.review?.uuid } as Review)),
       // Update current review
       switchMap((review) => this.reviewService.upsertReview(review)),
     );
@@ -191,21 +196,23 @@ export class PageEditComponent {
       tap((review?: Review) => this.review = review),
       // Set current UUID
       tap((review?: Review) => {
+
         // Define review UUID
         const uuid = review?.uuid ? review.uuid : '';
         // Define updated URL according to retrieved identifier
-        const route = this.router.createUrlTree(['./', uuid], {relativeTo: this.activeRoute});
+        const route = this.router.createUrlTree(['./', uuid], { relativeTo: this.activeRoute });
         // TODO Remove this
         console.log('Current route', route);
         // // Change current URL
         // this.location.go(route.toString());
       }),
+
       // Update form
-      tap((review?: Review) => this.updates.patchValue({...this.initial, ...review})),
+      tap((review?: Review) => this.updates.patchValue({ ...this.initial, ...review })),
       // Mark fields as touched
       tap((review?: Review) => review?.uuid ? this.updates.markAllAsTouched() : this.updates.markAsUntouched()),
       // Eventually, return default review
-      map((review) => review ? review : {public: false} as Review),
+      map((review) => review ? review : { public: false } as Review),
       // Cache result
       shareReplay(1),
     );
@@ -226,22 +233,46 @@ export class PageEditComponent {
       )),
       // Cache result
       shareReplay(1),
-      
+
     );
 
 
   }
+  ngOnDestroy(): void {
+    this.destroy$.next(true)
+  }
+
 
   // Handle save click
   public onSaveClick($event: MouseEvent) {
     // Just trigger save action
+
     this.update$.emit();
+
   }
 
   // Handle delete click
   public onDeleteClick($event: MouseEvent) {
+    console.log( this.delete$);
     // Just trigger delete action
     this.delete$.emit();
+  }
+
+  //Make the annotation public 
+
+  public onPublishClick($event: MouseEvent) {
+    try {
+      console.log('we are here heheheh');
+      console.log(this.review?.uuid);
+      this.reviewService.publishAnnotation(this.review?.uuid).pipe(
+        takeUntil(this.destroy$),
+        map(() => {
+          console.log('Post Update Message !!!');
+        })
+      ).subscribe(() => { })
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // Avoid sorting map

@@ -1,7 +1,7 @@
-import {environment} from "../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, map, Observable, tap} from "rxjs";
+import { environment } from "../environments/environment";
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, map, Observable, tap } from "rxjs";
 import * as core from "dome-registry-core";
 
 
@@ -55,15 +55,15 @@ export class ReviewService {
   constructor(private readonly httpClient: HttpClient) {
   }
 
-// Set data for the shared services 
-setData(data:string){
-  this.dataSubject.next(data);
-}
+  // Set data for the shared services 
+  setData(data: string) {
+    this.dataSubject.next(data);
+  }
 
-// Get data for the shared service 
-getData(){
-  return this.dataSubject.getValue() ;
-}
+  // Get data for the shared service 
+  getData() {
+    return this.dataSubject.getValue();
+  }
 
 
   // Search for single review against database
@@ -75,9 +75,9 @@ getData(){
   // Search for multiple reviews against database
   public searchReviews(query: Query) {
     // Define GET query parameters
-    let params: any = {...query, sort: query.by, by: undefined};
+    let params: any = { ...query, sort: query.by, by: undefined };
     // Return observable for search results
-    return this.httpClient.get<Array<Review | {matches: Record<string, string>}>>(this.url, {params}).pipe(
+    return this.httpClient.get<Array<Review | { matches: Record<string, string> }>>(this.url, { params }).pipe(
       tap((reviews) => {
         console.log({ reviews })
       }),
@@ -107,18 +107,11 @@ getData(){
           }
         }
         // Parse field matches to text matches
-        return {...review, matches} as Review;
+        return { ...review, matches } as Review;
       })),
     );
   }
 
-  // Create or update a review and insert it into the database
-  public upsertReview(review: Partial<Review>): Observable<Review> {
-    // Define endpoint URL according to review identifier
-    let url = this.url + '/' + (review.uuid || '');
-    // Define method according to review identifier
-    return review.uuid ? this.httpClient.patch<Review>(url, review) : this.httpClient.post<Review>(url, review);
-  }
 
   // Delete a review from the database
   public deleteReview(uuid: string): Observable<void> {
@@ -129,7 +122,7 @@ getData(){
 
 
   // Get the total number of the public entries 
-  public countElements() :Observable<number>{
+  public countElements(): Observable<number> {
     return this.httpClient.get<number>(this.url + '/total').pipe(
       map(response => response as number)
     );
@@ -137,14 +130,37 @@ getData(){
 
 
   // Get the total number of the private entries 
-  public countPrivElements(): Observable<number>{
-     
-    return this.httpClient.get<number>(this.url +'/totalPrivate')
+  public countPrivElements(): Observable<number> {
+
+    return this.httpClient.get<number>(this.url + '/totalPrivate')
+  }
+
+  public getOwner(uuid: string): Observable<string> {
+
+    return this.httpClient.get<string>(this.url + '/adel/' + uuid);
+
+  }
+
+  // Create or update a review and insert it into the database
+  public upsertReview(review: Partial<Review>): Observable<Review> {
+    // Define endpoint URL according to review identifier
+    let url = this.url + '/' + (review.uuid || '');
+    // Define method according to review identifier
+    return review.uuid ? this.httpClient.patch<Review>(url, review) : this.httpClient.post<Review>(url, review);
+  }
+  public publishAnnotation(uuid: any) {
+
+    //(url, review) : this.httpClient.post<Review>(url, review)
+    let url = this.url + '/publish/' + uuid;
+    let update = {public: true}
+
+    return this.httpClient.patch<Review>(url,{});
   }
 
 
-
-
-
-  
 }
+
+
+
+
+

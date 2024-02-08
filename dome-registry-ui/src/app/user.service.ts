@@ -33,4 +33,9 @@ export class UserService {
     const total= this.http.get<number>(this.url + '/total')
     return total;
   }
+
+
+  public  userInfo(id: any){
+    return this.http.get<User>(this.url+'/owner'+id);
+  }
 }

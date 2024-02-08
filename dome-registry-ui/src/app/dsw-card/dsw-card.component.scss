@@ -1,0 +1,26 @@
+img{
+   height: 30%;
+}
+
+@keyframes rotate-arrow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(90deg);
+    }
+  }
+  
+  .bi-arrow-right {
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+  
+  .btn:hover .bi-arrow-right {
+    animation: rotate-arrow 0.3s forwards;
+ 
+  }
+  .btn-primary:hover{
+    background-color: #F46B17;
+  }
+

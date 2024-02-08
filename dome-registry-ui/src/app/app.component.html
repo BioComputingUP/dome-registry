@@ -12,17 +12,17 @@
         </a>
         <!-- Collapse button -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbar-supported-content" aria-controls="navbar-supported-content"
-                aria-expanded="false" aria-label="Toggle navigation">
+          data-bs-target="#navbar-supported-content" aria-controls="navbar-supported-content" aria-expanded="false"
+          aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <!-- Collapsable content -->
-        <div class="navbar-collapse collapse" id="navbar-supported-content">
+        <div class="navbar-collapse collapse " id="navbar-supported-content">
           <!-- Left side -->
           <ul class="navbar-nav ms-auto">
             <li class="nav-item  ">
               <a class="nav-link " [routerLinkActive]="['active']" [routerLink]="'/intro'"><b>Home</b></a>
-            
+
             </li>
             <li class="nav-item">
               <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/stats'"><b>Statistics</b></a>
@@ -39,7 +39,10 @@
             <li class="nav-item">
               <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/about'"><b>About</b></a>
             </li>
-            
+            <li class="nav-item">
+              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/DSW'"><b>Help</b></a>
+            </li>
+          
           </ul>
           <!-- Right side -->
           <ul class="navbar-nav ms-auto me-0">
@@ -49,7 +52,7 @@
               <ng-container *ngIf="!!user.auth; else userNotAuthorized">
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle active" href="#" id="navbar-menu" role="button"
-                     data-bs-toggle="dropdown" aria-expanded="false">
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     {{user.orcid}}&nbsp;<i class="bi bi-person-circle bi-orcid"></i>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar-menu">
@@ -57,9 +60,14 @@
                     <li>
                       <a class="dropdown-item">
                         <div>{{user.name || 'Unknown user'}}</div>
-                        <div class="small"><i class="bi bi-person-circle text-orcid"></i><b>&nbsp;{{user.orcid}}</b></div>
+                        <div class="small"><i class="bi bi-person-circle text-orcid"></i><b>&nbsp;{{user.orcid}}</b>
+                        </div>
                         <div class="small"><i class="bi bi-envelope text-orcid"></i>&nbsp;{{user.email || '-'}}</div>
+                       
                       </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-item cursor-pointer"><i class="bi bi-person-circle text-orcid"></i>&nbsp;{{user.roles || '-'}}</div>
                     </li>
                     <!-- Show logout button -->
                     <li>
@@ -67,6 +75,7 @@
                         <i class="bi bi-box-arrow-right"></i>&nbsp;Logout
                       </a>
                     </li>
+                   
                   </ul>
                 </li>
               </ng-container>
@@ -113,23 +122,21 @@
   <!-- Bottom footer (sticky) -->
   <footer class="d-block flex-grow-0 ">
     <div class="d-flex flex-row align-items-center bg-gradient py-2">
-  <span class="d-inline ms-3 me-auto">
-    <span class="d-none d-sm-inline">Supported by&nbsp;</span>
-    <a href="https://elixir-europe.org/">
-      <img class="logo-sm cursor-pointer" src="assets/elixir.svg">
-    </a>
-  </span>
-  <span class="d-inline me-auto">
+      <span class="d-inline ms-3 me-auto">
+        <span class="d-none d-sm-inline">Supported by&nbsp;</span>
+        <a href="https://elixir-europe.org/">
+          <img class="logo-sm cursor-pointer" src="assets/elixir.svg">
+        </a>
+      </span>
+      <span class="d-inline me-auto">
 
-    <span class="d-none d-sm-inline"> <a class="text-white" href="#">Version 2.0 </a> </span>
-      
-  </span>
+        <span class="d-none d-sm-inline"> <a class="text-white"  href="#">Version 2.1 </a> </span>
+
+      </span>
       <span class="d-inline me-3">
-    <span class="d-none d-sm-inline">Developed and maintained by&nbsp;</span>
-    <a class= "text-white"href="https://github.com/BioComputingUP" >BioCompUP <i class="bi bi-github"></i></a>
-  </span>
+        <span class="d-none d-sm-inline">Developed and maintained by&nbsp;</span>
+        <a class="text-white" href="https://github.com/BioComputingUP">BioCompUP <i class="bi bi-github"></i></a>
+      </span>
     </div>
   </footer>
 </div>
-
-

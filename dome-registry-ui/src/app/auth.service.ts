@@ -78,8 +78,10 @@ export class AuthService {
 
   // Define logout function
   public logout() {
+
     // First, remove token
     this.cookieService.remove('jwt');
+    sessionStorage.clear()
     // Then, emit it
     this.token$.next(this.token);
   }

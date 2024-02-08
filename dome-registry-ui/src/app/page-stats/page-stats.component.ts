@@ -3,6 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, forkJoin, map, Observable, of, shareReplay, switchMap, tap} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 
+
+
 @Component({
   selector: 'app-page-stats',
   templateUrl: './page-stats.component.html',
@@ -10,7 +12,14 @@ import {ActivatedRoute} from "@angular/router";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageStatsComponent implements OnInit {
-
+  databar: any;
+  datadoughnut: any;
+  dataline: any;
+  datapolar: any;
+  datapie:any;
+  dataradar:any;
+  datacombo: any;
+  chartOptions: any;
   // Retrieve root element
   public get element() {
     return this.elementRef.nativeElement;
@@ -145,6 +154,7 @@ export class PageStatsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
 }
