@@ -31,6 +31,7 @@ async function bootstrap() {
 
     const port = configService.get<number>('server.port');
     logger.log(`Listening On port ${port}`)
+    
 
     // Run application synchronously on given port
     await app.listen(port);

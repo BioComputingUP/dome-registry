@@ -1,43 +1,51 @@
-import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
-import {Publication, Dataset, Model, Optimization, Evaluation, computeDomeScore} from 'dome-registry-core';
-import {User} from '../user/user.schema';
+import { Publication, Dataset, Model, Optimization, Evaluation, computeDomeScore } from 'dome-registry-core';
+import { User } from '../user/user.schema';
+import { ReviewState } from 'src/review-state/state.eum';
+
 
 type ReviewDocument = Review & mongoose.Document;
 
-@Schema()
+@Schema({
+    collection: 'reviews',
+    discriminatorKey: 'public'
+})
 class Review {
-
-    @Prop({required: true})
+    
+    @Prop({ required: true })
     uuid: string;
 
-    @Prop({type: Date, required: true})
+    @Prop({ type: Date, required: true })
     created: number;
 
-    @Prop({type: Date, required: true})
+    @Prop({ type: Date, required: true })
     updated: number;
 
     @Prop({ required: true })
     public: boolean;
 
-    @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true})
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true })
     user: User;
 
-    @Prop({type: Object, required: true})
+    @Prop({ type: Object, required: true })
     publication: Publication;
 
-    @Prop({type: Object, required: true})
+    @Prop({ type: Object, required: true })
     dataset: Dataset;
 
-    @Prop({type: Object, required: true})
+    @Prop({ type: Object, required: true })
     model: Model;
 
-    @Prop({type: Object, required: true})
+    @Prop({ type: Object, required: true })
     optimization: Optimization;
 
-    @Prop({type: Object, required: true})
+    @Prop({ type: Object, required: true })
     evaluation: Evaluation;
 
+    @Prop({ type: String, enum:ReviewState ,default:ReviewState.Undefined})
+    reviewState?: ReviewState;
+  
 }
 
 const ReviewSchema = SchemaFactory.createForClass(Review);
@@ -65,4 +73,6 @@ const ReviewSchema = SchemaFactory.createForClass(Review);
 // });
 
 
-export { Review, ReviewSchema, ReviewDocument }
+export {
+    Review, ReviewSchema, ReviewDocument
+}

@@ -2,13 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ConfigService } from "@nestjs/config";
 import { Strategy, ExtractJwt } from "passport-jwt";
+import { UserService } from "src/user/user.service";
 
 
 @Injectable()
 export class JwtAuthStrategy extends PassportStrategy(Strategy) {
 
   // Constructor
-  constructor(private readonly configService: ConfigService) {
+  constructor(private readonly configService: ConfigService, protected userService: UserService) {
     // Define function for extracting JWT from cookie (first option)
     const extractJwtFromCookie = (req) => {
       // Initialize token
@@ -36,8 +37,23 @@ export class JwtAuthStrategy extends PassportStrategy(Strategy) {
   // Validate JWT
   // https://docs.nestjs.com/security/authentication#implementing-passport-jwt
   async validate(payload: any) {
+
+    console.log({ payload })
+
+    if (payload.orcid) {
+      const user = await this.userService.findByOrcid(payload.orcid);
+      
+
+      return user
+    }
+    if (payload._id) {
+      return await this.userService.findById(payload._id);
+    }
+
+    throw new Error(`User with payload ${payload} Not found !`);
+
     // Here, we're guaranteed that we're receiving a valid token
-    return { _id: payload._id, orcid: payload.orcid };
+    // return { _id: payload._id, orcid: payload.orcid };
   }
 
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, ForbiddenException, NotFoundException, Query } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, ForbiddenException, NotFoundException, Query, Logger } from "@nestjs/common";
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
@@ -12,7 +12,8 @@ import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, 
 import { Review } from "./review.schema";
 import { computeDomeScore } from "dome-registry-core";
 import mongodb from 'mongodb';
-import { SubmitWizards } from "./dto/submit-wizard.dto";
+import { ReviewSubmission, SubmitWizards } from "./dto/submit-wizard.dto";
+import { Role } from "src/roles/role.enum";
 
 
 @ApiTags('Reviews')
@@ -26,6 +27,7 @@ export class ReviewController {
         private readonly userService: UserService,
     ) { }
 
+    logger = new Logger(ReviewController.name);
 
     //**----------Get All reviews-------- **/
     @Get()
@@ -52,17 +54,31 @@ export class ReviewController {
         status: 200,
         description: 'we got it ',
     })
+
     @Get('total')
     async getTotalEntries() {
-        //return 'test';
+
         const totalEntries = await this.reviewService.countPub();
-        // console.log(totalEntries);
         return totalEntries;
+
+    }
+
+    /* ------------Swich annotations from private to public---------------- */
+
+    @Patch('publish/:uuid')
+    async publishAnnotation(@Param('uuid') uuid: string, @User() user) {
+
+        return await this.reviewService.makePublic(uuid, user);
     }
 
 
 
+
+
+
+
     /* Get the number of the private entries in the database  */
+
 
     @ApiOperation({ summary: 'Get the total number of the entries in progress (private)' })
     @ApiResponse({
@@ -71,11 +87,14 @@ export class ReviewController {
     })
     @Get('totalprivate')
     async getTotalPrivEntries() {
-        //return 'test';
+
         const totalEntries = await this.reviewService.countprivate();
-        // console.log(totalEntries);
         return totalEntries;
     }
+
+
+
+
 
 
     //**---------------Get Review by Unique UID ------------**/
@@ -95,6 +114,7 @@ export class ReviewController {
         description: 'Review',
     })
     async findOne(@Param('uuid') uuid: string, @User() user) {
+
         // Try retrieving review
         let review = await this.reviewService.findOne(uuid);
         // Case review is found
@@ -104,11 +124,15 @@ export class ReviewController {
                 // Return review
                 return review;
             }
+            if (!review.public && user.roles === Role.Admin) {
+                return review;
+
+            }
             // Otherwise, return 403 Forbidden
             throw new ForbiddenException();
         }
         // Otherwise, return 404 Not Found
-        throw new NotFoundException(null, 'not found');
+        throw new NotFoundException(null, 'Not found');
     }
 
 
@@ -122,26 +146,25 @@ export class ReviewController {
 
     @ApiResponse({
         status: 201,
-        description: 'success review updated ',
+        description: 'Success review updated ',
     })
 
     @UseGuards(JwtAuthGuard)
     async create(@Body() createReviewDto: CreateReviewDto, @User() user) {
-        console.log(createReviewDto);
-        console.log(user);
+
         return this.reviewService.create(createReviewDto, user);
     }
 
 
 
 
-    // **------- update a revieww -------**//
+    // **------- Update a revieww -------**//
     @Patch(':uuid')
     @UseGuards(JwtAuthGuard)
     @ApiOperation({ summary: 'Get updated review ' })
     async update(@Param('uuid') uuid: string, @Body() updateReviewDto: UpdateReviewDto, @User() user) {
         // Get updated review, if any
-        console.log(user);
+
         let review = await this.reviewService.update(Object.assign(updateReviewDto, { uuid }), user);
         // Case no review was returned
         if (!review) {
@@ -153,6 +176,7 @@ export class ReviewController {
     }
 
 
+
     //**---------Delete A review-------**/
     @Delete(':uuid')
     @UseGuards(JwtAuthGuard)
@@ -162,40 +186,40 @@ export class ReviewController {
         description: 'Review removed successfuly',
     })
     async remove(@Param('uuid') uuid: string, @User() user) {
-        return this.reviewService.remove(uuid, user);
+        return await this.reviewService.remove(uuid, user);
     }
+
+
 
     //**------------------Create a review threw Dome  Wizards ----------------------**//
-
     @Post('wizards')
-    @ApiOperation({ summary: 'Get a  review from wizards' })
-    @ApiResponse({
-        status: 200,
-        description: 'we got it ',
-    })
+    // @ApiOperation({ summary: 'Get a  review from wizards' })
+    // @ApiResponse({
+    //     status: 200,
+    //     description: 'we got it ',
+    // })
 
-    async createRevieWizads(@Body() wizards: SubmitWizards) {
-        const {
+    async createRevieWizads(@Body() wizards: ReviewSubmission) {
+
+        this.logger.log('Create Review Wizards');
+        // Mapping the object coming from the Data Stewardship wizards 
+        const { ReviewUser: {
             user,
             review
-        } = wizards;
+        } } = wizards;
 
-        // const userId = new mongodb.ObjectId('648c696c92c76639b8bb57cb');
-        // const user = await this.userService.findByOrcid('0009-0000-4401-6504');
-
+        // insert the ORCID user in the database
         const createdUser = await this.userService.upsertByOrcid(user);
 
-        console.log(wizards);
+        this.logger.log(`Upserted User name: ${createdUser.name}/ orcid: ${createdUser.orcid}`);
+
+        // Create the review in the Database
         const reviewCreated = await this.reviewService.create(review, createdUser);
 
-        console.log({
-            reviewCreated
-        })
+        this.logger.log(`Created Review:`);
+        this.logger.log({ reviewCreated });
 
-        // const insert new this.
-
+        
     }
-
-
 
 }

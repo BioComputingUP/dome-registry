@@ -58,6 +58,7 @@ import { configuration } from "./config/configuration";
         JwtAuthModule,
         ReviewModule,
         UserModule,
+        
     ],
     controllers: [AppController],
     providers: [AppService]

@@ -3,6 +3,7 @@ import {Module} from '@nestjs/common';
 import {JwtModule, JwtService} from "@nestjs/jwt";
 import {JwtAuthService} from './jwt-auth.service';
 import {JwtAuthStrategy} from "./jwt-auth.strategy";
+import { UserModule } from 'src/user/user.module';
 
 
 @Module({
@@ -19,6 +20,7 @@ import {JwtAuthStrategy} from "./jwt-auth.strategy";
             }),
         }),
         ConfigModule,
+        UserModule
     ],
     providers: [JwtAuthStrategy, JwtAuthService],
     exports: [JwtModule, JwtAuthService],

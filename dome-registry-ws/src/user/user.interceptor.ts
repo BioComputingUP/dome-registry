@@ -1,6 +1,7 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import {Observable, tap} from 'rxjs';
 import {JwtService} from "@nestjs/jwt";
+import { UserService } from './user.service';
 
 @Injectable()
 export class UserInterceptor implements NestInterceptor {
@@ -8,9 +9,10 @@ export class UserInterceptor implements NestInterceptor {
   // Dependency injection
   constructor(
       private readonly jwtService: JwtService,
+      protected userService: UserService
   ) {}
 
-  intercept(ctx: ExecutionContext, next: CallHandler): Observable<any> {
+  async intercept(ctx: ExecutionContext, next: CallHandler) {
     // Retrieve HTTP request out of context
     const req = ctx.switchToHttp().getRequest();
     // Initialize user
@@ -23,7 +25,7 @@ export class UserInterceptor implements NestInterceptor {
       user = this.jwtService.decode(token) as { _id: string } | null;
     }
     // Set user in request
-    req.user = user;
+    req.user = await this.userService.findByOrcid(user?.orcid);
     // Continue execution
     return next.handle();
   }
