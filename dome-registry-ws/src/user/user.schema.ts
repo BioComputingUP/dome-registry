@@ -27,7 +27,7 @@ export class User {
     roles?: string;
 
     // Organization of the user 
-    @Prop({type:String, required:false})
+    @Prop({type:String, required:false , default:'undefined'})
     organisation?:string;
 
 }

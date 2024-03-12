@@ -50,27 +50,27 @@ class Review {
 
 const ReviewSchema = SchemaFactory.createForClass(Review);
 
-// // Add pre-init hook on review schema
-// ReviewSchema.pre('init', function () {
-//     // DEBUG
-//     console.log('Pre-init', this);
-// });
+// Add pre-init hook on review schema
+ReviewSchema.pre('init', function () {
+    // DEBUG
+    console.log('Pre-init', this);
+});
 
-// Add pre-save hook on review schema
-// ReviewSchema.pre('save', function () {
-//     // Define review
-//     let review = this.toObject() as Review;
-//     // Compute DOME score
-//     let score = computeDomeScore(review);
-//     // Remove total score
-//     score.delete('total');
-//     // Update sections' scores in place
-//     score.forEach(([ done, skip ], section) => {
-//         // Update section
-//         this[section]['done'] = done;
-//         this[section]['skip'] = skip;
-//     });
-// });
+//Add pre-save hook on review schema
+ReviewSchema.pre('save', function () {
+    // Define review
+    let review = this.toObject() as Review;
+    // Compute DOME score
+    let score = computeDomeScore(review);
+    // Remove total score
+    score.delete('total');
+    // Update sections' scores in place
+    score.forEach(([ done, skip ], section) => {
+        // Update section
+        this[section]['done'] = done;
+        this[section]['skip'] = skip;
+    });
+});
 
 
 export {
