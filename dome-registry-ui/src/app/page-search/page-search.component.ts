@@ -2,8 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy} from '@angu
 import {Observable, BehaviorSubject, switchMap, combineLatest, distinctUntilChanged, debounceTime, map, tap, startWith, Subject} from "rxjs";
 import {Field, Offset, Query, Review, ReviewService, Sort} from "../review.service";
 import {AuthService} from "../auth.service";
-import { computeDomeScore } from 'dome-registry-core';
-
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 type Reviews = Array<Review>;
 
 interface Score {
@@ -20,7 +19,7 @@ interface Score {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageSearchComponent implements OnDestroy{
-
+  public page = 3 ;
   public readonly text$ = new BehaviorSubject<string>('');
 
   public readonly public$ = new BehaviorSubject<'true' | 'false'>('true');

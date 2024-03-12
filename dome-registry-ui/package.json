@@ -10,7 +10,8 @@
     "deploy-check": "(colR='\\033[0;91m';colC='\\033[0;36m';colN='\\033[0m'; echo ${colC}Checking repo in deploy-check...${colN}; { git diff --exit-code --stat|| { echo ${colR}There are local unstaged changes, fix with git add ...${colN} && false; }; } && { git diff --cached --exit-code --stat || { echo ${colR}There are uncommitted changes, fix with git commit ...${colN} && false; }; } && { git push --dry-run --porcelain >/dev/null|| { echo ${colR}There are remote changes, fix with git pull ...${colN} && false; }; } && { git push --dry-run --porcelain|grep -q 'up to date' || { git status; echo ${colR}There are unpublished local commits, fix with git push ...${colN} && false; }; } && { { { git remote update &>/dev/null && git status -uno; } |grep -q \"up to date\"; } || { echo ${colR}There are remote changes, fix with git pull ...${colN} && false; }; }; )",
     "deploy-prod-quick": "(colC='\\033[0;36m';colN='\\033[0m'; echo ${colC}Running npm build-prod ...${colN} && npm run build-prod && echo ${colC}Rsyncing dist ...${colN} && rsync -avh --delete dist biocomp@persefone:/var/www/dome-registry/ && echo ${colC}Done with deploy-prod-quick!${colC})",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "gogo": "ng generate component new-state"
   },
   "private": true,
   "dependencies": {
@@ -35,7 +36,8 @@
     "ngx-cookie": "^5.0.2",
     "ngx-toastr": "^14.3.0",
     "rxjs": "~7.5.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.11.4",
+    "dome-registry-core":"/home/omar/Domebiocomp/dome-registry/dome-registry-core"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~13.3.9",

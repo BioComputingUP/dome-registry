@@ -6,7 +6,7 @@
 
 // Style statistics card content for mobile visualization
 .statistics-card-body {
-  height: 400px;
+  height: 600px;
 }
 
 
@@ -14,8 +14,16 @@
   // TODO Style statistics card content for desktop visualization
   @include media-breakpoint-up(md) {
     // Update height
-    height: 400px;
+    height: 600px;
   }
+}
+
+.container{
+  text-align: center;
+  justify-content: center ;
+  align-items:center ;
+ 
+
 }
 
 //// Set style for plot

@@ -18,20 +18,21 @@
         </button>
         <!-- Collapsable content -->
         <div class="navbar-collapse collapse " id="navbar-supported-content">
-          <!-- Left side -->
+          <!-- navbar in center -->
           <ul class="navbar-nav ms-auto">
             <li class="nav-item  ">
               <a class="nav-link " [routerLinkActive]="['active']" [routerLink]="'/intro'"><b>Home</b></a>
 
             </li>
             <li class="nav-item">
-              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/stats'"><b>Statistics</b></a>
+              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/newstate'"><b>Statistics</b></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/search'"><b>Browse</b></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/review'"><b>Submit</b></a>
+              <!-- <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/review'"><b>Submit</b></a> -->
+              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/DSW'"><b>Submit</b></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" [routerLinkActive]="['active']" href="/api/"><b>API</b></a>
@@ -39,11 +40,10 @@
             <li class="nav-item">
               <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/about'"><b>About</b></a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/DSW'"><b>Help</b></a>
-            </li>
-          
           </ul>
+           
+           
+  
           <!-- Right side -->
           <ul class="navbar-nav ms-auto me-0">
             <!-- Get user -->

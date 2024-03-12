@@ -23,7 +23,7 @@
               <!-- Define card title -->
               <h4 title>Score</h4>
               <!-- Define card body -->
-              <div class="d-block w-100 h-100 p-1 overflow-auto" body>
+              <div class="d-block w-100 h-100 p-1 ml-2 overflow-auto" body>
                 <!-- Table header -->
                 <div class="d-flex flex-row flex-nowrap text-capitalize w-100  overflow-y-auto ">
                   <strong class="text-primary" style="flex: 1;">Section</strong>
@@ -38,7 +38,7 @@
                       <ng-container *ngIf="kv.value as score">
                         <!-- Define container -->
                         <div class="d-flex flex-row flex-wrap text-capitalize w-100 " [class.fw-bold]="name == 'total'">
-                          <span style="flex: 1">{{name}}</span>
+                          <span style="flex: 1">{{name}}</span>&nbsp;
                           <span style="flex: 0 0 8rem">{{score.done }} / {{score.done + score.skip}}
                             ({{score.percentage!.toFixed(0)}}%)</span>
                         </div>

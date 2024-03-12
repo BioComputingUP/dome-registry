@@ -8,6 +8,7 @@ import { SwaggerAPiComponent } from "./swagger-api/swagger-api.component";
 import { AboutPageComponent } from './about-page/about-page.component';
 import { PageDashboardComponent } from './page-dashboard/page-dashboard.component';
 import { DSWCardComponent } from './dsw-card/dsw-card.component';
+import { NewStateComponent } from './new-state/new-state.component';
 
 // Define default parameters
 const params: Route = {
@@ -32,7 +33,9 @@ const routes: Routes = [
   {...params,path:'DSW', component: DSWCardComponent},
   // set path to about page
   { ...params, path: 'about', component: AboutPageComponent },
+   // set ther new statistics page 
 
+   {...params, path:'newstate',component:NewStateComponent},
   // Set path to search page as default
 
   { ...params, path: '**', redirectTo: 'intro', pathMatch: 'full' },

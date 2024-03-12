@@ -21,9 +21,10 @@ import { CookieModule } from "ngx-cookie";
 import { SwaggerAPiComponent } from './swagger-api/swagger-api.component';
 import { AboutPageComponent } from './about-page/about-page.component';
 import { PageDashboardComponent } from './page-dashboard/page-dashboard.component';
-
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DSWCardComponent } from './dsw-card/dsw-card.component'
+import { DSWCardComponent } from './dsw-card/dsw-card.component';
+import { NewStateComponent } from './new-state/new-state.component'
 
 // Set Plotly.js from CDN
 PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
@@ -48,6 +49,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     AboutPageComponent,
     PageDashboardComponent,
     DSWCardComponent,
+    NewStateComponent,
   ],
   imports: [
     PlotlyViaCDNModule,
@@ -56,7 +58,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-  
+    NgbPaginationModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     CookieModule.forRoot(),

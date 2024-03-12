@@ -2,17 +2,17 @@ import {ChangeDetectionStrategy, Component, ElementRef, OnInit} from '@angular/c
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, forkJoin, map, Observable, of, shareReplay, switchMap, tap} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
-import { ChartAnnotationService } from '@syncfusion/ej2-angular-charts';
-
-
+import { Margin } from '@syncfusion/ej2-angular-charts';
 
 @Component({
-  selector: 'app-page-stats',
-  templateUrl: './page-stats.component.html',
-  styleUrls: ['./page-stats.component.scss'],
+  selector: 'app-new-state',
+  templateUrl: './new-state.component.html',
+  styleUrls: ['./new-state.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  
+  
 })
-export class PageStatsComponent implements OnInit {
+export class NewStateComponent implements OnInit {
   databar: any;
   datadoughnut: any;
   dataline: any;
@@ -21,6 +21,7 @@ export class PageStatsComponent implements OnInit {
   dataradar:any;
   datacombo: any;
   chartOptions: any;
+
   // Retrieve root element
   public get element() {
     return this.elementRef.nativeElement;
@@ -98,12 +99,25 @@ export class PageStatsComponent implements OnInit {
     // Define graph object to be returned
     map(({year, pmid}) => {
       // Define data
-      let data = [{x: Object.values(year), y: Object.values(pmid), type: 'bar'}];
+      let data = [
+        // the scatter for the annotations
+        {x: Object.values(year), 
+          y: Object.values(pmid),
+         type:'scatter',
+        marker:{color:'red'}       },
+      // The chart bar for the annotation 
+
+          {x: Object.values(year), 
+          y: Object.values(pmid),
+          type: 'bar',
+           
+         
+        }];
       // Define layout
       let layout = {
-        title: 'Annotated paper per year',
-        colorway:["green", "blue", "goldenrod", "magenta"],
-        xaxis: { title: 'Year' },
+        
+      
+        xaxis: {  type: 'category ',title: 'Year', tickangle: -45 },
         yaxis: { title: 'Count' },
         // margin: {"l": 2, "r": 2},
         showlegend: false,
@@ -150,11 +164,11 @@ export class PageStatsComponent implements OnInit {
             // Change x values (strings)
             x = x.map((s) => s.match(/(-?\d+)[\]\)]+$/)![1]);
             // Define data
-            let data = [{ x, y, type: 'bar'}];
+            let data = [{x,y, type:'scatter', marker: {color: 'blue'}},{ x, y, type: 'bar'}];
             // Define layout
             let layout = {
-              title: 'Distribution of DOME score (public reviews)',
-              xaxis: { title: 'DOME score'  },
+              
+              xaxis: { title: 'DOME score' },
               yaxis: { title: 'Count' },
               // margin: {"l": 0, "r": 0},
               showlegend: false,
@@ -193,3 +207,4 @@ export class PageStatsComponent implements OnInit {
   }
 
 }
+
