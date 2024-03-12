@@ -20,7 +20,7 @@ export interface Review {
     // User information
     user: User,
     // Whether review is public or not
-    // NOTE Private reviews can be accessed only by their owner
+    // NOTE Private reviews can be accessed only by their owners or The Admin or the person in charge of the journal
     public: boolean,
 }
 
@@ -72,15 +72,18 @@ export function computeDomeScore(review: Review): Map<string, [number, number]> 
     // Initialize sections
     let sections: Map<string, Record<string, any>>;
     // Define section names
-    let names = ['publication', 'dataset', 'optimization', 'model', 'evaluation'];
+    let names = [ 'publication','dataset', 'optimization', 'model', 'evaluation'];
     // Retrieve sections from given review
     sections = new Map<string, any>(Object.entries(review).filter(([name, _]) => names.includes(name)));
     // Remove done, skip fields
     sections.forEach((section, name) => {
-        // Extract done, skip properties
-        let {done, skip, ...others} = section;
-        // Remove only done, skip properties
-        sections.set(name, others);
+        if(name !='publication'){
+            
+            // Extract done, skip properties
+            let {done, skip, ...others} = section;
+            // Remove only done, skip properties
+            sections.set(name, others);
+        }
     });
     // Remove user, update fields from publication section
     delete sections.get('publication')!['user'];
@@ -91,12 +94,15 @@ export function computeDomeScore(review: Review): Map<string, [number, number]> 
     let total: [number, number] = [0, 0];
     // Loop through each section
     sections.forEach((section, name) => {
-        // Compute number of valid, invalid fields
-        let current = countValidFields(section);
-        // Update current section
-        score.set(name, current);
-        // Update total score
-        total = [total[0] + current[0], total[1] + current[1]];
+        if (name != 'publication'){
+            
+            // Compute number of valid, invalid fields
+            let current = countValidFields(section);
+            // Update current section
+            score.set(name, current);
+            // Update total score
+            total = [total[0] + current[0], total[1] + current[1]];
+        }
     });
     // Add total field
     score.set('total', total);
@@ -104,10 +110,13 @@ export function computeDomeScore(review: Review): Map<string, [number, number]> 
     return score;
 }
 
+
 export interface User {
+    roles?:string
     name?: string,
     orcid?: string,
     email?: string,
+    organisation?:string,
 }
 
 export interface Section {
@@ -130,6 +139,8 @@ export interface Publication extends Section {
     title: string,
     // Authors, comma separated
     authors: string,
+
+    
 }
 
 // Description for input data
