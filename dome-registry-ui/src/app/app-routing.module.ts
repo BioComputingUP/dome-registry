@@ -20,11 +20,11 @@ const routes: Routes = [
   // Define path to introduction page
   { ...params, path: 'intro', component: PageIntroComponent },
   // Define path to statistics page
-  { ...params, path: 'stats', component: PageStatsComponent },
+  { ...params, path: 'stats', component: NewStateComponent },
   // Define path to search page
   { ...params, path: 'search', component: PageSearchComponent },
   // Define path to list of reviews
-  { ...params, path: 'review', component: PageEditComponent },
+  { ...params, path: 'review', component: DSWCardComponent },
   // Define path to edit page, with id
   { ...params, path: 'review/:uuid', component: PageEditComponent },
   //Define path to the dashboard
