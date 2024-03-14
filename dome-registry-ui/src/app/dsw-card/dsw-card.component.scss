@@ -1,6 +1,4 @@
-img{
-   height: 30%;
-}
+
 
 @keyframes rotate-arrow {
     from {
@@ -10,7 +8,22 @@ img{
       transform: rotate(90deg);
     }
   }
+
+
+  .dashboard {
+    background: #172042;
+    padding: 2em;
+   
+    grid-template-columns:1fr 1fr 1fr ;
+    justify-content: center;
+    width:calc(100% - 18em);
   
+  }
+.img{
+  display: block;
+  width: 50%;
+  height: auto;
+}
   .bi-arrow-right {
     display: inline-block;
     transition: transform 0.3s ease;

@@ -1,8 +1,10 @@
-import {ChangeDetectionStrategy, Component, ElementRef, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, forkJoin, map, Observable, of, shareReplay, switchMap, tap} from "rxjs";
+import {BehaviorSubject, forkJoin, map, Observable,interval,take, of, shareReplay, switchMap, tap, Subject} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import { Margin } from '@syncfusion/ej2-angular-charts';
+import { ReviewService } from '../review.service';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-new-state',
@@ -12,7 +14,8 @@ import { Margin } from '@syncfusion/ej2-angular-charts';
   
   
 })
-export class NewStateComponent implements OnInit {
+export class NewStateComponent implements OnInit,OnDestroy {
+  private destroy$ = new Subject<boolean>();
   databar: any;
   datadoughnut: any;
   dataline: any;
@@ -195,11 +198,51 @@ export class NewStateComponent implements OnInit {
     shareReplay(),
   );
 
+  public  readonly count$: Observable<number> = this.reviewService.countElements().pipe(shareReplay(1)) ;
+  public readonly countPr$ : Observable<number> = this.reviewService.countPrivElements().pipe(shareReplay(1));
+  public readonly countUsers$ : Observable<number> = this.userService.getTotalNumber().pipe(shareReplay(1));
+ // public readonly tot$ : Observable<number> = thiscount$ + this.countPr$
+  
+  
+  
+  
+  
+  public readonly countCounter$ = this.count$.pipe(
+    switchMap((count: number) => {
+      return interval(1).pipe(
+        map((counter) => counter),
+        take(count)
+      )
+    })
+  )
+  public readonly countPreson = this.countUsers$.pipe(
+    switchMap((count:number) => {
+      return interval(1).pipe(
+        map((counter) => counter),take(count)
+      )
+    })
+  )
+
+public readonly countProgres$ = this.countPr$.pipe(
+  switchMap((count: number) => {
+    return interval(1).pipe(
+      map((counter) => counter), take(count)
+    )
+  })
+)
+
+
+
   constructor(
     private http: HttpClient,
     private activeRoute: ActivatedRoute,
     private elementRef: ElementRef,
+    private reviewService:ReviewService,
+    private userService:UserService,
   ) {
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
   }
 
   ngOnInit(): void {

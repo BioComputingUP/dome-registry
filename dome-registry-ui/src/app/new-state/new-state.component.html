@@ -15,24 +15,24 @@
             <div class="sales mb-3 text-white  ">
                 <div class="col-3 w-auto">
                     <h4>Users</h4>
-                    <h1>59</h1>
+                    <h1>{{countPreson | async}}</h1>
                    
                 </div>
                 <div class="col-3 w-auto">
                     <h4>
                         Public annotations
                     </h4>
-                    <h1>159 </h1>
+                    <h1>{{ countCounter$ | async }} </h1>
                    
                 </div>
                 <div class="col-3 w-auto">
                     <h4>Private annotations </h4>
-                    <h1>32</h1>
+                    <h1>{{countProgres$ | async }}</h1>
                    
                 </div>
                 <div class="col-3 w-auto">
                     <h4>Total annotations </h4>
-                    <h1>192</h1>
+                    <h1>190</h1>
                    
                     
                 </div>
@@ -99,7 +99,7 @@
 
 
                        </div>
-                       <div class="col-md-6 ">
+                       <div class="col-md-6 my-auto">
                            <ng-container  [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'Top Journals', id: 'journal', graph: journal$ | async }"></ng-container>
                            
                         </div>
@@ -311,7 +311,7 @@
                      
 
                 </div>
-                <div class="col-6">
+                <div class="col-6 my-auto">
                     <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['total'] }"></ng-container>
                 </div>
                     </div>
@@ -363,7 +363,7 @@
 
         </div>
             
-        <div class="col-6">
+        <div class="col-6 my-auto">
         <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (dataset)', id: 'score-dataset', graph: (score$ | async)?.['dataset'] }"></ng-container>
         </div>
 
@@ -525,7 +525,7 @@
                             
 
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 my-auto">
                             <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (evaluation)', id: 'score-evaluation', graph: (score$ | async)?.['evaluation'] }"></ng-container>
 
                         </div>
