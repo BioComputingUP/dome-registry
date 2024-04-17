@@ -123,10 +123,7 @@ export class PageSearchComponent implements OnDestroy{
     // Emit new offset
     this.offset$.emit({skip: this.results.length, limit: 100});
   }
-  public async owner(uuid:string){
-    console.log(this.reviewService.getOwner(uuid));
-     return this.reviewService.getOwner(uuid);
-  }
+
   ngOnDestroy(): void {
     this.destroy$.next(true)
   }

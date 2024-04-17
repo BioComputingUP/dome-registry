@@ -26,7 +26,7 @@ const routes: Routes = [
   // Define path to list of reviews
   { ...params, path: 'review', component: DSWCardComponent },
   // Define path to edit page, with id
-  { ...params, path: 'review/:uuid', component: PageEditComponent },
+  { ...params, path: 'review/:shortid', component: PageEditComponent },
   //Define path to the dashboard
   { ...params, path: 'dashboard', component: PageDashboardComponent },
   // Dfine a path to DSW

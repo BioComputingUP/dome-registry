@@ -135,6 +135,12 @@ export class ReviewService {
     return this.httpClient.get<number>(this.url + '/totalPrivate')
   }
 
+public countAllElements(): Observable<number> {
+  
+  return this.httpClient.get<number>(this.url+ '/totalpub')
+}
+
+
   public getOwner(uuid: string): Observable<string> {
 
     return this.httpClient.get<string>(this.url + '/adel/' + uuid);

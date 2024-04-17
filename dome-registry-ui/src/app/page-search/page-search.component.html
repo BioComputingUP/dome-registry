@@ -103,7 +103,7 @@
 
                 <div class="border border-orange shadow-lg p-3 mb-3  rounded " *ngFor="let review of results$ | async">
                   <!-- Show review title -->
-                  <h4 class="text-primary cursor-pointer mb-0" [routerLink]="['/review', review.uuid]">
+                  <h4 class="text-primary cursor-pointer mb-0" [routerLink]="['/review', review.shortid]">
                     {{review.publication.title || 'Undefined'}}
                   </h4>
 
@@ -113,7 +113,7 @@
                       <strong>Matching fields</strong>
                     </p>
                     <p class="cursor-pointer ps-1 mb-0" *ngFor="let item of review.matches | keyvalue"
-                      [routerLink]="['/review', review.uuid]" [fragment]="item.key.split('/').pop()">
+                      [routerLink]="['/review', review.shortid]" [fragment]="item.key.split('/').pop()">
                       <!-- Show field name -->
                       <strong>{{item.key}}&nbsp;</strong>
                       <!-- Show matching value -->
@@ -148,6 +148,16 @@
 
                     <strong>Visibility&nbsp;</strong><i class="bi bi-lock"></i>
                     Private
+                  </p>
+                  <p class="mb-0" >
+
+                    <strong>Created:&nbsp;</strong>
+                  <span>{{review.created | date}}</span>
+                  </p>
+                  <p class="mb-0" >
+
+                    <strong>Updated:&nbsp;</strong>
+                  <span>{{review.updated | date }}</span>
                   </p>
                   <!-- Show journal and date -->
 

@@ -3,7 +3,7 @@
   <!-- Retrieve review, if any -->
   <ng-container *ngIf="review$ | async as review">
     <!-- Case user is authorized, show edit form -->
-    <ng-container *ngIf="user.auth || review.uuid ; else signInFirst">
+    <ng-container *ngIf="user.auth || review.shortid ; else signInFirst">
       <!-- Inner scaffold   -->
       <div class="container-fluid flex-grow-1 bg-light h-100 overflow-scroll" [root]="element" [target]="'#links'"
         scroll-spy>

@@ -201,6 +201,7 @@ export class NewStateComponent implements OnInit,OnDestroy {
   public  readonly count$: Observable<number> = this.reviewService.countElements().pipe(shareReplay(1)) ;
   public readonly countPr$ : Observable<number> = this.reviewService.countPrivElements().pipe(shareReplay(1));
   public readonly countUsers$ : Observable<number> = this.userService.getTotalNumber().pipe(shareReplay(1));
+  public readonly countTotal$ : Observable<number> = this.reviewService.countAllElements().pipe(shareReplay(1));
  // public readonly tot$ : Observable<number> = thiscount$ + this.countPr$
   
   
@@ -224,6 +225,14 @@ export class NewStateComponent implements OnInit,OnDestroy {
   )
 
 public readonly countProgres$ = this.countPr$.pipe(
+  switchMap((count: number) => {
+    return interval(1).pipe(
+      map((counter) => counter), take(count)
+    )
+  })
+)
+
+public readonly countTotalE$ = this.countTotal$.pipe(
   switchMap((count: number) => {
     return interval(1).pipe(
       map((counter) => counter), take(count)

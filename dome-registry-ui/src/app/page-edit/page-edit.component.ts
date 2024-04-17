@@ -41,6 +41,7 @@ export class PageEditComponent implements OnDestroy {
   private readonly initial: Partial<Review>;
 
   public readonly updates = this.formBuilder.group({
+    shortid: ['',],
     uuid: ['',],
     created: ['',],
     updated: ['',],
@@ -163,13 +164,14 @@ export class PageEditComponent implements OnDestroy {
     // Define uuid retrieval pipeline
     this.fetch$ = this.activeRoute.paramMap.pipe(
       // Extract UUID
-      map((params) => params.get('uuid') || ''),
+      map((params) => params.get('shortid') || ''),
     );
+    console.log(this.fetch$);
 
     // Define review fetch pipeline
     this.fetched$ = this.fetch$.pipe(
       // Try retrieving review
-      switchMap((uuid) => uuid ? this.reviewService.getReview(uuid) : of(undefined)),
+      switchMap((shortid) => shortid ? this.reviewService.getReview(shortid) : of(undefined)),
       // Cache review
       shareReplay(1),
     );
@@ -177,7 +179,7 @@ export class PageEditComponent implements OnDestroy {
     // Define update pipeline
     this.updated$ = this.update$.pipe(
       // Define current review
-      map(() => ({ ...this.updates.value, uuid: this.review?.uuid } as Review)),
+      map(() => ({ ...this.updates.value, shortid: this.review?.shortid } as Review)),
       // Update current review
       switchMap((review) => this.reviewService.upsertReview(review)),
     );
@@ -185,7 +187,7 @@ export class PageEditComponent implements OnDestroy {
     // Define delete pipeline
     this.deleted$ = this.delete$.pipe(
       // Delete current review
-      switchMap((review) => this.reviewService.deleteReview(this.review!.uuid)),
+      switchMap((review) => this.reviewService.deleteReview(this.review!.shortid)),
       // Define empty review
       map(() => undefined),
     );
@@ -198,9 +200,10 @@ export class PageEditComponent implements OnDestroy {
       tap((review?: Review) => {
 
         // Define review UUID
-        const uuid = review?.uuid ? review.uuid : '';
+        const shortid = review?.shortid ? review.shortid : '';
+        console.log(shortid);
         // Define updated URL according to retrieved identifier
-        const route = this.router.createUrlTree(['./', uuid], { relativeTo: this.activeRoute });
+        const route = this.router.createUrlTree(['./', shortid], { relativeTo: this.activeRoute });
         // TODO Remove this
         console.log('Current route', route);
         // // Change current URL
@@ -210,7 +213,7 @@ export class PageEditComponent implements OnDestroy {
       // Update form
       tap((review?: Review) => this.updates.patchValue({ ...this.initial, ...review })),
       // Mark fields as touched
-      tap((review?: Review) => review?.uuid ? this.updates.markAllAsTouched() : this.updates.markAsUntouched()),
+      tap((review?: Review) => review?.shortid ? this.updates.markAllAsTouched() : this.updates.markAsUntouched()),
       // Eventually, return default review
       map((review) => review ? review : { public: false } as Review),
       // Cache result
@@ -262,7 +265,7 @@ export class PageEditComponent implements OnDestroy {
 
   public onPublishClick($event: MouseEvent) {
     try {
-      console.log('we are here heheheh');
+      console.log('we are here ');
       console.log(this.review?.uuid);
       this.reviewService.publishAnnotation(this.review?.uuid).pipe(
         takeUntil(this.destroy$),
