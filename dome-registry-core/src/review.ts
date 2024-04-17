@@ -1,4 +1,7 @@
 export interface Review {
+    // External identifier (ShortuniqueId)
+    shortid: string;
+
     // External identifier (UUID v4)
     uuid: string,
     // Chronological information
