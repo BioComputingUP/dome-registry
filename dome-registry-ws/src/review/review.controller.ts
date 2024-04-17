@@ -54,14 +54,19 @@ export class ReviewController {
         status: 200,
         description: 'we got it ',
     })
-
-    @Get('total')
-    async getTotalEntries() {
+     @Get('total')
+    async getPublicEntries() {
 
         const totalEntries = await this.reviewService.countPub();
         return totalEntries;
 
     }
+
+
+
+
+
+
 
     /* ------------Swich annotations from private to public---------------- */
 
@@ -77,13 +82,13 @@ export class ReviewController {
 
 
 
-    /* Get the number of the private entries in the database  */
+    /* ---------------Get the number of the private entries in the database ---------- */
 
 
     @ApiOperation({ summary: 'Get the total number of the entries in progress (private)' })
     @ApiResponse({
         status: 200,
-        description: 'we got it ',
+        description: 'Success ',
     })
     @Get('totalprivate')
     async getTotalPrivEntries() {
@@ -93,12 +98,18 @@ export class ReviewController {
     }
 
 
+    //**-- Get the total number  of the entries  ---------/
+     @Get('totalpub')
+     async getTotalPub(){
+
+        const total = await this.reviewService.contAll();
+        return total;
+     }
 
 
 
-
-    //**---------------Get Review by Unique UID ------------**/
-    @Get(':uuid')
+    //**---------------Get Review by Unique shortid UID ------------**/
+    @Get(':shortid')
     @ApiOperation({ summary: 'Find one review' })
 
     @ApiResponse({
@@ -113,10 +124,10 @@ export class ReviewController {
         status: 200,
         description: 'Review',
     })
-    async findOne(@Param('uuid') uuid: string, @User() user) {
+    async findOne(@Param('shortid') shortid: string, @User() user) {
 
         // Try retrieving review
-        let review = await this.reviewService.findOne(uuid);
+        let review = await this.reviewService.findOneShortid(shortid);
         // Case review is found
         if (review) {
             // Compare user identifier with current use, if review is not public

@@ -12,7 +12,9 @@ type ReviewDocument = Review & mongoose.Document;
     discriminatorKey: 'public'
 })
 class Review {
-    
+    @Prop({ required : false})
+    shortid: string; 
+
     @Prop({ required: true })
     uuid: string;
 

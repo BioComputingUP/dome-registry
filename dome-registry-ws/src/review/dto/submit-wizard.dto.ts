@@ -1,7 +1,7 @@
-import { IsNotEmpty, Validate } from "class-validator";
+import { IsNotEmpty, Validate,ValidateNested } from "class-validator";
 import { CreateReviewDto } from "./create-review.dto";
 import { OrcidChecksum } from "../orcid-cheksum.service";
-import { ValidateNested } from 'class-validator';
+
 
 
 export class ReviewUser {
@@ -15,19 +15,19 @@ export class ReviewUser {
 
 export class SubmitWizards {
 
-    @ValidateNested()
     @IsNotEmpty()
+    @ValidateNested()
     user: ReviewUser;
 
-    @ValidateNested()
     @IsNotEmpty()
+    @ValidateNested()
     review: CreateReviewDto
 
 }
 
 export class ReviewSubmission {
-    @ValidateNested()
     @IsNotEmpty()
+    @ValidateNested()
     ReviewUser: SubmitWizards
 }
 

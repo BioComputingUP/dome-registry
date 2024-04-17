@@ -10,8 +10,8 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "NODE_ENV=development nest start --watch",
-    "start:debug": "NODE_ENV=development nest start --debug --watch",
+    "start:dev": "NODE_ENV=production nest start --watch",
+    "start:debug": "NODE_ENV=production nest start --debug --watch",
     "start:prod": "NODE_ENV=production node dist/main",
     "deploy:dev": "echo \"No development server available\"",
     "deploy:prod": "(colC='\\033[0;36m';colN='\\033[0m'; echo ${colC}Building and rsyncing dist ...${colN} && NODE_ENV=production && npm ci && npm run build && rsync -avh --delete . nodejs@persefone:/var/local/webservers/apps/dome-registry && echo ${colC}Restarting node-dome-registry service ...${colN} && ssh nodejs@persefone 'sudo systemctl restart node-dome-registry' && echo ${colC}Done with deploy-prod!${colN})",
@@ -51,6 +51,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "short-unique-id": "^5.0.3",
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {

@@ -19,7 +19,7 @@ export class CreatePublicationDto implements Publication {
     //**------Authors---------------* */
     @ApiProperty({
         description: 'authors name',
-        example: 'mouloud'
+        example: 'Jhon'
     })
     
     @IsString()

@@ -6,16 +6,22 @@ import { Review, ReviewDocument } from "./review.schema";
 import { User, UserDocument } from "../user/user.schema";
 import { computeDomeScore } from "dome-registry-core"
 import { Role } from "src/roles/role.enum";
-
+import ShortUniqueId from "short-unique-id";
 @Injectable()
 export class ReviewService {
-
+ private uid : ShortUniqueId;
     // Dependency injection
     constructor(
         @InjectModel(Review.name) private reviewModel: Model<ReviewDocument>,
         @InjectModel(User.name) private userModel: Model<UserDocument>
     ) {
-    }
+        const customDictionary = [
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+           ];
+        //const dictionnary = '0123456789abcdefghijklmnopqrstuvwxyz';
+        this.uid = new ShortUniqueId({dictionary: customDictionary});   
+     }
 
     // Find multiple reviews
     // NOTE If user is set, it allows to choose whether to return public or private reviews
@@ -188,7 +194,7 @@ export class ReviewService {
                 {
                     $project: {
                         // Keep these fields
-                        created: 1, updated: 1, user: 1, uuid: 1, public: 1, publication: 1, score: 1,
+                        created: 1, updated: 1, user: 1, uuid: 1, public: 1, publication: 1, score: 1, shortid: 1,
                         // Remove these fields
                         fields: '$$REMOVE', done: '$$REMOVE', skip: '$$REMOVE',
                         // Eventually, remove matches
@@ -403,7 +409,7 @@ export class ReviewService {
                 {
                     $project: {
                         // Keep these fields
-                        created: 1, updated: 1, user: 1, uuid: 1, public: 1, publication: 1, score: 1,
+                        created: 1, updated: 1, user: 1, uuid: 1, public: 1, publication: 1, score: 1,shortid:1,
                         // Remove these fields
                         fields: '$$REMOVE', done: '$$REMOVE', skip: '$$REMOVE',
                         // Eventually, remove matches
@@ -515,12 +521,7 @@ export class ReviewService {
 
       
         }
-    
-    
-    
-    
-    
-    
+      
     }
 
         else {
@@ -682,7 +683,7 @@ export class ReviewService {
                 {
                     $project: {
                         // Keep these fields
-                        created: 1, updated: 1, user: 1, uuid: 1, public: 1, publication: 1, score: 1,
+                        created: 1, updated: 1, user: 1, uuid: 1, public: 1, publication: 1, score: 1,shortid:1,
                         // Remove these fields
                         fields: '$$REMOVE', done: '$$REMOVE', skip: '$$REMOVE',
                         // Eventually, remove matches
@@ -737,26 +738,33 @@ export class ReviewService {
 
     }
 
-    //Publish the review 
+
+
+
+        //**----------Publish the review--------*// 
 
     async makePublic(iden: string, user: User) {
 
         //if()
         const filter = { uuid: iden };
         const update = { public: "true" };
+        if (user.roles == Role.Admin){
 
-        try {
-
-            const updatedDocument = await this.reviewModel
+            try {
+                
+                const updatedDocument = await this.reviewModel
                 .findOneAndUpdate(filter, { $set: { "public": true } }, { new: true });
-            return updatedDocument;
-        } catch (error) {
-            console.error('Error updating document:', error);
-            throw error;
+                return updatedDocument;
+            } catch (error) {
+                console.error('Error updating document:', error);
+                throw error;
+            }
         }
     }
 
+        //** retrieve one specific review */ 
     async findOne(uuid: string) {
+        
         // Retrieve review
         return await this.reviewModel
             // Filter review with given UUI
@@ -764,15 +772,30 @@ export class ReviewService {
             // .populate("user")
             .exec();
     }
+    //** retrieve one specific review with shortid  */ 
+    async findOneShortid(shortid: string) {
+        
+        // Retrieve review
+        return await this.reviewModel
+            // Filter review with given UUI
+            .findOne({ shortid:shortid })
+            // .populate("user")
+            .exec();
+    }
 
+   
     async create(review: Partial<Review>, user: User) {
+        //Define the shortid 
+       
+        
         // Define creation and update date
         const created = Date.now();
         const updated = created;
         // Define unique identifier
         const uuid = UUID();
+        const shortid = this.uid.randomUUID(10); 
         // Update review
-        review = Object.assign(review, { uuid, user, updated, created, public: false });
+        review = Object.assign(review, { shortid,uuid, user, updated, created, public: false });
         // Fill database with given review
         const inserted = new this.reviewModel(review);
         // Compute score for each section
@@ -807,7 +830,7 @@ export class ReviewService {
         // NOTE Only private reviews can be updated
         return this.reviewModel.findOneAndUpdate(
             // Get only searched and allowed review
-            { uuid: review.uuid, user, public: false },
+            { shortid:review.shortid,uuid: review.uuid, user, public: false },
             // Use input values to update review
             Object.assign({}, review, { updated }),
             // Return updated review
@@ -817,7 +840,7 @@ export class ReviewService {
 
     // Remove document according to given UUID
     async remove(uuid: string, user: User) {
-        // NOTE Only owner user can delete its own private reviews
+        // NOTE Only owner user or the admin can delete its own private reviews
         if (user.roles == Role.Admin) {
             return await this.reviewModel.findOneAndDelete(
                 //  Get only searched and allowed review
@@ -833,27 +856,34 @@ export class ReviewService {
 
     }
 
-    // Count public reviews 
+    // Count public annotations 
     async countPub(): Promise<number> {
         const bn = await this.reviewModel.count({ public: true });
         return bn;
     }
 
 
-    // Count private reviews
+    // Count private annotations
     async countprivate(): Promise<number> {
         const bn = await this.reviewModel.count({ public: false });
         return bn;
     }
 
+    // Count all the annotations 
+    async contAll ():Promise<number> {
+    const bn = await this.reviewModel.count({});
+    return bn ;
+    }
+
+
+
 
 
     // Create a new review threw Dome wizards 
-
-
-    async createWizard(review: Partial<Review>) {
+  async createWizard(review: Partial<Review>) {
         // Define creation and update date 
-        const creatd = Date.now();
+        const creatd = Date.now()
+
         const updated = creatd;
         // console.log(creatd);
         const uuid = UUID();
