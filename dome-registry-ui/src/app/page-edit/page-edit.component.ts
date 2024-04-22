@@ -43,10 +43,10 @@ export class PageEditComponent implements OnDestroy {
   public readonly updates = this.formBuilder.group({
     shortid: ['',],
     uuid: ['',],
-    created: ['',],
-    updated: ['',],
     publication: this.formBuilder.group({
       pmid: ['', [notDefinedValidator(),]],
+      created: ['',],
+      updated: ['',],
       doi: ['', [notDefinedValidator(),]],
       title: ['', [notDefinedValidator(),]],
       authors: ['', [notDefinedValidator(),]],
@@ -202,6 +202,7 @@ export class PageEditComponent implements OnDestroy {
         // Define review UUID
         const shortid = review?.shortid ? review.shortid : '';
         console.log(shortid);
+        console.log(review?.created)
         // Define updated URL according to retrieved identifier
         const route = this.router.createUrlTree(['./', shortid], { relativeTo: this.activeRoute });
         // TODO Remove this

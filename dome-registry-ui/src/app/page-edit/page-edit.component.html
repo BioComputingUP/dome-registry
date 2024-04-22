@@ -91,6 +91,8 @@
                       formControlName="year" [readonly]="!user.roles?.includes('admin') && review.public">
                     <div id="year-help" class="form-text">Year of publication, as a number</div>
                   </div>
+
+                  
                   <!-- Publication PubMed ID -->
                   <div class="mb-3">
                     <label for="pmid" class="form-label">PubMed ID</label>
@@ -105,7 +107,16 @@
                       [readonly]="!user.roles?.includes('admin') && review.public">
                     <div id="doi-help" class="form-text">DOI of the published article</div>
                   </div>
+
+                <!-- Creation date  -->
+                <div class="mb-3">
+                    <div  class="mb-1"> <b>Created </b> {{review.created | date }} </div>
+                    <div class=""> <b>Last update</b>  {{review.updated | date }} </div>
                 </div>
+
+                </div> 
+             
+            
               </card-section>
               <!-- 2nd section: dataset -->
               <card-section id="dataset" formGroupName="dataset" class="d-block pb-3">
@@ -392,7 +403,7 @@
                       <ul>
                         <li>Which performance metrics are reported?</li>
                         <li>Is this set of metrics representative (e.g. compared to the literature)?</li>
-                      </ul>
+                      </ul>Creation date
                     </div>
                   </div>
                   <!-- Methods comparison -->
@@ -457,6 +468,13 @@
             <small>Unique identifer</small><br>
             <strong [class.text-primary]="!!review.uuid" [class.text-muted]="!review.uuid">
               {{ review.uuid || '-' }}
+            </strong>
+          </div>
+          <div class=" col-12 col-md-6 py-1  ">
+            <!-- Case review is set -->
+            <small>Short Unique identifer</small><br>
+            <strong [class.text-primary]="!!review.shortid" [class.text-muted]="!review.shortid">
+              {{ review.shortid || '-' }}
             </strong>
           </div>
           <!-- Buttons -->
