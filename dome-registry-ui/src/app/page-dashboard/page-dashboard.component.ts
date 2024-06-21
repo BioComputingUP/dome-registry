@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
 
 import { ReviewService } from "../review.service";
-import { Review, computeDomeScore, isValidField } from "dome-registry-core";
+import { Review, User, computeDomeScore, isValidField } from "dome-registry-core";
 import { AuthService } from "../auth.service";
 
 
@@ -39,8 +39,20 @@ export function notDefinedValidator(): ValidatorFn {
 export class PageDashboardComponent implements OnDestroy {
 
   private readonly initial: Partial<Review>;
+  private readonly userInit: Partial<User>; 
 
-  public readonly updates = this.formBuilder.group({
+  private readonly UpdatesUsers = this.formBuilderUser.group({
+  _id : ['',],
+  username: ['',],
+  email: ['',],
+  orcid: ['',],
+  organization:['',],
+   });
+    
+
+
+
+  public readonly updatesAnnotations = this.formBuilder.group({
     shortid: ['',],
     uuid: ['',],
     created: ['',],
@@ -155,11 +167,12 @@ export class PageDashboardComponent implements OnDestroy {
     private elementRef: ElementRef,
     private location: Location,
     private router: Router,
+    private formBuilderUser : FormBuilder,
 
   ) {
 
     // Define initial form value
-    this.initial = this.updates.value;
+    this.initial = this.updatesAnnotations.value;
 
     // Define uuid retrieval pipeline
     this.fetch$ = this.activeRoute.paramMap.pipe(
@@ -178,7 +191,7 @@ export class PageDashboardComponent implements OnDestroy {
     // Define update pipeline
     this.updated$ = this.update$.pipe(
       // Define current review
-      map(() => ({ ...this.updates.value, shortid: this.review?.shortid } as Review)),
+      map(() => ({ ...this.updatesAnnotations.value, shortid: this.review?.shortid } as Review)),
       // Update current review
       switchMap((review) => this.reviewService.upsertReview(review)),
     );
@@ -209,9 +222,9 @@ export class PageDashboardComponent implements OnDestroy {
       }),
 
       // Update form
-      tap((review?: Review) => this.updates.patchValue({ ...this.initial, ...review })),
+      tap((review?: Review) => this.updatesAnnotations.patchValue({ ...this.initial, ...review })),
       // Mark fields as touched
-      tap((review?: Review) => review?.shortid ? this.updates.markAllAsTouched() : this.updates.markAsUntouched()),
+      tap((review?: Review) => review?.shortid ? this.updatesAnnotations.markAllAsTouched() : this.updatesAnnotations.markAsUntouched()),
       // Eventually, return default review
       map((review) => review ? review : { public: false } as Review),
       // Cache result
@@ -219,11 +232,11 @@ export class PageDashboardComponent implements OnDestroy {
     );
 
     // Define DOME score computation pipeline
-    this.score$ = merge(this.fetched$, this.updates.valueChanges).pipe(
+    this.score$ = merge(this.fetched$, this.updatesAnnotations.valueChanges).pipe(
       // // Subscribe to form change
       // expand(() => this.updates.valueChanges),
       // Compute absolute DOME score
-      map((review) => computeDomeScore(this.updates.value)),
+      map((review) => computeDomeScore(this.updatesAnnotations.value)),
       // Compute relative DOME score
       map((scores) => new Map([...scores.entries()]
         .map(([key, [done, skip]]) => [key, {

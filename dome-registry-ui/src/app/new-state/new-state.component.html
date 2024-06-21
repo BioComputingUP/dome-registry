@@ -2,573 +2,578 @@
 
    
 
-<div id="inner-div" class="  overflow-auto w-100 h-100">
-    
+    <div id="inner-div" class="  overflow-auto w-100 h-100">
         
             
-            
-                <!-- Card header -->
-     <div class=" container text-white  "> 
-
-        <div class="row">
-
-            <div class="sales mb-3 text-white  ">
-                <div class="col-3 w-auto">
-                    <h4>Users</h4>
-                    <h1>{{countPreson | async}}</h1>
-                   
-                </div>
-                <div class="col-3 w-auto">
-                    <h4>
-                        Public annotations
-                    </h4>
-                    <h1>{{ countCounter$ | async }} </h1>
-                   
-                </div>
-                <div class="col-3 w-auto">
-                    <h4>Private annotations </h4>
-                    <h1>{{countProgres$ | async }}</h1>
-                   
-                </div>
-                <div class="col-3 w-auto">
-                    <h4>Total annotations </h4>
-                    <h1>{{countTotalE$ | async }}</h1>
-                   
-                    
-                </div>
-            </div>
-            
-        </div>
-            
-    <div class="row m-3">
-
-        <!-- start of the card -->
-        <div class="card" >
-            <div class="card-body .">
-                <div class="card-title costum-card-hearder text-black text-center mb-4 "> <h2>Top 10  annotated journals </h2></div> 
                 
-                <div class="row  text-black">
-                           <div class="col-md-6 panel list ">
-                            <li>
-                               <h3>Journal</h3>
-                               <span>Annotations </span>
-                           </li>
-                           <li>
-                               <p class="text-black">BMC Bioinformatics </p>
-                               <span>12</span>
-                                
-                           </li>
-                           
-                           <li>
-                               <p class="text-black"> Nat Commun</p>
-                               <span>11</span>
-                           </li>
-                           
-                           <li>
-                               <p class="text-black">PloS Comput Biol</p>
-                               <span>11</span>
-                           </li>
-                           <li>
-                               <p class="text-black">PLoS One</p>
-                               <span>10</span>
-                           </li>
-                           <li>
-                            <p class="text-black">BMC Genomics</p>
-                            <span>7</span>
-                            </li>
-                            <li>
-                                <p class="text-black">Comput Math Methods Med</p>
-                                <span>7</span>
-                            </li>
-                            <li>
-                                <p class="text-black">Bioinformatics</p>
-                                <span>4</span>
-                            </li>
-                            <li>
-                                <p class="text-black">BMC Med Genomics</p>
-                                <span>3</span>
-                            </li>
-                            <li>
-                                <p class="text-black">Biomed Res Int </p>
-                                <span>3</span>
-                            </li>
-                            <li>
-                                <b><p class="text-black">Other </p> </b> 
-                                <span>90</span>
-                            </li>
-
-
-                       </div>
-                       <div class="col-md-6 my-auto">
-                           <ng-container  [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'Top Journals', id: 'journal', graph: journal$ | async }"></ng-container>
-                           
-                        </div>
-                        
+                
+                    <!-- Card header -->
+         <div class=" container text-white  "> 
+    
+            <div class="row">
+    
+                <div class="sales mb-3 text-white  ">
+                    <div class="col-3 w-auto">
+                        <h4>Users</h4>
+                        <h1>{{countPreson | async}}</h1>
+                       
+                    </div>
+                    <div class="col-3 w-auto">
+                        <h4>
+                            Public annotations
+                        </h4>
+                        <h1>{{ countCounter$ | async }} </h1>
+                       
+                    </div>
+                    <div class="col-3 w-auto">
+                        <h4>Private annotations </h4>
+                        <h1>{{countProgres$ | async }}</h1>
+                       
+                    </div>
+                    <div class="col-3 w-auto">
+                        <h4>Total annotations </h4>
+                        <h1>{{countTotalE$ | async }}</h1>
+                       
                         
                     </div>
                 </div>
-                <!-- the end of the card  -->
+                
             </div>
-        </div>
-
-
-<div class="row m-3">
- <div class="card">
-    <div class="card-body text-center">
-    <div class="card-title text-black "> <h2>Annotated papers per year</h2></div> 
-        <div class="row text-black">
-            <div class="col-md-6 mt-3 panel list ">
-                <li>
-                    <h3>Year</h3>
-                    <span>Annotations count </span>
-                </li>
-                <li>
-                    <b>
-
-                        <p class="text-black">2021 </p>
-                    </b>
-                    <span>29</span>
-                     
-                </li>
                 
-                <li>
-                    <b>
-
-                        <p class="text-black">2020</p>
-                    </b>
-                    <span>34</span>
-                </li>
-                
-                 <li>
-                    <b>
-
-                        <p class="text-black">2019</p>
-                    </b>
-                     <span>30</span>
-                 </li>
-                 <li>
-                    <b>
-
-                        <p class="text-black">2018</p>
-                    </b>
-                     <span>11</span>
-                 </li>
-                 <li>
-                    <b>
-
-                        <p class="text-black">2017</p>
-                    </b>
-                     <span>14</span>
-                 </li>
-                 <li>
-                    <b>
-                        <p class="text-black">2016 </p>
-                        
-                    </b>
-                     <span>11</span>
-                 </li>
-                 <li>
-                     <b><p class="text-black">2015 </p> </b> 
-                     <span>12</span>
-                 </li>
-                 <li>
-                    <b><p class="text-black">2014 </p> </b> 
-                    <span>3</span>
-                </li>
-                 <li>
-                    <b><p class="text-black">2013 </p> </b> 
-                    <span>1</span>
-                </li>
-                <li>
-                    <b><p class="text-black">2012 </p> </b> 
-                    <span>4</span>
-                </li>
-                
-                <li>
-                    <b><p class="text-black">2010 </p> </b> 
-                    <span>2</span>
-                </li>
-                <li>
-                    <b><p class="text-black">2009 </p> </b> 
-                    <span>2</span>
-                </li>
-                <li>
-                    <b><p class="text-black">2008 </p> </b> 
-                    <span>3</span>
-                </li>
-                <li>
-                    <b><p class="text-black">2007 </p> </b> 
-                    <span>1</span>
-                </li>
-                <li>
-                    <b><p class="text-black">2006 </p> </b> 
-                    <span>1</span>
-                </li>
-                 </div>
-
-                <div class="col-md-6 my-auto">
-
-                <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'Year', id: 'year', graph: (year$ | async) }"></ng-container>
-                
-                     </div>
-      
-    </div>
-    </div>
-</div>
-
-</div>
-
-<div class="row m-4">
-
-    <div class="card">
+        <div class="row m-3">
+    
+            <!-- start of the card -->
+            <div class="card" >
+                <div class="card-body .">
+                    <div class="card-title costum-card-hearder text-black text-center mb-4 "> <h2>Top 10  annotated journals </h2></div> 
+                    
+                    <div class="row  text-black">
+                               <div class="col-md-6 panel list ">
+                                <li>
+                                   <h3>Journal</h3>
+                                   <span>Annotations </span>
+                               </li>
+                               <li>
+                                   <p class="text-black">BMC Bioinformatics </p>
+                                   <span>15</span>
+                                    
+                               </li>
+                               
+                               <li>
+                                   <p class="text-black"> Nat Commun</p>
+                                   <span>11</span>
+                               </li>
+                               
+                               <li>
+                                   <p class="text-black">PloS Comput Biol</p>
+                                   <span>11</span>
+                               </li>
+                               <li>
+                                   <p class="text-black">PLoS One</p>
+                                   <span>10</span>
+                               </li>
+                               <li>
+                                <p class="text-black">BMC Genomics</p>
+                                <span>8</span>
+                                </li>
+                                <li>
+                                    <p class="text-black">Bioinformatics</p>
+                                    <span>8</span>
+                                </li>
+                                <li>
+                                    <p class="text-black">Comput Math Methods Med</p>
+                                    <span>7</span>
+                                </li>
+                                
+                                <li>
+                                    <p class="text-black">BMC Med Genomics</p>
+                                    <span>3</span>
+                                </li>
+                                <li>
+                                    <p class="text-black">Biomed Res Int </p>
+                                    <span>3</span>
+                                </li>
+                                <li>
+                                    <b><p class="text-black">Other </p> </b> 
+                                    <span>106</span>
+                                </li>
+    
+    
+                           </div>
+                           <div class="col-md-6 my-auto">
+                               <ng-container  [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'Top Journals', id: 'journal', graph: journal$ | async }"></ng-container>
+                               
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                    <!-- the end of the card  -->
+                </div>
+            </div>
+    
+    
+    <div class="row m-3">
+     <div class="card">
         <div class="card-body text-center">
-            <div class="card-title text-black mb-3 "> <h2>Distribution of the DOME score</h2></div> 
-            
+        <div class="card-title text-black "> <h2>Annotated papers per year</h2></div> 
             <div class="row text-black">
-                <div class="col-6  panel list">
+                <div class="col-md-6 mt-3 panel list ">
                     <li>
-                        <h3>Score</h3>
+                        <h3>Year</h3>
                         <span>Annotations count </span>
                     </li>
                     <li>
                         <b>
-    
-                            <p class="text-black">21 </p>
+                         <p class="text-black">2023 </p>
                         </b>
-                        <span>13</span>
+                        <span>5</span>
+                         
+                    </li>
+                    
+                    <li>
+                        <b>
+                         <p class="text-black">2022 </p>
+                        </b>
+                        <span>4</span>
+                         
+                    </li>
+                    
+                    <li>
+                        <b>
+                         <p class="text-black">2021 </p>
+                        </b>
+                        <span>29</span>
                          
                     </li>
                     
                     <li>
                         <b>
     
-                            <p class="text-black">20</p>
+                            <p class="text-black">2020</p>
                         </b>
-                        <span>18</span>
+                        <span>34</span>
                     </li>
                     
                      <li>
                         <b>
     
-                            <p class="text-black">19</p>
+                            <p class="text-black">2019</p>
                         </b>
-                         <span>18</span>
+                         <span>30</span>
                      </li>
                      <li>
                         <b>
     
-                            <p class="text-black">18</p>
+                            <p class="text-black">2018</p>
                         </b>
-                         <span>27</span>
+                         <span>11</span>
                      </li>
                      <li>
                         <b>
     
-                            <p class="text-black">17</p>
+                            <p class="text-black">2017</p>
                         </b>
-                         <span>21</span>
+                         <span>14</span>
                      </li>
                      <li>
                         <b>
-                            <p class="text-black">16 </p>
+                            <p class="text-black">2016 </p>
                             
                         </b>
-                         <span>23</span>
+                         <span>11</span>
                      </li>
                      <li>
-                         <b><p class="text-black">15 </p> </b> 
-                         <span>10</span>
+                         <b><p class="text-black">2015 </p> </b> 
+                         <span>12</span>
                      </li>
                      <li>
-                        <b><p class="text-black">14 </p> </b> 
-                        <span>4</span>
-                    </li>
-                     <li>
-                        <b><p class="text-black">13 </p> </b> 
-                        <span>6</span>
-                    </li>
-                    <li>
-                        <b><p class="text-black">12 </p> </b> 
-                        <span>5</span>
-                    </li>
-                    
-                    <li>
-                        <b><p class="text-black">11 </p> </b> 
+                        <b><p class="text-black">2014 </p> </b> 
                         <span>3</span>
                     </li>
-                    <li>
-                        <b><p class="text-black">10 </p> </b> 
-                        <span>5</span>
-                    </li>
-                    <li>
-                        <b><p class="text-black">9 </p> </b> 
+                     <li>
+                        <b><p class="text-black">2013 </p> </b> 
                         <span>1</span>
                     </li>
                     <li>
-                        <b><p class="text-black">8 </p> </b> 
+                        <b><p class="text-black">2012 </p> </b> 
                         <span>4</span>
                     </li>
-                     
-
-                </div>
-                <div class="col-6 my-auto">
-                    <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['total'] }"></ng-container>
-                </div>
-                    </div>
+                    
+                    <li>
+                        <b><p class="text-black">2010 </p> </b> 
+                        <span>2</span>
+                    </li>
+                    <li>
+                        <b><p class="text-black">2009 </p> </b> 
+                        <span>2</span>
+                    </li>
+                   
+                     </div>
+    
+                    <div class="col-md-6 my-auto">
+    
+                    <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'Year', id: 'year', graph: (year$ | async) }"></ng-container>
+                    
+                         </div>
+          
+        </div>
         </div>
     </div>
-</div>
-
-
-<div class="row m-4">
- <div class="card">
-    <div class="card-body text-center">
-        <div class="card-title text-black mb-3">
-            <h2>DOME Score Distribution (Dataset section)</h2>
-        </div>
-        <div class="row text-black">
+    
+    </div>
+    
+    <div class="row m-4">
+    
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="card-title text-black mb-3 "> <h2>Distribution of the DOME score</h2></div> 
+                
+                <div class="row text-black">
+                    <div class="col-6  panel list">
+                        <li>
+                            <h3>Score</h3>
+                            <span>Annotations count </span>
+                        </li>
+                        <li>
+                            <b>
         
-        <div class="col-6  my-auto panel list ">
+                                <p class="text-black">21 </p>
+                            </b>
+                            <span>13</span>
+                             
+                        </li>
+                        
+                        <li>
+                            <b>
+        
+                                <p class="text-black">20</p>
+                            </b>
+                            <span>18</span>
+                        </li>
+                        
+                         <li>
+                            <b>
+        
+                                <p class="text-black">19</p>
+                            </b>
+                             <span>18</span>
+                         </li>
+                         <li>
+                            <b>
+        
+                                <p class="text-black">18</p>
+                            </b>
+                             <span>27</span>
+                         </li>
+                         <li>
+                            <b>
+        
+                                <p class="text-black">17</p>
+                            </b>
+                             <span>21</span>
+                         </li>
+                         <li>
+                            <b>
+                                <p class="text-black">16 </p>
+                                
+                            </b>
+                             <span>23</span>
+                         </li>
+                         <li>
+                             <b><p class="text-black">15 </p> </b> 
+                             <span>10</span>
+                         </li>
+                         <li>
+                            <b><p class="text-black">14 </p> </b> 
+                            <span>4</span>
+                        </li>
+                         <li>
+                            <b><p class="text-black">13 </p> </b> 
+                            <span>6</span>
+                        </li>
+                        <li>
+                            <b><p class="text-black">12 </p> </b> 
+                            <span>5</span>
+                        </li>
+                        
+                        <li>
+                            <b><p class="text-black">11 </p> </b> 
+                            <span>3</span>
+                        </li>
+                        <li>
+                            <b><p class="text-black">10 </p> </b> 
+                            <span>5</span>
+                        </li>
+                        <li>
+                            <b><p class="text-black">9 </p> </b> 
+                            <span>1</span>
+                        </li>
+                        <li>
+                            <b><p class="text-black">8 </p> </b> 
+                            <span>4</span>
+                        </li>
+                         
+    
+                    </div>
+                    <div class="col-6 my-auto">
+                        <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['total'] }"></ng-container>
+                    </div>
+                        </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="row m-4">
+     <div class="card">
+        <div class="card-body text-center">
+            <div class="card-title text-black mb-3">
+                <h2>DOME Score Distribution (Dataset section)</h2>
+            </div>
+            <div class="row text-black">
+            
+            <div class="col-6  my-auto panel list ">
+                <li>
+                    <h3>Score (Dataset)</h3>
+                    <span>Annotations count </span>
+                </li>
+                <li>
+                    <b>
+    
+                        <p class="text-black">4/4 </p>
+                    </b>
+                    <span>86</span>
+                     
+                </li>
+                
+                <li>
+                    <b>
+                          <p class="text-black">3/4</p>
+                    </b>
+                    <span>53</span>
+                </li>
+                <li>
+                    <b>
+                          <p class="text-black">2/4</p>
+                    </b>
+                    <span>18</span>
+                </li>
+                <li>
+                    <b>
+                          <p class="text-black">1/4</p>
+                    </b>
+                    <span>1</span>
+                </li>
+    
+            </div>
+                
+            <div class="col-6 my-auto">
+            <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (dataset)', id: 'score-dataset', graph: (score$ | async)?.['dataset'] }"></ng-container>
+            </div>
+    
+            </div>
+        </div>
+    
+     </div>
+    
+    
+    </div>
+    
+    <div class="row m-4">
+    <div class="card">
+    <div class="card-body text-center">
+    <div class="card-title text-black"> <h2>DOME Score Distribution (Optimization section)</h2></div>
+    <div class="row">
+        <div class="col-md-6 text-black my-auto panel list">
             <li>
-                <h3>Score (Dataset)</h3>
+                <h3>Score (Optimization)</h3>
                 <span>Annotations count </span>
             </li>
             <li>
                 <b>
-
-                    <p class="text-black">4/4 </p>
-                </b>
-                <span>86</span>
-                 
-            </li>
-            
-            <li>
-                <b>
-                      <p class="text-black">3/4</p>
-                </b>
-                <span>53</span>
+                    <p class="text-black">8/8 </p>
+                        </b>
+                <span>43</span>
             </li>
             <li>
-                <b>
-                      <p class="text-black">2/4</p>
-                </b>
-                <span>18</span>
+                <b><p class="text-black">7/8 </p></b>
+                <span>37</span>
             </li>
             <li>
-                <b>
-                      <p class="text-black">1/4</p>
-                </b>
-                <span>1</span>
+                <b><p class="text-black">6/8 </p></b>
+                <span>39</span>
             </li>
-
-        </div>
-            
-        <div class="col-6 my-auto">
-        <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (dataset)', id: 'score-dataset', graph: (score$ | async)?.['dataset'] }"></ng-container>
-        </div>
-
-        </div>
-    </div>
-
- </div>
-
-
-</div>
-
-<div class="row m-4">
-<div class="card">
-<div class="card-body text-center">
-<div class="card-title text-black"> <h2>DOME Score Distribution (Optimization section)</h2></div>
-<div class="row">
-    <div class="col-md-6 text-black my-auto panel list">
-        <li>
-            <h3>Score (Optimization)</h3>
-            <span>Annotations count </span>
-        </li>
-        <li>
-            <b>
-                <p class="text-black">8/8 </p>
-                    </b>
-            <span>43</span>
-        </li>
-        <li>
-            <b><p class="text-black">7/8 </p></b>
-            <span>37</span>
-        </li>
-        <li>
-            <b><p class="text-black">6/8 </p></b>
-            <span>39</span>
-        </li>
-        <li>
-            <b><p class="text-black">5/8 </p></b>
-            <span>16</span>
-        </li>
-        <li>
-            <b><p class="text-black">4/8 </p></b>
-            <span>13</span>
-        </li>
-        <li>
-            <b><p class="text-black">3/8 </p></b>
-            <span>7</span>
-        </li>
-        <li>
-            <b><p class="text-black">2/8 </p></b>
-            <span>2</span>   
-        </li>
-        <li>
-            <b><p class="text-black">1/8 </p></b>
-            <span>1</span>   
-        </li>
-
-
-
-
-
-
-
-
-
-
-
-    </div>
-    <div class="col-md-6">
-        <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (optimization)', id: 'score-optimization', graph: (score$ | async)?.['optimization'] }"></ng-container>
-    </div>
-</div>    
-</div>
-</div>
-</div>
-
-
-<div class="row m-4">
-    <div class="card">
-        <div class="card-body text-center">
-            <div class="card-title text-black"><h2>Dome score distribution(Model section)</h2></div>
-                <div class="row">
-                        <div class="col-md-6 my-auto text-black panel list">
-                            <li>
-                                <h3>Score (Model)</h3>
-                                <span>Annotations count </span>
-                            </li>
-                            <li>
-                                <b>
-                                    <p class="text-black">4/4 </p>
-                                        </b>
-                                <span>30</span>
-                            </li>
-                            <li>
-                                <b>
-                                    <p class="text-black">3/4 </p>
-                                        </b>
-                                <span>95</span>
-                            </li>
-                            <li>
-                                <b>
-                                    <p class="text-black">2/4 </p>
-                                        </b>
-                                <span>29</span>
-                            </li>
-                            <li>
-                                <b>
-                                    <p class="text-black">1/4 </p>
-                                        </b>
-                                <span>4</span>
-                            </li>
-
-                        </div>
-                        <div class="col-md-6">
-                            <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (model)', id: 'score-model', graph: (score$ | async)?.['model'] }"></ng-container>
-
-                        </div>
-
-                </div>
-
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-<div class="row m-4">
-    <div class="card">
-        <div class="card-body text-center">
-            <div class="card-title text-black"><h2>Dome score distribution(Evaluation section)</h2></div>
-                <div class="row">
-                        <div class="col-md-6 my-auto text-black panel list">
-                            <li>
-                                <h3>Score (Evaluation)</h3>
-                                <span>Annotations count </span>
-                            </li>
-                            <li>
-                                <b> <p class="text-black">5/5 </p> </b>
-                                <span>74</span>
-                            </li>
-                            <li>
-                                <b> <p class="text-black">4/5 </p>  </b>
-                                <span>50</span>
-                            </li>
-                            <li>
-                                <b><p class="text-black">3/5 </p></b>
-                                <span>18</span>
-                            </li>
-                            <li>
-                                <b> <p class="text-black">2/5 </p>  </b>
-                                <span>12</span>
-                            </li>
-                            <li>
-                                <b> <p class="text-black">1/5 </p> </b>
-                                <span>12</span>
-                            </li>
-                            
-
-                        </div>
-                        <div class="col-md-6 my-auto">
-                            <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (evaluation)', id: 'score-evaluation', graph: (score$ | async)?.['evaluation'] }"></ng-container>
-
-                        </div>
-
-                </div>
-
-
-        </div>
-
-    </div>
-
-</div>
-
-        <div class="row m-3">
-
+            <li>
+                <b><p class="text-black">5/8 </p></b>
+                <span>16</span>
+            </li>
+            <li>
+                <b><p class="text-black">4/8 </p></b>
+                <span>13</span>
+            </li>
+            <li>
+                <b><p class="text-black">3/8 </p></b>
+                <span>7</span>
+            </li>
+            <li>
+                <b><p class="text-black">2/8 </p></b>
+                <span>2</span>   
+            </li>
+            <li>
+                <b><p class="text-black">1/8 </p></b>
+                <span>1</span>   
+            </li>
     
     
     
-    <ng-template let-id='id' let-title='title' let-graph='graph' #section>
-
-
-        <!-- Actual card -->
+    
+    
+    
+    
+    
+    
+    
+    
+        </div>
+        <div class="col-md-6">
+            <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (optimization)', id: 'score-optimization', graph: (score$ | async)?.['optimization'] }"></ng-container>
+        </div>
+    </div>    
+    </div>
+    </div>
+    </div>
+    
+    
+    <div class="row m-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="card-title text-black"><h2>Dome score distribution(Model section)</h2></div>
+                    <div class="row">
+                            <div class="col-md-6 my-auto text-black panel list">
+                                <li>
+                                    <h3>Score (Model)</h3>
+                                    <span>Annotations count </span>
+                                </li>
+                                <li>
+                                    <b>
+                                        <p class="text-black">4/4 </p>
+                                            </b>
+                                    <span>30</span>
+                                </li>
+                                <li>
+                                    <b>
+                                        <p class="text-black">3/4 </p>
+                                            </b>
+                                    <span>95</span>
+                                </li>
+                                <li>
+                                    <b>
+                                        <p class="text-black">2/4 </p>
+                                            </b>
+                                    <span>29</span>
+                                </li>
+                                <li>
+                                    <b>
+                                        <p class="text-black">1/4 </p>
+                                            </b>
+                                    <span>4</span>
+                                </li>
+    
+                            </div>
+                            <div class="col-md-6">
+                                <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (model)', id: 'score-model', graph: (score$ | async)?.['model'] }"></ng-container>
+    
+                            </div>
+    
+                    </div>
+    
+    
+            </div>
+    
+        </div>
+    
+    </div>
+    
+    
+    
+    <div class="row m-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <div class="card-title text-black"><h2>Dome score distribution(Evaluation section)</h2></div>
+                    <div class="row">
+                            <div class="col-md-6 my-auto text-black panel list">
+                                <li>
+                                    <h3>Score (Evaluation)</h3>
+                                    <span>Annotations count </span>
+                                </li>
+                                <li>
+                                    <b> <p class="text-black">5/5 </p> </b>
+                                    <span>74</span>
+                                </li>
+                                <li>
+                                    <b> <p class="text-black">4/5 </p>  </b>
+                                    <span>50</span>
+                                </li>
+                                <li>
+                                    <b><p class="text-black">3/5 </p></b>
+                                    <span>18</span>
+                                </li>
+                                <li>
+                                    <b> <p class="text-black">2/5 </p>  </b>
+                                    <span>12</span>
+                                </li>
+                                <li>
+                                    <b> <p class="text-black">1/5 </p> </b>
+                                    <span>12</span>
+                                </li>
+                                
+    
+                            </div>
+                            <div class="col-md-6 my-auto">
+                                <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (evaluation)', id: 'score-evaluation', graph: (score$ | async)?.['evaluation'] }"></ng-container>
+    
+                            </div>
+    
+                    </div>
+    
+    
+            </div>
+    
+        </div>
+    
+    </div>
+    
+            <div class="row m-3">
+    
         
-            <!-- Set card title -->
-         
-            <!-- Set card body -->
-           
-                <!-- Define statistics card body -->
-                <div class="statistics-card-body">
-                    <!-- Case graph is not set -->
-                    <div class="d-flex align-items-center justify-content-center w-100 h-100" *ngIf="!graph">
-                        <!-- Show spinner -->
-                        <div class="spinner-grow text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
+        
+        
+        <ng-template let-id='id' let-title='title' let-graph='graph' #section>
+    
+    
+            <!-- Actual card -->
+            
+                <!-- Set card title -->
+             
+                <!-- Set card body -->
+               
+                    <!-- Define statistics card body -->
+                    <div class="statistics-card-body">
+                        <!-- Case graph is not set -->
+                        <div class="d-flex align-items-center justify-content-center w-100 h-100" *ngIf="!graph">
+                            <!-- Show spinner -->
+                            <div class="spinner-grow text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        <!-- Otherwise -->
+                        <div class="d-block overflow-hidden w-100 h-100" *ngIf="!!graph">
+                            <!-- Show graph -->
+                            <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
                         </div>
                     </div>
-                    <!-- Otherwise -->
-                    <div class="d-block overflow-hidden w-100 h-100" *ngIf="!!graph">
-                        <!-- Show graph -->
-                        <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
-                    </div>
-                </div>
-     </ng-template>
-   </div>    
-</div>
-</div>
+         </ng-template>
+       </div>    
+    </div>
+    </div>

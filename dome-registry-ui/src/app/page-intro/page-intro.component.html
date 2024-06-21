@@ -1,40 +1,62 @@
- <!-- Outer container (fill page) -->
+<!-- Outer container (fill page) -->
 <div class="container-fluid bg-primary bg-gradient w-100 h-100">
+
+  <!-- Warning card -->
+  <!-- <div class="row justify-content-center  pt-3 m-auto w-auto">
+    <div class="card bg-danger shadow-lg">
+      <div class="card-body rounded-top text-center text-white">
+ 
+
+   <p>
+     Important:<b> The DOME Registry</b>  will be temporarily unavailable during the weekend (4-5 May 2024)
+     due to a scheduled power outage.
+    </p>
+ 
+
+      </div>
+    </div>
+  </div> -->
+
   <!-- Horizontal alignment -->
   <div class="row justify-content-center overflow-auto h-100">
     <!-- Vertical alignment -->
+
     <div class="col col-12 col-md-6 align-self-start align-self-md-center">
       <!-- Introduction card -->
+
       <div class="card bg-transparent shadow-lg mb-3">
         <!-- Card header -->
         <div class="card-header rounded-top text-white">
-<!--          &lt;!&ndash; Scaffold: left icon, right title &ndash;&gt;-->
-<!--          <div class="d-flex flex-row align-items-end">-->
-<!--            &lt;!&ndash; Logo &ndash;&gt;-->
-<!--            <div class="d-none d-md-block me-3">-->
-<!--              <img class="logo-lg" src="../../assets/logo-white-animated.svg">-->
-<!--            </div>-->
-<!--            &lt;!&ndash; Title &ndash;&gt;-->
-<!--            <div class="d-block flex-grow-1">-->
-<!--              <h1 class="d-none d-md-block">DOME Registry</h1>-->
-<!--              <h5 class="d-block">A database of annotations for published papers describing machine learning methods in biology.</h5>-->
-<!--            </div>-->
-<!--          </div>-->
+          <!--          &lt;!&ndash; Scaffold: left icon, right title &ndash;&gt;-->
+          <!--          <div class="d-flex flex-row align-items-end">-->
+          <!--            &lt;!&ndash; Logo &ndash;&gt;-->
+          <!--            <div class="d-none d-md-block me-3">-->
+          <!--              <img class="logo-lg" src="../../assets/logo-white-animated.svg">-->
+          <!--            </div>-->
+          <!--            &lt;!&ndash; Title &ndash;&gt;-->
+          <!--            <div class="d-block flex-grow-1">-->
+          <!--              <h1 class="d-none d-md-block">DOME Registry</h1>-->
+          <!--              <h5 class="d-block">A database of annotations for published papers describing machine learning methods in biology.</h5>-->
+          <!--            </div>-->
+          <!--          </div>-->
           <!-- Mobile header -->
           <div class="d-inline-block d-md-none">
-<!--            <img class="logo-sm float-start mb-0 mt-1 me-1" src="../../assets/logo-white-animated.svg">-->
-            <h5>{{title}}</h5>
+            <!--            <img class="logo-sm float-start mb-0 mt-1 me-1" src="../../assets/logo-white-animated.svg">-->
+            <h5>{{ title }}</h5>
           </div>
           <!-- Desktop header -->
           <div class="d-none d-md-flex flex-row align-items-end">
             <!-- Logo -->
             <div class="d-none d-md-block me-3">
-              <img class="logo-lg" src="../../assets/logo-white-animated.svg">
+              <img class="logo-lg" src="../../assets/logo-white-animated.svg" />
             </div>
             <!-- Title -->
             <div class="d-block flex-grow-1">
-              <h1 class="d-none d-md-block ">DOME Registry</h1>
-              <h5 class="d-block">A database of annotations for published papers describing machine learning methods in biology.</h5>
+              <h1 class="d-none d-md-block">DOME Registry</h1>
+              <h5 class="d-block">
+                A database of annotations for published papers describing
+                machine learning methods in biology.
+              </h5>
             </div>
           </div>
         </div>
@@ -42,63 +64,69 @@
         <div class="card-body rounded-bottom bg-white p-3">
           <!-- 1st row -->
           <p class="d-block w-100">
-            Machine learning (ML) methods have been widely used in biology for the
-            last few decades. The description of ML methods in publications benefits
-            from the standardization of terminology and reporting of techincal
-            details. To this end, the DOME recommendations
-            (<a href="https://www.nature.com/articles/s41592-021-01205-4">Walsh et al, Nature Methods 2021</a>)
-            provide an easy to follow template.
+            Machine learning (ML) methods have been widely used in biology for
+            the last few decades. The description of ML methods in publications
+            benefits from the standardization of terminology and reporting of
+            techincal details. To this end, the DOME recommendations (<a
+              href="https://www.nature.com/articles/s41592-021-01205-4"
+              >Walsh et al, Nature Methods 2021</a
+            >) provide an easy to follow template.
           </p>
           <!-- 2nd line -->
-          <p class="d-block w-100">The DOME registry provides a curated set of annotations for ML papers following the DOME recommendations.</p>
-          
-          
+          <p class="d-block w-100">
+            The DOME registry provides a curated set of annotations for ML
+            papers following the DOME recommendations.
+          </p>
+
           <!-- <p class="counter-count">  {{ count$ | async }}   </p> -->
           <!-- 3rd line -->
-          
+
           <!-- Action buttons -->
           <div class="d-flex justify-content-center mt-3">
             <!-- Browse -->
-            <a class="btn btn-primary px-3 " [routerLink]="['/search']">Browse</a>
+            <a class="btn btn-primary px-3" [routerLink]="['/search']"
+              >Browse</a
+            >
           </div>
         </div>
       </div>
 
       <div class="counter">
         <div class="container">
-            <div class="row ">
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                    <div class="designer">
-                        <p class="counter-count "><b>{{countPreson | async}}</b></p>
-                        <p class="design "><i class="bi bi-people"></i><b> Users</b></p>
-                    </div>
-                </div>
-    
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                    <div class="designer">
-                        <p class="counter-count  "><b>{{ countCounter$ | async }}</b></p>
-                       <p class="design"> <i class="bi bi-journals"></i><b> Entries</b></p>
-                    </div>
-                </div>
-    
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                    <div class="designer">
-                        <p class="counter-count "><b>{{countProgres$ | async }}</b></p>
-                        <p class="design"><i class="bi bi-clock-history"></i><b> In progress</b></p>
-                    </div>
-                </div>
-    
-                
+          <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+              <div class="designer">
+                <p class="counter-count">
+                  <b>{{ countPreson | async }}</b>
+                </p>
+                <p class="design"><i class="bi bi-people"></i><b> Users</b></p>
+              </div>
             </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+              <div class="designer">
+                <p class="counter-count">
+                  <b>{{ countCounter$ | async }}</b>
+                </p>
+                <p class="design">
+                  <i class="bi bi-journals"></i><b> Entries</b>
+                </p>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+              <div class="designer">
+                <p class="counter-count">
+                  <b>{{ countProgres$ | async }}</b>
+                </p>
+                <p class="design">
+                  <i class="bi bi-clock-history"></i><b> In progress</b>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-
-
-
-
-
-
-    </div>
-    
   </div>
 </div>

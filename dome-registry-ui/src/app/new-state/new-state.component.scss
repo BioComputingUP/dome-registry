@@ -8,16 +8,6 @@ ul {
     padding:0;
 }
 
-::-webkit-scrollbar-track{
-    background: #0c1839;
-}
-
-::-webkit-scrollbar-thumb{
-    background: #6b6f8a;
-
-}
-
-
 
 
 
@@ -119,6 +109,11 @@ background: linear-gradient(0deg, #178add,#03dcee);
        width: calc(100% - 4.1em); 
     }
     
+
+
+   
 }
 
-
+td, th {
+    border-width: 2px; /* Adjust the value to your desired thickness */
+  }
