@@ -171,7 +171,7 @@ export class NewStateComponent implements OnInit,OnDestroy {
             // Define layout
             let layout = {
               
-              xaxis: { title: 'DOME score' },
+              
               yaxis: { title: 'Count' },
               // margin: {"l": 0, "r": 0},
               showlegend: false,
