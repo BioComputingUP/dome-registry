@@ -18,9 +18,10 @@ export class ClientService {
   async eventHandler(data: WizardsCreatedEvent) {
     console.log("triggered");
     console.log(data);
-
-     await axios.post('https://dev.apicuron.org/reports/single/', data, {
+     
+     await axios.post('https://dev.apicuron.org/api/reports/single/', data.toObject(), {
       headers:{
+         'Version': '2',
         'Authorization':`Bearer ${this.token}`,
         'Content-Type':'application/json',
       }
