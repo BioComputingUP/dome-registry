@@ -50,6 +50,19 @@ export class UserController {
         return totalEntriees;
     }
 
+// ** --------------------Get the users that do not have OCID ID ---------------------**//
+
+     @Get('orcid')
+     async OrcidNO(){
+        return this.userService.userNoOrcid();
+     }
+
+    @Get('orcidyes')
+    async OrcidYes(){
+        return this.userService.userOrcid();
+    }
+
+     
 
 
 

@@ -1,8 +1,8 @@
 import { IsNotEmpty, Validate,ValidateNested } from "class-validator";
 import { CreateReviewDto } from "./create-review.dto";
 import { OrcidChecksum } from "../orcid-cheksum.service";
-
-
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 
 export class ReviewUser {
     @Validate(OrcidChecksum)
@@ -16,20 +16,22 @@ export class ReviewUser {
 export class SubmitWizards {
 
     @IsNotEmpty()
-    @ValidateNested()
+    @Type(()=>ReviewUser)
     user: ReviewUser;
 
     @IsNotEmpty()
-    @ValidateNested()
+    @Type(()=>CreateReviewDto)
     review: CreateReviewDto
 
 }
 
 export class ReviewSubmission {
     @IsNotEmpty()
-    @ValidateNested()
+    @Type(() => SubmitWizards)
     ReviewUser: SubmitWizards
 }
+
+
 
 
 

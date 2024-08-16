@@ -13,6 +13,8 @@ import {AppService} from "./app.service";
 
 // Import configuration function
 import { configuration } from "./config/configuration";
+import { EventEmitterModule } from "@nestjs/event-emitter";
+import { ApicuronModule } from "./apicuron-sub/apicuron-sub.module";
 
 
 @Module({
@@ -25,6 +27,8 @@ import { configuration } from "./config/configuration";
             load: [configuration],
             isGlobal: true
         }),
+
+        EventEmitterModule.forRoot(),
         // Initialize throttle rate
         ThrottlerModule.forRootAsync({
             imports: [ConfigModule],
@@ -58,6 +62,7 @@ import { configuration } from "./config/configuration";
         JwtAuthModule,
         ReviewModule,
         UserModule,
+        ApicuronModule,
         
     ],
     controllers: [AppController],
