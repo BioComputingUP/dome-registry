@@ -20,24 +20,24 @@ export class ClientService {
   async eventHandler(data: WizardsCreatedEvent) {
     console.log("triggered");
     console.log(data);
-     // send  Post request to APICURON with Token (hidden)  
-    //  await axios.post('https://apicuron.org/api/reports/single/', data.toObject(), {
-    //   headers:{
-    //      'Version': '2',
-    //     'Authorization':`Bearer ${this.token}`,
-    //     'Content-Type':'application/json',
-    //   }
-    //  }).then(response => {
-    //   console.log(response.data);
-    //  }).catch(error =>{
-    //   if(error.response){
-    //     console.log('Error',error.response.data);
-    //   }else if (error.request){
-    //     console.log('No response received ',error.request);
-    //   }else {
-    //     console.log(Error, error.message);
-    //   }
-    //  });
+     //send  Post request to APICURON with Token (hidden)  
+     await axios.post('https://apicuron.org/api/reports/single/', data.toObject(), {
+      headers:{
+         'Version': '2',
+        'Authorization':`Bearer ${this.token}`,
+        'Content-Type':'application/json',
+      }
+     }).then(response => {
+      console.log(response.data);
+     }).catch(error =>{
+      if(error.response){
+        console.log('Error',error.response.data);
+      }else if (error.request){
+        console.log('No response received ',error.request);
+      }else {
+        console.log(Error, error.message);
+      }
+     });
 
 
 
