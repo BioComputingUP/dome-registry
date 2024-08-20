@@ -13,6 +13,7 @@ import {
   Query,
   Logger,
   Res,
+  ValidationPipe,
 } from "@nestjs/common";
 import { ReviewService } from "./review.service";
 import { CreateReviewDto } from "./dto/create-review.dto";
@@ -215,18 +216,23 @@ export class ReviewController {
   //     description: 'we got it ',
   // })
   @Post("wizards")
-  async createRevieWizads(
-    @Body() wizards: ReviewSubmission,
+  async createRevieWizads( @Body() wizards: ReviewSubmission,
     @Res() response: Response
-   
   ) {
-   
-
     this.logger.log("Create Review Wizards");
+    console.log(wizards);
+
+    if (!wizards || !wizards.ReviewUser) {
+      return response.status(400).json({ message: "Invalid request body" });
+    }   
+
+
     // Mapping the object coming from the Data Stewardship wizards
-    const {
-      ReviewUser: { user, review },
-    } = wizards;
+    const { ReviewUser: { user, review }} = wizards;
+    
+
+
+
 
     // insert the ORCID user in the database
 
@@ -256,13 +262,10 @@ export class ReviewController {
         data.entity_uri,
         data.ressource_id,
         new Date(data.timestamp).toISOString(),
-        data.activity_term,
+        data.activity_term
       )
     );
-    this.logger.log(ApicuronData),
-
-
-    this.logger.log(`Created Review:`);
+    this.logger.log(ApicuronData), this.logger.log(`Created Review:`);
     this.logger.log({ reviewCreated });
   }
 }

@@ -5,7 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import { AppModule } from "./app.module";
 import { swaggerSetup } from "./swagger/swagger";
 import * as bodyParser from 'body-parser'
-
+import 'reflect-metadata';
 
 async function bootstrap() {
     // Instantiate application

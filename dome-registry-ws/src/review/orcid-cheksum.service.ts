@@ -12,6 +12,12 @@ export class OrcidChecksum implements ValidatorConstraintInterface {
 
     async validate(orcid_id: string, args: ValidationArguments) {
         // First we verify that the length of the orcid id is correct
+        if (!orcid_id || typeof orcid_id !== 'string') {
+            console.log(orcid_id);
+            this.logger.warn('ORCID ID is either undefined or not a string.');
+            return false;
+        }
+        
         if (orcid_id.split('-').join('').length != 16) {
             return false;
         }
