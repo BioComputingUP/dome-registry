@@ -61,9 +61,9 @@ public readonly countProgres$ = this.countPr$.pipe(
   // Try to print the number of the entries 
 
   ngOnInit(): void {
-    
-   
-
+    console.log("test on init");
+    var bioschemas_name = "DOME Registry";
+    var bioschemas_version = "3.0.0";
   }
 
 }
