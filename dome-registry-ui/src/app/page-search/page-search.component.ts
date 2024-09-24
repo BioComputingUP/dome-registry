@@ -30,10 +30,16 @@ export class PageSearchComponent implements OnDestroy{
 
   public readonly query$: Observable<Query>;
 
-  public readonly score$: Observable<Map<string, Score>>
+  public readonly score$: Observable<Map<string, Score>>;
   private results: Reviews;
   private destroy$ = new Subject();
-
+   readonly   dropDownData = [
+    { seo_val: 'val1', text_val: 'Option 1' },
+    { seo_val: 'val2', text_val: 'Option 2' },
+    // Add more options here
+    
+];
+ selectedfilter = '';
   public readonly results$: Observable<Reviews>;
 
   public get auth() {
@@ -118,10 +124,13 @@ export class PageSearchComponent implements OnDestroy{
       this.sort$.next({by, asc: 'false'});
     }
   }
-
+ 
   public onScrollEnd() {
     // Emit new offset
     this.offset$.emit({skip: this.results.length, limit: 100});
+  }
+  updateSelectedFilter(filter: string) {
+    this.selectedfilter = filter;
   }
 
   ngOnDestroy(): void {
