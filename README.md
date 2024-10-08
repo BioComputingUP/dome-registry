@@ -1,6 +1,6 @@
 # *Get started with the* *[DOME Registry](registry.dome-ml.org)*
 
-*** Our repository is devided into 3 parts:
+Our repository is devided into 3 parts:
 - dome-registry-core (shared logic between frontend and backend)
 - dome-registry-ui (backend)
 - dome-registry-ws (frontend) 
