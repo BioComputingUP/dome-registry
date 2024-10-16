@@ -37,6 +37,11 @@ npm install
 npm link dome-registry-core
 cd ..
 ```
+### Build UI (to be served by Apache or nginx)
+```sh
+npm run build-dev
+# This command will produce a 'dist' folder with index.html and associated files. Point the Apache virtual host or nginx server block to the 'dist' folder to serve it properly in a production environment
+```
 ## 3. Install dependencies for dome-registry-ws
 
 ```bash
