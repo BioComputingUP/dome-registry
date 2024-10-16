@@ -7,7 +7,6 @@
         <div class="col-12 col-md-8 offset-md-2 h-auto">
           <form class="d-flex flex-row flex-nowrap align-items-center">
             <!-- Search text -->
-
             <div class="row flex-grow-1 ms-0 me-3">
               <!-- <div class="col-2">
                 <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
@@ -80,6 +79,7 @@
                   (click)="onSortChange('score')" type="radio" />
                 <label class="form-check-label" for="inlineRadio4">Score</label>
               </div>
+              
             </ng-container>
           </div>
         </div>
@@ -169,6 +169,10 @@
                   <p class="mb-0">
                     <strong>Last update:&nbsp;</strong>
                     <span>{{ review.updated | date }}</span>
+                  </p>
+                  <p class="mb-0">
+                    <strong>DOME-id:&nbsp;</strong>
+                    <span>{{ review.shortid }}</span>
                   </p>
                   <!-- Show journal and date -->
 
