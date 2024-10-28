@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  backend: 'https://registry.dome-ml.org/api',
+  backend: 'http://localhost:8118',
 };

@@ -491,7 +491,7 @@
               Save&nbsp;<i class="bi bi-save d-none d-md-inline"></i>
             </button>
 
-            <button class="btn btn-success me-0 " *ngIf="user.roles?.includes('admin')" type="button"
+            <button class="btn btn-success me-0 " *ngIf="user.roles?.includes('admin') && review.public == false" type="button"
               [disabled]="!review.uuid" (click)=" onPublishClick($event)">
               Publish &nbsp;<i class="bi bi-check2-circle"></i>
             </button>
