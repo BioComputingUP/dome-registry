@@ -2,7 +2,7 @@
   "name": "dome-registry-ws",
   "version": "2.1.0",
   "description": "DOME Registry Web Server",
-  "author": "Damiano Clementel",
+  "author": "Omar Abdelghani Attafi",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

@@ -1077,22 +1077,16 @@ export class ReviewService {
   // get the journal counts form the Databse
   async getJournalsC() {
     const data = this.reviewModel.aggregate([
+     {$match:{public:true}},
+     
       {
-        $match: {
-          public: true,
-        },
-      },
-      {
-        $group: {
-          _id: "$data.done",
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $sort: {
-          count: -1,
-        },
-      },
+      $group:{
+      _id: "$publication.year",
+      count: {$sum:1}
+     }},
+     {
+      $sort:{count:-1}
+     }
     ]);
 
     return data;

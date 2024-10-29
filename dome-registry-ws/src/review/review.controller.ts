@@ -122,6 +122,15 @@ export class ReviewController {
     return total;
   }
 
+  //get journal counts in the database  //
+@Get("totaljournal")
+async totaljoournal (){
+ const tot =  await this.reviewService.getJournalsC()
+ return tot
+
+}
+
+
   //**---------------Get Review by Unique shortid UID ------------**/
   @Get(":shortid")
   @ApiOperation({ summary: "Find one review" })
@@ -143,13 +152,27 @@ export class ReviewController {
     // Case review is found
     if (review) {
       // Compare user identifier with current use, if review is not public
-      if (review.public || (user && review.user.toString() === user._id)) {
-        // Return review
-        return review;
+      // if (review.public || (user && review.user.toString() === user._id)) {
+      //   // Return review
+      //   return review;
+      // }
+      // if (!review.public && user.roles === Role.Admin) {
+      //   return review;
+      // }
+      if (review.public){
+        return review
       }
-      if (!review.public && user.roles === Role.Admin) {
-        return review;
+      if(!review.public){
+        if(user.roles == Role.Admin){
+          return review;
+        }else{
+          if(user && review.user.toString() == user._id){
+            return review;
+          }
+        }
       }
+
+
       // Otherwise, return 403 Forbidden
       throw new ForbiddenException();
     }
@@ -208,7 +231,7 @@ export class ReviewController {
     return await this.reviewService.remove(uuid, user);
   }
 
-  //**------------------Create a review threw Dome  Wizards ----------------------**//
+  //*------------------Create a review threw Dome  Wizards ----------------------**//
 
   // @ApiOperation({ summary: 'Get a  review from wizards' })
   // @ApiResponse({
@@ -231,9 +254,6 @@ export class ReviewController {
     const { ReviewUser: { user, review }} = wizards;
     
 
-
-
-
     // insert the ORCID user in the database
 
     const createdUser = await this.userService.upsertByOrcid(user);
@@ -245,7 +265,7 @@ export class ReviewController {
     // Create the review in the Database
     const reviewCreated = await this.reviewService.create(review, createdUser);
 
-    response.send();
+    response.send('https://registry.dome-ml.org/review/'+reviewCreated.shortid);
 
     const data = {
       curator_orcid: createdUser.orcid,
@@ -256,16 +276,16 @@ export class ReviewController {
     };
     this.logger.log(`trying to create an event:`);
     //this.logger.log(data);
-    const ApicuronData = await this.reviewService.APiCuronEventTrigger(
-      new WizardsCreatedEvent(
-        data.curator_orcid,
-        data.entity_uri,
-        data.ressource_id,
-        new Date(data.timestamp).toISOString(),
-        data.activity_term
-      )
-    );
-    this.logger.log(ApicuronData), this.logger.log(`Created Review:`);
+    // const ApicuronData = await this.reviewService.APiCuronEventTrigger(
+    //   new WizardsCreatedEvent(
+    //     data.curator_orcid,
+    //     data.entity_uri,
+    //     data.ressource_id,
+    //     new Date(data.timestamp).toISOString(),
+    //     data.activity_term
+    //   )
+    // );
+    // this.logger.log(ApicuronData), this.logger.log(`Created Review:`);
     this.logger.log({ reviewCreated });
   }
 }
