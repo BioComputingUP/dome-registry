@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Types, Model, Query, QueryOptions, mongo } from "mongoose";
 import { v4 as UUID } from "uuid";
@@ -995,38 +995,50 @@ export class ReviewService {
       { new: true }
     );
   }
-
+  //(user.roles == Role.Admin) 
   // Remove document according to given UUID
-  async remove(uuid: string, user: User) {
+  async remove(uuid: string, user2: User) {
     // NOTE Only owner user or the admin can delete its own private reviews
-    if (user.roles == Role.Admin) {
-      return await this.reviewModel.findOneAndDelete(
-        //  Get only searched and allowed review
-        { uuid }
-      );
-    } else {
-      return await this.reviewModel.findOneAndDelete(
-        //  Get only searched and allowed review
-        { uuid, public: false, user }
-      );
-    }
-  }
 
+    console.log(user2)
+    try {
+      let deletedReview;
+      let rev;
+      if (this.isAdmin(user2)) {
+        deletedReview = await this.reviewModel.findOneAndDelete({ uuid });
+      } else {
+        console.log('second condition to delete the review for user');
+        rev = await this.reviewModel.findOne({ uuid, public: false});
+        console.log(rev);
+        deletedReview = await this.reviewModel.findOneAndDelete({ uuid, public: false, user:user2 });
+      }
+  
+      return !!deletedReview;
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      throw new HttpException('Failed to delete review', HttpStatus.INTERNAL_SERVER_ERROR);
+    } 
+    
+  }
+  private isAdmin(user: User): boolean {
+    // Assuming roles are stored as an array in the User object
+    return user.roles.includes(Role.Admin);
+  }
   // Count public annotations
   async countPub(): Promise<number> {
-    const bn = await this.reviewModel.count({ public: true });
+    const bn = await this.reviewModel.countDocuments({ public: true });
     return bn;
   }
 
   // Count private annotations
   async countprivate(): Promise<number> {
-    const bn = await this.reviewModel.count({ public: false });
+    const bn = await this.reviewModel.countDocuments({ public: false });
     return bn;
   }
 
   // Count all the annotations
   async contAll(): Promise<number> {
-    const bn = await this.reviewModel.count({});
+    const bn = await this.reviewModel.countDocuments();
     return bn;
   }
 
