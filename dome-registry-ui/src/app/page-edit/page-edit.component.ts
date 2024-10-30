@@ -187,7 +187,7 @@ export class PageEditComponent implements OnDestroy {
     // Define delete pipeline
     this.deleted$ = this.delete$.pipe(
       // Delete current review
-      switchMap((review) => this.reviewService.deleteReview(this.review!.shortid)),
+      switchMap((review) => this.reviewService.deleteReview(this.review!.uuid)),
       // Define empty review
       map(() => undefined),
     );

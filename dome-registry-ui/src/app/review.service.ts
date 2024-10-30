@@ -66,9 +66,9 @@ export class ReviewService {
   }
 
   // Search for single review against database
-  public getReview(uuid: string): Observable<Review> {
+  public getReview(shortid: string): Observable<Review> {
     // Make request against database
-    return this.httpClient.get<Review>(this.url + '/' + uuid);
+    return this.httpClient.get<Review>(this.url + '/' + shortid);
   }
 
   // Search for multiple reviews against database
