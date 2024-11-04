@@ -14,6 +14,7 @@ import {
   Logger,
   Res,
   ValidationPipe,
+  InternalServerErrorException,
 } from "@nestjs/common";
 import { ReviewService } from "./review.service";
 import { CreateReviewDto } from "./dto/create-review.dto";
@@ -52,7 +53,7 @@ export class ReviewController {
     private readonly reviewService: ReviewService,
     private readonly userService: UserService,
     private evenEmitter: EventEmitter2
-  ) {}
+  ) { }
 
   logger = new Logger(ReviewController.name);
 
@@ -123,14 +124,29 @@ export class ReviewController {
   }
 
   //get journal counts in the database  //
-@Get("totaljournal")
-async totaljoournal (){
- const tot =  await this.reviewService.getJournalsC()
- return tot
-
-}
-
-
+  @Get("totaljournal")
+  async totaljoournal() {
+    const tot = await this.reviewService.getJournalsC();
+    return tot;
+  }
+  @Patch(":uuid")
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Get updated review " })
+  async update( @Param("uuid") uuid: string,@Body() updateReviewDto: UpdateReviewDto, @User() user
+  ) {
+    try {
+      let review = await this.reviewService.update(
+        Object.assign(updateReviewDto, { uuid })
+      );
+      if (!review) {
+        throw new NotFoundException();
+      }
+      return review;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException('An unexpected error occurred');
+    }
+  }
   //**---------------Get Review by Unique shortid UID ------------**/
   @Get(":shortid")
   @ApiOperation({ summary: "Find one review" })
@@ -159,19 +175,18 @@ async totaljoournal (){
       // if (!review.public && user.roles === Role.Admin) {
       //   return review;
       // }
-      if (review.public){
-        return review
+      if (review.public) {
+        return review;
       }
-      if(!review.public){
-        if(user.roles == Role.Admin){
+      if (!review.public) {
+        if (user.roles == Role.Admin) {
           return review;
-        }else{
-          if(user && review.user.toString() == user._id){
+        } else {
+          if (user && review.user.toString() == user._id) {
             return review;
           }
         }
       }
-
 
       // Otherwise, return 403 Forbidden
       throw new ForbiddenException();
@@ -196,28 +211,7 @@ async totaljoournal (){
   }
 
   // **------- Update a revieww -------**//
-  @Patch(":uuid")
-  @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: "Get updated review " })
-  async update(
-    @Param("uuid") uuid: string,
-    @Body() updateReviewDto: UpdateReviewDto,
-    @User() user
-  ) {
-    // Get updated review, if any
-
-    let review = await this.reviewService.update(
-      Object.assign(updateReviewDto, { uuid }),
-      user
-    );
-    // Case no review was returned
-    if (!review) {
-      // Then, return 404 Not Found
-      throw new NotFoundException();
-    }
-    // Otherwise, return review
-    return review;
-  }
+ 
 
   //**---------Delete A review-------**/
   @Delete(":uuid")
@@ -239,7 +233,8 @@ async totaljoournal (){
   //     description: 'we got it ',
   // })
   @Post("wizards")
-  async createRevieWizads( @Body() wizards: ReviewSubmission,
+  async createRevieWizads(
+    @Body() wizards: ReviewSubmission,
     @Res() response: Response
   ) {
     this.logger.log("Create Review Wizards");
@@ -247,12 +242,12 @@ async totaljoournal (){
 
     if (!wizards || !wizards.ReviewUser) {
       return response.status(400).json({ message: "Invalid request body" });
-    }   
-
+    }
 
     // Mapping the object coming from the Data Stewardship wizards
-    const { ReviewUser: { user, review }} = wizards;
-    
+    const {
+      ReviewUser: { user, review },
+    } = wizards;
 
     // insert the ORCID user in the database
 
@@ -265,7 +260,9 @@ async totaljoournal (){
     // Create the review in the Database
     const reviewCreated = await this.reviewService.create(review, createdUser);
 
-    response.send('https://registry.dome-ml.org/review/'+reviewCreated.shortid);
+    response.send(
+      "https://registry.dome-ml.org/review/" + reviewCreated.shortid
+    );
 
     const data = {
       curator_orcid: createdUser.orcid,

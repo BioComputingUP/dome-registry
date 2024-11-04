@@ -970,7 +970,7 @@ export class ReviewService {
     return await inserted.save();
   }
 
-  async update(review: Partial<Review>, user: User) {
+  async update(review: Partial<Review>) {
     // Define update time
     let updated = Date.now();
     // Compute DOME score
@@ -988,19 +988,19 @@ export class ReviewService {
     // NOTE Only private reviews can be updated
     return this.reviewModel.findOneAndUpdate(
       // Get only searched and allowed review
-      { shortid: review.shortid, uuid: review.uuid, user, public: false },
+      { shortid: review.shortid, uuid: review.uuid},
       // Use input values to update review
       Object.assign({}, review, { updated }),
       // Return updated review
       { new: true }
     );
   }
-  //(user.roles == Role.Admin) 
+ 
   // Remove document according to given UUID
   async remove(uuid: string, user2: User) {
     // NOTE Only owner user or the admin can delete its own private reviews
 
-    console.log(user2)
+    
     try {
       let deletedReview;
       let rev;
