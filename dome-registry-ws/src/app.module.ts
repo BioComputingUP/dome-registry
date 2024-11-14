@@ -15,8 +15,8 @@ import {AppService} from "./app.service";
 import { configuration } from "./config/configuration";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { ApicuronModule } from "./apicuron-sub/apicuron-sub.module";
-
-
+import { EmailModule } from "./Email-system/email-client.module";
+ import { MailerModule } from "@nestjs-modules/mailer";
 @Module({
     imports: [
         // Initialize configuration module
@@ -63,6 +63,8 @@ import { ApicuronModule } from "./apicuron-sub/apicuron-sub.module";
         ReviewModule,
         UserModule,
         ApicuronModule,
+        MailerModule,
+        EmailModule,
         
     ],
     controllers: [AppController],

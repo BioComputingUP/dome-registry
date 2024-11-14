@@ -18,7 +18,4 @@ import { ClientService } from "./apicuron-client.service";
   ]
 })
 export class ApicuronModule {
-
-
-    
 }

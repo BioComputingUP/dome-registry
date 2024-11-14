@@ -10,8 +10,8 @@ import ShortUniqueId from "short-unique-id";
 import { timestamp } from "rxjs";
 import { ClientService } from "src/apicuron-sub/apicuron-client.service";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { WizardsCreatedEvent } from "src/apicuron-sub/events";
 
+import { ReviewCreatedEvent } from "./events/review-created.event";
 @Injectable()
 export class ReviewService {
   private uid: ShortUniqueId;
@@ -966,8 +966,17 @@ export class ReviewService {
       review[section]["done"] = done;
       review[section]["skip"] = skip;
     });
+    
     // Store review into database
-    return await inserted.save();
+    //return await inserted.save();
+
+    const response= {
+      review: await inserted.save(),
+      callback: async () => {
+        await this.eventEmitter.emitAsync(ReviewCreatedEvent.name,new ReviewCreatedEvent(inserted,user))
+      }
+    }
+    return response;
   }
 
   async update(review: Partial<Review>) {
@@ -1073,10 +1082,7 @@ export class ReviewService {
   //     return inserted.save();
   //   }
 
-  async APiCuronEventTrigger(wizardcreatedEvent: WizardsCreatedEvent) {
-    console.log("the event is triggered");
-     await this.eventEmitter.emitAsync(WizardsCreatedEvent.name, wizardcreatedEvent);
-  }
+  
 
   // // Get the  ORCID ID of  owner
 

@@ -258,31 +258,14 @@ export class ReviewController {
     );
 
     // Create the review in the Database
-    const reviewCreated = await this.reviewService.create(review, createdUser);
+    const { callback } = await this.reviewService.create(review, createdUser);
 
-    response.send(
-      "https://registry.dome-ml.org/review/" + reviewCreated.shortid
-    );
-
-    const data = {
-      curator_orcid: createdUser.orcid,
-      timestamp: reviewCreated.created,
-      entity_uri: "https://registry.dome-ml.org/" + reviewCreated.shortid,
-      activity_term: "annotation_submitted",
-      ressource_id: "dome_id",
-    };
-    this.logger.log(`trying to create an event:`);
-    //this.logger.log(data);
-    // const ApicuronData = await this.reviewService.APiCuronEventTrigger(
-    //   new WizardsCreatedEvent(
-    //     data.curator_orcid,
-    //     data.entity_uri,
-    //     data.ressource_id,
-    //     new Date(data.timestamp).toISOString(),
-    //     data.activity_term
-    //   )
-    // );
-    // this.logger.log(ApicuronData), this.logger.log(`Created Review:`);
-    this.logger.log({ reviewCreated });
+    response.send();
+    
+    callback();
+    
+    
+  //  this.logger.log(ApicuronData), this.logger.log(`Created Review:`);
+    //this.logger.log({ reviewCreated });
   }
 }

@@ -1,27 +1,37 @@
-import { Inject, Injectable, Logger, OnModuleInit } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { HTTP_TOKEN_INJECTION } from "./constants";
 import { HttpService } from "@nestjs/axios";
 import { OnEvent } from "@nestjs/event-emitter";
-import { WizardsCreatedEvent } from "./events";
-import { map } from "rxjs";
 import axios from "axios";
-import { response } from "express";
+import { ReviewCreatedEvent } from "src/review/events/review-created.event";
 
 @Injectable()
 export class ClientService {
   constructor(
     @Inject(HTTP_TOKEN_INJECTION) protected token: string,
-    protected http: HttpService
+    protected http: HttpService,
   ) {}
 
 
   // Event listener on the WizardscreatedEventName:
-  @OnEvent(WizardsCreatedEvent.name, { promisify: true, async: true })
-  async eventHandler(data: WizardsCreatedEvent) {
-    console.log("triggered");
-    console.log(data);
+  @OnEvent(ReviewCreatedEvent.name, { promisify: true, async: true })
+  async eventHandler({ review, creator: user }: ReviewCreatedEvent) {
+
+    const data2 = {
+      curator_orcid: user.orcid,
+      timestamp: review.created,
+      entity_uri: "https://registry.dome-ml.org/review/" + review.shortid,
+      activity_term: "annotation_submitted",
+      resource_id: "dome_id",
+    };
+
+
+    console.log("api curon report submission triggered");
+    //console.log(data);
+
+    console.log(data2);
      //send  Post request to APICURON with Token (hidden)  
-     await axios.post('https://apicuron.org/api/reports/single/', data.toObject(), {
+     await axios.post('https://apicuron.org/api/reports/single/', data2, {
       headers:{
          'Version': '2',
         'Authorization':`Bearer ${this.token}`,
@@ -42,5 +52,4 @@ export class ClientService {
 
 
    
-  }
-}
+  }}

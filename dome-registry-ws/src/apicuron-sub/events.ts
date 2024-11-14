@@ -1,4 +1,6 @@
 import { SubmitWizards } from "src/review/dto/submit-wizard.dto";
+import { ReviewDocument } from "src/review/review.schema";
+import { User } from "src/user/user.schema";
 
 export class WizardsCreatedEvent {
   constructor(
