@@ -10,7 +10,7 @@ import {UserModule} from "./user/user.module";
 // Import application
 import {AppController} from "./app.controller";
 import {AppService} from "./app.service";
-
+import { jsonldModule } from "./review/Json-ld/json-ld.module";
 // Import configuration function
 import { configuration } from "./config/configuration";
 import { EventEmitterModule } from "@nestjs/event-emitter";
@@ -65,6 +65,7 @@ import { EmailModule } from "./Email-system/email-client.module";
         ApicuronModule,
         MailerModule,
         EmailModule,
+        jsonldModule,
         
     ],
     controllers: [AppController],

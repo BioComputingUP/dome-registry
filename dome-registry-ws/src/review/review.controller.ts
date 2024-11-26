@@ -222,7 +222,7 @@ export class ReviewController {
     description: "Review removed successfuly",
   })
   async remove(@Param("uuid") uuid: string, @User() user) {
-    return await this.reviewService.remove(uuid, user);
+    return await this.reviewService.remove(uuid,user);
   }
 
   //*------------------Create a review threw Dome  Wizards ----------------------**//
