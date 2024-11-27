@@ -22,6 +22,7 @@ export interface Offset {
 
 export interface Query extends Offset, Sort {
   // Search parameters
+  
   text: string;
   public: 'true' | 'false';
 }
@@ -48,7 +49,9 @@ export interface journalData {
   providedIn: 'root',
 })
 export class ReviewService {
+  private jsonldMArkup: string;
   // Define APIs endpoint
+  public readonly urlMarkup = environment.backend+ '/markup';
   public readonly url = environment.backend + '/review';
   private dataSubject = new BehaviorSubject<string>('initial data');
   data$ = this.dataSubject.asObservable();
@@ -200,4 +203,25 @@ export class ReviewService {
     shareReplay()
     );
   }
+
+
+  public GetHomePageMarkup(){
+
+     const  url = this.urlMarkup +'/dataCatalog';
+    return this.httpClient.get(url,{});
+  }
+
+
+  public GetSearchPageMarkup (){
+    const url = this.urlMarkup+ '/dataset';
+    return this.httpClient.get(url,{});
+  }
+
+
+  public GetReviewMarkup(shortid:string){
+    const url = this.urlMarkup+ '/'+shortid;
+
+    return this.httpClient.get(url,{})
+  }
+
 }

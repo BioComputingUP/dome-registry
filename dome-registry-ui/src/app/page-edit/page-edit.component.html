@@ -481,7 +481,7 @@
             </strong>
           </div>
           <!-- Buttons -->
-          <div class="col-12 col-md-6 d-flex flex-row flex-nowrap py-1 justify-content-end g">
+          <div class="col-12 col-md-6 d-flex flex-row flex-nowrap py-1 justify-content-end " *ngIf="review.public == false">
             <!-- Delete button -->
             <button class="btn btn-danger me-1" type="button" [disabled]="!review.uuid" (click)="onDeleteClick($event)">
               Delete&nbsp;<i class="bi bi-x-square d-none d-md-inline"></i>

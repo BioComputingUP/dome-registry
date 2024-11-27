@@ -1,8 +1,12 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy} from '@angular/core';
-import {Observable, BehaviorSubject, switchMap, combineLatest, distinctUntilChanged, debounceTime, map, tap, startWith, Subject} from "rxjs";
+import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Renderer2,Inject} from '@angular/core';
+import {Observable, BehaviorSubject, switchMap, combineLatest, distinctUntilChanged, debounceTime, map, tap, startWith, Subject, takeUntil} from "rxjs";
 import {Field, Offset, Query, Review, ReviewService, Sort} from "../review.service";
 import {AuthService} from "../auth.service";
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { DOCUMENT } from '@angular/common';
+import { take } from 'rxjs';
+
+
 type Reviews = Array<Review>;
 
 interface Score {
@@ -18,7 +22,8 @@ interface Score {
   styleUrls: ['./page-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageSearchComponent implements OnDestroy{
+export class PageSearchComponent implements OnInit, OnDestroy{
+  jsonLD: any;
   public page = 3 ;
   public readonly text$ = new BehaviorSubject<string>('');
 
@@ -32,7 +37,7 @@ export class PageSearchComponent implements OnDestroy{
 
   public readonly score$: Observable<Map<string, Score>>;
   private results: Reviews;
-  private destroy$ = new Subject();
+  private destroy$ = new Subject<void>();
    readonly   dropDownData = [
     { seo_val: 'val1', text_val: 'Option 1' },
     { seo_val: 'val2', text_val: 'Option 2' },
@@ -49,12 +54,13 @@ export class PageSearchComponent implements OnDestroy{
   constructor(
     // Dependency injection
     
-    
+    private _renderer2: Renderer2, 
+    @Inject(DOCUMENT) private _document: Document,
     private reviewService: ReviewService,
     private authService: AuthService,
   ) {
     
-
+     
     // Define text pipeline
     const text$ = this.text$.pipe(
       // Filter value
@@ -134,6 +140,29 @@ export class PageSearchComponent implements OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next(true)
+    this.destroy$.next();
+  }
+
+  ngOnInit(): void {
+      let script = this._renderer2.createElement('script');
+      this.reviewService.GetSearchPageMarkup().pipe(
+        tap((response)=> {
+          this.jsonLD = this._renderer2.createElement('script');
+          this.jsonLD.type =`application/ld+json`;
+          this.jsonLD.text = JSON.stringify(response);
+          this._renderer2.appendChild(this._document.body,this.jsonLD);
+        }),
+        takeUntil(this.destroy$.asObservable()),
+      ).subscribe();
+
+
+      this.destroy$.asObservable().pipe(
+        tap(() => {
+          // retirer markup
+          this._renderer2.removeChild(this._document.body, this.jsonLD);
+        }),
+        take(1)
+      ).subscribe();
+    
   }
 }

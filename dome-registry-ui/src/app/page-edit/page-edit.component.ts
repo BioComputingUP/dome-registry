@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Inject,Renderer2 } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { expand, map, merge, Observable, of, share, shareReplay, startWith, Subject, switchMap, takeUntil, tap, } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -7,6 +7,8 @@ import { Location } from "@angular/common";
 import { ReviewService } from "../review.service";
 import { Review, computeDomeScore, isValidField } from "dome-registry-core";
 import { AuthService } from "../auth.service";
+import { DOCUMENT } from '@angular/common';
+import { take } from 'rxjs';
 
 
 
@@ -36,7 +38,7 @@ export function notDefinedValidator(): ValidatorFn {
   styleUrls: ['./page-edit.component.scss'],
   //changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageEditComponent implements OnDestroy {
+export class PageEditComponent implements OnInit,OnDestroy {
 
   private readonly initial: Partial<Review>;
 
@@ -92,15 +94,17 @@ export class PageEditComponent implements OnDestroy {
   public review?: Review;
   public show = false;
   public autohide = true;
-
+  jsonLd : any;
   public readonly review$: Observable<Review>;
+  public  review$2: Observable<Review>;
 
   public readonly score$: Observable<Map<string, Score>>;
 
   private readonly fetch$: Observable<string>;
+  private  fetch$2: Observable<string>;
 
   public readonly fetched$: Observable<Review | undefined>;
-
+  public  fetched$2: Observable<Review | undefined>;
   //public readonly Sharedscore$: Observable<string>;
 
   // = this.fetch$.pipe(
@@ -125,11 +129,12 @@ export class PageEditComponent implements OnDestroy {
   private readonly update$ = new EventEmitter<void>();
 
   public readonly updated$: Observable<Review>;
+  public  updated$2: Observable<Review>;
 
   private readonly delete$ = new EventEmitter<void>();
 
   public readonly deleted$: Observable<undefined>;
-  private destroy$ = new Subject();
+  private destroy$ = new Subject<void>();
 
 
   // Retrieve root element
@@ -155,6 +160,8 @@ export class PageEditComponent implements OnDestroy {
     private elementRef: ElementRef,
     private location: Location,
     private router: Router,
+    private _renderer2: Renderer2,
+    @Inject(DOCUMENT) private _document:Document
 
   ) {
 
@@ -166,7 +173,7 @@ export class PageEditComponent implements OnDestroy {
       // Extract UUID
       map((params) => params.get('shortid') || ''),
     );
-    console.log(this.fetch$);
+    
 
     // Define review fetch pipeline
     this.fetched$ = this.fetch$.pipe(
@@ -201,8 +208,7 @@ export class PageEditComponent implements OnDestroy {
 
         // Define review UUID
         const shortid = review?.shortid ? review.shortid : '';
-        console.log(shortid);
-        console.log(review?.created)
+        
         // Define updated URL according to retrieved identifier
         const route = this.router.createUrlTree(['./', shortid], { relativeTo: this.activeRoute });
         // TODO Remove this
@@ -242,8 +248,56 @@ export class PageEditComponent implements OnDestroy {
 
 
   }
+  ngOnInit(): void {
+
+      console.log( this.router.url);
+
+      let full = this.router.url; 
+      let updatedString = full.replace("/review/", "");
+      console.log(updatedString); // Output: al24g8xyml
+
+      this.reviewService.GetReviewMarkup(updatedString).pipe(
+        tap((response)=> {
+          this.jsonLd = this._renderer2.createElement('script');
+          this.jsonLd.type = `application/ld+json`;
+          this.jsonLd.text = JSON.stringify(response);
+          this._renderer2.appendChild(this._document.body,this.jsonLd) ;
+        }),
+        takeUntil(this.destroy$.asObservable()),
+      ).subscribe();
+
+      this.destroy$.asObservable().pipe(
+        tap(() => {
+          // retirer markup
+          this._renderer2.removeChild(this._document.body, this.jsonLd);
+        }),
+        take(1)
+      ).subscribe();  
+      // this.reviewService.GetReviewMarkup().pipe(
+      //   tap((response)=> {
+      //     this.jsonLd = this._renderer2.createElement('script');
+      //     this.jsonLd.type = `application/ld+json`;
+      //     this.jsonLd.text = JSON.stringify(response);
+      //     this._renderer2.appendChild(this._document.body,this.jsonLd); 
+      //   }),
+      //   takeUntil(this.destroy$.asObservable()),
+
+      // ).subscribe();
+
+
+      // this.destroy$.asObservable().pipe(
+      //   tap (()=>{
+        //   // this._renderer2.removeChild(this._document.body,this.jsonLd);
+        // // }),
+      //   // take(1)
+      // // ).subscribe();
+   
+
+
+
+  }
   ngOnDestroy(): void {
-    this.destroy$.next(true)
+    this.destroy$.next();
   }
 
 
@@ -260,6 +314,7 @@ export class PageEditComponent implements OnDestroy {
     console.log( this.delete$);
     // Just trigger delete action
     this.delete$.emit();
+    this.router.navigate(['/search']);
   }
 
   //Make the annotation public 

@@ -41,7 +41,7 @@ export class AppComponent {
     this.authService.login();
   }
   
-   public readonly pagecopm = new PageSearchComponent(this.reviewwService,this.authService);
+   //public readonly pagecopm = new PageSearchComponent(this.reviewwService,this.authService);
   //public readonly rs = this.pagecopm.numberofentries();
   
 
