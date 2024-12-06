@@ -11,14 +11,14 @@ export class JsonLdService {
         const jsonLd = {
             '@context': 'https://schema.org',
             '@type': 'DataCatalog',
-            '@id': "https://registry.dome-ml.org/#Datacatalog",
+            '@id': "https://registry.dome-ml.org/#DataCatalog",
             "http://purl.org/dc/terms/conformsTo": {
                 "@type": "CreativeWork",
                 "@id": "https://bioschemas.org/profiles/DataCatalog/0.3-RELEASE-2019_07_01"
             },
-            "sameAs": "https://registry.identifiers.org/registry/mobidb",
-            "url": "https://mobidb.org/",
-            "identifier": "https://registry.identifiers.org/registry/mobidb",
+            "sameAs": "https://registry.identifiers.org/registry/dome",
+            "url": "https://registry.dome-ml.org/",
+            "identifier": "https://registry.identifiers.org/registry/dome",
             "name": "DOME Registry",
             "description": "The central activity in DOME Registry is the curation of Intrinsically of machine learning methods in biology from relevant publications.Data collection, annotation and integration in The DOME Registry is the result of an effort of expert curators.Curators annotate machine learning methods through data stawardship wizard instance which is a dedicated curation interface",
 
@@ -92,7 +92,7 @@ export class JsonLdService {
     "includedInDataCatalog": {
       "@id": "https://registry.dome-ml.org/#DataCatalog"
     },
-    "url":"https://registry.dome-ml.org/browse",
+    "url":"https://registry.dome-ml.org/browse/#Dataset",
     "version":"2.1",
      "name":"DOME Registry",
      "description":"",
@@ -109,7 +109,7 @@ export class JsonLdService {
         "@type": "Person",
         "givenName": "Omar",
         "familyName": "Attafi",
-        "identifier": "https://orcid.org/0000-0001-8210-2390",
+        "identifier": "https://orcid.org/0009-0002-2327-9430",
         "name": "Omar A. Attafi",
         "email": "omarabdelghani.attafi@phd.unipd.it",
         "url": "https://biocomputingup.it/people"
@@ -141,7 +141,7 @@ const jsonLd = {
         "@id": "https://bioschemas.org/profiles/Study/0.3-DRAFT",
         "@type": "CreativeWork"
     },
- "includedInDataset":"DOME Registry",
+ "includedInDataset":"https://registry.dome-ml.org/#Dataset",
   "citation": {
     "@type": "ScholarlyArticle",
     "@id": review.publication.doi,
