@@ -42,6 +42,7 @@
                           <span style="flex: 0 0 8rem">{{score.done }} / {{score.done + score.skip}}
                             ({{score.percentage!.toFixed(0)}}%)</span>
                         </div>
+                       
                       </ng-container>
                     </ng-container>
                   </ng-container>
@@ -49,12 +50,21 @@
                 <!-- Describe DOME score -->
                 <small class="d-block text-muted w-100 h-100 mb-3 overflow-y-scoll ">
                   The DOME score is computed as the number of valid fields, divided by the total number of fields <br>
-                  
+                 
                 </small>
 
                 <b>DOME-id: </b> <span class="badge bg-primary">{{review.shortid}}</span>
+                <div class="w-100 p-3 ">
+                  <button class="btn btn-primary" type="button" (click)="OnClickdownloadJSonfile($event)">
+                    Download json &nbsp;<i class="bi bi-save d-none d-md-inline"></i>
+                  </button>
+                </div>
               </div>
+            
             </card-template>
+          
+         
+
           </div>
           <!-- Main content -->
           <div class="col-8 col-md-8 offset-md-2 position-relative">
@@ -456,8 +466,12 @@
                 </div>
               </card-section>
             </form>
+           
           </div>
+           
         </div>
+      
+     
       </div>
       <!-- Bottom container, actions -->
       <!-- If the role is admin the modification and the delete are allowed -->

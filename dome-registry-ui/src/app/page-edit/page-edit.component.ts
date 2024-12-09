@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Inject,Renderer2 } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Inject, Renderer2 } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { expand, map, merge, Observable, of, share, shareReplay, startWith, Subject, switchMap, takeUntil, tap, } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -38,7 +38,7 @@ export function notDefinedValidator(): ValidatorFn {
   styleUrls: ['./page-edit.component.scss'],
   //changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageEditComponent implements OnInit,OnDestroy {
+export class PageEditComponent implements OnInit, OnDestroy {
 
   private readonly initial: Partial<Review>;
 
@@ -94,17 +94,17 @@ export class PageEditComponent implements OnInit,OnDestroy {
   public review?: Review;
   public show = false;
   public autohide = true;
-  jsonLd : any;
+  jsonLd: any;
   public readonly review$: Observable<Review>;
-  public  review$2: Observable<Review>;
 
   public readonly score$: Observable<Map<string, Score>>;
 
   private readonly fetch$: Observable<string>;
-  private  fetch$2: Observable<string>;
+  fetch$2: Observable<string>;
 
   public readonly fetched$: Observable<Review | undefined>;
-  public  fetched$2: Observable<Review | undefined>;
+  fetched2$: any;
+
   //public readonly Sharedscore$: Observable<string>;
 
   // = this.fetch$.pipe(
@@ -129,12 +129,11 @@ export class PageEditComponent implements OnInit,OnDestroy {
   private readonly update$ = new EventEmitter<void>();
 
   public readonly updated$: Observable<Review>;
-  public  updated$2: Observable<Review>;
 
   private readonly delete$ = new EventEmitter<void>();
 
   public readonly deleted$: Observable<undefined>;
-  private destroy$ = new Subject<void>();
+  private destroy$ = new Subject();
 
 
   // Retrieve root element
@@ -161,7 +160,7 @@ export class PageEditComponent implements OnInit,OnDestroy {
     private location: Location,
     private router: Router,
     private _renderer2: Renderer2,
-    @Inject(DOCUMENT) private _document:Document
+    @Inject(DOCUMENT) private _document: Document
 
   ) {
 
@@ -173,7 +172,7 @@ export class PageEditComponent implements OnInit,OnDestroy {
       // Extract UUID
       map((params) => params.get('shortid') || ''),
     );
-    
+
 
     // Define review fetch pipeline
     this.fetched$ = this.fetch$.pipe(
@@ -208,7 +207,7 @@ export class PageEditComponent implements OnInit,OnDestroy {
 
         // Define review UUID
         const shortid = review?.shortid ? review.shortid : '';
-        
+
         // Define updated URL according to retrieved identifier
         const route = this.router.createUrlTree(['./', shortid], { relativeTo: this.activeRoute });
         // TODO Remove this
@@ -249,55 +248,48 @@ export class PageEditComponent implements OnInit,OnDestroy {
 
   }
   ngOnInit(): void {
+    this.activeRoute.paramMap
 
-      console.log( this.router.url);
+    this.fetch$2 = this.activeRoute.paramMap.pipe(
+      // Extract UUID
+      map((params) => params.get('shortid') || ''));
 
-      let full = this.router.url; 
-      let updatedString = full.replace("/review/", "");
-      console.log(updatedString); // Output: al24g8xyml
-
-      this.reviewService.GetReviewMarkup(updatedString).pipe(
-        tap((response)=> {
-          this.jsonLd = this._renderer2.createElement('script');
-          this.jsonLd.type = `application/ld+json`;
-          this.jsonLd.text = JSON.stringify(response);
-          this._renderer2.appendChild(this._document.body,this.jsonLd) ;
-        }),
-        takeUntil(this.destroy$.asObservable()),
-      ).subscribe();
-
-      this.destroy$.asObservable().pipe(
-        tap(() => {
-          // retirer markup
-          this._renderer2.removeChild(this._document.body, this.jsonLd);
-        }),
-        take(1)
-      ).subscribe();  
-      // this.reviewService.GetReviewMarkup().pipe(
-      //   tap((response)=> {
-      //     this.jsonLd = this._renderer2.createElement('script');
-      //     this.jsonLd.type = `application/ld+json`;
-      //     this.jsonLd.text = JSON.stringify(response);
-      //     this._renderer2.appendChild(this._document.body,this.jsonLd); 
-      //   }),
-      //   takeUntil(this.destroy$.asObservable()),
-
-      // ).subscribe();
+    this.fetched2$ = this.fetch$2.pipe(
+      switchMap((shortid) => shortid ? this.reviewService.GetReviewMarkup(shortid) : of(undefined))
+    )
 
 
-      // this.destroy$.asObservable().pipe(
-      //   tap (()=>{
-        //   // this._renderer2.removeChild(this._document.body,this.jsonLd);
-        // // }),
-      //   // take(1)
-      // // ).subscribe();
-   
+
+
+
+    const a = "flds";
+    const b = "rfjek";
+    const c = "dfkl";
+    // this.reviewService.GetReviewMarkup(shortid,b,c).pipe(
+    //   tap((response)=> {
+    //     this.jsonLd = this._renderer2.createElement('script');
+    //     this.jsonLd.type = `application/ld+json`;
+    //     this.jsonLd.text = JSON.stringify(response);
+    //     this._renderer2.appendChild(this._document.body,this.jsonLd); 
+    //   }),
+    //   takeUntil(this.destroy$.asObservable()),
+
+    // ).subscribe();
+
+
+    // this.destroy$.asObservable().pipe(
+    //   tap (()=>{
+    //   // this._renderer2.removeChild(this._document.body,this.jsonLd);
+    // // }),
+    //   // take(1)
+    // // ).subscribe();
+
 
 
 
   }
   ngOnDestroy(): void {
-    this.destroy$.next();
+    this.destroy$.next(true)
   }
 
 
@@ -311,7 +303,7 @@ export class PageEditComponent implements OnInit,OnDestroy {
 
   // Handle delete click
   public onDeleteClick($event: MouseEvent) {
-    console.log( this.delete$);
+    console.log(this.delete$);
     // Just trigger delete action
     this.delete$.emit();
     this.router.navigate(['/search']);
@@ -332,6 +324,21 @@ export class PageEditComponent implements OnInit,OnDestroy {
     } catch (error) {
       console.log(error);
     }
+  }
+
+
+  public OnClickdownloadJSonfile($event: MouseEvent) {
+    const json = JSON.stringify(this.review, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = this._document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = this.review?.publication.title +'.json';
+    this._document.body.appendChild(a);
+    a.click();
+
+    window.URL.revokeObjectURL(url);
   }
 
   // Avoid sorting map
