@@ -23,8 +23,17 @@
 
               </div> -->
               <div class="col-10">
-                <input type="text" class="form-control" placeholder="Search..." id="search-text"
+                <div class="input-group mb-3">
+                  <!-- <select class="form-select" style="max-width: 150px;">
+                    <option selected>Search field</option>
+                    <option value="1">Title</option>
+                    <option value="2">Author</option>
+                    <option value="3">Year</option>
+                  </select> -->
+              
+                  <input type="text" class="form-control" placeholder="Search..." id="search-text"
                   (keyup)="onTextChange($event)" />
+                </div>
               </div>
 
 
@@ -79,6 +88,7 @@
                   (click)="onSortChange('score')" type="radio" />
                 <label class="form-check-label" for="inlineRadio4">Score</label>
               </div>
+              <button class="btn btn-primary" type="button" (click)="OnClickdownloadJSonfile($event)">&nbsp;<i class="bi bi-save d-none d-md-inline"></i> Bulk Download </button>
               
             </ng-container>
           </div>

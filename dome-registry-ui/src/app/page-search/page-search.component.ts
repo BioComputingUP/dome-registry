@@ -142,6 +142,19 @@ export class PageSearchComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
     this.destroy$.next();
   }
+  public OnClickdownloadJSonfile($event: MouseEvent) {
+    const json = JSON.stringify(this.results, null,1);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = this._document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download =  'BulkDome.json';
+    this._document.body.appendChild(a);
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  }
 
   ngOnInit(): void {
       let script = this._renderer2.createElement('script');
