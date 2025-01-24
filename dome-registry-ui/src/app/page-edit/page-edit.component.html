@@ -5,11 +5,11 @@
     <!-- Case user is authorized, show edit form -->
     <ng-container *ngIf="user.auth || review.shortid ; else signInFirst">
       <!-- Inner scaffold   -->
-      <div class="container-fluid flex-grow-1 bg-light h-100 overflow-scroll" [root]="element" [target]="'#links'"
+      <div class="container-fluid flex-grow-1 bg-light h-100" [root]="element" [target]="'#links'"
         scroll-spy>
         <div class="row position-relative overflow-auto">
           <!-- Left shoulder -->
-          <div class="col-2 d-none d-md-block position-fixed h-100 py-6 overflow-scroll">
+          <div class="col-2 d-none d-md-block position-fixed h-100 py-6 overflow-auto">
             <!-- Vertical navigation -->
             <card-nav id="links" class="d-block mt-3 mb-3 ">
               <a class="nav-link" [routerLink]="[]" fragment="publication" link>Publication</a>
@@ -120,6 +120,17 @@
                       [readonly]="!user.roles?.includes('admin') && review.public">
                     <div id="doi-help" class="form-text">DOI of the published article</div>
                   </div>
+                  <!-- Annotation tags -->
+                  <div class="mb-3">
+                    <label for="tags" class="form-label">Tags</label>
+
+                    <div class="tags-container">
+                      <span *ngFor="let tag of review.publication.tags" class="tag">{{ tag | uppercase }}</span>
+                    </div>
+                    
+                   
+                      <div id="tags-help" class="form-text">Tags related to the published article</div>
+                  </div> 
 
                 <!-- Creation date  -->
                 <div class="mb-3">
