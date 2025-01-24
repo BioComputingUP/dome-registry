@@ -142,6 +142,8 @@ export interface Publication extends Section {
     title: string,
     // Authors, comma separated
     authors: string,
+    // Tags list related to the annotation 
+     tags: string [], 
 
     
 }
