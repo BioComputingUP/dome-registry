@@ -71,6 +71,17 @@ export class CreatePublicationDto implements Publication {
     @Type(() => String)
     doi: string = '';
     
+    //* -------------Annotation Tags ----------------*/
+    @ApiProperty({
+        description: 'Doi of the published article',
+        example:'10.9999/2023/79752'
+    })
+    @IsString()
+    @IsDefined()
+    @Type(() => String)
+    tags: string[] = [];
+     
+
     
 // @IsInt()
     // @Min(0)

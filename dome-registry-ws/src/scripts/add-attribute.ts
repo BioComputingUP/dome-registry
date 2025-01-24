@@ -7,6 +7,8 @@ import { AppModule } from "src/app.module"
 import { User, UserDocument } from "src/user/user.schema";
 //import { ReviewService } from "src/review/review.service";
 import { Role } from "src/roles/role.enum";
+import { Review, ReviewDocument } from "src/review/review.schema";
+// NODE_ENV= Developement node script.js
 
 
 async function bootstrap() {
@@ -14,11 +16,11 @@ async function bootstrap() {
     const app = await NestFactory.createApplicationContext(AppModule);
     // console.log(Reflect.getMetadata('providers', MongooseModule));
 
-    const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name))
+    //const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name));
+    const reviewModel : mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
 
-
-    await userModel.updateMany({}, { $set: { "organisation": "undefined" } });
-    
+    //await userModel.updateMany({}, { $set: { "tags": "undefined" } });
+    await reviewModel.updateMany({},{$set:{"publication.tags":[]}});
 
     // const all = userModel.find();
     // all.updateMany({}, { $set: { roles: Role.User } });

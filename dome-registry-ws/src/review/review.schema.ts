@@ -47,6 +47,9 @@ class Review {
 
     @Prop({ type: String, enum:ReviewState ,default:ReviewState.Undefined})
     reviewState?: ReviewState;
+   
+    @Prop({type:[{type: String}], required:false})
+    tags : string[];
   
 }
 
