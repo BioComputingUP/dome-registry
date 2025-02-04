@@ -12,6 +12,7 @@ import { ClientService } from "src/apicuron-sub/apicuron-client.service";
 import { EventEmitter2 } from "@nestjs/event-emitter";
 
 import { ReviewCreatedEvent } from "./events/review-created.event";
+import { writeFileSync } from "fs";
 @Injectable()
 export class ReviewService {
   private uid: ShortUniqueId;
@@ -168,7 +169,7 @@ export class ReviewService {
                               $not: {
                                 $regexMatch: {
                                   input: "$$field.k",
-                                  regex: ".*(skip|done)$",
+                                  regex: ".*(skip|done|tags)$",
                                   options: "i",
                                 },
                               },
@@ -293,7 +294,7 @@ export class ReviewService {
               // 'publication.journal': user.organisation
 
               $and: [
-                // Match public reviews (any user) and private ones (current user)
+                // keep public and private reviews
                 {
                   $or: [
                     // Keep public reviews
@@ -340,7 +341,7 @@ export class ReviewService {
         // console.log(JSON.stringify(data.pipeline()));
         return data;
       } else {
-        console.log("first condition");
+        console.log("second condition");
 
         // Apply aggregation function to model
         const data = this.reviewModel.aggregate([
@@ -432,7 +433,7 @@ export class ReviewService {
                               $not: {
                                 $regexMatch: {
                                   input: "$$field.k",
-                                  regex: ".*(skip|done)$",
+                                  regex: ".*(skip|done|tags)$",
                                   options: "i",
                                 },
                               },
@@ -634,13 +635,15 @@ export class ReviewService {
           { $skip: query.skip },
         ]);
 
+        
+
         return data;
       }
     } else {
       console.log("The logged in user is:" + user);
       console.log("second condition");
 
-      return this.reviewModel.aggregate([
+      const data =  this.reviewModel.aggregate([
         // Add flattened sections' fields
         {
           $set: {
@@ -729,7 +732,7 @@ export class ReviewService {
                             $not: {
                               $regexMatch: {
                                 input: "$$field.k",
-                                regex: ".*(skip|done)$",
+                                regex: ".*(skip|done|tags)$",
                                 options: "i",
                               },
                             },
@@ -893,6 +896,10 @@ export class ReviewService {
         // Then, apply lower bound
         { $skip: query.skip },
       ]);
+
+      const pipeline = data.pipeline();
+      writeFileSync('/tmp/agg.json', JSON.stringify(pipeline, null, 2));
+      return data;
     }
   }
 
@@ -966,14 +973,14 @@ export class ReviewService {
       review[section]["done"] = done;
       review[section]["skip"] = skip;
     });
-    
+
     // Store review into database
     //return await inserted.save();
 
-    const response= {
+    const response = {
       review: await inserted.save(),
       callback: async () => {
-        await this.eventEmitter.emitAsync(ReviewCreatedEvent.name,new ReviewCreatedEvent(inserted,user))
+        await this.eventEmitter.emitAsync(ReviewCreatedEvent.name, new ReviewCreatedEvent(inserted, user))
       }
     }
     return response;
@@ -997,19 +1004,19 @@ export class ReviewService {
     // NOTE Only private reviews can be updated
     return this.reviewModel.findOneAndUpdate(
       // Get only searched and allowed review
-      { shortid: review.shortid, uuid: review.uuid},
+      { shortid: review.shortid, uuid: review.uuid },
       // Use input values to update review
       Object.assign({}, review, { updated }),
       // Return updated review
       { new: true }
     );
   }
- 
+
   // Remove document according to given UUID
   async remove(uuid: string, user2: User) {
     // NOTE Only owner user or the admin can delete its own private reviews
 
-    
+
     try {
       let deletedReview;
       let rev;
@@ -1017,17 +1024,17 @@ export class ReviewService {
         deletedReview = await this.reviewModel.findOneAndDelete({ uuid });
       } else {
         console.log('second condition to delete the review for user');
-        rev = await this.reviewModel.findOne({ uuid, public: false});
+        rev = await this.reviewModel.findOne({ uuid, public: false });
         console.log(rev);
-        deletedReview = await this.reviewModel.findOneAndDelete({ uuid, public: false, user:user2 });
+        deletedReview = await this.reviewModel.findOneAndDelete({ uuid, public: false, user: user2 });
       }
-  
+
       return !!deletedReview;
     } catch (error) {
       console.error('Error deleting review:', error);
       throw new HttpException('Failed to delete review', HttpStatus.INTERNAL_SERVER_ERROR);
-    } 
-    
+    }
+
   }
   private isAdmin(user: User): boolean {
     // Assuming roles are stored as an array in the User object
@@ -1082,7 +1089,7 @@ export class ReviewService {
   //     return inserted.save();
   //   }
 
-  
+
 
   // // Get the  ORCID ID of  owner
 
@@ -1095,16 +1102,17 @@ export class ReviewService {
   // get the journal counts form the Databse
   async getJournalsC() {
     const data = this.reviewModel.aggregate([
-     {$match:{public:true}},
-     
+      { $match: { public: true } },
+
       {
-      $group:{
-      _id: "$publication.year",
-      count: {$sum:1}
-     }},
-     {
-      $sort:{count:-1}
-     }
+        $group: {
+          _id: "$publication.year",
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { count: -1 }
+      }
     ]);
 
     return data;
