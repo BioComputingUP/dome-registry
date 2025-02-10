@@ -135,7 +135,7 @@
                 <!-- Creation date  -->
                 <div class="mb-3">
                     <div  class="mb-1"> <b>Created </b> {{review.created | date }} </div>
-                    <div class=""> <b>Last update</b>  {{review.updated | date }} </div>
+                    <div class="mb-1"> <b>Last update</b>  {{review.updated | date }} </div>
                 </div>
 
                 </div> 
@@ -483,48 +483,56 @@
         </div>
       
      
+        <!-- Bottom container, actions -->
+        <!-- If the role is admin the modification and the delete are allowed -->
+       
+        <div class="container">
+          <footer class="stick-footer">
+            <div class="z-3 position-relative  container-fluid flex-shrink-0 bg-white shadow-sm overflow-hidden"
+            *ngIf="(user.roles?.includes('user') && !review.public) || user.roles?.includes('admin')">
+            <!-- Actions form -->
+            <form id="Uidbar" [formGroup]="actions" class="row py-3 py-1">
+              <!-- UUID of current review -->
+              <div class=" col-12 col-md-6 py-1  ">
+                <!-- Case review is set -->
+                <small>Unique identifer</small><br>
+                <strong [class.text-primary]="!!review.uuid" [class.text-muted]="!review.uuid">
+                  {{ review.uuid || '-' }}
+                </strong>
+              </div>
+              <div class=" col-12 col-md-6 py-1  ">
+                <!-- Case review is set -->
+                <small>Short Unique identifer</small><br>
+                <strong [class.text-primary]="!!review.shortid" [class.text-muted]="!review.shortid">
+                  {{ review.shortid || '-' }}
+                </strong>
+              </div>
+              <!-- Buttons -->
+              <div class="col-12 col-md-6 d-flex flex-row flex-nowrap py-1 justify-content-end " *ngIf="review.public == false">
+                <!-- Delete button -->
+                <button class="btn btn-danger me-1" type="button" [disabled]="!review.uuid" (click)="onDeleteClick($event)">
+                  Delete&nbsp;<i class="bi bi-x-square d-none d-md-inline"></i>
+                </button>
+                <!-- Save button -->
+                <button class="btn btn-primary me-1" type="button" (click)="onSaveClick($event)">
+                  Save&nbsp;<i class="bi bi-save d-none d-md-inline"></i>
+                </button>
+    
+                <button class="btn btn-success me-0 " *ngIf="user.roles?.includes('admin') && review.public == false" type="button"
+                  [disabled]="!review.uuid" (click)=" onPublishClick($event)">
+                  Publish &nbsp;<i class="bi bi-check2-circle"></i>
+                </button>
+    
+              </div>
+            </form>
+          </div>
+    
+           
+          </footer>
+
+        </div>
       </div>
-      <!-- Bottom container, actions -->
-      <!-- If the role is admin the modification and the delete are allowed -->
-      <div class="z-3 position-relative  container-fluid flex-shrink-0 bg-white shadow-sm overflow-hidden"
-        *ngIf="(user.roles?.includes('user') && !review.public) || user.roles?.includes('admin')">
-        <!-- Actions form -->
-        <form id="Uidbar" [formGroup]="actions" class="row py-3 py-1">
-          <!-- UUID of current review -->
-          <div class=" col-12 col-md-6 py-1  ">
-            <!-- Case review is set -->
-            <small>Unique identifer</small><br>
-            <strong [class.text-primary]="!!review.uuid" [class.text-muted]="!review.uuid">
-              {{ review.uuid || '-' }}
-            </strong>
-          </div>
-          <div class=" col-12 col-md-6 py-1  ">
-            <!-- Case review is set -->
-            <small>Short Unique identifer</small><br>
-            <strong [class.text-primary]="!!review.shortid" [class.text-muted]="!review.shortid">
-              {{ review.shortid || '-' }}
-            </strong>
-          </div>
-          <!-- Buttons -->
-          <div class="col-12 col-md-6 d-flex flex-row flex-nowrap py-1 justify-content-end " *ngIf="review.public == false">
-            <!-- Delete button -->
-            <button class="btn btn-danger me-1" type="button" [disabled]="!review.uuid" (click)="onDeleteClick($event)">
-              Delete&nbsp;<i class="bi bi-x-square d-none d-md-inline"></i>
-            </button>
-            <!-- Save button -->
-            <button class="btn btn-primary me-1" type="button" (click)="onSaveClick($event)">
-              Save&nbsp;<i class="bi bi-save d-none d-md-inline"></i>
-            </button>
-
-            <button class="btn btn-success me-0 " *ngIf="user.roles?.includes('admin') && review.public == false" type="button"
-              [disabled]="!review.uuid" (click)=" onPublishClick($event)">
-              Publish &nbsp;<i class="bi bi-check2-circle"></i>
-            </button>
-
-          </div>
-        </form>
-      </div>
-
+      
     </ng-container>
     <!-- Otherwise, ask user to sign in -->
     <ng-template #signInFirst>

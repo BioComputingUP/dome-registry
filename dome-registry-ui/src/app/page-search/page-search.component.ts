@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Renderer2,Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Renderer2,Inject, ViewChild, ElementRef} from '@angular/core';
+import { FormControl } from '@angular/forms';
 import {Observable, BehaviorSubject, switchMap, combineLatest, distinctUntilChanged, debounceTime, map, tap, startWith, Subject, takeUntil} from "rxjs";
 import {Field, Offset, Query, Review, ReviewService, Sort} from "../review.service";
 import {AuthService} from "../auth.service";
@@ -23,8 +24,25 @@ interface Score {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageSearchComponent implements OnInit, OnDestroy{
+  @ViewChild('input') input: ElementRef<HTMLInputElement>;
+  control = new FormControl('');
+  tags: string[] = [''];
+  separatorKeys = ['Enter', ','];
+  filterOptions = [
+    { id: 1, name: 'Filter by Name' },
+    { id: 2, name: 'Filter by Date' },
+    { id: 3, name: 'Filter by Category' },
+  ];
+
+  // Selected filter
+  selectedFilter = this.filterOptions[0];
+   // New tag input
+  newTag = '';
+  // Search query
+  searchQuery = '';
+  
   jsonLD: any;
-  public page = 3 ;
+  //public page = 3 ;
   public readonly text$ = new BehaviorSubject<string>('');
 
   public readonly public$ = new BehaviorSubject<'true' | 'false'>('true');
@@ -38,12 +56,12 @@ export class PageSearchComponent implements OnInit, OnDestroy{
   public readonly score$: Observable<Map<string, Score>>;
   private results: Reviews;
   private destroy$ = new Subject<void>();
-   readonly   dropDownData = [
-    { seo_val: 'val1', text_val: 'Option 1' },
-    { seo_val: 'val2', text_val: 'Option 2' },
-    // Add more options here
+//    readonly   dropDownData = [
+//     { seo_val: 'val1', text_val: 'Option 1' },
+//     { seo_val: 'val2', text_val: 'Option 2' },
+//     // Add more options here
     
-];
+// ];
  selectedfilter = '';
   public readonly results$: Observable<Reviews>;
 
@@ -109,6 +127,7 @@ export class PageSearchComponent implements OnInit, OnDestroy{
   }
 
   public onTextChange(event: KeyboardEvent) {
+    console.log((event.target as HTMLInputElement).value)
     this.text$.next((event.target as HTMLInputElement).value);
   }
 
@@ -157,7 +176,7 @@ export class PageSearchComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-      let script = this._renderer2.createElement('script');
+     // let script = this._renderer2.createElement('script');
       this.reviewService.GetSearchPageMarkup().pipe(
         tap((response)=> {
           this.jsonLD = this._renderer2.createElement('script');
@@ -178,4 +197,28 @@ export class PageSearchComponent implements OnInit, OnDestroy{
       ).subscribe();
     
   }
+
+  addTag(): void {
+    if (this.newTag && !this.tags.includes(this.newTag)) {
+      this.tags.push(this.newTag);
+      this.newTag = ''; // clear the input 
+    }
+  }
+
+  removeTag(index: number): void {
+    this.tags.splice(index, 1);
+  }
+
+  handleKeydown(event: KeyboardEvent): void {
+    if (this.separatorKeys.includes(event.key)) {
+      event.preventDefault();
+      this.addTag();
+    }
+  }
+
+  handleBlur(): void {
+    this.addTag();
+  }
+
+
 }

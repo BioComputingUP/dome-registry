@@ -189,6 +189,7 @@ export class PageEditComponent implements OnInit, OnDestroy {
       map(() => ({ ...this.updates.value, shortid: this.review?.shortid } as Review)),
       // Update current review
       switchMap((review) => this.reviewService.upsertReview(review)),
+      
     );
 
     // Define delete pipeline
@@ -259,23 +260,26 @@ export class PageEditComponent implements OnInit, OnDestroy {
       switchMap((shortid) => shortid ? this.reviewService.GetReviewMarkup(shortid) : of(undefined))
     )
 
-
+    console.log( this.router.url);
+    let full = this.router.url; 
+    let updatedString = full.replace("/review/", "");
+    console.log(updatedString); // Output: al24g8xyml
 
 
 
     const a = "flds";
     const b = "rfjek";
     const c = "dfkl";
-    // this.reviewService.GetReviewMarkup(shortid,b,c).pipe(
-    //   tap((response)=> {
-    //     this.jsonLd = this._renderer2.createElement('script');
-    //     this.jsonLd.type = `application/ld+json`;
-    //     this.jsonLd.text = JSON.stringify(response);
-    //     this._renderer2.appendChild(this._document.body,this.jsonLd); 
-    //   }),
-    //   takeUntil(this.destroy$.asObservable()),
+    this.reviewService.GetReviewMarkup(updatedString).pipe(
+      tap((response)=> {
+        this.jsonLd = this._renderer2.createElement('script');
+        this.jsonLd.type = `application/ld+json`;
+        this.jsonLd.text = JSON.stringify(response);
+        this._renderer2.appendChild(this._document.body,this.jsonLd); 
+      }),
+      takeUntil(this.destroy$.asObservable()),
 
-    // ).subscribe();
+    ).subscribe();
 
 
     // this.destroy$.asObservable().pipe(

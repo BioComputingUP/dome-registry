@@ -88,7 +88,7 @@
                   (click)="onSortChange('score')" type="radio" />
                 <label class="form-check-label" for="inlineRadio4">Score</label>
               </div>
-              <button class="btn btn-primary" type="button" (click)="OnClickdownloadJSonfile($event)">&nbsp;<i class="bi bi-save d-none d-md-inline"></i> Bulk Download </button>
+              <button class="btn btn-primary" type="button" (click)="OnClickdownloadJSonfile($event)">Bulk Download <i class=" bi-save d-none d-md-inline"></i> </button>
               
             </ng-container>
           </div>
@@ -172,10 +172,19 @@
                     <strong>Visibility&nbsp;</strong><i class="bi bi-lock"></i>
                     Private
                   </p>
+                  
+                  <p class="mb-0">
+                    <strong>Tags:&nbsp;</strong>
+                    <span class="shadow-l d-inline-block m-1" *ngFor="let tag of  review.publication.tags ">
+                        <span class="tag ">{{ tag || '-'}}</span>
+                        <span ng-if="!$last"> </span> <!-- Add a comma after each tag except the last one -->
+                    </span>
+                  </p>
                   <p class="mb-0">
                     <strong>Created:&nbsp;</strong>
                     <span>{{ review.created | date }}</span>
                   </p>
+
                   <p class="mb-0">
                     <strong>Last update:&nbsp;</strong>
                     <span>{{ review.updated | date }}</span>

@@ -73,6 +73,15 @@ export class ReviewService {
     // Make request against database
     return this.httpClient.get<Review>(this.url + '/' + shortid);
   }
+  public upsertReview(review: Partial<Review>): Observable<Review> {
+    if (!review.shortid){
+      throw new Error('shortid is required for updatin the review');
+    }
+    // Define endpoint URL according to review identifier
+    let url = this.url + '/' + (review.shortid || '');
+    // Define method according to review identifier
+    return this.httpClient.patch<Review>(url, review)
+  }
 
   // Search for multiple reviews against database
   public searchReviews(query: Query) {
@@ -143,15 +152,7 @@ export class ReviewService {
   }
 
   // Create or update a review and insert it into the database
-  public upsertReview(review: Partial<Review>): Observable<Review> {
-    // Define endpoint URL according to review identifier
-    let url = this.url + '/' + (review.uuid || '');
-    // Define method according to review identifier
-    return review.uuid
-      ? this.httpClient.patch<Review>(url, review)
-      : this.httpClient.post<Review>(url, review);
-  }
-  public publishAnnotation(uuid: any) {
+   public publishAnnotation(uuid: any) {
     //(url, review) : this.httpClient.post<Review>(url, review)
     let url = this.url + '/publish/' + uuid;
     let update = { public: true };
