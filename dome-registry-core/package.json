@@ -13,7 +13,7 @@
     "deploy-prod": "(colC='\\033[0;36m';colN='\\033[0m'; echo ${colC}Building and rsyncing dist ...${colN} && npm run build && rsync -avh --delete dist nodejs@persefone:/var/local/webservers/apps/dome-registry-core/ && echo ${colC}Done with deploy-prod!${colN})",
     "watch": "webpack --watch"
   },
-  "author": "Damiano Clementel",
+  "author": "Omar Abdelghani Attafi",
   "license": "ISC",
   "devDependencies": {
     "@webpack-cli/generators": "^2.5.0",
