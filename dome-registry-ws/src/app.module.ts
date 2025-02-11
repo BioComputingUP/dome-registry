@@ -18,6 +18,7 @@ import { ApicuronModule } from "./apicuron-sub/apicuron-sub.module";
 import { EmailModule } from "./Email-system/email-client.module";
  import { MailerModule } from "@nestjs-modules/mailer";
 import { DocumentModule } from "./review/doc/document.module";
+import { CaslModule } from './casl/casl.module';
 @Module({
     imports: [
         // Initialize configuration module
@@ -68,6 +69,7 @@ import { DocumentModule } from "./review/doc/document.module";
         EmailModule,
         jsonldModule,
         DocumentModule,
+        CaslModule,
         
     ],
     controllers: [AppController],

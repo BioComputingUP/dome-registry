@@ -49,7 +49,7 @@ class Review {
     reviewState?: ReviewState;
    
     @Prop({type:[{type: String}], required:false})
-    tags : string[];
+    tags : any;
   
 }
 

@@ -1,5 +1,5 @@
 import { Publication} from 'dome-registry-core';
-import {IsDefined, IsString, ValidateNested} from "class-validator";
+import {IsArray, IsDefined, IsOptional, IsString, ValidateNested} from "class-validator";
 import {Type} from "class-transformer";
 import { ApiBody, ApiProperty } from '@nestjs/swagger';
 
@@ -76,10 +76,10 @@ export class CreatePublicationDto implements Publication {
         description: 'Doi of the published article',
         example:'10.9999/2023/79752'
     })
-    @IsString()
-    @IsDefined()
-    @Type(() => String)
-    tags: string[] = [];
+    @IsArray()
+    
+    @IsOptional()
+    tags?: string[] | undefined;
      
 
     

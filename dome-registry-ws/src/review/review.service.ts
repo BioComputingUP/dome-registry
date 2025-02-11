@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Types, Model, Query, QueryOptions, mongo } from "mongoose";
 import { v4 as UUID } from "uuid";
@@ -448,6 +448,8 @@ export class ReviewService {
                                 options: "i",
                               },
                             },
+                          
+
                           ],
                         },
                       },
@@ -640,7 +642,7 @@ export class ReviewService {
         return data;
       }
     } else {
-      console.log("The logged in user is:" + user);
+      //console.log("The logged in user is:" + user);
       console.log("second condition");
 
       const data =  this.reviewModel.aggregate([
@@ -747,6 +749,8 @@ export class ReviewService {
                               options: "i",
                             },
                           },
+
+                        
                         ],
                       },
                     },
@@ -986,9 +990,18 @@ export class ReviewService {
     return response;
   }
 
-  async update(review: Partial<Review>) {
+  async update(review: Partial<Review>): Promise<Review>{
+
+
+    if (!review.shortid || !review.uuid) {
+      throw new BadRequestException('shortid and uuid are required');
+  }
+
+
+
+
     // Define update time
-    let updated = Date.now();
+    const updated = Date.now();
     // Compute DOME score
     let score = computeDomeScore(review as any);
     // Remove total score
@@ -1004,12 +1017,18 @@ export class ReviewService {
     // NOTE Only private reviews can be updated
     return this.reviewModel.findOneAndUpdate(
       // Get only searched and allowed review
-      { shortid: review.shortid, uuid: review.uuid },
+      { shortid: review.shortid, uuid: review.uuid, private:true },
       // Use input values to update review
       Object.assign({}, review, { updated }),
       // Return updated review
-      { new: true }
-    );
+      { new: true,
+        lean:  true
+       }).then(result => {
+        if (!result){
+          throw new NotFoundException('review is not found or authorized');
+        }
+        return result;
+       });
   }
 
   // Remove document according to given UUID

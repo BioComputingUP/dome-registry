@@ -57,6 +57,42 @@ export class ReviewController {
 
   logger = new Logger(ReviewController.name);
 
+
+  @Patch(":shortid")
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: "Get updated review " })
+  async update( @Param("shortid") shortid: string,@Body() updateReviewDto: UpdateReviewDto
+  ) {
+    try {
+      let review = await this.reviewService.update(
+        Object.assign(updateReviewDto, { shortid })
+      );
+      if (!review) {
+        throw new NotFoundException();
+      }
+      return review;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException('An unexpected error occurred');
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   //**----------Get All reviews-------- **/
   @Get()
   @ApiOperation({ summary: "Get all reviews  " })
@@ -67,6 +103,7 @@ export class ReviewController {
       public: query.public,
       skip: query.skip,
       limit: query.limit,
+      
     };
     // Define sort parameters
     let _sort = { by: query.sort, asc: query.asc };
@@ -126,27 +163,10 @@ export class ReviewController {
   //get journal counts in the database  //
   @Get("totaljournal")
   async totaljoournal() {
-    const tot = await this.reviewService.getJournalsC();
-    return tot;
+    const total = await this.reviewService.getJournalsC();
+    return total;
   }
-  @Patch(":uuid")
-  @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: "Get updated review " })
-  async update( @Param("uuid") uuid: string,@Body() updateReviewDto: UpdateReviewDto, @User() user
-  ) {
-    try {
-      let review = await this.reviewService.update(
-        Object.assign(updateReviewDto, { uuid })
-      );
-      if (!review) {
-        throw new NotFoundException();
-      }
-      return review;
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException('An unexpected error occurred');
-    }
-  }
+  
   //**---------------Get Review by Unique shortid UID ------------**/
   @Get(":shortid")
   @ApiOperation({ summary: "Find one review" })
