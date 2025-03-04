@@ -1,12 +1,40 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Renderer2,Inject, ViewChild, ElementRef} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  Inject,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
-import {Observable, BehaviorSubject, switchMap, combineLatest, distinctUntilChanged, debounceTime, map, tap, startWith, Subject, takeUntil} from "rxjs";
-import {Field, Offset, Query, Review, ReviewService, Sort} from "../review.service";
-import {AuthService} from "../auth.service";
+import {
+  Observable,
+  BehaviorSubject,
+  switchMap,
+  combineLatest,
+  distinctUntilChanged,
+  debounceTime,
+  map,
+  tap,
+  startWith,
+  Subject,
+  takeUntil,
+} from 'rxjs';
+import {
+  Field,
+  Offset,
+  Query,
+  Review,
+  ReviewService,
+  Sort,
+} from '../review.service';
+import { AuthService } from '../auth.service';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { DOCUMENT } from '@angular/common';
 import { take } from 'rxjs';
-
 
 type Reviews = Array<Review>;
 
@@ -23,31 +51,18 @@ interface Score {
   styleUrls: ['./page-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageSearchComponent implements OnInit, OnDestroy{
+export class PageSearchComponent implements OnInit, OnDestroy {
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
-  control = new FormControl('');
-  tags: string[] = [''];
-  separatorKeys = ['Enter', ','];
-  filterOptions = [
-    { id: 1, name: 'Filter by Name' },
-    { id: 2, name: 'Filter by Date' },
-    { id: 3, name: 'Filter by Category' },
-  ];
-
-  // Selected filter
-  selectedFilter = this.filterOptions[0];
-   // New tag input
-  newTag = '';
-  // Search query
-  searchQuery = '';
-  
   jsonLD: any;
   //public page = 3 ;
   public readonly text$ = new BehaviorSubject<string>('');
 
   public readonly public$ = new BehaviorSubject<'true' | 'false'>('true');
 
-  public readonly sort$ = new BehaviorSubject<Sort>({by: 'publication.year', asc: 'false'});
+  public readonly sort$ = new BehaviorSubject<Sort>({
+    by: 'publication.year',
+    asc: 'false',
+  });
 
   private readonly offset$ = new EventEmitter<Offset>();
 
@@ -56,29 +71,19 @@ export class PageSearchComponent implements OnInit, OnDestroy{
   public readonly score$: Observable<Map<string, Score>>;
   private results: Reviews;
   private destroy$ = new Subject<void>();
-//    readonly   dropDownData = [
-//     { seo_val: 'val1', text_val: 'Option 1' },
-//     { seo_val: 'val2', text_val: 'Option 2' },
-//     // Add more options here
-    
-// ];
- selectedfilter = '';
   public readonly results$: Observable<Reviews>;
-
   public get auth() {
     return !!this.authService.user?.auth;
   }
 
   constructor(
     // Dependency injection
-    
-    private _renderer2: Renderer2, 
+
+    private _renderer2: Renderer2,
     @Inject(DOCUMENT) private _document: Document,
     private reviewService: ReviewService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {
-    
-     
     // Define text pipeline
     const text$ = this.text$.pipe(
       // Filter value
@@ -86,7 +91,7 @@ export class PageSearchComponent implements OnInit, OnDestroy{
       // Wait before emitting
       debounceTime(400),
       // Do only if final value is distinct
-      distinctUntilChanged(),
+      distinctUntilChanged()
     );
 
     // Define offset pipeline
@@ -94,45 +99,54 @@ export class PageSearchComponent implements OnInit, OnDestroy{
       // Compare current, previous offsets
       distinctUntilChanged((prev, curr) => prev.skip <= curr.skip),
       // Set original value
-      startWith({ skip: 0, limit: 100})
+      startWith({ skip: 0, limit: 100 })
     );
 
     const [public$, sort$] = [this.public$, this.sort$];
+
     // Define query parameters pipeline
     this.query$ = combineLatest([text$, public$, sort$]).pipe(
       // Join all together in the same object
-      map(([text, _public, sort]) => ({text, public: _public, ...sort, skip: 0, limit: 100})),
+      map(([text, _public, sort]) => ({
+        text,
+        public: _public,
+        ...sort,
+        skip: 0,
+        limit: 100,
+      }))
     );
 
     // Initialize results
     this.results = [];
+
     // Define results pipeline
     this.results$ = this.query$.pipe(
       // On query emission, reset results
-      tap(() => this.results = []),
+      tap(() => (this.results = [])),
       // Subscribe to offset emission
-      switchMap((query) => offset$.pipe(
-        // Generate entire query
-        map((offset) => ({...query, ...offset})),
-      )),
+      switchMap((query) =>
+        offset$.pipe(
+          // Generate entire query
+          map((offset) => ({ ...query, ...offset }))
+        )
+      ),
       // Retrieve results
       switchMap((query) => this.reviewService.searchReviews(query)),
       tap((results) => {
-        console.log({ results })
+        console.log({ results });
       }),
       // Update results
-      map((results) => this.results = [...this.results, ...results]),
+      map((results) => (this.results = [...this.results, ...results]))
     );
-     //console.log(this.results.length);
   }
 
   public onTextChange(event: KeyboardEvent) {
-    console.log((event.target as HTMLInputElement).value)
+    console.log((event.target as HTMLInputElement).value);
     this.text$.next((event.target as HTMLInputElement).value);
   }
 
   public onPublicChange(event: boolean) {
-    this.public$.next(event ? 'true' : 'false')
+    this.public$.next(event ? 'true' : 'false');
   }
 
   public onSortChange(by: Field) {
@@ -141,34 +155,31 @@ export class PageSearchComponent implements OnInit, OnDestroy{
     // Case selected field is equal to current field
     if (current.by === by) {
       // Then, just invert sorting order
-      this.sort$.next({by, asc: current.asc === 'true' ? 'false' : 'true'});
+      this.sort$.next({ by, asc: current.asc === 'true' ? 'false' : 'true' });
     }
     // Otherwise
     else {
       // Set new sorting parameter
-      this.sort$.next({by, asc: 'false'});
+      this.sort$.next({ by, asc: 'false' });
     }
   }
- 
+
   public onScrollEnd() {
     // Emit new offset
-    this.offset$.emit({skip: this.results.length, limit: 100});
-  }
-  updateSelectedFilter(filter: string) {
-    this.selectedfilter = filter;
+    this.offset$.emit({ skip: this.results.length, limit: 100 });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
   }
   public OnClickdownloadJSonfile($event: MouseEvent) {
-    const json = JSON.stringify(this.results, null,1);
+    const json = JSON.stringify(this.results, null, 1);
     const blob = new Blob([json], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = this._document.createElement('a');
     a.style.display = 'none';
     a.href = url;
-    a.download =  'BulkDome.json';
+    a.download = 'BulkDome.json';
     this._document.body.appendChild(a);
     a.click();
 
@@ -176,49 +187,29 @@ export class PageSearchComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-     // let script = this._renderer2.createElement('script');
-      this.reviewService.GetSearchPageMarkup().pipe(
-        tap((response)=> {
+    // let script = this._renderer2.createElement('script');
+    this.reviewService
+      .GetSearchPageMarkup()
+      .pipe(
+        tap((response) => {
           this.jsonLD = this._renderer2.createElement('script');
-          this.jsonLD.type =`application/ld+json`;
+          this.jsonLD.type = `application/ld+json`;
           this.jsonLD.text = JSON.stringify(response);
-          this._renderer2.appendChild(this._document.body,this.jsonLD);
+          this._renderer2.appendChild(this._document.body, this.jsonLD);
         }),
-        takeUntil(this.destroy$.asObservable()),
-      ).subscribe();
+        takeUntil(this.destroy$.asObservable())
+      )
+      .subscribe();
 
-
-      this.destroy$.asObservable().pipe(
+    this.destroy$
+      .asObservable()
+      .pipe(
         tap(() => {
           // retirer markup
           this._renderer2.removeChild(this._document.body, this.jsonLD);
         }),
         take(1)
-      ).subscribe();
-    
+      )
+      .subscribe();
   }
-
-  addTag(): void {
-    if (this.newTag && !this.tags.includes(this.newTag)) {
-      this.tags.push(this.newTag);
-      this.newTag = ''; // clear the input 
-    }
-  }
-
-  removeTag(index: number): void {
-    this.tags.splice(index, 1);
-  }
-
-  handleKeydown(event: KeyboardEvent): void {
-    if (this.separatorKeys.includes(event.key)) {
-      event.preventDefault();
-      this.addTag();
-    }
-  }
-
-  handleBlur(): void {
-    this.addTag();
-  }
-
-
 }
