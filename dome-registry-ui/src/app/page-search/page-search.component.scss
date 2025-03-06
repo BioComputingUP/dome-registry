@@ -1,6 +1,8 @@
 @import "/src/styles/cursor";
 @import "/src/styles/flip";
 
+
+
 .sort-item {
   @extend .cursor-pointer;
 }
@@ -16,6 +18,7 @@
 .sort-item.sort-selected > i {
   visibility: visible !important;
 }
+
 .border-orange {
   border-color: #F46B17;
 }
@@ -25,4 +28,33 @@
   border-radius: 4px;
   padding: 2px 4px;
   box-shadow: 1;
+}
+
+.d-flex.flex-row.flex-nowrap.align-items-center {
+  margin-top: 60px;
+}
+
+.d-flex.flex-row.flex-nowrap.justify-content-around.w-100.mt-3 {
+  margin-top: 24px !important;
+  margin-bottom: 24px;
+}
+
+.form-check.form-check-inline {
+  align-content: center;
+}
+
+.form-check.form-check-inline p {
+  margin: 0 0;
+}
+
+
+.form-control {
+  border-radius: 25px 25px 25px 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding-left: 20px;
+
+}
+
+.border.border-orange.shadow-lg.p-3.mb-3.rounded p{
+  margin-top:8px ;
 }
