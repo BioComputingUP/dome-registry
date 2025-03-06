@@ -1136,6 +1136,24 @@ export class ReviewService {
 
     return data;
   }
+  // get and group the journals names and sort them with higher annotations
+  async getJournalsName() {
+    const data = this.reviewModel.aggregate([
+      { $match: { public: true } },
+
+      {
+        $group: {
+          _id: "$publication.journal",
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { count: -1 }
+      }
+    ]);
+
+    return data;
+  }
 
   async getscore() {
     return this.reviewModel.countDocuments({ "optimization.done": 2 });

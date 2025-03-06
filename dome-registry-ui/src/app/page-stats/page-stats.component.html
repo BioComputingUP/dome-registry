@@ -21,11 +21,11 @@
     <!-- Define middle column -->
     <div class=" col-12 col-md-8 offset-md-2 justify-content-center  ">
       <!-- 1st section: number of papers per journal -->
-      
-      
-      
+
+
+
         <ng-container   [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'Top Journals', id: 'journal', graph: journal$ | async }"></ng-container>
-      
+
       <!-- 2nd section: DOME score distribution, for each section -->
       <ng-container id="score">
         <!-- DOME score: total distribution -->
@@ -35,15 +35,15 @@
             <!--            <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>-->
             <!--          </div>-->
             <!--        </card-template>-->
-            
-            
-            
-            
+
+
+
+
             <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['total'] }"></ng-container>
-            
-            
-            
-            
+
+
+
+
             <!-- DOME score: dataset distribution -->
             <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (dataset)', id: 'score-dataset', graph: (score$ | async)?.['dataset'] }"></ng-container>
             <!--        <card-template *ngIf="score['dataset'] as graph" id="score-dataset" class="d-block mb-3">-->
@@ -87,7 +87,7 @@
                                 <!--      </card-template>-->
                               </div>
                             </div>
-                            
+
                             <!-- Define template for graph -->
                             <ng-template let-id='id' let-title='title' let-graph='graph' #section>
                               <!-- Actual card -->
@@ -113,13 +113,13 @@
                                   </div>
                                 </div>
                               </card-template>
-                              
-                              
-                              
-                              
-                              
-                              
+
+
+
+
+
+
                             </ng-template>
-                            
-                            
+
+
                           </div>
