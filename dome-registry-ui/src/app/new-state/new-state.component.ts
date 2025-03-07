@@ -218,6 +218,9 @@ export class NewStateComponent implements OnInit,OnDestroy {
       return totalCount - explicitCount;
     })
   );
+  // gets only the last 11 Annotations year
+  public readonly journalsYear$: Observable<journalData[]> = this.reviewService.getAnnotationsYear().pipe(map((Names) => Names.slice(0, 11)) // Limit to the first 9 items);
+  );
 
 
 

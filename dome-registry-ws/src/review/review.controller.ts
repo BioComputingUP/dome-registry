@@ -161,9 +161,9 @@ export class ReviewController {
   }
 
   //get journal counts in the database  //
-  @Get("totalournal")
-  async totaljoournal() {
-    const total = await this.reviewService.getJournalsC();
+  @Get("totalAnnotationsYear")
+  async totalAnnotationsYear() {
+    const total = await this.reviewService.getAnnotationsC();
     return total;
   }
   //get journal group names

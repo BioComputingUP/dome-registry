@@ -90,81 +90,10 @@
                         <h3>Year</h3>
                         <span>Annotations count </span>
                     </li>
-                    <li>
-                        <b><p class="text-black">2025 </p> </b>
-                        <span>6</span>
-                    </li>
-                    <li>
-                        <b>
-                         <p class="text-black">2024 </p>
-                        </b>
-                        <span>22</span>
-
-                    </li>
-                    <li>
-                        <b>
-                         <p class="text-black">2023 </p>
-                        </b>
-                        <span>18</span>
-
-                    </li>
-
-                    <li>
-                        <b>
-                         <p class="text-black">2022 </p>
-                        </b>
-                        <span>5</span>
-
-                    </li>
-
-                    <li>
-                        <b>
-                         <p class="text-black">2021 </p>
-                        </b>
-                        <span>35</span>
-
-                    </li>
-
-                    <li>
-                        <b>
-
-                            <p class="text-black">2020</p>
-                        </b>
-                        <span>35</span>
-                    </li>
-
-                     <li>
-                        <b>
-
-                            <p class="text-black">2019</p>
-                        </b>
-                         <span>32</span>
-                     </li>
-                     <li>
-                        <b>
-
-                            <p class="text-black">2018</p>
-                        </b>
-                         <span>16</span>
-                     </li>
-                     <li>
-                        <b>
-
-                            <p class="text-black">2017</p>
-                        </b>
-                         <span>17</span>
-                     </li>
-                     <li>
-                        <b>
-                            <p class="text-black">2016 </p>
-
-                        </b>
-                         <span>12</span>
-                     </li>
-                     <li>
-                         <b><p class="text-black">2015 </p> </b>
-                         <span>12</span>
-                     </li>
+                  <li *ngFor="let group of journalsYear$ | async">
+                    <p class="text-black">{{ group._id }}</p>
+                    <span>{{ group.count }}</span>
+                  </li>
 
                      <!-- <li>
                         <b><p class="text-black">2013 </p> </b>

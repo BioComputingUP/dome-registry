@@ -165,6 +165,12 @@ export class ReviewService {
     return this.httpClient.get<journalData[]>(url);
   }
 
+  // get the journals names group
+  public getAnnotationsYear(): Observable<journalData[]> {
+    let url = this.url + '/totalAnnotationsYear/';
+    return this.httpClient.get<journalData[]>(url);
+  }
+
   public getJournalsCount() {
     let url = this.url + '/journal/';
     return this.httpClient.get<journalData>(url).pipe(
