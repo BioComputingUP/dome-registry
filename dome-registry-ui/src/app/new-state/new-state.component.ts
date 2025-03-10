@@ -1,9 +1,22 @@
 import {ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, forkJoin, map, Observable,interval,take, of, shareReplay, switchMap, tap, Subject} from "rxjs";
+import {
+  BehaviorSubject,
+  forkJoin,
+  map,
+  Observable,
+  interval,
+  take,
+  of,
+  shareReplay,
+  switchMap,
+  tap,
+  Subject,
+  combineLatest
+} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import { Margin } from '@syncfusion/ej2-angular-charts';
-import { ReviewService } from '../review.service';
+import { ReviewService, journalData } from '../review.service';
 import { UserService } from '../user.service';
 
 @Component({
@@ -11,8 +24,8 @@ import { UserService } from '../user.service';
   templateUrl: './new-state.component.html',
   styleUrls: ['./new-state.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  
-  
+
+
 })
 export class NewStateComponent implements OnInit,OnDestroy {
   private destroy$ = new Subject<boolean>();
@@ -29,21 +42,37 @@ export class NewStateComponent implements OnInit,OnDestroy {
   public get element() {
     return this.elementRef.nativeElement;
   }
-
+  // gets only the top 9 journals names
+  public readonly journalsNames$: Observable<journalData[]> = this.reviewService.getJournalsNames().pipe(map((Names) => Names.slice(0, 9)) // Limit to the first 9 items);
+  );
+  // Observable for the "Other" count
+  public readonly otherCount$: Observable<number> = this.reviewService.getJournalsNames().pipe(
+    map((groups) => {
+      // Calculate the sum of counts for the first 9 journals
+      const explicitCount = groups.slice(0, 9).reduce((total, Names) => total + Number(Names.count), 0);
+      // Calculate the total count for all journals
+      const totalCount = groups.reduce((total, Names) => total + Number(Names.count), 0);
+      // Return the difference for the "Other" category
+      return totalCount - explicitCount;
+    })
+  );
   // Retrieve paper per journal
-  journal$ = this.http.get<{
-    journal: Record<string, string>,
-    count: Record<string, number>,
-  }>('./assets/data/stats/journal.json').pipe(
-    // Return graph object
-    map(({journal, count}) => {
+  journal$ = combineLatest([this.journalsNames$, this.otherCount$]).pipe(
+    map(([firstNine, otherCount]) => {
+      // Prepare labels and values for the pie chart
+      const labels = firstNine.map((journal) => journal._id);
+      const values = firstNine.map((journal) => journal.count);
+
+      // Add "Other" category if there are remaining journals
+        labels.push('Other');
+        values.push(otherCount.toString());
       // Define plot data
       let data = [{
-        
+
         type: 'pie',
         hole:.3,
-        values: Object.values(count),
-        labels: Object.values(journal),
+        values: values,
+        labels: labels,
         textinfo: "label+percent",
         textposition: "outside",
         insidetextorientation: 'trangential',
@@ -70,20 +99,20 @@ export class NewStateComponent implements OnInit,OnDestroy {
         size: 5,
         opacity: 0.5
       },
-     
+
         automargin: true
       }];
       // Define plot layout
       let layout = {
-        
+
         // Disable autosizing
-        
+
         margin: { l: 0,
           r: 0,
           t: 0,
           b: 0},
         showlegend: false,
-       
+
       };
       // Define configuration
       let config = {responsive: true, displayModeBar: false};
@@ -95,31 +124,31 @@ export class NewStateComponent implements OnInit,OnDestroy {
   );
 
   // Retrieve paper per year
-  year$ = this.http.get<{
-    year: Record<string, string>,
-    pmid: Record<string, number>
-  }>('assets/data/stats/year.json').pipe(
+  year$ = this.reviewService.getAnnotationsYear().pipe(
     // Define graph object to be returned
-    map(({year, pmid}) => {
+    map((year) => {
+
+      const labels = year.map((year) => year._id);
+      const values = year.map((year) => year.count);
       // Define data
       let data = [
         // the scatter for the annotations
-        {x: Object.values(year), 
-          y: Object.values(pmid),
+        {x: labels,
+          y: values,
          type:'scatter',
         marker:{color:'red'}       },
-      // The chart bar for the annotation 
+      // The chart bar for the annotation
 
-          {x: Object.values(year), 
-          y: Object.values(pmid),
+          {x: labels,
+          y: values,
           type: 'bar',
-           
-         
+
+
         }];
       // Define layout
       let layout = {
-        
-      
+
+
         xaxis: {  type: 'category ',title: 'Year', tickangle: -45 },
         yaxis: { title: 'Count' },
         // margin: {"l": 2, "r": 2},
@@ -170,8 +199,8 @@ export class NewStateComponent implements OnInit,OnDestroy {
             let data = [{x,y, type:'scatter', marker: {color: 'blue'}},{ x, y, type: 'bar'}];
             // Define layout
             let layout = {
-              
-              
+
+
               yaxis: { title: 'Count' },
               // margin: {"l": 0, "r": 0},
               showlegend: false,
@@ -203,11 +232,14 @@ export class NewStateComponent implements OnInit,OnDestroy {
   public readonly countUsers$ : Observable<number> = this.userService.getTotalNumber().pipe(shareReplay(1));
   public readonly countTotal$ : Observable<number> = this.reviewService.countAllElements().pipe(shareReplay(1));
  // public readonly tot$ : Observable<number> = thiscount$ + this.countPr$
-  
-  
-  
-  
-  
+
+  // gets only the last 11 Annotations year
+  public readonly journalsYear$: Observable<journalData[]> = this.reviewService.getAnnotationsYear().pipe(map((Names) => Names.slice(0, 11)) // Limit to the first 9 items);
+  );
+
+
+
+
   public readonly countCounter$ = this.count$.pipe(
     switchMap((count: number) => {
       return interval(1).pipe(

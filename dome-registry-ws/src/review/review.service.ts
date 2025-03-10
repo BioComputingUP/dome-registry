@@ -1118,8 +1118,30 @@ export class ReviewService {
   //   return rev;
   // }
 
-  // get the journal counts form the Databse
-  async getJournalsC() {
+  // get the Annotations counts form the Databse
+  async getAnnotationsC() {
+    const data = this.reviewModel.aggregate([
+      { $match: { public: true } },
+      {
+        $addFields: {
+          trimmedYear: { $trim: { input: "$publication.year" } } // Trim whitespace from the year field
+        }
+      },
+      {
+        $group: {
+          _id: "$trimmedYear", // Group by the trimmed year
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { _id: -1 }
+      }
+    ]);
+
+    return data;
+  }
+  // get and group the journals names and sort them with higher annotations
+  async getJournalsName() {
     const data = this.reviewModel.aggregate([
       { $match: { public: true } },
 

@@ -22,7 +22,7 @@ export interface Offset {
 
 export interface Query extends Offset, Sort {
   // Search parameters
-  
+
   text: string;
   public: 'true' | 'false';
 }
@@ -75,7 +75,7 @@ export class ReviewService {
   }
   public upsertReview(review: Partial<Review>): Observable<Review> {
     if (!review.shortid){
-      throw new Error('shortid is required for updatin the review');
+      throw new Error('shortid is required for updating the review');
     }
     // Define endpoint URL according to review identifier
     let url = this.url + '/' + (review.shortid || '');
@@ -159,6 +159,17 @@ export class ReviewService {
 
     return this.httpClient.patch<Review>(url, {});
   }
+  // get the journals names group
+  public getJournalsNames(): Observable<journalData[]> {
+    let url = this.url + '/totalJournalNames/';
+    return this.httpClient.get<journalData[]>(url);
+  }
+
+  // get the journals names group
+  public getAnnotationsYear(): Observable<journalData[]> {
+    let url = this.url + '/totalAnnotationsYear/';
+    return this.httpClient.get<journalData[]>(url);
+  }
 
   public getJournalsCount() {
     let url = this.url + '/journal/';
@@ -168,7 +179,7 @@ export class ReviewService {
       let data = [
         {
           type: 'pie',
-          
+
           values: Object.values(count),
           labels: Object.values(_id),
           textinfo: 'label+percent',

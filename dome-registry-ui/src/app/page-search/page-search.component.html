@@ -22,6 +22,7 @@
                 </ul>
 
               </div> -->
+
               <div class="col-10">
                 <div class="input-group mb-3">
                   <!-- <select class="form-select" style="max-width: 150px;">
@@ -30,20 +31,11 @@
                     <option value="2">Author</option>
                     <option value="3">Year</option>
                   </select> -->
-              
+
                   <input type="text" class="form-control" placeholder="Search..." id="search-text"
-                  (keyup)="onTextChange($event)" />
+                         (keyup)="onTextChange($event)"/>
                 </div>
               </div>
-
-
-             
-
-
-
-
-
-
 
 
             </div>
@@ -51,45 +43,53 @@
             <div class="flex-shrink-0 ms-0 me-0">
               <div class="form-check form-switch" *ngIf="public$ | async as public_">
                 <input class="form-check-input" type="checkbox" id="search-public"
-                  (click)="onPublicChange(public_ !== 'true')" [disabled]="!auth" checked />
+                       (click)="onPublicChange(public_ !== 'true')" [disabled]="!auth" checked/>
                 <label class="form-check-label" for="search-public">Public</label>
               </div>
             </div>
           </form>
           <div class="d-flex flex-row flex-nowrap justify-content-around w-100 mt-3">
             <ng-container *ngIf="sort$ | async as sort">
-              <div>
+              <div class="form-check form-check-inline">
                 <strong>
-                  <p class="text-Justify">Sort by:</p>
+                  <p>Sort by:</p>
                 </strong>
               </div>
-
+              <!-- Radio buttons -->
               <div class="form-check form-check-inline">
                 <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                  [class.sort-selected]="sort.by === 'publication.title'" (click)="onSortChange('publication.title')"
-                  type="radio" />
+                       [class.sort-selected]="sort.by === 'publication.title'"
+                       (click)="onSortChange('publication.title')"
+                       type="radio"
+                       name="sortOption"/>
                 <label class="form-check-label" for="inlineRadio1">Title</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                  [class.sort-selected]="sort.by === 'publication.authors'"
-                  (click)="onSortChange('publication.authors')" type="radio" />
+                       [class.sort-selected]="sort.by === 'publication.authors'"
+                       (click)="onSortChange('publication.authors')"
+                       type="radio"
+                       name="sortOption"/>
                 <label class="form-check-label" for="inlineRadio2">Authors</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                  [class.sort-selected]="sort.by === 'publication.year'" (click)="onSortChange('publication.year')"
-                  type="radio" />
+                       [class.sort-selected]="sort.by === 'publication.year'" (click)="onSortChange('publication.year')"
+                       type="radio"
+                       name="sortOption"/>
                 <label class="form-check-label" for="inlineRadio3">Year</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                  [class.sort-selected]="sort.by === 'publication.title'" [class.sort-selected]="sort.by === 'score'"
-                  (click)="onSortChange('score')" type="radio" />
+                       [class.sort-selected]="sort.by === 'publication.title'"
+                       [class.sort-selected]="sort.by === 'score'"
+                       (click)="onSortChange('score')" type="radio"
+                       name="sortOption"/>
                 <label class="form-check-label" for="inlineRadio4">Score</label>
               </div>
-              <button class="btn btn-primary" type="button" (click)="OnClickdownloadJSonfile($event)">Bulk Download <i class=" bi-save d-none d-md-inline"></i> </button>
-              
+              <button class="btn btn-primary" type="button" (click)="OnClickdownloadJSonfile($event)">Bulk Download <i
+                class=" bi-save d-none d-md-inline"></i></button>
+
             </ng-container>
           </div>
         </div>
@@ -102,7 +102,7 @@
     <!-- Table body (scrollable) -->
 
     <div class="position-absolute left-0 top-0 w-100 h-100 bg-transparent overflow-scroll" scroll-end
-      (end$)="onScrollEnd()">
+         (end$)="onScrollEnd()">
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-8 offset-md-2">
@@ -134,7 +134,7 @@
                       <strong>Matching fields</strong>
                     </p>
                     <p class="cursor-pointer ps-1 mb-0" *ngFor="let item of review.matches | keyvalue"
-                      [routerLink]="['/review', review.shortid]" [fragment]="item.key.split('/').pop()">
+                       [routerLink]="['/review', review.shortid]" [fragment]="item.key.split('/').pop()">
                       <!-- Show field name -->
                       <strong>{{ item.key }}&nbsp;</strong>
                       <!-- Show matching value -->
@@ -159,7 +159,8 @@
                         'https://pubmed.ncbi.nlm.nih.gov/' +
                         review.publication.pmid
                       ">
-                      {{ review.publication.doi
+                      {{
+                        review.publication.doi
                       }}<i class="bi bi-link-45deg"></i>
                     </a>
                     <!-- Show journal and date -->
@@ -172,11 +173,11 @@
                     <strong>Visibility&nbsp;</strong><i class="bi bi-lock"></i>
                     Private
                   </p>
-                  
+
                   <p class="mb-0">
                     <strong>Tags:&nbsp;</strong>
                     <span class="shadow-l d-inline-block m-1" *ngFor="let tag of  review.publication.tags ">
-                        <span class="tag ">{{ tag || '-'}}</span>
+                        <span class="tag ">{{ tag || '-' }}</span>
                         <span ng-if="!$last"> </span> <!-- Add a comma after each tag except the last one -->
                     </span>
                   </p>
@@ -205,7 +206,7 @@
                     <div class="d-block h-100" style="width: 10rem">
                       <div class="progress progress-gradient">
                         <div class="progress-bar" role="progressbar" aria-label="DOME score"
-                          [style.width]="(review.score! * 100).toFixed(0) + '%'" [attr.aria-valuenow]="
+                             [style.width]="(review.score! * 100).toFixed(0) + '%'" [attr.aria-valuenow]="
                             (review.score! * 100).toFixed(2)
                           " [attr.aria-valuemin]="0" [attr.aria-valuemax]="100"></div>
                       </div>
@@ -220,7 +221,7 @@
     </div>
     <!-- Table header (fixed) -->
     <div class="position-absolute left-0 top-0 w-100 h-auto bg-transparent overflow-scroll invisible"
-      style="pointer-events: none">
+         style="pointer-events: none">
       <div class="container-fluid bg-light visible">
         <div class="row">
           <div class="col-12 col-md-8 offset-md-2">
