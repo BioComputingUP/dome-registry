@@ -1125,7 +1125,7 @@ export class ReviewService {
 
       {
         $group: {
-          _id: "$publication.year",
+          _id: "$publication.journal",
           count: { $sum: 1 }
         }
       },

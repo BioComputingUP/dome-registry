@@ -9,6 +9,7 @@ import {UserModule} from "src/user/user.module";
 import {JwtService} from "@nestjs/jwt";
 import { DocumentController } from './document.contoller';
 import { DocumentService } from './document.service';
+import { CaslModule } from 'src/casl/casl.module';
 // import { DataCatalogController } from './Json-ld/json-ld.controller';
 // import { JsonLdService } from './Json-ld/json-ld.service';
 
@@ -18,6 +19,7 @@ import { DocumentService } from './document.service';
 MongooseModule.forFeature([{name:User.name,schema:UserSchema}]),
 MongooseModule.forFeature([{name:Review.name,schema:ReviewSchema}]),
 UserModule,
+  CaslModule,
  ],   
  controllers:[DocumentController],
  providers: [DocumentService,JwtService]

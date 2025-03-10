@@ -20,7 +20,7 @@ async function bootstrap() {
     const reviewModel : mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
 
     //await userModel.updateMany({}, { $set: { "tags": "undefined" } });
-    await reviewModel.updateMany({},{$set:{"publication.tags":[]}});
+    await reviewModel.updateMany({},{$unset:{tags:""}}, { multi: true });
 
     // const all = userModel.find();
     // all.updateMany({}, { $set: { roles: Role.User } });
@@ -46,5 +46,4 @@ async function bootstrap() {
  */
     await app.close();
 }
-
 bootstrap()

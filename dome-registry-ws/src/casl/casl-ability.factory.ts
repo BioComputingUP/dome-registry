@@ -1,16 +1,75 @@
-import { Review } from "src/review/review.schema";
+import { Review, ReviewDocument } from "src/review/review.schema";
 import { User } from "src/user/user.decorator";
 import { UserSchema } from "src/user/user.schema";
-// import {
-//     Ability,
-//     AbilityBuilder,
-//     AbilityClass,
-//     ExtractSubjectType,
-//     InferSubjects,
-//   } from '@casl/ability';
-  import { Injectable } from '@nestjs/common';
+import { Role } from "src/roles/role.enum";
+import {
+  AbilityBuilder,
+  AbilityClass,
+  createMongoAbility,
+  ExtractSubjectType,
+  InferSubjects,
+  MongoAbility,
+  MongoQuery,
+} from "@casl/ability";
+import { ListReviewsDto } from "src/review/dto/list-reviews.dto";
+import { Injectable } from "@nestjs/common";
+import { Action } from "src/Actions/action.enum";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+//import { Action } from "rxjs/internal/scheduler/Action";
 
-// type Subject = InferSubjects<typeof Review | typeof UserSchema> | 'all' ; 
+export type AppAbility = MongoAbility<PossibleAbilities, Conditions>;
 
+// type for the condition Created to li:mit the visibility
 
-export class CaslAbilityFactory {}
+type ReviewConditions = {
+  public: boolean;
+  publication: {
+    journal: string;
+  };
+  user: string;
+};
+
+type Subjects = InferSubjects<typeof Review>;
+
+type PossibleAbilities = [Action, Subjects];
+
+type Conditions = MongoQuery<ReviewDocument>; // Specify Review type explicitly
+
+@Injectable()
+export class CaslAbilityFactory {
+  constructor(
+    @InjectModel(Review.name) private reviewModel: Model<ReviewDocument>
+  ) {}
+
+  createForUser(@User() user) {
+    const { can, cannot, build } = new AbilityBuilder(
+      createMongoAbility<PossibleAbilities, Conditions>
+    );
+
+    can(Action.Read, this.reviewModel, { public: true });
+
+    if (user?.roles === Role.Admin) {
+      if (user.organisation === "biocomp") {
+        can(Action.Manage, this.reviewModel);
+      } else {
+        // Admins can read public reviews
+
+        can([Action.Manage], this.reviewModel, {
+          public: false,
+          publication: { journal: user.organisation },
+        });
+
+        // Admins of specific organization can manage their organization's reviews
+      }
+    } else {
+      can(Action.Manage, this.reviewModel, { public: false, user: user._id });
+    }
+
+    return build({
+      // Read https://casl.js.org/v6/en/guide/subject-type-detection#use-classes-as-subject-types for details
+      detectSubjectType: (item) =>
+        item.constructor as ExtractSubjectType<Subjects>,
+    });
+  }
+}

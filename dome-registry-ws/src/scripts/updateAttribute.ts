@@ -17,8 +17,8 @@ async function bootstrap() {
     const reviews = reviewModel.find().cursor();
 
     for await (const review of reviews) {
-       review.publication.done = 0;
-       review.markModified('publication.done');
+       review.publication.skip = 0;
+       review.markModified('publication.skip');
 
        const reply = await review.save();
        console.log({
@@ -26,7 +26,11 @@ async function bootstrap() {
        })
      
     }
-
+   //# Remove tags field from all documents
+// db.yourCollectionName.updateMany(
+//     {},
+//     { $unset: { tags: "" } }
+//   )
     await app.close();
 
 
