@@ -29,6 +29,11 @@ export class User {
     // Organization of the user 
     @Prop({type:String, required:false , default:'undefined'})
     organisation?:string;
+    
+    //Multiple Organizations of the user
+    @Prop({type:[String], required:false,default:['nothing']})
+    organizations?:string[];
+
 
 }
 

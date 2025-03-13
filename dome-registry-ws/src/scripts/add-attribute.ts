@@ -16,11 +16,11 @@ async function bootstrap() {
     const app = await NestFactory.createApplicationContext(AppModule);
     // console.log(Reflect.getMetadata('providers', MongooseModule));
 
-    //const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name));
+    const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name));
     const reviewModel : mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
 
-    //await userModel.updateMany({}, { $set: { "tags": "undefined" } });
-    await reviewModel.updateMany({},{$unset:{tags:""}}, { multi: true });
+  //  await userModel.updateMany({}, { $set: { "organizations": "undefined" } });
+    //await reviewModel.updateMany({},{$unset:{tags:""}}, { multi: true });
 
     // const all = userModel.find();
     // all.updateMany({}, { $set: { roles: Role.User } });

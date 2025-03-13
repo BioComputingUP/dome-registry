@@ -341,7 +341,7 @@ export class ReviewService {
         // console.log(JSON.stringify(data.pipeline()));
         return data;
       } else {
-        console.log("second condition");
+        console.log("Admin user is not from biocomp");
 
         // Apply aggregation function to model
         const data = this.reviewModel.aggregate([
@@ -567,7 +567,7 @@ export class ReviewService {
                     // Keep public reviews
                     { public: true },
                     // Keep private reviews (organization only only)
-                    { public: false, "publication.journal": user.organisation },
+                    { public: false, "publication.journal": {$in: user.organizations }},
                   ],
                 },
                 // Filter reviews according to input query
@@ -643,7 +643,8 @@ export class ReviewService {
       }
     } else {
       //console.log("The logged in user is:" + user);
-      console.log("second condition");
+      console.log("the logged user is not an admin");
+      // Apply aggregation function to model
 
       const data =  this.reviewModel.aggregate([
         // Add flattened sections' fields
