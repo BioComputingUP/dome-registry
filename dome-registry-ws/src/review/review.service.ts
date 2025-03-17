@@ -64,7 +64,23 @@ export class ReviewService {
     //const dictionnary = '0123456789abcdefghijklmnopqrstuvwxyz';
     this.uid = new ShortUniqueId({ dictionary: customDictionary });
   }
-
+  async aggregateData(groupByField, sortCriteria) {
+    try {
+      return await this.reviewModel.aggregate([
+        { $match: { public: true } },
+        {
+          $group: {
+            _id: groupByField,
+            count: { $sum: 1 },
+          },
+        },
+        { $sort: sortCriteria },
+      ]);
+    } catch (error) {
+      console.error("Error in aggregateData:", error);
+      throw error; // Re-throw the error for the caller to handle
+    }
+  }
   // Find multiple reviews
   // NOTE If user is set, it allows to choose whether to return public or private reviews
   // NOTE If user is not set, it returns only public ones
@@ -1118,45 +1134,60 @@ export class ReviewService {
   //   return rev;
   // }
 
-  // get the Annotations counts form the Databse
+  // get the Annotations counts form the Database
   async getAnnotationsC() {
-    const data = this.reviewModel.aggregate([
-      { $match: { public: true } },
-      {
-        $addFields: {
-          trimmedYear: { $trim: { input: "$publication.year" } } // Trim whitespace from the year field
-        }
-      },
-      {
-        $group: {
-          _id: "$trimmedYear", // Group by the trimmed year
-          count: { $sum: 1 }
-        }
-      },
-      {
-        $sort: { _id: -1 }
-      }
-    ]);
-
-    return data;
+    return this.aggregateData(
+        { $trim: { input: "$publication.year" } }, // Group by trimmed year
+        { _id: -1 } // Sort by year in descending order
+    );
   }
+
   // get and group the journals names and sort them with higher annotations
   async getJournalsName() {
-    const data = this.reviewModel.aggregate([
-      { $match: { public: true } },
+    return this.aggregateData(
+        "$publication.journal", // Group by journal name
+        { count: -1 } // Sort by count in descending order
+    );
+  }
 
-      {
-        $group: {
-          _id: "$publication.journal",
-          count: { $sum: 1 }
-        }
-      },
-      {
-        $sort: { count: -1 }
-      }
-    ]);
+  // get and group the dataset score and sort them with higher score
+  async getScoreDataset() {
+    return this.aggregateData(
+        "$dataset.done", // Group by dataset score
+        { _id: -1 } // Sort by count in descending order
+    );
+  }
 
-    return data;
+  // get and group the optimization score and sort them with higher score
+  async getScoreOptimization() {
+    return this.aggregateData(
+        "$optimization.done", // Group by dataset score
+        { _id: -1 } // Sort by count in descending order
+    );
+  }
+
+  // get and group the evaluation score and sort them with higher score
+  async getScoreEvaluation() {
+    return this.aggregateData(
+        "$evaluation.done", // Group by dataset score
+        { _id: -1 } // Sort by count in descending order
+    );
+  }
+
+  // get and group the model score and sort them with higher score
+  async getScoreModel() {
+    return this.aggregateData(
+        "$model.done", // Group by dataset score
+        { _id: -1 } // Sort by count in descending order
+    );
+  }
+
+  // get and group the overall score and sort them with higher score
+  async getScoreOverall() {
+    return this.aggregateData(
+        "$score", // Group by dataset score
+        { _id: -1 } // Sort by count in descending order
+    );
   }
 
   async getscore() {

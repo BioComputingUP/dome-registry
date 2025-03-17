@@ -172,7 +172,42 @@ export class ReviewController {
     const total = await this.reviewService.getJournalsName();
     return total;
   }
-  
+
+  //gets dataset score
+  @Get("totalScoreDataset")
+  async totalScoreDataset() {
+    const total = await this.reviewService.getScoreDataset();
+    return total;
+  }
+
+  //gets optimization score
+  @Get("totalScoreOptimization")
+  async totalScoreOptimization() {
+    const total = await this.reviewService.getScoreOptimization();
+    return total;
+  }
+
+  //gets evaluation score
+  @Get("totalScoreEvaluation")
+  async totalScoreEvaluation() {
+    const total = await this.reviewService.getScoreEvaluation();
+    return total;
+  }
+
+  //gets model score
+  @Get("totalScoreModel")
+  async totalScoreModel() {
+    const total = await this.reviewService.getScoreModel();
+    return total;
+  }
+
+  //gets overall score
+  @Get("totalScoreOverall")
+  async totalScoreOverall() {
+    const total = await this.reviewService.getScoreOverall();
+    return total;
+  }
+
   //**---------------Get Review by Unique shortid UID ------------**/
   @Get(":shortid")
   @ApiOperation({ summary: "Find one review" })

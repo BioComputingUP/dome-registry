@@ -1,13 +1,14 @@
-import { NestFactory } from "@nestjs/core"
-import { MongooseModule, getModelToken } from "@nestjs/mongoose";
+import {NestFactory} from "@nestjs/core"
+import {MongooseModule, getModelToken} from "@nestjs/mongoose";
 import mongoose from "mongoose";
-import { AppModule } from "src/app.module"
+import {AppModule} from "src/app.module"
 //import { ReviewModule } from "src/review/review.module";
 //import { Review, ReviewDocument } from "src/review/review.schema";
-import { User, UserDocument } from "src/user/user.schema";
+import {User, UserDocument} from "src/user/user.schema";
 //import { ReviewService } from "src/review/review.service";
-import { Role } from "src/roles/role.enum";
-import { Review, ReviewDocument } from "src/review/review.schema";
+import {Role} from "src/roles/role.enum";
+import {Review, ReviewDocument} from "src/review/review.schema";
+
 // NODE_ENV= Developement node script.js
 
 
@@ -17,10 +18,24 @@ async function bootstrap() {
     // console.log(Reflect.getMetadata('providers', MongooseModule));
 
     //const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name));
-    const reviewModel : mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
+    const reviewModel: mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
 
     //await userModel.updateMany({}, { $set: { "tags": "undefined" } });
-    await reviewModel.updateMany({},{$set:{"publication.tags":[]}});
+    await reviewModel.aggregate([{
+        $set:
+            {
+                score: {
+                    $add: ["$dataset.done", "$model.done", "$optimization.done", "$evaluation.done"]
+                }
+            }
+    },
+        {
+            $merge: {
+                into: 'reviews',
+                whenMatched: 'merge',
+                whenNotMatched: 'insert'
+            }
+        }]);
 
     // const all = userModel.find();
     // all.updateMany({}, { $set: { roles: Role.User } });
@@ -34,7 +49,6 @@ async function bootstrap() {
     //     const savePromise = iterator.save();
     //     savePromises.push(savePromise);
     // }
-
 
 
     // await Promise.all(savePromises);

@@ -15,9 +15,9 @@ import {
   combineLatest
 } from "rxjs";
 import {ActivatedRoute} from "@angular/router";
-import { Margin } from '@syncfusion/ej2-angular-charts';
-import { ReviewService, journalData } from '../review.service';
-import { UserService } from '../user.service';
+import {Margin} from '@syncfusion/ej2-angular-charts';
+import {ReviewService, journalData} from '../review.service';
+import {UserService} from '../user.service';
 
 @Component({
   selector: 'app-new-state',
@@ -27,14 +27,14 @@ import { UserService } from '../user.service';
 
 
 })
-export class NewStateComponent implements OnInit,OnDestroy {
+export class NewStateComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
   databar: any;
   datadoughnut: any;
   dataline: any;
   datapolar: any;
-  datapie:any;
-  dataradar:any;
+  datapie: any;
+  dataradar: any;
   datacombo: any;
   chartOptions: any;
 
@@ -42,6 +42,7 @@ export class NewStateComponent implements OnInit,OnDestroy {
   public get element() {
     return this.elementRef.nativeElement;
   }
+
   // gets only the top 9 journals names
   public readonly journalsNames$: Observable<journalData[]> = this.reviewService.getJournalsNames().pipe(map((Names) => Names.slice(0, 9)) // Limit to the first 9 items);
   );
@@ -56,6 +57,83 @@ export class NewStateComponent implements OnInit,OnDestroy {
       return totalCount - explicitCount;
     })
   );
+  //gets Score dataset
+  public readonly scoreDataset$: Observable<journalData[]> = this.reviewService.getScoreDataset().pipe(shareReplay(1));
+  public readonly scoreOptimization$: Observable<journalData[]> = this.reviewService.getScoreOptimization().pipe(shareReplay(1));
+  public readonly scoreEvaluation$: Observable<journalData[]> = this.reviewService.getScoreEvaluation().pipe(shareReplay(1));
+  public readonly scoreModel$: Observable<journalData[]> = this.reviewService.getScoreModel().pipe(shareReplay(1));
+  public readonly scoreOverall$: Observable<journalData[]> = this.reviewService.getScoreOverall().pipe(
+    map(data => {
+      // Initialize an object to hold the summed values for each range
+      const ranges = {
+        '0-25': 0,
+        '25-50': 0,
+        '50-75': 0,
+        '75-100': 0
+      };
+
+      // Iterate over the data and sum the values for each range
+      data.forEach(item => {
+        // Scale the ID to 0-100 (as you've already done)
+        const scaledId = Math.round((Number(item._id) / 21) * 100);
+
+        // Determine the range and add the value to the corresponding range
+        if (scaledId >= 0 && scaledId < 25) {
+          ranges['0-25'] += Number(item.count);
+        } else if (scaledId >= 25 && scaledId < 50) {
+          ranges['25-50'] += Number(item.count);
+        } else if (scaledId >= 50 && scaledId < 75) {
+          ranges['50-75'] += Number(item.count);
+        } else if (scaledId >= 75 && scaledId <= 100) {
+          ranges['75-100'] += Number(item.count);
+        }
+      });
+
+      // Convert the summed ranges into an array of journalData objects
+      const result: journalData[] = Object.entries(ranges).map(([range, value]) => ({
+        _id: range, // Use the range as the ID
+        count: value.toString() // Convert the value to a string and assign it to `count`
+      }));
+
+      return result.reverse();
+    }),
+    shareReplay(1)
+  );
+
+
+  private getSectionPlot(sectionName: string, sectionData$: Observable<journalData[]>): Observable<{
+    data: any,
+    layout: any,
+    config: any
+  }> {
+    return sectionData$.pipe(
+      map((data) => {
+        // Extract x and y values from the data
+        const x = data.map((item) => item._id).reverse(); // Assuming `_id` is the label (e.g., year or category)
+        const y = data.map((item) => item.count).reverse(); // Assuming `count` is the value
+
+        // Define data for the plot
+        const plotData = [
+          {x, y, type: 'scatter', marker: {color: 'blue'}}, // Scatter plot
+          {x, y, type: 'bar'}, // Bar chart
+        ];
+
+        // Define layout for the plot
+        const plotLayout = {
+          xaxis: {type: 'category', title: sectionName}, // Dynamic title based on section
+          yaxis: {title: 'Count'},
+          showlegend: false,
+        };
+
+        // Define configuration for the plot
+        const plotConfig = {responsive: true, displayModeBar: false};
+
+        // Return the graph parameters
+        return {data: plotData, layout: plotLayout, config: plotConfig};
+      }),
+    );
+  }
+
   // Retrieve paper per journal
   journal$ = combineLatest([this.journalsNames$, this.otherCount$]).pipe(
     map(([firstNine, otherCount]) => {
@@ -64,13 +142,13 @@ export class NewStateComponent implements OnInit,OnDestroy {
       const values = firstNine.map((journal) => journal.count);
 
       // Add "Other" category if there are remaining journals
-        labels.push('Other');
-        values.push(otherCount.toString());
+      labels.push('Other');
+      values.push(otherCount.toString());
       // Define plot data
       let data = [{
 
         type: 'pie',
-        hole:.3,
+        hole: .3,
         values: values,
         labels: labels,
         textinfo: "label+percent",
@@ -79,26 +157,26 @@ export class NewStateComponent implements OnInit,OnDestroy {
         textfont: {
           size: 12, // Adjust text size here
           color: 'black'
-       },
-       marker: {
-        colors: [
-          'rgb(255, 215, 0)',
-          'rgb(128, 0, 128)', // Yellow
-          'rgb(0, 128, 128)', // Purple
-          'rgb(224, 176, 255)', // Blue
-          'rgb (242, 195, 204)', // Orange
-          'rgb(0, 128, 64)', // Red
-          'rgb(15, 82, 186)', // Light Blue
-          'rgb(187, 0, 51)', // Pink
-          'rgb(0, 174, 179)', // Teal
-          'rgb (192, 192, 192)' // Lavender
-        ]
-      },
-      shadow: {
-        color: 'rgba(0, 0, 0, 0.5)',
-        size: 5,
-        opacity: 0.5
-      },
+        },
+        marker: {
+          colors: [
+            'rgb(255, 215, 0)',
+            'rgb(128, 0, 128)', // Yellow
+            'rgb(0, 128, 128)', // Purple
+            'rgb(224, 176, 255)', // Blue
+            'rgb (242, 195, 204)', // Orange
+            'rgb(0, 128, 64)', // Red
+            'rgb(15, 82, 186)', // Light Blue
+            'rgb(187, 0, 51)', // Pink
+            'rgb(0, 174, 179)', // Teal
+            'rgb (192, 192, 192)' // Lavender
+          ]
+        },
+        shadow: {
+          color: 'rgba(0, 0, 0, 0.5)',
+          size: 5,
+          opacity: 0.5
+        },
 
         automargin: true
       }];
@@ -107,10 +185,12 @@ export class NewStateComponent implements OnInit,OnDestroy {
 
         // Disable autosizing
 
-        margin: { l: 0,
+        margin: {
+          l: 0,
           r: 0,
           t: 0,
-          b: 0},
+          b: 0
+        },
         showlegend: false,
 
       };
@@ -133,13 +213,16 @@ export class NewStateComponent implements OnInit,OnDestroy {
       // Define data
       let data = [
         // the scatter for the annotations
-        {x: labels,
+        {
+          x: labels,
           y: values,
-         type:'scatter',
-        marker:{color:'red'}       },
-      // The chart bar for the annotation
+          type: 'scatter',
+          marker: {color: 'red'}
+        },
+        // The chart bar for the annotation
 
-          {x: labels,
+        {
+          x: labels,
           y: values,
           type: 'bar',
 
@@ -149,8 +232,8 @@ export class NewStateComponent implements OnInit,OnDestroy {
       let layout = {
 
 
-        xaxis: {  type: 'category ',title: 'Year', tickangle: -45 },
-        yaxis: { title: 'Count' },
+        xaxis: {type: 'category ', title: 'Year', tickangle: -45},
+        yaxis: {title: 'Count'},
         // margin: {"l": 2, "r": 2},
         showlegend: false,
       };
@@ -179,65 +262,67 @@ export class NewStateComponent implements OnInit,OnDestroy {
   // );
 
   // Retrieve score distribution (for each section)
-  score$: Observable<Record<string, { data: any, layout: any, config: any }>> = of('assets/data/stats/score_{0}.json').pipe(
-    // Get data for each section
-    switchMap((url) => {
-      // Define sections
-      // const sections = ['publication', 'dataset', 'optimization', 'model', 'evaluation', 'total'];
-      const sections = ['dataset', 'optimization', 'model', 'evaluation', 'total'];
-      // Wait for every data to be fetched
-      return forkJoin(sections.map((section) => {
-        // Just return the HTTP response
-        return this.http.get<any>(url.replace('{0}', section)).pipe(
-          // Create graph out of given data
-          map((score) => {
-            // Define x, y values
-            let [x, y] = [[...Object.keys(score)], [...Object.values(score)]];
-            // Change x values (strings)
-            x = x.map((s) => s.match(/(-?\d+)[\]\)]+$/)![1]);
-            // Define data
-            let data = [{x,y, type:'scatter', marker: {color: 'blue'}},{ x, y, type: 'bar'}];
-            // Define layout
-            let layout = {
+  score$: Observable<Record<string, {
+    data: any,
+    layout: any,
+    config: any
+  }>> = of(['dataset', 'optimization', 'model', 'evaluation', 'total']).pipe(
+    // SwitchMap to handle the array of sections
+    switchMap((sections) => {
+      // For each section, call the reusable function and get the plot data
+      return forkJoin(
+        sections.map((section) => {
+          // Dynamically select the observable for the section
+          let sectionData$: Observable<journalData[]>;
+          switch (section) {
+            case 'dataset':
+              sectionData$ = this.scoreDataset$;
+              break;
+            case 'optimization':
+              sectionData$ = this.scoreOptimization$;
+              break;
+            case 'model':
+              sectionData$ = this.scoreModel$; // Replace with the correct observable
+              break;
+            case 'evaluation':
+              sectionData$ = this.scoreEvaluation$; // Replace with the correct observable
+              break;
+            case 'total':
+              sectionData$ = this.scoreOverall$; // Replace with the correct observable
+              break;
+            default:
+              throw new Error(`Unknown section: ${section}`);
+          }
 
 
-              yaxis: { title: 'Count' },
-              // margin: {"l": 0, "r": 0},
-              showlegend: false,
-            };
-            // Define configuration
-            let config = {responsive: true, displayModeBar: false}
-            // Return graph parameters
-            return {data, layout, config};
-          }),
-          // Define partial object
-          map((graph) => ({ [section]: graph })),
-        )
-      }));
+          // Call the reusable function to get the plot data
+          return this.getSectionPlot(section, sectionData$).pipe(
+            // Map the result to include the section name
+            map((graph) => ({[section]: graph})),
+          );
+        }),
+      );
     }),
-    // Create single object
+    // Combine all section plots into a single object
     map((graphs) => Object.assign({}, ...graphs)),
-    // Cache results
-    shareReplay(),
-  )
+    // Cache the results
+    shareReplay(1),
+  );
 
-  // Load all statistics
   stats$ = forkJoin([this.journal$, this.year$, this.score$]).pipe(
     map(([journal, year, score]) => ({journal, year, score})),
     shareReplay(),
   );
 
-  public  readonly count$: Observable<number> = this.reviewService.countElements().pipe(shareReplay(1)) ;
-  public readonly countPr$ : Observable<number> = this.reviewService.countPrivElements().pipe(shareReplay(1));
-  public readonly countUsers$ : Observable<number> = this.userService.getTotalNumber().pipe(shareReplay(1));
-  public readonly countTotal$ : Observable<number> = this.reviewService.countAllElements().pipe(shareReplay(1));
- // public readonly tot$ : Observable<number> = thiscount$ + this.countPr$
+  public readonly count$: Observable<number> = this.reviewService.countElements().pipe(shareReplay(1));
+  public readonly countPr$: Observable<number> = this.reviewService.countPrivElements().pipe(shareReplay(1));
+  public readonly countUsers$: Observable<number> = this.userService.getTotalNumber().pipe(shareReplay(1));
+  public readonly countTotal$: Observable<number> = this.reviewService.countAllElements().pipe(shareReplay(1));
+  // public readonly tot$ : Observable<number> = thiscount$ + this.countPr$
 
   // gets only the last 11 Annotations year
   public readonly journalsYear$: Observable<journalData[]> = this.reviewService.getAnnotationsYear().pipe(map((Names) => Names.slice(0, 11)) // Limit to the first 9 items);
   );
-
-
 
 
   public readonly countCounter$ = this.count$.pipe(
@@ -249,39 +334,39 @@ export class NewStateComponent implements OnInit,OnDestroy {
     })
   )
   public readonly countPreson = this.countUsers$.pipe(
-    switchMap((count:number) => {
+    switchMap((count: number) => {
       return interval(1).pipe(
-        map((counter) => counter),take(count)
+        map((counter) => counter), take(count)
       )
     })
   )
 
-public readonly countProgres$ = this.countPr$.pipe(
-  switchMap((count: number) => {
-    return interval(1).pipe(
-      map((counter) => counter), take(count)
-    )
-  })
-)
+  public readonly countProgres$ = this.countPr$.pipe(
+    switchMap((count: number) => {
+      return interval(1).pipe(
+        map((counter) => counter), take(count)
+      )
+    })
+  )
 
-public readonly countTotalE$ = this.countTotal$.pipe(
-  switchMap((count: number) => {
-    return interval(1).pipe(
-      map((counter) => counter), take(count)
-    )
-  })
-)
-
+  public readonly countTotalE$ = this.countTotal$.pipe(
+    switchMap((count: number) => {
+      return interval(1).pipe(
+        map((counter) => counter), take(count)
+      )
+    })
+  )
 
 
   constructor(
     private http: HttpClient,
     private activeRoute: ActivatedRoute,
     private elementRef: ElementRef,
-    private reviewService:ReviewService,
-    private userService:UserService,
+    private reviewService: ReviewService,
+    private userService: UserService,
   ) {
   }
+
   ngOnDestroy(): void {
     this.destroy$.next(true);
   }

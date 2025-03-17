@@ -1,478 +1,303 @@
-<div  id='outer-div'class="dashboard w-100 h-100 ">
+<div id='outer-div' class="dashboard w-100 h-100 ">
 
 
-
-    <div id="inner-div" class="  overflow-auto w-100 h-100">
-
+  <div id="inner-div" class="  overflow-auto w-100 h-100">
 
 
+    <!-- Card header -->
+    <div class=" container text-white  ">
 
-                    <!-- Card header -->
-         <div class=" container text-white  ">
+      <div class="row">
 
-            <div class="row">
+        <div class="sales mb-3 text-white  ">
+          <div class="col-3 w-auto">
+            <h4>Users</h4>
+            <h1>{{ countPreson | async }}</h1>
 
-                <div class="sales mb-3 text-white  ">
-                    <div class="col-3 w-auto">
-                        <h4>Users</h4>
-                        <h1>{{countPreson | async}}</h1>
+          </div>
+          <div class="col-3 w-auto">
+            <h4>
+              Public annotations
+            </h4>
+            <h1>{{ countCounter$ | async }} </h1>
 
-                    </div>
-                    <div class="col-3 w-auto">
-                        <h4>
-                            Public annotations
-                        </h4>
-                        <h1>{{ countCounter$ | async }} </h1>
+          </div>
+          <div class="col-3 w-auto">
+            <h4>Private annotations </h4>
+            <h1>{{ countProgres$ | async }}</h1>
 
-                    </div>
-                    <div class="col-3 w-auto">
-                        <h4>Private annotations </h4>
-                        <h1>{{countProgres$ | async }}</h1>
-
-                    </div>
-                    <div class="col-3 w-auto">
-                        <h4>Total annotations </h4>
-                        <h1>{{countTotalE$ | async }}</h1>
-
-
-                    </div>
-                </div>
-
-            </div>
-
-        <div class="row m-3">
-
-            <!-- start of the card -->
-            <div class="card" >
-                <div class="card-body .">
-                    <div class="card-title costum-card-hearder text-black text-center mb-4 "> <h2>Top 10  annotated journals </h2></div>
-
-                    <div class="row  text-black">
-                               <div class="col-md-6 panel list ">
-                                <li>
-                                   <h3>Journal</h3>
-                                   <span>Annotations </span>
-                               </li>
-                                 <!-- shows the 9 first journals-->
-                                 <li *ngFor="let group of journalsNames$ | async">
-                                   <p class="text-black">{{ group._id }}</p>
-                                   <span>{{ group.count }}</span>
-                                 </li>
-                                 <!-- shows the other journals at the end -->
-                                 <li>
-                                   <b><p class="text-black">Other</p></b>
-                                   <span>{{ otherCount$ | async }}</span>
-                                 </li>
+          </div>
+          <div class="col-3 w-auto">
+            <h4>Total annotations </h4>
+            <h1>{{ countTotalE$ | async }}</h1>
 
 
-
-                           </div>
-                           <div class="col-md-6 my-auto">
-                               <ng-container  [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'Top Journals', id: 'journal', graph: journal$ | async }"></ng-container>
-
-                            </div>
-
-
-                        </div>
-                    </div>
-                    <!-- the end of the card  -->
-                </div>
-            </div>
-
-
-    <div class="row m-3">
-     <div class="card">
-        <div class="card-body text-center">
-        <div class="card-title text-black "> <h2>Number of Annotated Papers (Based on Publication Year)</h2></div>
-            <div class="row text-black">
-                <div class="col-md-6 mt-3 panel list ">
-                    <li>
-                        <h3>Year</h3>
-                        <span>Annotations count </span>
-                    </li>
-                  <li *ngFor="let group of journalsYear$ | async">
-                    <p class="text-black">{{ group._id }}</p>
-                    <span>{{ group.count }}</span>
-                  </li>
-
-                     <!-- <li>
-                        <b><p class="text-black">2013 </p> </b>
-                        <span>1</span>
-                    </li>
-                    <li>
-                        <b><p class="text-black">2012 </p> </b>
-                        <span>4</span>
-                    </li>
-
-                    <li>
-                        <b><p class="text-black">2010 </p> </b>
-                        <span>2</span>
-                    </li> -->
-                     </div>
-
-                    <div class="col-md-6 my-auto">
-
-                    <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'Year', id: 'year', graph: (year$ | async) }"></ng-container>
-
-                         </div>
-
+          </div>
         </div>
-        </div>
-    </div>
 
-    </div>
+      </div>
 
-    <div class="row m-4">
+      <div class="row m-3">
 
+        <!-- start of the card -->
         <div class="card">
-            <div class="card-body text-center">
-                <div class="card-title text-black mb-3 "> <h2>Distribution of the DOME score</h2></div>
-
-                <div class="row text-black">
-                    <div class="col-6  panel list">
-                        <li>
-                            <h3>Score</h3>
-                            <span>Annotations count </span>
-                        </li>
-                        <li>
-                            <b>
-
-                                <p class="text-black">21 </p>
-                            </b>
-                            <span>13</span>
-
-                        </li>
-
-                        <li>
-                            <b>
-
-                                <p class="text-black">20</p>
-                            </b>
-                            <span>18</span>
-                        </li>
-
-                         <li>
-                            <b>
-
-                                <p class="text-black">19</p>
-                            </b>
-                             <span>18</span>
-                         </li>
-                         <li>
-                            <b>
-
-                                <p class="text-black">18</p>
-                            </b>
-                             <span>27</span>
-                         </li>
-                         <li>
-                            <b>
-
-                                <p class="text-black">17</p>
-                            </b>
-                             <span>21</span>
-                         </li>
-                         <li>
-                            <b>
-                                <p class="text-black">16 </p>
-
-                            </b>
-                             <span>23</span>
-                         </li>
-                         <li>
-                             <b><p class="text-black">15 </p> </b>
-                             <span>10</span>
-                         </li>
-                         <li>
-                            <b><p class="text-black">14 </p> </b>
-                            <span>4</span>
-                        </li>
-                         <li>
-                            <b><p class="text-black">13 </p> </b>
-                            <span>6</span>
-                        </li>
-                        <li>
-                            <b><p class="text-black">12 </p> </b>
-                            <span>5</span>
-                        </li>
-
-                        <li>
-                            <b><p class="text-black">11 </p> </b>
-                            <span>3</span>
-                        </li>
-                        <li>
-                            <b><p class="text-black">10 </p> </b>
-                            <span>5</span>
-                        </li>
-                        <li>
-                            <b><p class="text-black">9 </p> </b>
-                            <span>1</span>
-                        </li>
-                        <li>
-                            <b><p class="text-black">8 </p> </b>
-                            <span>4</span>
-                        </li>
-
-
-                    </div>
-                    <div class="col-6 my-auto">
-                        <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['total'] }"></ng-container>
-                    </div>
-                        </div>
+          <div class="card-body .">
+            <div class="card-title costum-card-hearder text-black text-center mb-4 "><h2>Top 10 annotated journals </h2>
             </div>
+
+            <div class="row  text-black">
+              <div class="col-md-6 panel list ">
+                <li>
+                  <h3>Journal</h3>
+                  <span>Annotations </span>
+                </li>
+                <!-- shows the 9 first journals-->
+                <li *ngFor="let group of journalsNames$ | async">
+                  <b><p class="text-black">{{ group._id }}</p></b>
+                  <span>{{ group.count }}</span>
+                </li>
+                <!-- shows the other journals at the end -->
+                <li>
+                  <b><p class="text-black">Other</p></b>
+                  <span>{{ otherCount$ | async }}</span>
+                </li>
+
+
+              </div>
+              <div class="col-md-6 my-auto">
+                <ng-container [ngTemplateOutlet]="section"
+                              [ngTemplateOutletContext]="{ title: 'Top Journals', id: 'journal', graph: journal$ | async }"></ng-container>
+
+              </div>
+
+
+            </div>
+          </div>
+          <!-- the end of the card  -->
         </div>
-    </div>
+      </div>
 
 
-    <div class="row m-4">
-     <div class="card">
-        <div class="card-body text-center">
+      <div class="row m-3">
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="card-title text-black "><h2>Number of Annotated Papers (Based on Publication Year)</h2></div>
+            <div class="row text-black">
+              <div class="col-md-6 mt-3 panel list ">
+                <li>
+                  <h3>Year</h3>
+                  <span>Annotations count </span>
+                </li>
+                <li *ngFor="let group of journalsYear$ | async">
+                  <b>
+                  <p class="text-black">{{ group._id }}</p>
+                  </b>
+                  <span>{{ group.count }}</span>
+                </li>
+
+              </div>
+
+              <div class="col-md-6 my-auto">
+
+                <ng-container [ngTemplateOutlet]="section"
+                              [ngTemplateOutletContext]="{ title: 'Year', id: 'year', graph: (year$ | async) }"></ng-container>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row m-4">
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="card-title text-black mb-3 "><h2>Distribution of the DOME score</h2></div>
+
+            <div class="row text-black">
+              <div class="col-6  panel list">
+                <li>
+                  <h3>Score</h3>
+                  <span>Annotations count </span>
+                </li>
+                <li *ngFor="let group of scoreOverall$ | async">
+                  <b>
+                    <p class="text-black">{{ group._id }}%</p>
+                  </b>
+                  <span>{{ group.count }}</span>
+                </li>
+
+
+              </div>
+              <div class="col-6 my-auto">
+                <ng-container [ngTemplateOutlet]="section"
+                              [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['total']}"></ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row m-4">
+        <div class="card">
+          <div class="card-body text-center">
             <div class="card-title text-black mb-3">
-                <h2>DOME Score Distribution (Dataset section)</h2>
+              <h2>DOME Score Distribution (Dataset section)</h2>
             </div>
             <div class="row text-black">
 
-            <div class="col-6  my-auto panel list ">
+              <div class="col-6  my-auto panel list ">
                 <li>
-                    <h3>Score (Dataset)</h3>
-                    <span>Annotations count </span>
+                  <h3>Score (Dataset)</h3>
+                  <span>Annotations count </span>
                 </li>
-                <li>
-                    <b>
-
-                        <p class="text-black">4/4 </p>
-                    </b>
-                    <span>99</span>
-
+                <li *ngFor="let group of scoreDataset$ | async">
+                  <b>
+                  <p class="text-black">{{ group._id }}/4</p>
+                  </b>
+                  <span>{{ group.count }}</span>
                 </li>
 
-                <li>
-                    <b>
-                          <p class="text-black">3/4</p>
-                    </b>
-                    <span>60</span>
-                </li>
-                <li>
-                    <b>
-                          <p class="text-black">2/4</p>
-                    </b>
-                    <span>24</span>
-                </li>
-                <li>
-                    <b>
-                          <p class="text-black">1/4</p>
-                    </b>
-                    <span>4</span>
-                </li>
+
+              </div>
+
+              <div class="col-6 my-auto">
+                <ng-container [ngTemplateOutlet]="section"
+                              [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['dataset']}"></ng-container>
+              </div>
 
             </div>
-
-            <div class="col-6 my-auto">
-            <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (dataset)', id: 'score-dataset', graph: (score$ | async)?.['dataset'] }"></ng-container>
-            </div>
-
-            </div>
-        </div>
-
-     </div>
-
-
-    </div>
-
-    <div class="row m-4">
-    <div class="card">
-    <div class="card-body text-center">
-    <div class="card-title text-black"> <h2>DOME Score Distribution (Optimization section)</h2></div>
-    <div class="row">
-        <div class="col-md-6 text-black my-auto panel list">
-            <li>
-                <h3>Score (Optimization)</h3>
-                <span>Annotations count </span>
-            </li>
-            <li>
-                <b>
-                    <p class="text-black">8/8 </p>
-                        </b>
-                <span>25</span>
-            </li>
-            <li>
-                <b><p class="text-black">7/8 </p></b>
-                <span>28</span>
-            </li>
-            <li>
-                <b><p class="text-black">6/8 </p></b>
-                <span>21</span>
-            </li>
-            <li>
-                <b><p class="text-black">5/8 </p></b>
-                <span>48</span>
-            </li>
-            <li>
-                <b><p class="text-black">4/8 </p></b>
-                <span>29</span>
-            </li>
-            <li>
-                <b><p class="text-black">3/8 </p></b>
-                <span>20</span>
-            </li>
-            <li>
-                <b><p class="text-black">2/8 </p></b>
-                <span>10</span>
-            </li>
-            <li>
-                <b><p class="text-black">1/8 </p></b>
-                <span>3</span>
-            </li>
-
-
-
-
-
-
-
-
-
-
+          </div>
 
         </div>
-        <div class="col-md-6">
-            <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'Optimization Score ', id: 'score-optimization', graph: (score$ | async)?.['optimization'] }"></ng-container>
-        </div>
-    </div>
-    </div>
-    </div>
-    </div>
 
 
-    <div class="row m-4">
+      </div>
+
+      <div class="row m-4">
         <div class="card">
-            <div class="card-body text-center">
-                <div class="card-title text-black"><h2>Dome score distribution(Model section)</h2></div>
-                    <div class="row">
-                            <div class="col-md-6 my-auto text-black panel list">
-                                <li>
-                                    <h3>Score (Model)</h3>
-                                    <span>Annotations count </span>
-                                </li>
-                                <li>
-                                    <b>
-                                        <p class="text-black">4/4 </p>
-                                            </b>
-                                    <span>30</span>
-                                </li>
-                                <li>
-                                    <b>
-                                        <p class="text-black">3/4 </p>
-                                            </b>
-                                    <span>95</span>
-                                </li>
-                                <li>
-                                    <b>
-                                        <p class="text-black">2/4 </p>
-                                            </b>
-                                    <span>29</span>
-                                </li>
-                                <li>
-                                    <b>
-                                        <p class="text-black">1/4 </p>
-                                            </b>
-                                    <span>4</span>
-                                </li>
-
-                            </div>
-                            <div class="col-md-6">
-                                <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (model)', id: 'score-model', graph: (score$ | async)?.['model'] }"></ng-container>
-
-                            </div>
-
-                    </div>
+          <div class="card-body text-center">
+            <div class="card-title text-black"><h2>DOME Score Distribution (Optimization section)</h2></div>
+            <div class="row">
+              <div class="col-md-6 text-black my-auto panel list">
+                <li>
+                  <h3>Score (Optimization)</h3>
+                  <span>Annotations count </span>
+                </li>
+                <li *ngFor="let group of scoreOptimization$ | async">
+                  <b>
+                    <p class="text-black">{{ group._id }}/8</p></b>
+                  <span>{{ group.count }}</span>
+                </li>
 
 
+              </div>
+              <div class="col-md-6">
+                <ng-container [ngTemplateOutlet]="section"
+                              [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['optimization']}"></ng-container>
+              </div>
             </div>
-
+          </div>
         </div>
-
-    </div>
-
+      </div>
 
 
-    <div class="row m-4">
+      <div class="row m-4">
         <div class="card">
-            <div class="card-body text-center">
-                <div class="card-title text-black"><h2>Dome score distribution(Evaluation section)</h2></div>
-                    <div class="row">
-                            <div class="col-md-6 my-auto text-black panel list">
-                                <li>
-                                    <h3>Score (Evaluation)</h3>
-                                    <span>Annotations count </span>
-                                </li>
-                                <li>
-                                    <b> <p class="text-black">5/5 </p> </b>
-                                    <span>74</span>
-                                </li>
-                                <li>
-                                    <b> <p class="text-black">4/5 </p>  </b>
-                                    <span>50</span>
-                                </li>
-                                <li>
-                                    <b><p class="text-black">3/5 </p></b>
-                                    <span>18</span>
-                                </li>
-                                <li>
-                                    <b> <p class="text-black">2/5 </p>  </b>
-                                    <span>12</span>
-                                </li>
-                                <li>
-                                    <b> <p class="text-black">1/5 </p> </b>
-                                    <span>12</span>
-                                </li>
+          <div class="card-body text-center">
+            <div class="card-title text-black"><h2>Dome score distribution(Model section)</h2></div>
+            <div class="row">
+              <div class="col-md-6 my-auto text-black panel list">
+                <li>
+                  <h3>Score (Model)</h3>
+                  <span>Annotations count </span>
+                </li>
+                <li *ngFor="let group of scoreModel$ | async">
+                  <b>
+                    <p class="text-black">{{ group._id }}/4</p></b>
+                  <span>{{ group.count }}</span>
+                </li>
 
+              </div>
+              <div class="col-md-6">
+                <ng-container [ngTemplateOutlet]="section"
+                              [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['model']}"></ng-container>
 
-                            </div>
-                            <div class="col-md-6 my-auto">
-                                <ng-container [ngTemplateOutlet]="section" [ngTemplateOutletContext]="{ title: 'DOME Score (evaluation)', id: 'score-evaluation', graph: (score$ | async)?.['evaluation'] }"></ng-container>
-
-                            </div>
-
-                    </div>
-
+              </div>
 
             </div>
 
+
+          </div>
+
         </div>
 
-    </div>
-
-            <div class="row m-3">
+      </div>
 
 
+      <div class="row m-4">
+        <div class="card">
+          <div class="card-body text-center">
+            <div class="card-title text-black"><h2>Dome score distribution(Evaluation section)</h2></div>
+            <div class="row">
+              <div class="col-md-6 my-auto text-black panel list">
+                <li>
+                  <h3>Score (Evaluation)</h3>
+                  <span>Annotations count </span>
+                </li>
+                <li *ngFor="let group of scoreEvaluation$ | async">
+                  <b>
+                    <p class="text-black">{{ group._id }}/5</p></b>
+                  <span>{{ group.count }}</span>
+                </li>
+
+
+              </div>
+              <div class="col-md-6 my-auto">
+                <ng-container [ngTemplateOutlet]="section"
+                              [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['evaluation']}"></ng-container>
+
+              </div>
+
+            </div>
+
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="row m-3">
 
 
         <ng-template let-id='id' let-title='title' let-graph='graph' #section>
 
 
-            <!-- Actual card -->
+          <!-- Actual card -->
 
-                <!-- Set card title -->
+          <!-- Set card title -->
 
-                <!-- Set card body -->
+          <!-- Set card body -->
 
-                    <!-- Define statistics card body -->
-                    <div class="statistics-card-body">
-                        <!-- Case graph is not set -->
-                        <div class="d-flex align-items-center justify-content-center w-100 h-100" *ngIf="!graph">
-                            <!-- Show spinner -->
-                            <div class="spinner-grow text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                        <!-- Otherwise -->
-                        <div class="d-block overflow-hidden w-100 h-100" *ngIf="!!graph">
-                            <!-- Show graph -->
-                            <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
-                        </div>
-                    </div>
-         </ng-template>
-       </div>
+          <!-- Define statistics card body -->
+          <div class="statistics-card-body">
+            <!-- Case graph is not set -->
+            <div class="d-flex align-items-center justify-content-center w-100 h-100" *ngIf="!graph">
+              <!-- Show spinner -->
+              <div class="spinner-grow text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            <!-- Otherwise -->
+            <div class="d-block overflow-hidden w-100 h-100" *ngIf="!!graph">
+              <!-- Show graph -->
+              <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
+            </div>
+          </div>
+        </ng-template>
+      </div>
     </div>
-    </div>
+  </div>

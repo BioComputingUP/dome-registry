@@ -15,11 +15,11 @@ ul {
 .dashboard {
     background: #172042;
     padding: 2em;
-   
+
     grid-template-columns:1fr 1fr 1fr ;
     justify-content: center;
     width:calc(100% - 18em);
-  
+
 
 }
 
@@ -39,11 +39,11 @@ align-items: center;
 
 .list span{
     color: #F46B17;
-    
+
 }
 
 .sales {
-    
+
     display: grid;
     grid-template-columns: repeat(4,1fr) ;
     grid-gap: 2em;
@@ -57,10 +57,10 @@ align-items: center;
     padding: 1em;
 }
 .sales h1 {
-  margin: 0.5em 0;  
+  margin: 0.5em 0;
 }
 .sales small {
- color: #fff;   
+ color: #fff;
 }
 .sales > div:nth-child(even) {
     background: linear-gradient(0deg,#3581bb,#F46B17);
@@ -68,7 +68,7 @@ align-items: center;
 }
 .sales > div:nth-child(odd){
 background: linear-gradient(0deg, #178add,#03dcee);
-} 
+}
 
 .text {
     padding:1em;
@@ -79,10 +79,10 @@ background: linear-gradient(0deg, #178add,#03dcee);
     grid-column-start: span 3;
 }
 @media screen and (max-width: 1150px) {
-    .dashboard, .sales{ 
+    .dashboard, .sales{
     grid-template-columns: 1fr 1fr;
     }
-    
+
     .text-horizontal {
 
         grid-column-start: span 1;
@@ -106,12 +106,16 @@ background: linear-gradient(0deg, #178add,#03dcee);
         margin: 0;
     }
     .dashboard {
-       width: calc(100% - 4.1em); 
+       width: calc(100% - 4.1em);
     }
-    
 
 
-   
+
+
+}
+
+.col-6.panel.list{
+  align-content: center;
 }
 
 td, th {

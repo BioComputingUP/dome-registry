@@ -50,6 +50,9 @@ class Review {
    
     @Prop({type:[{type: String}], required:false})
     tags : any;
+
+    @Prop({ type: Number, required: false })
+    score : number;
   
 }
 
@@ -70,11 +73,16 @@ ReviewSchema.pre('save', function () {
     // Remove total score
     score.delete('total');
     // Update sections' scores in place
+    let scoreAttribute = 0;
     score.forEach(([ done, skip ], section) => {
         // Update section
         this[section]['done'] = done;
         this[section]['skip'] = skip;
+
+        scoreAttribute +=done;
     });
+
+    this.score = scoreAttribute;
 });
 
 
