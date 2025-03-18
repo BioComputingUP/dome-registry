@@ -90,48 +90,52 @@ export class DocumentService {
   //sort the reviews
 
   async findAll(getReviewsDto: GetReviewsDto, user?: User) {
-
+    // Create ability for the user
     const ability = this.abilityFactory.createForUser(user);
+    // Get the CASL query for the user's permissions
     const caslQuery = accessibleBy(ability).ofType(this.reviewModel);
-    const filter: any = {$and: [caslQuery]};
+    // Initialize the filter with CASL query
+    const filter: any = { $and: [caslQuery] };
+    // Initialize the aggregation pipeline
     const pipeline = [];
 
-    /// the Opertations to get the data for the database
-    //const query = buildQuery(getReview);
-     if(getReviewsDto.field && getReviewsDto.text){
-     const dbField = getReviewsDto.field ?
-        filterFields[getReviewsDto.field] : filterFields.title;
-      
-        const searchPattern = escapeRegex(getReviewsDto.text);
-
-
-     pipeline.push({[dbField]: {$regex: searchPattern, $options: "i"}});   
-    
+    // If field and text are provided, add a match stage to the pipeline
+    if (getReviewsDto.field && getReviewsDto.text) {
+      const dbField = filterFields[getReviewsDto.field] || filterFields.title;
+      const searchPattern = escapeRegex(getReviewsDto.text);
+      pipeline.push({ $match: { [dbField]: { $regex: searchPattern, $options: "i" } } });
     }
-    pipeline.push({$text: {$search: getReviewsDto.field}});
 
-     pipeline.push({$sort: { [getReviewsDto.sort]: getReviewsDto.asc ? 1 : -1 }});
+    // Add a text search stage to the pipeline
+    if (getReviewsDto.field) {
+      pipeline.push({ $match: { $text: { $search: getReviewsDto.field } } });
+    }
 
-     pipeline.push({
+    // Add a sort stage to the pipeline
+    pipeline.push({ $sort: { [getReviewsDto.sort]: getReviewsDto.asc ? 1 : -1 } });
+
+    // Add a project stage to the pipeline to select specific fields
+    pipeline.push({
       $project: {
-   _id:0,
-    title: "$publication.title",
-    authors: "$publication.authors",
-    journal: "$publication.journal",
-    year: "$publication.year",
-    tags: "$publication.tags",
-    shortid: "$shortid",
-    created: "$created",
-    updated: "$updated",
-
+        _id: 0,
+        title: "$publication.title",
+        authors: "$publication.authors",
+        journal: "$publication.journal",
+        year: "$publication.year",
+        tags: "$publication.tags",
+        shortid: "$shortid",
+        created: "$created",
+        updated: "$updated",
       }
-     });
+    });
 
-     pipeline.push({$limit: getReviewsDto.limit});
-      pipeline.push({$skip: getReviewsDto.skip});
+    // Add limit and skip stages to the pipeline for pagination
+    pipeline.push({ $limit: getReviewsDto.limit });
+    pipeline.push({ $skip: getReviewsDto.skip });
 
+    // Execute the aggregation pipeline
     const data = await this.reviewModel.aggregate(pipeline).exec();
 
-    return data;  
+    return data;
   }
 }

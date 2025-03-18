@@ -55,10 +55,14 @@ export class CaslAbilityFactory {
       } else {
         // Admins can read public reviews
 
-        can([Action.Manage], this.reviewModel, {
-          public: false,
-          publication: { journal: user.organisation },
-        });
+      //  can(Action.Manage, this.reviewModel, {  public: false, 'publication.journal': {$in: user.organizations}  );
+
+
+       
+        
+
+
+
 
         // Admins of specific organization can manage their organization's reviews
       }
