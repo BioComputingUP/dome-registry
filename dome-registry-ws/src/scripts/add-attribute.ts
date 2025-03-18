@@ -18,7 +18,7 @@ async function bootstrap() {
     // console.log(Reflect.getMetadata('providers', MongooseModule));
 
     const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name));
-    const reviewModel : mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
+   // const reviewModel : mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
     //const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name));
     const reviewModel: mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
 
