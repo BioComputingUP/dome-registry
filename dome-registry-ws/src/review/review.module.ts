@@ -28,6 +28,7 @@ import { JsonLdService } from './Json-ld/json-ld.service';
         MongooseModule.forFeature([{name: Review.name, schema: ReviewSchema}]),
         UserModule,
     ],
+    exports: [MongooseModule],
     controllers: [ReviewController],
     providers: [ReviewService, JwtService]
 })

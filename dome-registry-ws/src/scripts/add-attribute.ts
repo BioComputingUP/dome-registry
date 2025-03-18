@@ -17,6 +17,8 @@ async function bootstrap() {
     const app = await NestFactory.createApplicationContext(AppModule);
     // console.log(Reflect.getMetadata('providers', MongooseModule));
 
+    const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name));
+    const reviewModel : mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
     //const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name));
     const reviewModel: mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
 
@@ -60,5 +62,4 @@ async function bootstrap() {
  */
     await app.close();
 }
-
 bootstrap()

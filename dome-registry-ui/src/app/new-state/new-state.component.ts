@@ -14,6 +14,20 @@ import {
   Subject,
   combineLatest
 } from "rxjs";
+import {
+  BehaviorSubject,
+  forkJoin,
+  map,
+  Observable,
+  interval,
+  take,
+  of,
+  shareReplay,
+  switchMap,
+  tap,
+  Subject,
+  combineLatest
+} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {Margin} from '@syncfusion/ej2-angular-charts';
 import {ReviewService, journalData} from '../review.service';
@@ -24,6 +38,8 @@ import {UserService} from '../user.service';
   templateUrl: './new-state.component.html',
   styleUrls: ['./new-state.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+
+
 
 
 })
@@ -147,6 +163,7 @@ export class NewStateComponent implements OnInit, OnDestroy {
       // Define plot data
       let data = [{
 
+
         type: 'pie',
         hole: .3,
         values: values,
@@ -183,6 +200,7 @@ export class NewStateComponent implements OnInit, OnDestroy {
       // Define plot layout
       let layout = {
 
+
         // Disable autosizing
 
         margin: {
@@ -192,6 +210,7 @@ export class NewStateComponent implements OnInit, OnDestroy {
           b: 0
         },
         showlegend: false,
+
 
       };
       // Define configuration
@@ -205,7 +224,12 @@ export class NewStateComponent implements OnInit, OnDestroy {
 
   // Retrieve paper per year
   year$ = this.reviewService.getAnnotationsYear().pipe(
+  year$ = this.reviewService.getAnnotationsYear().pipe(
     // Define graph object to be returned
+    map((year) => {
+
+      const labels = year.map((year) => year._id);
+      const values = year.map((year) => year.count);
     map((year) => {
 
       const labels = year.map((year) => year._id);
@@ -225,6 +249,8 @@ export class NewStateComponent implements OnInit, OnDestroy {
           x: labels,
           y: values,
           type: 'bar',
+
+
 
 
         }];
@@ -376,3 +402,4 @@ export class NewStateComponent implements OnInit, OnDestroy {
   }
 
 }
+

@@ -11,7 +11,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "NODE_ENV=development nest start --watch",
-    "start:debug": "NODE_ENV=production nest start --debug --watch",
+    "start:pro": "NODE_ENV=production nest start --watch",
     "start:prod": "NODE_ENV=production node dist/main",
     "deploy:dev": "echo \"No development server available\"",
     "deploy:prod": "(colC='\\033[0;36m';colN='\\033[0m'; echo ${colC}Building and rsyncing dist ...${colN} && NODE_ENV=production && npm ci && npm run build && rsync -avh --delete . nodejs@persefone:/var/local/webservers/apps/dome-registry && echo ${colC}Restarting node-dome-registry service ...${colN} && ssh nodejs@persefone 'sudo systemctl restart node-dome-registry' && echo ${colC}Done with deploy-prod!${colN})",
@@ -24,6 +24,8 @@
     "generate": "nest g class casl/casl-ability.factory"
   },
   "dependencies": {
+    "@casl/ability": "^6.7.3",
+    "@casl/mongoose": "^8.0.3",
     "@nestjs-modules/mailer": "^1.3.17",
     "@nestjs/axios": "^3.0.2",
     "@nestjs/common": "^8.0.0",

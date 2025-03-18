@@ -96,5 +96,5 @@ export class CreatePublicationDto implements Publication {
     // @IsOptional()
     // @Type(() => Number)
    
-    skip: number = 6;
+    skip: number = 0;
 }
