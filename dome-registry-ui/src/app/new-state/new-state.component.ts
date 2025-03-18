@@ -14,20 +14,7 @@ import {
   Subject,
   combineLatest
 } from "rxjs";
-import {
-  BehaviorSubject,
-  forkJoin,
-  map,
-  Observable,
-  interval,
-  take,
-  of,
-  shareReplay,
-  switchMap,
-  tap,
-  Subject,
-  combineLatest
-} from "rxjs";
+
 import {ActivatedRoute} from "@angular/router";
 import {Margin} from '@syncfusion/ej2-angular-charts';
 import {ReviewService, journalData} from '../review.service';
@@ -223,13 +210,10 @@ export class NewStateComponent implements OnInit, OnDestroy {
   );
 
   // Retrieve paper per year
-  year$ = this.reviewService.getAnnotationsYear().pipe(
+  ///year$ = this.reviewService.getAnnotationsYear().pipe(
   year$ = this.reviewService.getAnnotationsYear().pipe(
     // Define graph object to be returned
-    map((year) => {
-
-      const labels = year.map((year) => year._id);
-      const values = year.map((year) => year.count);
+ 
     map((year) => {
 
       const labels = year.map((year) => year._id);
