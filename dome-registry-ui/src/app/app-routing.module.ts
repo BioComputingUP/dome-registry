@@ -3,7 +3,7 @@ import { ExtraOptions, Route, RouterModule, Routes } from '@angular/router';
 import { PageSearchComponent } from "./page-search/page-search.component";
 import { PageEditComponent } from "./page-edit/page-edit.component";
 import { PageIntroComponent } from "./page-intro/page-intro.component";
-import { PageStatsComponent } from "./page-stats/page-stats.component";
+//import { PageStatsComponent } from "./page-stats/page-stats.component";
 import { SwaggerAPiComponent } from "./swagger-api/swagger-api.component";
 import { AboutPageComponent } from './about-page/about-page.component';
 import { PageDashboardComponent } from './page-dashboard/page-dashboard.component';
