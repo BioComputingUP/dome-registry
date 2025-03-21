@@ -14,10 +14,12 @@
 .progress.progress-gradient {
   // Set positioning
   position: relative;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   // Set display as flex
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  margin-left: 15px;
   // Make children start from opposite parts
   justify-content: flex-start;
   // Make children fill the whole height
@@ -25,6 +27,7 @@
   // Do not set background
   background: transparent;
   // Set foreground as transparent
+
   .progress-bar {
     // Show bar
     display: block;
@@ -42,8 +45,10 @@
   bottom: 0;
   left: 0;
   border-radius: .375rem;
-  border: 1px solid white;
-  background: linear-gradient(90deg, $danger, lighten($primary, 25%));
+  border: none;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  /*background: linear-gradient(to right, yellow, forestgreen);*/
+
 }
 .progress.progress-gradient:after {
   // No content
@@ -54,12 +59,13 @@
   // Hide what's behind
   background: $light;
   // Set border to match progress bar
-  border: 1px solid white;
+  border:none;
   border-left: 0;
   // Define border radius
   border-radius: 0 .375rem .375rem 0;
   //// Set z-index
   //z-index: 1;
+
 }
 
 // Apply invalid style to all invalid fields
