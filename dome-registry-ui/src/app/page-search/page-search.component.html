@@ -8,11 +8,23 @@
           <form class="d-flex flex-row flex-nowrap align-items-center">
             <!-- Search text -->
             <div class="row flex-grow-1 ms-0 me-3">
-          
+              <!-- <div class="col-2">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                  aria-expanded="true">
+                  {{ selectedfilter || 'select a filter '}}
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" (click)="updateSelectedFilter('Title of publication')">Title of publication</a></li>
+                  <li>
+                    <a class="dropdown-item" (click)="updateSelectedFilter('Year')">Year of publication </a>
+                  </li>
+                  <li><a class="dropdown-item" (click)="updateSelectedFilter('Journal name')" >Journal name</a></li>
+                </ul>
 
+              </div> -->
               <div class="col-10">
                 <div class="input-group mb-3">
-                 
+
                   <input type="text" class="form-control" placeholder="Search..." id="search-text"
                          (keyup)="onTextChange($event)"/>
                 </div>
@@ -82,8 +94,7 @@
   <div class="d-inline-block position-relative flex-grow-1 bg-light">
     <!-- Table body (scrollable) -->
 
-    <div class="position-absolute left-0 top-0 w-100 h-100 bg-transparent overflow-scroll" scroll-end
-         (end$)="onScrollEnd()">
+    <div class="position-absolute left-0 top-0 w-100 h-100 bg-transparent overflow-scroll" >
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-8 offset-md-2">
@@ -156,7 +167,7 @@
                   </p>
 
                   <p *ngIf="review.publication.tags && review.publication.tags.length > 0" class="mb-0">
-                  
+
                     <strong>Tags:&nbsp;</strong>
                     <span class="shadow-l d-inline-block m-1" *ngFor="let tag of  review.publication.tags ">
                         <span class="tag ">{{ tag || '-' }}</span>
@@ -197,6 +208,51 @@
                 </div>
               </div>
             </div>
+            <!-- Pagination controls -->
+            <div class="d-flex justify-content-center mt-3" *ngIf="totalItems > itemsPerPage">
+              <nav aria-label="Page navigation">
+                <ul class="pagination">
+                  <!-- First page button -->
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" (click)="goToPage(1)" aria-label="First">
+                      <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                  </li>
+
+                  <!-- Previous page button -->
+                  <li class="page-item" [class.disabled]="currentPage === 1">
+                    <a class="page-link" (click)="goToPage(currentPage - 1)" aria-label="Previous">
+                      <span aria-hidden="true">&laquo;</span>
+                    </a>
+                  </li>
+
+                  <!-- Page numbers -->
+                  <ng-container *ngFor="let page of visiblePages">
+                    <li *ngIf="page === -1" class="page-item disabled">
+                      <span class="page-link">...</span>
+                    </li>
+                    <li *ngIf="page !== -1" class="page-item" [class.active]="page === currentPage">
+                      <a class="page-link" (click)="goToPage(page)">{{ page }}</a>
+                    </li>
+                  </ng-container>
+
+                  <!-- Next page button -->
+                  <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" (click)="goToPage(currentPage + 1)" aria-label="Next">
+                      <span aria-hidden="true">&raquo;</span>
+                    </a>
+                  </li>
+
+                  <!-- Last page button -->
+                  <li class="page-item" [class.disabled]="currentPage === totalPages">
+                    <a class="page-link" (click)="goToPage(totalPages)" aria-label="Last">
+                      <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
           </div>
         </div>
       </div>

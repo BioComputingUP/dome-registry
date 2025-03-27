@@ -9,7 +9,7 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {FormControl} from '@angular/forms';
 import {
   Observable,
   BehaviorSubject,
@@ -21,7 +21,7 @@ import {
   tap,
   startWith,
   Subject,
-  takeUntil,
+  takeUntil, filter,
 } from 'rxjs';
 import {
   Field,
@@ -31,10 +31,10 @@ import {
   ReviewService,
   Sort,
 } from '../review.service';
-import { AuthService } from '../auth.service';
-import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { DOCUMENT } from '@angular/common';
-import { take } from 'rxjs';
+import {AuthService} from '../auth.service';
+import {NgbPaginationModule} from '@ng-bootstrap/ng-bootstrap';
+import {DOCUMENT} from '@angular/common';
+import {take} from 'rxjs';
 
 type Reviews = Array<Review>;
 
@@ -45,6 +45,7 @@ interface Score {
   // This must be computed
   percentage?: number;
 }
+
 @Component({
   selector: 'app-page-search',
   templateUrl: './page-search.component.html',
@@ -55,26 +56,35 @@ export class PageSearchComponent implements OnInit, OnDestroy {
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
   jsonLD: any;
   //public page = 3 ;
-  public readonly text$ = new BehaviorSubject<string>('');
-
-  public readonly public$ = new BehaviorSubject<'true' | 'false'>('true');
-
-  public readonly sort$ = new BehaviorSubject<Sort>({
+  // Search behavior subjects
+  public readonly text$ = new BehaviorSubject<string>(''); // Search text input
+  public readonly public$ = new BehaviorSubject<'true' | 'false'>('true'); // Public filter
+  public readonly sort$ = new BehaviorSubject<Sort>({ // Sorting criteria
     by: 'publication.year',
     asc: 'false',
   });
 
-  private readonly offset$ = new EventEmitter<Offset>();
-
-  public readonly query$: Observable<Query>;
-
   public readonly score$: Observable<Map<string, Score>>;
-  private results: Reviews;
-  private destroy$ = new Subject<void>();
-  public readonly results$: Observable<Reviews>;
+  // Data streams
+  public readonly query$: Observable<Query>; // Combined query parameters
+  public readonly results$: Observable<Reviews>; // Paginated results
+  private allResults: Reviews = []; // Full unfiltered results
+  private destroy$ = new Subject<void>(); // Component cleanup subject
+
+  // Auth helper
   public get auth() {
     return !!this.authService.user?.auth;
   }
+
+  // Pagination controls
+  public currentPage = 1;
+  public itemsPerPage = 10;
+  public totalItems = 0;
+  private readonly page$ = new BehaviorSubject<{ page: number, pageSize: number }>({
+    page: 1,
+    pageSize: 10
+  });
+
 
   constructor(
     // Dependency injection
@@ -84,60 +94,95 @@ export class PageSearchComponent implements OnInit, OnDestroy {
     private reviewService: ReviewService,
     private authService: AuthService
   ) {
-    // Define text pipeline
+    // Text input pipeline with debounce and cleanup
     const text$ = this.text$.pipe(
-      // Filter value
-      map((text) => text.replace(/[ \t]+/, ' ').trim()),
-      // Wait before emitting
-      debounceTime(400),
-      // Do only if final value is distinct
-      distinctUntilChanged()
-    );
-
-    // Define offset pipeline
-    const offset$ = this.offset$.pipe(
-      // Compare current, previous offsets
-      distinctUntilChanged((prev, curr) => prev.skip <= curr.skip),
-      // Set original value
-      startWith({ skip: 0, limit: 100 })
+      map((text) => text.replace(/[ \t]+/, ' ').trim()), // Normalize whitespace
+      debounceTime(400), // Wait for typing to settle
+      distinctUntilChanged() // Only emit when value changes
     );
 
     const [public$, sort$] = [this.public$, this.sort$];
 
-    // Define query parameters pipeline
-    this.query$ = combineLatest([text$, public$, sort$]).pipe(
-      // Join all together in the same object
+// Combine all query parameters into single observable
+    this.query$ = combineLatest([text$, this.public$, this.sort$]).pipe(
       map(([text, _public, sort]) => ({
         text,
         public: _public,
         ...sort,
         skip: 0,
         limit: 100,
-      }))
+      })),
+      tap(() => {
+        // Reset to first page whenever query changes
+        this.currentPage = 1;
+        this.page$.next({ page: 1, pageSize: this.itemsPerPage });
+      })
     );
 
-    // Initialize results
-    this.results = [];
-
-    // Define results pipeline
+    // Main results pipeline
     this.results$ = this.query$.pipe(
-      // On query emission, reset results
-      tap(() => (this.results = [])),
-      // Subscribe to offset emission
-      switchMap((query) =>
-        offset$.pipe(
-          // Generate entire query
-          map((offset) => ({ ...query, ...offset }))
-        )
-      ),
-      // Retrieve results
+      tap(() => this.allResults = []), // Clear results on new query
       switchMap((query) => this.reviewService.searchReviews(query)),
       tap((results) => {
-        console.log({ results });
+        this.totalItems = results.length;
+        this.allResults = [...results]; // Store all results
       }),
-      // Update results
-      map((results) => (this.results = [...this.results, ...results]))
+      // Combine with pagination changes
+      switchMap(() => this.page$.pipe(
+        map(({page, pageSize}) => {
+          this.currentPage = page;
+          this.itemsPerPage = pageSize;
+          return this.paginateResults(this.allResults);
+        })
+      ))
     );
+  }
+
+  // Pagination helper - slices results for current page
+  private paginateResults(results: Reviews): Reviews {
+    if (!results || results.length === 0) return [];
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return results.slice(startIndex, endIndex);
+  }
+
+  // Navigation to specific page
+  public goToPage(page: number): void {
+    if (page < 1 || page > this.totalPages || page === this.currentPage) return;
+    this.page$.next({ page, pageSize: this.itemsPerPage });
+  }
+
+
+  // Calculate total pages for pagination controls
+  public get totalPages(): number {
+    return Math.max(1, Math.ceil(this.totalItems / this.itemsPerPage));
+  }
+
+  // Generate visible page numbers for pagination controls
+  public get visiblePages(): number[] {
+    const pages: number[] = [1]; // Always show first page
+    const maxVisible = 5; // Current page + 2 on each side
+
+    let start = Math.max(2, this.currentPage - 2);
+    let end = Math.min(this.totalPages - 1, this.currentPage + 2);
+
+    // Adjust ranges near boundaries
+    if (this.currentPage <= 3) end = Math.min(5, this.totalPages - 1);
+    else if (this.currentPage >= this.totalPages - 2) start = Math.max(this.totalPages - 4, 2);
+
+    // Add ellipsis if needed before middle pages
+    if (start > 2) pages.push(-1);
+
+    // Add middle pages
+    for (let i = start; i <= end; i++) pages.push(i);
+
+    // Add ellipsis if needed after middle pages
+    if (end < this.totalPages - 1) pages.push(-1);
+
+    // Add last page if there are multiple pages
+    if (this.totalPages > 1) pages.push(this.totalPages);
+
+    return pages;
   }
 
   public onTextChange(event: KeyboardEvent) {
@@ -155,26 +200,19 @@ export class PageSearchComponent implements OnInit, OnDestroy {
     // Case selected field is equal to current field
     if (current.by === by) {
       // Then, just invert sorting order
-      this.sort$.next({ by, asc: current.asc === 'true' ? 'false' : 'true' });
+      this.sort$.next({by, asc: current.asc === 'true' ? 'false' : 'true'});
     }
     // Otherwise
     else {
       // Set new sorting parameter
-      this.sort$.next({ by, asc: 'false' });
+      this.sort$.next({by, asc: 'false'});
     }
   }
 
-  public onScrollEnd() {
-    // Emit new offset
-    this.offset$.emit({ skip: this.results.length, limit: 100 });
-  }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-  }
   public OnClickdownloadJSonfile($event: MouseEvent) {
-    const json = JSON.stringify(this.results, null, 1);
-    const blob = new Blob([json], { type: 'application/json' });
+    const json = JSON.stringify(this.allResults, null, 1);
+    const blob = new Blob([json], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
     const a = this._document.createElement('a');
     a.style.display = 'none';
@@ -201,15 +239,23 @@ export class PageSearchComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    this.destroy$
-      .asObservable()
-      .pipe(
-        tap(() => {
-          // retirer markup
-          this._renderer2.removeChild(this._document.body, this.jsonLD);
-        }),
-        take(1)
-      )
-      .subscribe();
+    // this.destroy$
+    //   .asObservable()
+    //   .pipe(
+    //     tap(() => {
+    //       // retirer markup
+    //       this._renderer2.removeChild(this._document.body, this.jsonLD);
+    //     }),
+    //     take(1)
+    //   )
+    //   .subscribe();
+  }
+  ngOnDestroy(): void {
+    // Cleanup
+    this.destroy$.next();
+    this.destroy$.complete();
+    if (this.jsonLD) {
+      this._renderer2.removeChild(this._document.body, this.jsonLD);
+    }
   }
 }
