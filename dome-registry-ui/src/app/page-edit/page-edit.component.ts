@@ -263,7 +263,7 @@ export class PageEditComponent implements OnInit, OnDestroy {
     console.log( this.router.url);
     let full = this.router.url; 
     let updatedString = full.replace("/review/", "");
-    console.log(updatedString); // Output: al24g8xyml
+    
 
 
 
@@ -282,12 +282,16 @@ export class PageEditComponent implements OnInit, OnDestroy {
     ).subscribe();
 
 
-    // this.destroy$.asObservable().pipe(
-    //   tap (()=>{
-    //   // this._renderer2.removeChild(this._document.body,this.jsonLd);
-    // // }),
-    //   // take(1)
-    // // ).subscribe();
+    this.destroy$
+    .asObservable()
+    .pipe(
+      tap(() => {
+        // Delete markup
+        this._renderer2.removeChild(this._document.body, this.jsonLd);
+      }),
+      take(1)
+    )
+    .subscribe();
 
 
 
