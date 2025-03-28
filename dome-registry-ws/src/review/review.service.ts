@@ -1146,47 +1146,7 @@ export class ReviewService {
     return bn;
   }
 
-  //   // Create a new review threw Dome wizards
-  //   async createWizard(review: Partial<Review>) {
-  //     // Define creation and update date
-  //     const creatd = Date.now();
-
-  //     const updated = creatd;
-  //     // console.log(creatd);
-  //     const uuid = UUID();
-  //     console.log(uuid);
-  //     review = Object.assign(review, { uuid, updated, creatd, public: false });
-  //     const inserted = new this.reviewModel();
-
-  //     let score = computeDomeScore(inserted.toObject() as Review);
-  //     score.delete("totale");
-  //     score.forEach(([done, skip], section) => {
-  //       review[section]["done"] = done;
-  //       review[section]["section"] = skip;
-  //     });
-
-  //  const ApiCuron_activity= {
-  //     curator_orcid:  review.user,
-  //     entity_uri: '',
-  //     ressource_id:'',
-  //     timestamp:'',
-  //     activity_term:'',
-  //     leagur:'',
-  //    }
-
-  //     return inserted.save();
-  //   }
-
-
-
-  // // Get the  ORCID ID of  owner
-
-  // async getTheOwner(uuid: string) {
-  //   const rev = await this.findOneShortid(uuid);
-  //   // const ud = rev.user;
-  //   return rev;
-  // }
-
+ 
   // get the Annotations counts form the Database
   async getAnnotationsC() {
     return this.aggregateData(
@@ -1278,6 +1238,9 @@ export class ReviewService {
     ]);
   }
 
+
+  
+// APi Curon function for bulk submission
   async APICuronAll() {
     return this.reviewModel.aggregate([
       {

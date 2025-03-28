@@ -13,53 +13,26 @@ import {Review, ReviewDocument} from "src/review/review.schema";
 
 
 async function bootstrap() {
-    // 
+   
     const app = await NestFactory.createApplicationContext(AppModule);
-    // console.log(Reflect.getMetadata('providers', MongooseModule));
-
-    const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name));
-   // const reviewModel : mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
-    //const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name));
     const reviewModel: mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
 
-    //await userModel.updateMany({}, { $set: { "tags": "undefined" } });
-    await reviewModel.aggregate([{
-        $set:
-            {
-                score: {
-                    $add: ["$dataset.done", "$model.done", "$optimization.done", "$evaluation.done"]
-                }
-            }
-    },
-        {
-            $merge: {
-                into: 'reviews',
-                whenMatched: 'merge',
-                whenNotMatched: 'insert'
-            }
-        }]);
+    try {
+        // Add score field to all documents that don't have it
+        const updateResult = await reviewModel.updateMany(
+            { score: { $exists: false } },  // Find documents without score field
+            { $set: { score: 0 } }          // Set score to 0
+        );
 
-    // const all = userModel.find();
-    // all.updateMany({}, { $set: { roles: Role.User } });
+        console.log(`Updated ${updateResult.modifiedCount} documents with score field`);
+    } catch (error) {
+        console.error('Error updating documents:', error);
+    } finally {
+        await app.close();
+    }
 
 
-    // const savePromises = [];
-    // for await (const iterator of all) {
-    //     //     // generate uuid
-    //     await userModel.findByIdAndUpdate(iterator._id, { $set: { roles: Role.User } });
-
-    //     const savePromise = iterator.save();
-    //     savePromises.push(savePromise);
-    // }
-
-
-    // await Promise.all(savePromises);
-    // const doc = await userModel.findOne();
-    // console.log('doc', doc);
-    /* 
-    const doc = await reviewModel.findOne()
-    console.log('doc', doc)
- */
-    await app.close();
+  
 }
+
 bootstrap()

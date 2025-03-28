@@ -53,6 +53,8 @@ class Review {
 
     @Prop({ type: Number, required: false })
     score : number;
+
+    
   
 }
 

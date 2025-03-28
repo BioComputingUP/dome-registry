@@ -310,8 +310,6 @@ export class ReviewController {
     
     callback();
     
-    
-  //  this.logger.log(ApicuronData), this.logger.log(`Created Review:`);
-    //this.logger.log({ reviewCreated });
+
   }
 }
