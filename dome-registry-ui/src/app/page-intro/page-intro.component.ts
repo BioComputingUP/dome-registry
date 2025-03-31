@@ -66,15 +66,7 @@ export class PageIntroComponent implements OnInit, OnDestroy {
   // Try to print the number of the entries 
 
   ngOnInit() {
-    //let script = this._renderer2.createElement('script');
-    // script.type = `application/ld+json`;
-    // let markup;
-    
-  
-    // this.reviewService.GetHomePageMarkup().subscribe(response => {
-    //   script.text = JSON.stringify(response)
-    // });
-    
+  //Add json-ld markup to the page
     
     this.reviewService.GetHomePageMarkup().pipe(
       tap((response)=> {
@@ -91,20 +83,13 @@ export class PageIntroComponent implements OnInit, OnDestroy {
     
     this.destroy$.asObservable().pipe(
       tap(() => {
-        // retirer markup
+        //  Delete markup
         this._renderer2.removeChild(this._document.body, this.jsonLd);
       }),
       take(1)
     ).subscribe();
  
 
-    // this.reviewService.GetHomePageMarkup().pipe(
-    //   tap((response) => {
-    //     let script = this._renderer2.createElement('script');
-    //     script.type = `application/ld+json`;
-    //   }),
-    //   takeUntil(this.destroy$)
-    // ).subscribe()
 
   }
 

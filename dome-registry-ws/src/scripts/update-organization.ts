@@ -18,13 +18,26 @@ async function bootstrap() {
 
     const userModel: mongoose.Model<UserDocument> = app.get(getModelToken(User.name));
 
-    //const reviewModel : mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
+  
 
     
     
-     //await userModel.updateMany({$exists:false}, { $set: { organizations: ['academia'] } } );
-    //await userModel.updateMany({}, { $set: { "organizations": "undefined" } });
-    await userModel.findOneAndUpdate({orcid:'0009-0002-2327-9430'},{$addToSet: {organizations:'bioRxiv'}});
+  
+    await userModel.updateOne(
+        { orcid: '' }, // Filter by Orcid.
+        {
+          $addToSet: {
+            organizations: {
+              $each: [''], // Add multiple values
+            },
+          },
+        },
+      );
+
+
+
+
+
 
     await app.close();
 }

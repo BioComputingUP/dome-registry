@@ -18,20 +18,21 @@ async function bootstrap() {
     // const all = reviewModel.find()
 
     await reviewModel.updateMany({}, { $unset: { new_uid: 1 }});
-    const savePromises = []
+    //const savePromises = []
 
     // for await (const iterator of all) {
     //     // generate uuid
     //     await reviewModel.findByIdAndUpdate(iterator._id,{$unset:{new_uid:'' }});
 
     
-        
+    await reviewModel.updateMany({}, { $unset: { scores: "" } }
+    );  
     //     const savePromise = iterator.save();
     //     savePromises.push(savePromise);
     // }
 
 
-    await Promise.all(savePromises)
+    //await Promise.all(savePromises)
     /* 
     const doc = await reviewModel.findOne()
     console.log('doc', doc)
