@@ -22,9 +22,10 @@ import { SwaggerAPiComponent } from './swagger-api/swagger-api.component';
 import { AboutPageComponent } from './about-page/about-page.component';
 import { PageDashboardComponent } from './page-dashboard/page-dashboard.component';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DSWCardComponent } from './dsw-card/dsw-card.component';
 import { NewStateComponent } from './new-state/new-state.component'
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {ToastrModule} from "ngx-toastr";
 
 // Set Plotly.js from CDN
 PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
@@ -50,11 +51,12 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     PageDashboardComponent,
     DSWCardComponent,
     NewStateComponent,
+
   ],
   imports: [
     PlotlyViaCDNModule,
     BrowserModule,
-    
+
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
@@ -62,6 +64,15 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     BrowserAnimationsModule,
     AppRoutingModule,
     CookieModule.forRoot(),
+    BrowserModule,
+    BrowserAnimationsModule, // Required for animations
+    ToastrModule.forRoot({// Toastr configuration
+      timeOut: 3000,        // Default auto-close time (3 sec)
+      positionClass:'toast-top-right',
+      preventDuplicates: true,
+      closeButton:true,
+      progressBar:true
+    }),
   ],
   providers: [
     // Add authentication interceptor (set cookie)

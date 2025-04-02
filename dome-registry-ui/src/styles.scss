@@ -102,3 +102,147 @@
   height: 8rem;
   width: 8rem;
 }
+
+.toast-success {
+  background-color: #4CAF50 !important;
+  border-left: 4px solid #2E7D32 !important;
+}
+.toast-error {
+  background-color: #F44336 !important;
+  border-left: 4px solid #C62828 !important;
+}
+.toast-info {
+  background-color: #2196F3 !important;
+  border-left: 4px solid #1565C0 !important;
+}
+
+.toast-warning {
+  background-color: #FF9800 !important;
+  border-left: 4px solid #EF6C00 !important;
+  color: #333 !important; /* Dark text for better contrast */
+}
+
+/* Change text color */
+.toast-message {
+  line-height: 1.5 !important;
+  margin-right: 24px !important; /* Space for close button */
+}
+
+/* Change title color */
+.toast-title {
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  margin-bottom: 4px !important;
+}
+
+/* Change size */
+.toast-container .ngx-toastr {
+  width: 320px !important; /* Fixed width for consistency */
+  padding: 16px 24px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  font-family: 'Segoe UI', Roboto, sans-serif !important;
+  color: white !important;
+  margin: 8px 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border: none !important;
+  z-index: 999999 !important;
+}
+
+.toast-warning .toast-message,
+.toast-warning .toast-title {
+  color: #333 !important;
+}
+
+.toast-progress {
+  height: 3px !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Force top-right positioning */
+.toast-container {
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  bottom: auto !important;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.toast-close-button {
+  position: absolute !important;
+  right: 12px !important;
+  top: 12px !important;
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  font-size: 18px !important;
+  line-height: 24px !important;
+  opacity: 0.7 !important;
+  color: white !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: none !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  pointer-events: auto !important; /* Ensures clicks register */
+  z-index: 9999999 !important; /* Higher than the toast itself */
+}
+
+.toast-close-button:hover {
+  opacity: 1 !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+  transform: scale(1.1);
+}
+
+/* Ensure contrast on all toast types */
+.toast-success .toast-close-button,
+.toast-error .toast-close-button,
+.toast-info .toast-close-button,
+.toast-warning .toast-close-button {
+  color: white !important;
+}
+
+@keyframes toastSlideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes toastFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.ngx-toastr {
+  animation: toastSlideIn 0.3s ease-out !important;
+}
+
+.ngx-toastr.ng-animate {
+  animation: toastFadeOut 0.3s ease-in !important;
+}
+
+/* Better hover states for all toasts */
+.ngx-toastr:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  .toast-warning {
+    background-color: #FFA726 !important;
+    color: #111 !important;
+  }
+}

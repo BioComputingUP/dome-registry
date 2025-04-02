@@ -42,7 +42,7 @@
                           <span style="flex: 0 0 8rem">{{score.done }} / {{score.done + score.skip}}
                             ({{score.percentage!.toFixed(0)}}%)</span>
                         </div>
-                       
+
                       </ng-container>
                     </ng-container>
                   </ng-container>
@@ -50,7 +50,7 @@
                 <!-- Describe DOME score -->
                 <small class="d-block text-muted w-100 h-100 mb-3 overflow-y-scoll ">
                   The DOME score is computed as the number of valid fields, divided by the total number of fields <br>
-                 
+
                 </small>
 
                 <b>DOME-id: </b> <span class="badge bg-primary">{{review.shortid}}</span>
@@ -60,10 +60,10 @@
                   </button>
                 </div>
               </div>
-            
+
             </card-template>
-          
-         
+
+
 
           </div>
           <!-- Main content -->
@@ -105,7 +105,7 @@
                     <div id="year-help" class="form-text">Year of publication, as a number</div>
                   </div>
 
-                  
+
                   <!-- Publication PubMed ID -->
                   <!-- <div class="mb-3">
                     <label for="pmid" class="form-label">PubMed ID</label>
@@ -127,10 +127,10 @@
                     <div class="tags-container">
                       <span *ngFor="let tag of review.publication.tags" class="tag">{{ tag | uppercase }}</span>
                     </div>
-                    
-                   
+
+
                       <div id="tags-help" class="form-text">Tags related to the published article</div>
-                  </div> 
+                  </div>
 
                 <!-- Creation date  -->
                 <div class="mb-3">
@@ -138,9 +138,9 @@
                     <div class="mb-1"> <b>Last update</b>  {{review.updated | date }} </div>
                 </div>
 
-                </div> 
-             
-            
+                </div>
+
+
               </card-section>
               <!-- 2nd section: dataset -->
               <card-section id="dataset" formGroupName="dataset" class="d-block pb-3">
@@ -477,15 +477,15 @@
                 </div>
               </card-section>
             </form>
-           
+
           </div>
-           
+
         </div>
-      
-     
+
+
         <!-- Bottom container, actions -->
         <!-- If the role is admin the modification and the delete are allowed -->
-       
+
         <div class="container">
           <footer class="stick-footer">
             <div class="z-3 position-relative  container-fluid flex-shrink-0 bg-white shadow-sm overflow-hidden"
@@ -517,22 +517,22 @@
                 <button class="btn btn-primary me-1" type="button" (click)="onSaveClick($event)">
                   Save&nbsp;<i class="bi bi-save d-none d-md-inline"></i>
                 </button>
-    
+
                 <button class="btn btn-success me-0 " *ngIf="user.roles?.includes('admin') && review.public == false" type="button"
-                  [disabled]="!review.uuid" (click)=" onPublishClick($event)">
+                  [disabled]="!review.uuid" (click)=" onPublishClick($event)" >
                   Publish &nbsp;<i class="bi bi-check2-circle"></i>
                 </button>
-    
+
               </div>
             </form>
           </div>
-    
-           
+
+
           </footer>
 
         </div>
       </div>
-      
+
     </ng-container>
     <!-- Otherwise, ask user to sign in -->
     <ng-template #signInFirst>
