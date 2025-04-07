@@ -24,7 +24,9 @@
                       <!-- Dropdown Menu -->
                       <ul class="dropdown-menu filter-dropdown" aria-labelledby="searchFilter">
                         <li><a class="dropdown-item" (click)="updateFilter('all')">All Categories</a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                          <hr class="dropdown-divider">
+                        </li>
                         <li><a class="dropdown-item" (click)="updateFilter('title')">Title</a></li>
                         <li><a class="dropdown-item" (click)="updateFilter('authors')">Authors</a></li>
                         <li><a class="dropdown-item" (click)="updateFilter('publication')">Publication</a></li>
@@ -101,7 +103,7 @@
   <div class="d-inline-block position-relative flex-grow-1 bg-light">
     <!-- Table body (scrollable) -->
 
-    <div class="position-absolute left-0 top-0 w-100 h-100 bg-transparent overflow-scroll" >
+    <div class="position-absolute left-0 top-0 w-100 h-100 bg-transparent overflow-scroll">
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-8 offset-md-2">
@@ -173,12 +175,11 @@
                     Private
                   </p>
 
-                  <p *ngIf="review.publication.tags && review.publication.tags.length > 0" class="mb-0">
-
+                  <p *ngIf="review.publication.tags && review.publication.tags.length > 0" class="mb-0 tags-container">
                     <strong>Tags:&nbsp;</strong>
-                    <span class="shadow-l d-inline-block m-1" *ngFor="let tag of  review.publication.tags ">
-                        <span class="tag ">{{ tag || '-' }}</span>
-                        <span ng-if="!$last"> </span> <!-- Add a comma after each tag except the last one -->
+                    <span *ngFor="let tag of review.publication.tags; let last = last">
+                      <span class="tag">{{ tag || '-' }}</span>
+                      <span *ngIf="!last">, </span>
                     </span>
                   </p>
                   <p class="mb-0">
