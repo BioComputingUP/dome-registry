@@ -52,42 +52,38 @@
           </form>
           <div class="d-flex flex-row flex-nowrap justify-content-around w-100 mt-3">
             <ng-container *ngIf="sort$ | async as sort">
-              <div class="form-check form-check-inline">
-                <strong>
-                  <p>Sort by:</p>
-                </strong>
-              </div>
-              <!-- Radio buttons -->
-              <div class="form-check form-check-inline">
-                <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                       [class.sort-selected]="sort.by === 'publication.title'"
-                       (click)="onSortChange('publication.title')"
-                       type="radio"
-                       name="sortOption"/>
-                <label class="form-check-label" for="inlineRadio1">Title</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                       [class.sort-selected]="sort.by === 'publication.authors'"
-                       (click)="onSortChange('publication.authors')"
-                       type="radio"
-                       name="sortOption"/>
-                <label class="form-check-label" for="inlineRadio2">Authors</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                       [class.sort-selected]="sort.by === 'publication.year'" (click)="onSortChange('publication.year')"
-                       type="radio"
-                       name="sortOption"/>
-                <label class="form-check-label" for="inlineRadio3">Year</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                       [class.sort-selected]="sort.by === 'publication.title'"
-                       [class.sort-selected]="sort.by === 'score'"
-                       (click)="onSortChange('score')" type="radio"
-                       name="sortOption"/>
-                <label class="form-check-label" for="inlineRadio4">Score</label>
+              <div class="sorting-controls">
+                <div class="sort-option" [class.active]="sort.by === 'publication.title'"
+                     (click)="onSortChange('publication.title')">
+                  <span>Title</span>
+                  <span class="sort-direction" *ngIf="sort.by === 'publication.title'">
+      {{ sort.asc === 'true' ? '▲' : '▼' }}
+    </span>
+                </div>
+
+                <div class="sort-option" [class.active]="sort.by === 'publication.authors'"
+                     (click)="onSortChange('publication.authors')">
+                  <span>Authors</span>
+                  <span class="sort-direction" *ngIf="sort.by === 'publication.authors'">
+      {{ sort.asc === 'true' ? '▲' : '▼' }}
+    </span>
+                </div>
+
+                <div class="sort-option" [class.active]="sort.by === 'publication.year'"
+                     (click)="onSortChange('publication.year')">
+                  <span>Year</span>
+                  <span class="sort-direction" *ngIf="sort.by === 'publication.year'">
+      {{ sort.asc === 'true' ? '▲' : '▼' }}
+    </span>
+                </div>
+
+                <div class="sort-option" [class.active]="sort.by === 'score'"
+                     (click)="onSortChange('score')">
+                  <span>Score</span>
+                  <span class="sort-direction" *ngIf="sort.by === 'score'">
+      {{ sort.asc === 'true' ? '▲' : '▼' }}
+    </span>
+                </div>
               </div>
               <button class="btn btn-primary" type="button" (click)="OnClickdownloadJSonfile($event)">Bulk Download <i
                 class=" bi-save d-none d-md-inline"></i></button>
