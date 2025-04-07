@@ -8,29 +8,36 @@
           <form class="d-flex flex-row flex-nowrap align-items-center">
             <!-- Search text -->
             <div class="row flex-grow-1 ms-0 me-3">
-              <!-- <div class="col-2">
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                  aria-expanded="true">
-                  {{ selectedfilter || 'select a filter '}}
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" (click)="updateSelectedFilter('Title of publication')">Title of publication</a></li>
-                  <li>
-                    <a class="dropdown-item" (click)="updateSelectedFilter('Year')">Year of publication </a>
-                  </li>
-                  <li><a class="dropdown-item" (click)="updateSelectedFilter('Journal name')" >Journal name</a></li>
-                </ul>
+              <div class="col-12">
+                <div class="search-container">
+                  <div class="input-group search-group filter-button-container">
+                    <div class="filter-wrapper">
+                      <button class="btn search-filter-btn dropdown-toggle no-caret"
+                              type="button"
+                              id="searchFilter"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false">
+                        <span class="filter-label">All Categories</span>
+                        <i class="bi bi-chevron-down dropdown-icon"></i>
+                      </button>
 
-              </div> -->
-              <div class="col-10">
-                <div class="input-group mb-3">
+                      <!-- Dropdown Menu -->
+                      <ul class="dropdown-menu filter-dropdown" aria-labelledby="searchFilter">
+                        <li><a class="dropdown-item" (click)="updateFilter('all')">All Categories</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" (click)="updateFilter('title')">Title</a></li>
+                        <li><a class="dropdown-item" (click)="updateFilter('authors')">Authors</a></li>
+                        <li><a class="dropdown-item" (click)="updateFilter('publication')">Publication</a></li>
+                        <li><a class="dropdown-item" (click)="updateFilter('tags')">Tags</a></li>
+                      </ul>
+                    </div>
 
-                  <input type="text" class="form-control" placeholder="Search..." id="search-text"
-                         (keyup)="onTextChange($event)"/>
+                    <!-- Search input -->
+                    <input type="text" class="form-control search-input" placeholder="Search for..." id="search-text"
+                           (keyup)="onTextChange($event)"/>
+                  </div>
                 </div>
               </div>
-
-
             </div>
             <!-- Public switch -->
             <div class="flex-shrink-0 ms-0 me-0">

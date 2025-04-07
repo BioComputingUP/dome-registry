@@ -2,7 +2,7 @@ import {
   IsBoolean,
   IsDefined,
   IsIn,
-  IsInt,
+  IsInt, IsOptional,
   IsString,
   Max,
   MaxLength,
@@ -70,4 +70,9 @@ export class ListReviewsDto {
   @Type(() => String)
   @Transform(({ value }) => value === "true")
   asc: boolean = true;
+
+  @IsOptional()
+  @IsIn(["title", "authors", "publication","tags", "all"])
+  @Type(() => String)
+  filter?: string = "all";
 }

@@ -78,21 +78,6 @@ export class ReviewController {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   //**----------Get All reviews-------- **/
   @Get()
   @ApiOperation({ summary: "Get all reviews  " })
@@ -103,7 +88,7 @@ export class ReviewController {
       public: query.public,
       skip: query.skip,
       limit: query.limit,
-      
+      filter: query.filter
     };
     // Define sort parameters
     let _sort = { by: query.sort, asc: query.asc };

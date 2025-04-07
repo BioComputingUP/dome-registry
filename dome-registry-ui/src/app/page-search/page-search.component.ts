@@ -58,6 +58,7 @@ export class PageSearchComponent implements OnInit, OnDestroy {
   //public page = 3 ;
   // Search behavior subjects
   public readonly text$ = new BehaviorSubject<string>(''); // Search text input
+  public readonly filterCategory$ = new BehaviorSubject<string>('all'); // Default to 'all'
   public readonly public$ = new BehaviorSubject<'true' | 'false'>('true'); // Public filter
   public readonly sort$ = new BehaviorSubject<Sort>({ // Sorting criteria
     by: 'publication.year',
@@ -104,10 +105,11 @@ export class PageSearchComponent implements OnInit, OnDestroy {
     const [public$, sort$] = [this.public$, this.sort$];
 
 // Combine all query parameters into single observable
-    this.query$ = combineLatest([text$, this.public$, this.sort$]).pipe(
-      map(([text, _public, sort]) => ({
+    this.query$ = combineLatest([text$, this.public$, this.sort$, this.filterCategory$]).pipe(
+      map(([text, _public, sort, category]) => ({
         text,
         public: _public,
+        filterCategory: category,
         ...sort,
         skip: 0,
         limit: 100,
@@ -188,10 +190,52 @@ export class PageSearchComponent implements OnInit, OnDestroy {
   public onTextChange(event: KeyboardEvent) {
     console.log((event.target as HTMLInputElement).value);
     this.text$.next((event.target as HTMLInputElement).value);
+
+    // Visual feedback for active filter
+    this.updateFilterUI();
+  }
+
+  private updateFilterUI() {
+    const activeCategory = this.filterCategory$.value;
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    dropdownItems.forEach(item => {
+      item.classList.remove('active');
+      if (item.getAttribute('data-value') === activeCategory) {
+        item.classList.add('active');
+      }
+    });
   }
 
   public onPublicChange(event: boolean) {
     this.public$.next(event ? 'true' : 'false');
+  }
+
+  updateFilter(category: string) {
+    this.filterCategory$.next(category);
+
+    // Update the button text
+    const labelMap = {
+      'all': 'All Categories',
+      'title': 'Title',
+      'authors': 'Authors',
+      'publication': 'Publication',
+      'tags': 'Tags'
+    };
+
+    document.querySelector('.filter-label').textContent = labelMap[category] || 'All Categories';
+
+    // Trigger search if there's existing text
+    if (this.text$.value) {
+      // Create a proper KeyboardEvent-like object
+      const mockEvent = {
+        target: {
+          value: this.text$.value
+        }
+      } as unknown as KeyboardEvent; // Type assertion
+
+      this.onTextChange(mockEvent);
+    }
   }
 
   public onSortChange(by: Field) {

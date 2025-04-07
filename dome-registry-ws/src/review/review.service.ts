@@ -87,7 +87,7 @@ export class ReviewService {
 
   // @Cache({key:'Searche results'})
   async findAll(
-    query: { skip: number; limit: number; text: string; public: boolean },
+    query: { skip: number; limit: number; text: string; public: boolean ;filter?: string},
     sort: { by: string; asc: boolean },
     user?: User
   ) {
@@ -177,31 +177,7 @@ export class ReviewService {
                         // Get all fields in current annotation
                         input: { $objectToArray: "$fields" },
                         as: "field",
-                        cond: {
-                          $and: [
-                            {
-                              // Skip DOME scores fields
-                              // NOTE It must be run before regex match
-                              $not: {
-                                $regexMatch: {
-                                  input: "$$field.k",
-                                  regex: ".*(skip|done|tags)$",
-                                  options: "i",
-                                },
-                              },
-                            },
-                            {
-                              // Match query text by regex
-                              // NOTE this is not efficient, would it much better to have an index on text
-                              // https://stackoverflow.com/questions/10610131/checking-if-a-field-contains-a-string
-                              $regexMatch: {
-                                input: "$$field.v",
-                                regex: query.text,
-                                options: "i",
-                              },
-                            },
-                          ],
-                        },
+                        cond: this.buildMatchCondition(query.text,query.filter)
                       },
                     },
                   },
@@ -441,33 +417,7 @@ export class ReviewService {
                         // Get all fields in current annotation
                         input: { $objectToArray: "$fields" },
                         as: "field",
-                        cond: {
-                          $and: [
-                            {
-                              // Skip DOME scores fields
-                              // NOTE It must be run before regex match
-                              $not: {
-                                $regexMatch: {
-                                  input: "$$field.k",
-                                  regex: ".*(skip|done|tags)$",
-                                  options: "i",
-                                },
-                              },
-                            },
-                            {
-                              // Match query text by regex
-                              // NOTE this is not efficient, would it much better to have an index on text
-                              // https://stackoverflow.com/questions/10610131/checking-if-a-field-contains-a-string
-                              $regexMatch: {
-                                input: "$$field.v",
-                                regex: query.text,
-                                options: "i",
-                              },
-                            },
-                          
-
-                          ],
-                        },
+                        cond: this.buildMatchCondition(query.text, query.filter),
                       },
                     },
                   },
@@ -743,33 +693,7 @@ export class ReviewService {
                       // Get all fields in current annotation
                       input: { $objectToArray: "$fields" },
                       as: "field",
-                      cond: {
-                        $and: [
-                          {
-                            // Skip DOME scores fields
-                            // NOTE It must be run before regex match
-                            $not: {
-                              $regexMatch: {
-                                input: "$$field.k",
-                                regex: ".*(skip|done|tags)$",
-                                options: "i",
-                              },
-                            },
-                          },
-                          {
-                            // Match query text by regex
-                            // NOTE this is not efficient, would it much better to have an index on text
-                            // https://stackoverflow.com/questions/10610131/checking-if-a-field-contains-a-string
-                            $regexMatch: {
-                              input: "$$field.v",
-                              regex: query.text,
-                              options: "i",
-                            },
-                          },
-
-                        
-                        ],
-                      },
+                      cond: this.buildMatchCondition(query.text, query.filter),
                     },
                   },
                 },
@@ -922,6 +846,134 @@ export class ReviewService {
       writeFileSync('/tmp/agg.json', JSON.stringify(pipeline, null, 2));
       return data;
     }
+  }
+
+  private buildMatchCondition(text: string, filter?: string) {
+    const conditions = [];
+
+    // Always exclude skip/done fields
+    conditions.push({
+      $not: {
+        $regexMatch: {
+          input: "$$field.k",
+          regex: ".*(skip|done)$",
+          options: "i"
+        }
+      }
+    });
+
+    if (filter && filter !== 'all') {
+      const filterMap = {
+        'title': 'publication/title',
+        'authors': 'publication/authors',
+        'publication': 'publication/journal',
+        'tags': 'publication/tags'
+      };
+
+      // First match the field we're filtering on
+      conditions.push({
+        $regexMatch: {
+          input: "$$field.k",
+          regex: `^${filterMap[filter]}$`,
+          options: "i"
+        }
+      });
+
+      // Then add the appropriate value matching condition
+      if (filter === 'tags') {
+        // Special handling for tags array
+        conditions.push({
+          $gt: [
+            {
+              $size: {
+                $filter: {
+                  input: "$$field.v",
+                  as: "tag",
+                  cond: {
+                    $regexMatch: {
+                      input: "$$tag",
+                      regex: text,
+                      options: "i"
+                    }
+                  }
+                }
+              }
+            },
+            0
+          ]
+        });
+      } else {
+        // Normal string matching for other fields
+        conditions.push({
+          $regexMatch: {
+            input: "$$field.v",
+            regex: text,
+            options: "i"
+          }
+        });
+      }
+    } else {
+      // When no filter is specified, search all fields
+      conditions.push({
+        $or: [
+          // Match normal string fields
+          {
+            $and: [
+              {
+                $not: {
+                  $regexMatch: {
+                    input: "$$field.k",
+                    regex: ".*tags$",
+                    options: "i"
+                  }
+                }
+              },
+              {
+                $regexMatch: {
+                  input: "$$field.v",
+                  regex: text,
+                  options: "i"
+                }
+              }
+            ]
+          },
+          // Match tags array
+          {
+            $and: [
+              {
+                $regexMatch: {
+                  input: "$$field.k",
+                  regex: ".*tags$",
+                  options: "i"
+                }
+              },
+              {
+                $gt: [
+                  {
+                    $size: {
+                      $filter: {
+                        input: "$$field.v",
+                        as: "tag",
+                        cond: {
+                          $regexMatch: {
+                            input: "$$tag",
+                            regex: text,
+                            options: "i"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  0
+                ]
+              }
+            ]
+          }
+        ]
+      });
+    }
+
+    return { $and: conditions };
   }
 
   //**----------Publish the review--------*//
