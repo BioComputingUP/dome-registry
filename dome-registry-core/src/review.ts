@@ -31,12 +31,16 @@ export interface Review {
 // NOTE Those have been defined as the most common N.A. values
 export const notDefinedValues = [
     '', 'nd', 'na', 'not applicable', 'not available', 'not defined', 'not stated', 'not specified', 'none',
-    'not mentioned', 'not explicitly stated', 'not provided', 'not reported', 'not reported', 'not stated', 'not given',
+    'not mentioned', 'not explicitly stated', 'not provided', 'not reported', 'not stated', 'not given',
     'none provided', 'not available', 'unclear', 'not known', 'unknown', 'not applicable', 'not discussed', 'Inaccessible',
-     'Inaccessible', 'Unreachable', 'Unattainable', 'Unobtainable', 'Unacquirable', 'Unreachable', 'Unreachable', 
-     'Unavailable', 'Unobtainable', 'Unreachable', 'Unretrievable', 'Unapproachable', 'Unreachable', 'Unachievable', 
-     'Ungettable', 'Unsecurable', 'Unforthcoming', 'Ungettable',
-     'Unreachable', 'Unretrievable','no','No','',
+    'Unreachable', 'Unattainable', 'Unobtainable', 'Unacquirable', 'Unretrievable', 'Unapproachable', 'Unachievable',
+    'Ungettable', 'Unsecurable', 'Unforthcoming', 'Unavailable', 'no', 'No', 'N/A', 'no.', 'n/a', 'nil', 'null',
+    'undef', 'undefined', 'n.d.', 'tbd', 'tba', 'not apllicable', 'not availble', 'not specifed', 'unkown',
+    'data not available', 'information not available', 'value not available', 'not disclosed', 'not recorded',
+    'not assessed', 'not evaluated', 'not determined', 'not identified', 'not collected', 'missing', 'withheld',
+    'redacted', 'dunno', 'nope', 'nada', 'zip', 'zilch', 'keine Angabe', 'sin dato', 'non disponible', 'нет данных',
+    'unspecified', 'undetermined', 'unidentified', 'blank', 'empty', 'void', 'nonexistent', 'not relevant',
+    'not in scope', 'out of scope', 'not covered', 'not included', 'not applicable here', 'not in the dataset'
 ];
 
 // True if field is not defined
