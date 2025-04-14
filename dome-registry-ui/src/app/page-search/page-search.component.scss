@@ -33,7 +33,7 @@
 }
 
 .search-group {
-  border-radius: 30px;
+  border-radius: 10px;
   box-shadow: 0 4px 12px rgba(244, 107, 23, 0.15);
   transition: all 0.3s ease;
 
@@ -44,10 +44,10 @@
 
 // Dropdown Filter
 .search-filter-btn {
-  background-color: #F46B17;
+  //background-color: #F46B17;
   text-align: left;
   width: auto;
-  color: white;
+  color: #6c757d;
   border: none;
   padding: 0.75rem 1.25rem;
   font-weight: 500;
@@ -56,9 +56,9 @@
   justify-content: space-between;
   min-width: 180px;
   transition: all 0.2s ease;
-  border-top-left-radius: 30px !important;
+  /*border-top-left-radius: 30px !important;
   border-bottom-left-radius: 30px !important;
-
+*/
   &:hover {
     background-color: darken(#F46B17, 5%);
     color: white;
@@ -92,7 +92,6 @@
   height: auto;
   border-top-right-radius: 30px !important;
   border-bottom-right-radius: 30px !important;
-
   &:focus {
     box-shadow: none;
     border-color: rgba(255, 255, 255, 0.3);
@@ -193,6 +192,8 @@
 
 // Button styling to ensure width matching
 .search-filter-btn {
+
+
   position: relative;
   min-width: 180px;
   width: auto;
@@ -224,6 +225,7 @@
 }
 
 .dropdown-menu {
+
   position: absolute;
   inset: auto auto 0px 0px;
   margin: 0px;
