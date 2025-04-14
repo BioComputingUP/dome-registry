@@ -79,21 +79,21 @@
                   <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <textarea class="form-control" id="title" aria-describedby="title-help" formControlName="title"
-                      [readonly]="!user.roles?.includes('admin') &&  review.public"></textarea>
+                      [readonly]=" review.public"></textarea>
                     <div id="title-help" class="form-text">Title of the article</div>
                   </div>
                   <!-- Authors -->
                   <div class="mb-3">
                     <label for="authors" class="form-label">Authors</label>
                     <textarea class="form-control" id="authors" aria-describedby="authors-help"
-                      formControlName="authors" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      formControlName="authors" [readonly]=" review.public"></textarea>
                     <div id="authors-help" class="form-text">Authors which contributes to the article</div>
                   </div>
                   <!-- Publication journal -->
                   <div class="mb-3">
                     <label for="journal" class="form-label">Publication journal</label>
                     <input type="text" class="form-control" id="journal" aria-describedby="journal-help"
-                      formControlName="journal" [readonly]="!user.roles?.includes('admin') && review.public">
+                      formControlName="journal" [readonly]="review.public">
                     <div id="journal-help" class="form-text">Name of the journal where the paper has been published
                     </div>
                   </div>
@@ -117,7 +117,7 @@
                   <div class="mb-3">
                     <label for="doi" class="form-label">DOI</label>
                     <input type="text" class="form-control" id="doi" aria-describedby="doi-help" formControlName="doi"
-                      [readonly]="!user.roles?.includes('admin') && review.public">
+                      [readonly]=" review.public">
                     <div id="doi-help" class="form-text">DOI of the published article</div>
                   </div>
                   <!-- Annotation tags -->
@@ -153,7 +153,7 @@
                     <label for="data-source" class="form-label">Dataset source</label>
                     <textarea class="form-control" id="data-source" aria-describedby="data-source-help"
                       formControlName="provenance"
-                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      [readonly]="review.public"></textarea>
                     <div id="data-source-help" class="form-text">
                       <ul>
                         <li>Source of the dataset?</li>
@@ -166,7 +166,7 @@
                   <div class="mb-3">
                     <label for="data-splits" class="form-label">Dataset splits</label>
                     <textarea class="form-control" id="data-splits" aria-describedby="data-splits-help"
-                      formControlName="splits" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      formControlName="splits" [readonly]="review.public"></textarea>
                     <div id="data-splits-help" class="form-text">
                       <ul>
                         <li>How many data splits?</li>
@@ -188,7 +188,7 @@
                     <label for="data-redundancy" class="form-label">Dataset redundancy</label>
                     <textarea class="form-control" id="data-redundancy" aria-describedby="data-redundancy-help"
                       formControlName="redundancy"
-                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      [readonly]="review.public"></textarea>
                     <div id="data-redundancy-help" class="form-text">
                       <ul>
                         <li>How were the datasets split?</li>
@@ -205,7 +205,7 @@
                     <label for="data-redundancy" class="form-label">Dataset availability</label>
                     <textarea class="form-control" id="data-availability" aria-describedby="data-redundancy-help"
                       formControlName="availability"
-                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      [readonly]="review.public"></textarea>
                     <div id="data-availability-help" class="form-text">
                       <ul>
                         <li>Are the data, including the data splits used, released in a public forum?</li>
@@ -226,7 +226,7 @@
                     <label for="optim-algorithm" class="form-label">Optimization algorithm</label>
                     <textarea class="form-control" id="optim-algorithm" aria-describedby="optim-algorithm-help"
                       formControlName="algorithm"
-                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      [readonly]=" review.public"></textarea>
                     <div id="optim-algorithm-help" class="form-text">
                       <ul>
                         <li>What is the machine-learning algorithm class used?</li>
@@ -247,7 +247,7 @@
                       </label>
                     </div>
                     <textarea class="form-control" id="optim-meta-desc" aria-describedby="optim-meta-desc-help"
-                      formControlName="meta" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      formControlName="meta" [readonly]=" review.public"></textarea>
                     <div id="optim-meta-desc-help" class="form-text">
                       <ul>
                         <li>Does the model use data from other machine-learning algorithms as input (i.e. it is a
@@ -265,7 +265,7 @@
                   <div class="mb-3">
                     <label for="optim-encoding" class="form-label">Data encoding</label>
                     <textarea class="form-control" id="optim-encoding" aria-describedby="optim-encoding-help"
-                      formControlName="encoding" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      formControlName="encoding" [readonly]=" review.public"></textarea>
                     <div id="optim-encoding-help" class="form-text">
                       How was the data encoded and pre-processed for the machine-learning algorithm?
                     </div>
@@ -275,7 +275,7 @@
                     <label for="optim-params" class="form-label">Input parameters</label>
                     <textarea class="form-control" id="optim-params" aria-describedby="optim-params-help"
                       formControlName="parameters"
-                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      [readonly]="review.public"></textarea>
                     <div id="optim-params-help" class="form-text">
                       <ul>
                         <li>How many parameters (p) are used in the model?</li>
@@ -287,7 +287,7 @@
                   <div class="mb-3">
                     <label for="optim-features" class="form-label">Input features</label>
                     <textarea class="form-control" id="optim-features" aria-describedby="optim-features-help"
-                      formControlName="features" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      formControlName="features" [readonly]="review.public"></textarea>
                     <div id="optim-features-help" class="form-text">
                       <ul>
                         <li>How many features (f) are used as input?</li>
@@ -300,7 +300,7 @@
                   <div class="mb-3">
                     <label for="optim-fitting" class="form-label">Fitting method</label>
                     <textarea class="form-control" id="optim-fitting" aria-describedby="optim-fitting-help"
-                      formControlName="fitting" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      formControlName="fitting" [readonly]="review.public"></textarea>
                     <div id="optim-fitting-help" class="form-text">
                       <ul>
                         <li>
@@ -321,7 +321,7 @@
                     <label for="optim-regular" class="form-label">Regularization method</label>
                     <textarea class="form-control" id="optim-regular" aria-describedby="optim-regular-help"
                       formControlName="regularization"
-                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      [readonly]="review.public"></textarea>
                     <div id="optim-regular-help" class="form-text">
                       <ul>
                         <li>Were any over-fitting prevention techniques performed (e.g. early stopping using a
@@ -336,7 +336,7 @@
                   <div class="mb-3">
                     <label for="optim-config" class="form-label">Configuration available</label>
                     <textarea class="form-control" id="optim-config" aria-describedby="optim-config-help"
-                      formControlName="config" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      formControlName="config" [readonly]="review.public"></textarea>
                     <div id="optim-config-help" class="form-text">
                       <ul>
                         <li>
@@ -360,7 +360,7 @@
                     <label for="model-inter" class="form-label">Interpretability</label>
                     <textarea class="form-control" id="model-inter" aria-describedby="model-inter-help"
                       formControlName="interpretability"
-                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      [readonly]="review.public"></textarea>
                     <div id="model-inter-help" class="form-text">
                       <ul>
                         <li>Is the model blackbox or transparent?</li>
@@ -372,7 +372,7 @@
                   <div class="mb-3">
                     <label for="model-out" class="form-label">Output</label>
                     <textarea class="form-control" id="model-out" aria-describedby="model-out-help"
-                      formControlName="output" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      formControlName="output" [readonly]="review.public"></textarea>
                     <div id="model-out-help" class="form-text">
                       Is the model classification or regression?
                     </div>
@@ -381,7 +381,7 @@
                   <div class="mb-3">
                     <label for="model-time" class="form-label">Execution time</label>
                     <input type="text" class="form-control" id="model-time" aria-describedby="model-time-help"
-                      formControlName="duration" [readonly]="!user.roles?.includes('admin') && review.public">
+                      formControlName="duration" [readonly]=" review.public">
                     <div id="model-time-help" class="form-text">
                       How much time did it take for the model to run
                     </div>
@@ -391,7 +391,7 @@
                     <label for="model-avail" class="form-label">Software availability</label>
                     <textarea class="form-control" id="model-avail" aria-describedby="model-avail-help"
                       formControlName="availability"
-                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      [readonly]=" review.public"></textarea>
                     <div id="model-avail-help" class="form-text">
                       <ul>
                         <li>Is the source code released?</li>
@@ -413,7 +413,7 @@
                   <div class="mb-3">
                     <label for="eval-method" class="form-label">Evaluation method</label>
                     <textarea class="form-control" id="eval-method" aria-describedby="eval-method-help"
-                      formControlName="method" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      formControlName="method" [readonly]=" review.public"></textarea>
                     <div id="eval-method-help" class="form-text">
                       How was the method evaluated? (E.g. cross-validation, independent dataset, novel experiments)
                     </div>
@@ -422,7 +422,7 @@
                   <div class="mb-3">
                     <label for="model-out" class="form-label">Performance measures</label>
                     <textarea class="form-control" id="eval-perform" aria-describedby="eval-perform-help"
-                      formControlName="measure" [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      formControlName="measure" [readonly]="review.public"></textarea>
                     <div id="eval-perform-help" class="form-text">
                       <ul>
                         <li>Which performance metrics are reported?</li>
@@ -434,7 +434,7 @@
                   <div class="mb-3">
                     <label for="eval-comparison" class="form-label">Methods comparison</label>
                     <input type="text" class="form-control" id="eval-comparison" aria-describedby="eval-comparison-help"
-                      formControlName="comparison" [readonly]="!user.roles?.includes('admin') && review.public">
+                      formControlName="comparison" [readonly]=" review.public">
                     <div id="eval-comparison-help" class="form-text">
                       <ul>
                         <li>Was a comparison to publicly available methods performed on benchmark datasets?</li>
@@ -447,7 +447,7 @@
                     <label for="eval-confidence" class="form-label">Evaluation confidence</label>
                     <textarea class="form-control" id="eval-confidence" aria-describedby="eval-confidence-help"
                       formControlName="confidence"
-                      [readonly]="!user.roles?.includes('user') && review.public"></textarea>
+                      [readonly]="review.public"></textarea>
                     <div id="eval-confidence-help" class="form-text">
                       <ul>
                         <li>Do the performance metrics have confidence intervals?</li>
@@ -463,7 +463,7 @@
                     <label for="eval-available" class="form-label">Evaluation availability</label>
                     <textarea class="form-control" id="eval-available" aria-describedby="eval-available-help"
                       formControlName="availability"
-                      [readonly]="!user.roles?.includes('admin') && review.public"></textarea>
+                      [readonly]="review.public"></textarea>
                     <div id="eval-available-help" class="form-text">
                       <ul>
                         <li>

@@ -1,0 +1,96 @@
+.stat-card {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.publication-card {
+    margin-bottom: 1.5rem;
+    border: none;
+    border-bottom: 1px solid #eee;
+    border-radius: 0;
+}
+
+
+.dome{
+
+    color: #f47d20;
+}
+#intro{
+    font-family: Inter;
+    //ont-size: 55px;
+    font-style: normal;
+    //font-weight: 700;
+    //line-height: normal;
+}
+
+.logo{
+    width: 120%;
+    height: 120%;
+
+    margin: auto;
+}
+.card-scroll-container {
+    overflow-x: hidden;
+    padding: 20px 40px;
+    position: relative;
+}
+
+/* Hide scrollbar in Firefox */
+.card-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Flex container for cards */
+.card-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    padding: 0;
+    transition: transform 0.3s ease-out;
+}
+
+/* Individual card styling */
+.scroll-card {
+    min-width: 250px;
+    flex: 0 0 auto;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.scroll-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Navigation arrows */
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 100;
+    transition: background-color 0.2s;
+}
+
+.nav-arrow:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.nav-arrow:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.nav-left {
+    left: 0;
+}
+
+.nav-right {
+    right: 0;
+}
+

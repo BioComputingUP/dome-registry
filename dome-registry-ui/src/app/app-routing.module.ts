@@ -9,7 +9,7 @@ import { AboutPageComponent } from './about-page/about-page.component';
 import { PageDashboardComponent } from './page-dashboard/page-dashboard.component';
 import { DSWCardComponent } from './dsw-card/dsw-card.component';
 import { NewStateComponent } from './new-state/new-state.component';
-
+import { NewIntroPageComponent } from './new-intro-page/new-intro-page.component';
 // Define default parameters
 const params: Route = {
   runGuardsAndResolvers: 'always',
@@ -17,6 +17,8 @@ const params: Route = {
 };
 // Definer available routes
 const routes: Routes = [
+  //New intro page 
+ // { ...params, path: 'intro2', component: NewIntroPageComponent },
   // Define path to introduction page
   { ...params, path: 'intro', component: PageIntroComponent },
   // Define path to statistics page

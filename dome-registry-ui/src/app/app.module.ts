@@ -23,7 +23,10 @@ import { AboutPageComponent } from './about-page/about-page.component';
 import { PageDashboardComponent } from './page-dashboard/page-dashboard.component';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { DSWCardComponent } from './dsw-card/dsw-card.component';
-import { NewStateComponent } from './new-state/new-state.component'
+import { NewStateComponent } from './new-state/new-state.component';
+import { NewIntroPageComponent } from './new-intro-page/new-intro-page.component';
+import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
+import { NgxMatomoRouterModule } from '@ngx-matomo/router'
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {ToastrModule} from "ngx-toastr";
 
@@ -50,7 +53,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     PageDashboardComponent,
     DSWCardComponent,
     NewStateComponent,
-
+    NewIntroPageComponent,
   ],
   imports: [
     PlotlyViaCDNModule,
@@ -63,6 +66,8 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     BrowserAnimationsModule,
     AppRoutingModule,
     CookieModule.forRoot(),
+    NgxMatomoTrackerModule.forRoot({ trackerUrl: 'https://matomo.biocomputingup.it/', siteId: '23', scriptUrl: 'https://matomo.biocomputingup.it/matomo.js' }),
+    NgxMatomoRouterModule,
     BrowserModule,
     BrowserAnimationsModule, // Required for animations
     ToastrModule.forRoot({// Toastr configuration
