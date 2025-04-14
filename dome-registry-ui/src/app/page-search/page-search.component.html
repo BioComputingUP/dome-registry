@@ -8,29 +8,38 @@
           <form class="d-flex flex-row flex-nowrap align-items-center">
             <!-- Search text -->
             <div class="row flex-grow-1 ms-0 me-3">
-              <!-- <div class="col-2">
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                  aria-expanded="true">
-                  {{ selectedfilter || 'select a filter '}}
-                </button>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" (click)="updateSelectedFilter('Title of publication')">Title of publication</a></li>
-                  <li>
-                    <a class="dropdown-item" (click)="updateSelectedFilter('Year')">Year of publication </a>
-                  </li>
-                  <li><a class="dropdown-item" (click)="updateSelectedFilter('Journal name')" >Journal name</a></li>
-                </ul>
+              <div class="col-12">
+                <div class="search-container">
+                  <div class="input-group search-group filter-button-container">
+                    <div class="filter-wrapper">
+                      <button class="btn search-filter-btn dropdown-toggle no-caret"
+                              type="button"
+                              id="searchFilter"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false">
+                        <span class="filter-label">All Categories</span>
+                        <i class="bi bi-chevron-down dropdown-icon"></i>
+                      </button>
 
-              </div> -->
-              <div class="col-10">
-                <div class="input-group mb-3">
+                      <!-- Dropdown Menu -->
+                      <ul class="dropdown-menu filter-dropdown" aria-labelledby="searchFilter">
+                        <li><a class="dropdown-item" (click)="updateFilter('all')">All Categories</a></li>
+                        <li>
+                          <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" (click)="updateFilter('title')">Title</a></li>
+                        <li><a class="dropdown-item" (click)="updateFilter('authors')">Authors</a></li>
+                        <li><a class="dropdown-item" (click)="updateFilter('publication')">Publication</a></li>
+                        <li><a class="dropdown-item" (click)="updateFilter('tags')">Tags</a></li>
+                      </ul>
+                    </div>
 
-                  <input type="text" class="form-control" placeholder="Search..." id="search-text"
-                         (keyup)="onTextChange($event)"/>
+                    <!-- Search input -->
+                    <input type="text" class="form-control search-input" placeholder="Search for..." id="search-text"
+                           (keyup)="onTextChange($event)"/>
+                  </div>
                 </div>
               </div>
-
-
             </div>
             <!-- Public switch -->
             <div class="flex-shrink-0 ms-0 me-0">
@@ -43,42 +52,38 @@
           </form>
           <div class="d-flex flex-row flex-nowrap justify-content-around w-100 mt-3">
             <ng-container *ngIf="sort$ | async as sort">
-              <div class="form-check form-check-inline">
-                <strong>
-                  <p>Sort by:</p>
-                </strong>
-              </div>
-              <!-- Radio buttons -->
-              <div class="form-check form-check-inline">
-                <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                       [class.sort-selected]="sort.by === 'publication.title'"
-                       (click)="onSortChange('publication.title')"
-                       type="radio"
-                       name="sortOption"/>
-                <label class="form-check-label" for="inlineRadio1">Title</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                       [class.sort-selected]="sort.by === 'publication.authors'"
-                       (click)="onSortChange('publication.authors')"
-                       type="radio"
-                       name="sortOption"/>
-                <label class="form-check-label" for="inlineRadio2">Authors</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                       [class.sort-selected]="sort.by === 'publication.year'" (click)="onSortChange('publication.year')"
-                       type="radio"
-                       name="sortOption"/>
-                <label class="form-check-label" for="inlineRadio3">Year</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input sort-item" [class.sort-asc]="sort.asc === 'true'"
-                       [class.sort-selected]="sort.by === 'publication.title'"
-                       [class.sort-selected]="sort.by === 'score'"
-                       (click)="onSortChange('score')" type="radio"
-                       name="sortOption"/>
-                <label class="form-check-label" for="inlineRadio4">Score</label>
+              <div class="sorting-controls">
+                <div class="sort-option" [class.active]="sort.by === 'publication.title'"
+                     (click)="onSortChange('publication.title')">
+                  <span>Title</span>
+                  <span class="sort-direction" *ngIf="sort.by === 'publication.title'">
+      {{ sort.asc === 'true' ? '▲' : '▼' }}
+    </span>
+                </div>
+
+                <div class="sort-option" [class.active]="sort.by === 'publication.authors'"
+                     (click)="onSortChange('publication.authors')">
+                  <span>Authors</span>
+                  <span class="sort-direction" *ngIf="sort.by === 'publication.authors'">
+      {{ sort.asc === 'true' ? '▲' : '▼' }}
+    </span>
+                </div>
+
+                <div class="sort-option" [class.active]="sort.by === 'publication.year'"
+                     (click)="onSortChange('publication.year')">
+                  <span>Year</span>
+                  <span class="sort-direction" *ngIf="sort.by === 'publication.year'">
+      {{ sort.asc === 'true' ? '▲' : '▼' }}
+    </span>
+                </div>
+
+                <div class="sort-option" [class.active]="sort.by === 'score'"
+                     (click)="onSortChange('score')">
+                  <span>Score</span>
+                  <span class="sort-direction" *ngIf="sort.by === 'score'">
+      {{ sort.asc === 'true' ? '▲' : '▼' }}
+    </span>
+                </div>
               </div>
               <button class="btn btn-primary" type="button" (click)="OnClickdownloadJSonfile($event)">Bulk Download <i
                 class=" bi-save d-none d-md-inline"></i></button>
@@ -94,7 +99,7 @@
   <div class="d-inline-block position-relative flex-grow-1 bg-light">
     <!-- Table body (scrollable) -->
 
-    <div class="position-absolute left-0 top-0 w-100 h-100 bg-transparent overflow-scroll" >
+    <div class="position-absolute left-0 top-0 w-100 h-100 bg-transparent overflow-scroll">
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-8 offset-md-2">
@@ -166,12 +171,11 @@
                     Private
                   </p>
 
-                  <p *ngIf="review.publication.tags && review.publication.tags.length > 0" class="mb-0">
-
+                  <p *ngIf="review.publication.tags && review.publication.tags.length > 0" class="mb-0 tags-container">
                     <strong>Tags:&nbsp;</strong>
-                    <span class="shadow-l d-inline-block m-1" *ngFor="let tag of  review.publication.tags ">
-                        <span class="tag ">{{ tag || '-' }}</span>
-                        <span ng-if="!$last"> </span> <!-- Add a comma after each tag except the last one -->
+                    <span *ngFor="let tag of review.publication.tags; let last = last">
+                      <span class="tag">{{ tag || '-' }}</span>
+                      <span *ngIf="!last">, </span>
                     </span>
                   </p>
                   <p class="mb-0">

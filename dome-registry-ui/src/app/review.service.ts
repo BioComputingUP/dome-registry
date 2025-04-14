@@ -25,6 +25,7 @@ export interface Query extends Offset, Sort {
 
   text: string;
   public: 'true' | 'false';
+  filterCategory?: string;
 }
 
 export interface Match {
@@ -89,10 +90,13 @@ export class ReviewService {
   // Search for multiple reviews against database
   public searchReviews(query: Query) {
     // Define GET query parameters
-    let params: any = {...query, sort: query.by, by: undefined};
+    let params: any = {...query, sort: query.by, by: undefined, ...(query.filterCategory && query.filterCategory !== 'all' && {
+        filter: query.filterCategory
+      })};
+
     // Return observable for search results
     return this.httpClient
-      .get<Array<Review | { matches: Record<string, string> }>>(this.url, {
+      .get<Array<Review | { matches: Record<string, string | string[]> }>>(this.url, {
         params,
       })
       .pipe(
@@ -106,25 +110,54 @@ export class ReviewService {
             let text = query.text.toLowerCase();
             // Initialize map for matching occurrences
             let matches = new Map<string, Match>();
+
             // Check if something matches
             if (text && review.matches) {
+              const fieldsToCheck = query.filterCategory && query.filterCategory !== 'all'
+                ? [query.filterCategory]
+                : Object.keys(review.matches);
+
               // Loop through each match in review
-              for (let [key, value] of Object.entries(review.matches)) {
-                // Match string in current field
-                let start = value.toLowerCase().match(text)?.index;
-                // Case string matches
-                if (start) {
-                  // Define end position of string match
-                  let end = start + query.text.length;
-                  // Define match
-                  matches.set(key, {
-                    match: value.slice(start, end),
-                    prefix: value.slice(0, start),
-                    suffix: value.slice(end, value.length),
-                  });
+              for (let key of fieldsToCheck) {
+                const value = review.matches[key];
+                if (!value) continue;
+
+                // Handle array fields (like tags)
+                if (Array.isArray(value)) {
+                  // For arrays, check if any element matches
+                  const matchingElements = value.filter(item =>
+                    item.toLowerCase().includes(text)
+                  );
+
+                  if (matchingElements.length > 0) {
+                    matches.set(key, {
+                      match: matchingElements.join(', '),
+                      prefix: '',
+                      suffix: ''
+                    });
+                  }
+                }
+                // Handle string fields
+                else if (typeof value === 'string') {
+                  // Match string in current field
+                  const lowerValue = value.toLowerCase();
+                  const start = lowerValue.indexOf(text);
+
+                  // Case string matches
+                  if (start >= 0) {
+                    // Define end position of string match
+                    let end = start + query.text.length;
+                    // Define match
+                    matches.set(key, {
+                      match: value.slice(start, end),
+                      prefix: value.slice(0, start),
+                      suffix: value.slice(end, value.length),
+                    });
+                  }
                 }
               }
             }
+
             // Parse field matches to text matches
             return {...review, matches} as Review;
           })

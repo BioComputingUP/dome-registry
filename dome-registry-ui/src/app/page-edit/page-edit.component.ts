@@ -9,8 +9,8 @@ import { Review, computeDomeScore, isValidField } from "dome-registry-core";
 import { AuthService } from "../auth.service";
 import { DOCUMENT } from '@angular/common';
 import { take } from 'rxjs';
-
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {ToastrService} from 'ngx-toastr';
 
 
 // Define score entry
@@ -106,6 +106,7 @@ export class PageEditComponent implements OnInit, OnDestroy {
   public readonly fetched$: Observable<Review | undefined>;
   fetched2$: any;
 
+  //private notificationService: Notificatio
   //public readonly Sharedscore$: Observable<string>;
 
   // = this.fetch$.pipe(
@@ -161,7 +162,8 @@ export class PageEditComponent implements OnInit, OnDestroy {
     private location: Location,
     private router: Router,
     private _renderer2: Renderer2,
-    @Inject(DOCUMENT) private _document: Document
+    private toastr:ToastrService,
+  @Inject(DOCUMENT) private _document: Document
 
   ) {
 
@@ -189,7 +191,7 @@ export class PageEditComponent implements OnInit, OnDestroy {
       map(() => ({ ...this.updates.value, shortid: this.review?.shortid } as Review)),
       // Update current review
       switchMap((review) => this.reviewService.upsertReview(review)),
-      
+
     );
 
     // Define delete pipeline
@@ -261,7 +263,7 @@ export class PageEditComponent implements OnInit, OnDestroy {
     )
 
     console.log( this.router.url);
-    let full = this.router.url; 
+    let full = this.router.url;
     let updatedString = full.replace("/review/", "");
     
 
@@ -275,7 +277,7 @@ export class PageEditComponent implements OnInit, OnDestroy {
         this.jsonLd = this._renderer2.createElement('script');
         this.jsonLd.type = `application/ld+json`;
         this.jsonLd.text = JSON.stringify(response);
-        this._renderer2.appendChild(this._document.body,this.jsonLd); 
+        this._renderer2.appendChild(this._document.body,this.jsonLd);
       }),
       takeUntil(this.destroy$.asObservable()),
 
@@ -305,33 +307,45 @@ export class PageEditComponent implements OnInit, OnDestroy {
   // Handle save click
   public onSaveClick($event: MouseEvent) {
     // Just trigger save action
-
-    this.update$.emit();
-
+    try {
+      this.update$.emit();
+      this.toastr.success('Your changes have been saved.', 'Saved Successfully');
+    } catch (error) {
+      this.toastr.error('Failed to save changes. Please try again.', 'Error');
+      console.error('Save error:', error);
+    }
   }
 
   // Handle delete click
   public onDeleteClick($event: MouseEvent) {
-    console.log(this.delete$);
-    // Just trigger delete action
-    this.delete$.emit();
-    this.router.navigate(['/search']);
+    try {
+      this.delete$.emit();
+      this.toastr.success('The item was deleted successfully.', 'Deleted');
+      this.router.navigate(['/search']);
+    } catch (error) {
+      this.toastr.error('Failed to delete the item. Please try again.', 'Error');
+      console.error('Delete error:', error);
+    }
   }
 
-  //Make the annotation public 
+  //Make the annotation public
 
   public onPublishClick($event: MouseEvent) {
     try {
-      console.log('we are here ');
-      console.log(this.review?.uuid);
       this.reviewService.publishAnnotation(this.review?.uuid).pipe(
-        takeUntil(this.destroy$),
-        map(() => {
-          console.log('Post Update Message !!!');
-        })
-      ).subscribe(() => { })
+        takeUntil(this.destroy$)
+      ).subscribe({
+        next: () => {
+          this.toastr.success('The annotation is now public!', 'Published');
+        },
+        error: (err) => {
+          this.toastr.error('Failed to publish. Please try again.', 'Error');
+          console.error('Publish error:', err);
+        }
+      });
     } catch (error) {
-      console.log(error);
+      this.toastr.error('An unexpected error occurred.', 'Error');
+      console.error('Publish error:', error);
     }
   }
 
@@ -353,6 +367,25 @@ export class PageEditComponent implements OnInit, OnDestroy {
   // Avoid sorting map
   public doNotSort(a: any, b: any): number {
     return 0;
+  }
+
+  showSaveSuccess() {
+    this.toastr.success('Your changes have been saved successfully.', 'Saved!');
+  }
+
+  // 2. Delete Success
+  showDeleteSuccess() {
+    this.toastr.success('The item was permanently deleted.', 'Deleted!');
+  }
+
+  // 3. Publish Success
+  showPublishSuccess() {
+    this.toastr.success('The annotation is now visible to the public.', 'Published!');
+  }
+
+  // 4. Simulated Error
+  showError() {
+    this.toastr.error('Failed to complete the action. Please try again later.', 'Oops!');
   }
 
 }
