@@ -24,7 +24,10 @@ import { PageDashboardComponent } from './page-dashboard/page-dashboard.componen
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DSWCardComponent } from './dsw-card/dsw-card.component';
-import { NewStateComponent } from './new-state/new-state.component'
+import { NewStateComponent } from './new-state/new-state.component';
+import { NewIntroPageComponent } from './new-intro-page/new-intro-page.component';
+import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
+import { NgxMatomoRouterModule } from '@ngx-matomo/router'
 
 // Set Plotly.js from CDN
 PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
@@ -49,6 +52,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     PageDashboardComponent,
     DSWCardComponent,
     NewStateComponent,
+    NewIntroPageComponent,
   ],
   imports: [
     PlotlyViaCDNModule,
@@ -61,6 +65,8 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     BrowserAnimationsModule,
     AppRoutingModule,
     CookieModule.forRoot(),
+    NgxMatomoTrackerModule.forRoot({ trackerUrl: 'https://matomo.biocomputingup.it/', siteId: '23', scriptUrl: 'https://matomo.biocomputingup.it/matomo.js' }),
+    NgxMatomoRouterModule,
   ],
   providers: [
     // Add authentication interceptor (set cookie)
