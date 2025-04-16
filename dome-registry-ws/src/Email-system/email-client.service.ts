@@ -30,7 +30,7 @@ export class EmailService {
  <div>
    <p>Best Regards,</p>
     <p>DOME Registry Support team,</p>
-    <p>If you're facing any problem please don't hesitate to contact us on : dome-registry@ngp-net.bio.unipd.it</p>
+    <p>If you're facing any problem please don't hesitate to contact us on : contact@dome-ml.org</p>
     
   </div>
 ` , });
