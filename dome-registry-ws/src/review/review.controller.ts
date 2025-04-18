@@ -1,48 +1,34 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  ForbiddenException,
+  Get,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Res,
   UseGuards,
   UseInterceptors,
-  ForbiddenException,
-  NotFoundException,
-  Query,
-  Logger,
-  Res,
-  ValidationPipe,
-  InternalServerErrorException,
 } from "@nestjs/common";
-import { ReviewService } from "./review.service";
-import { CreateReviewDto } from "./dto/create-review.dto";
-import { UpdateReviewDto } from "./dto/update-review.dto";
-import { ListReviewsDto } from "./dto/list-reviews.dto";
-import { JwtAuthGuard } from "../jwt-auth/jwt-auth.guard";
-import { UserInterceptor } from "../user/user.interceptor";
-import { UserService } from "../user/user.service";
-import { User } from "../user/user.decorator";
-import { v4 as UUID } from "uuid";
-import {
-  ApiBearerAuth,
-  ApiBody,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiResponse,
-  ApiTags,
-} from "@nestjs/swagger";
-import { Review } from "./review.schema";
-import { computeDomeScore } from "dome-registry-core";
-import mongodb from "mongodb";
-import { ReviewSubmission, SubmitWizards } from "./dto/submit-wizard.dto";
-import { Role } from "src/roles/role.enum";
-import { EventEmitter2 } from "@nestjs/event-emitter";
-import { log, time } from "console";
-import { WizardsCreatedEvent } from "src/apicuron-sub/events";
-import { Response, response } from "express";
+import {ReviewService} from "./review.service";
+import {CreateReviewDto} from "./dto/create-review.dto";
+import {UpdateReviewDto} from "./dto/update-review.dto";
+import {ListReviewsDto} from "./dto/list-reviews.dto";
+import {JwtAuthGuard} from "../jwt-auth/jwt-auth.guard";
+import {UserInterceptor} from "../user/user.interceptor";
+import {UserService} from "../user/user.service";
+import {User} from "../user/user.decorator";
+import {ApiBody, ApiOperation, ApiResponse, ApiTags,} from "@nestjs/swagger";
+import {Review} from "./review.schema";
+import {ReviewSubmission} from "./dto/submit-wizard.dto";
+import {Role} from "src/roles/role.enum";
+import {EventEmitter2} from "@nestjs/event-emitter";
+import {Response} from "express";
 
 @ApiTags("Reviews")
 @Controller("review")
@@ -104,16 +90,14 @@ export class ReviewController {
   })
   @Get("total")
   async getPublicEntries() {
-    const totalEntries = await this.reviewService.countPub();
-    return totalEntries;
+    return await this.reviewService.countPub();
   }
 
   /**********------Get  APICURON  Activities------------***/
 
   @Get("journal")
   async getJournalCount() {
-    const jounalsList = await this.reviewService.APICuronAll();
-    return jounalsList;
+    return await this.reviewService.APICuronAll();
   }
 
   /* ------------Swich annotations from private to public---------------- */
@@ -134,63 +118,13 @@ export class ReviewController {
   })
   @Get("totalprivate")
   async getTotalPrivEntries() {
-    const totalEntries = await this.reviewService.countprivate();
-    return totalEntries;
+    return await this.reviewService.countprivate();
   }
 
   //**-- Get the total number  of the entries  ---------/
   @Get("totalpub")
   async getTotalPub() {
-    const total = await this.reviewService.contAll();
-    return total;
-  }
-
-  //get journal counts in the database  //
-  @Get("totalAnnotationsYear")
-  async totalAnnotationsYear() {
-    const total = await this.reviewService.getAnnotationsC();
-    return total;
-  }
-  //get journal group names
-  @Get("totalJournalNames")
-  async totalJournalNames() {
-    const total = await this.reviewService.getJournalsName();
-    return total;
-  }
-
-  //gets dataset score
-  @Get("totalScoreDataset")
-  async totalScoreDataset() {
-    const total = await this.reviewService.getScoreDataset();
-    return total;
-  }
-
-  //gets optimization score
-  @Get("totalScoreOptimization")
-  async totalScoreOptimization() {
-    const total = await this.reviewService.getScoreOptimization();
-    return total;
-  }
-
-  //gets evaluation score
-  @Get("totalScoreEvaluation")
-  async totalScoreEvaluation() {
-    const total = await this.reviewService.getScoreEvaluation();
-    return total;
-  }
-
-  //gets model score
-  @Get("totalScoreModel")
-  async totalScoreModel() {
-    const total = await this.reviewService.getScoreModel();
-    return total;
-  }
-
-  //gets overall score
-  @Get("totalScoreOverall")
-  async totalScoreOverall() {
-    const total = await this.reviewService.getScoreOverall();
-    return total;
+    return await this.reviewService.contAll();
   }
 
   //**---------------Get Review by Unique shortid UID ------------**/

@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {
-  BehaviorSubject,
   forkJoin,
   map,
   Observable,
@@ -10,14 +9,13 @@ import {
   of,
   shareReplay,
   switchMap,
-  tap,
   Subject,
   combineLatest
 } from "rxjs";
 
 import {ActivatedRoute} from "@angular/router";
-import {Margin} from '@syncfusion/ej2-angular-charts';
 import {ReviewService, journalData} from '../review.service';
+import {StatService}  from "../stat.service";
 import {UserService} from '../user.service';
 
 @Component({
@@ -47,10 +45,10 @@ export class NewStateComponent implements OnInit, OnDestroy {
   }
 
   // gets only the top 9 journals names
-  public readonly journalsNames$: Observable<journalData[]> = this.reviewService.getJournalsNames().pipe(map((Names) => Names.slice(0, 9)) // Limit to the first 9 items);
+  public readonly journalsNames$: Observable<journalData[]> = this.statService.getJournalsNames().pipe(map((Names) => Names.slice(0, 9)) // Limit to the first 9 items);
   );
   // Observable for the "Other" count
-  public readonly otherCount$: Observable<number> = this.reviewService.getJournalsNames().pipe(
+  public readonly otherCount$: Observable<number> = this.statService.getJournalsNames().pipe(
     map((groups) => {
       // Calculate the sum of counts for the first 9 journals
       const explicitCount = groups.slice(0, 9).reduce((total, Names) => total + Number(Names.count), 0);
@@ -61,11 +59,11 @@ export class NewStateComponent implements OnInit, OnDestroy {
     })
   );
   //gets Score dataset
-  public readonly scoreDataset$: Observable<journalData[]> = this.reviewService.getScoreDataset().pipe(shareReplay(1));
-  public readonly scoreOptimization$: Observable<journalData[]> = this.reviewService.getScoreOptimization().pipe(shareReplay(1));
-  public readonly scoreEvaluation$: Observable<journalData[]> = this.reviewService.getScoreEvaluation().pipe(shareReplay(1));
-  public readonly scoreModel$: Observable<journalData[]> = this.reviewService.getScoreModel().pipe(shareReplay(1));
-  public readonly scoreOverall$: Observable<journalData[]> = this.reviewService.getScoreOverall().pipe(
+  public readonly scoreDataset$: Observable<journalData[]> = this.statService.getScoreDataset().pipe(shareReplay(1));
+  public readonly scoreOptimization$: Observable<journalData[]> = this.statService.getScoreOptimization().pipe(shareReplay(1));
+  public readonly scoreEvaluation$: Observable<journalData[]> = this.statService.getScoreEvaluation().pipe(shareReplay(1));
+  public readonly scoreModel$: Observable<journalData[]> = this.statService.getScoreModel().pipe(shareReplay(1));
+  public readonly scoreOverall$: Observable<journalData[]> = this.statService.getScoreOverall().pipe(
     map(data => {
       // Initialize an object to hold the summed values for each range
       const ranges = {
@@ -211,9 +209,9 @@ export class NewStateComponent implements OnInit, OnDestroy {
 
   // Retrieve paper per year
   ///year$ = this.reviewService.getAnnotationsYear().pipe(
-  year$ = this.reviewService.getAnnotationsYear().pipe(
+  year$ = this.statService.getAnnotationsYear().pipe(
     // Define graph object to be returned
- 
+
     map((year) => {
 
       const labels = year.map((year) => year._id);
@@ -255,21 +253,6 @@ export class NewStateComponent implements OnInit, OnDestroy {
     // Always return same data
     shareReplay(),
   );
-
-  // // Retrieve paper per user (first 10)
-  // user$ = this.http.get<{ user: Record<string, string>, pmid: Record<string, number> }>('assets/data/stats/user.json').pipe(
-  //   // Define graph object to be returned
-  //   map(({user, pmid}) => {
-  //     // Define data
-  //     let data = [{x: Object.values(user), y: Object.values(pmid), type: 'bar'}];
-  //     // Define layout
-  //     let layout = {title: 'Annotated paper per user'};
-  //     // Return graph parameters
-  //     return {data, layout};
-  //   }),
-  //   // Always return same data
-  //   shareReplay(),
-  // );
 
   // Retrieve score distribution (for each section)
   score$: Observable<Record<string, {
@@ -331,7 +314,7 @@ export class NewStateComponent implements OnInit, OnDestroy {
   // public readonly tot$ : Observable<number> = thiscount$ + this.countPr$
 
   // gets only the last 11 Annotations year
-  public readonly journalsYear$: Observable<journalData[]> = this.reviewService.getAnnotationsYear().pipe(map((Names) => Names.slice(0, 11)) // Limit to the first 9 items);
+  public readonly journalsYear$: Observable<journalData[]> = this.statService.getAnnotationsYear().pipe(map((Names) => Names.slice(0, 11)) // Limit to the first 9 items);
   );
 
 
@@ -372,8 +355,9 @@ export class NewStateComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private activeRoute: ActivatedRoute,
     private elementRef: ElementRef,
-    private reviewService: ReviewService,
+    private statService: StatService,
     private userService: UserService,
+    private reviewService:ReviewService
   ) {
   }
 

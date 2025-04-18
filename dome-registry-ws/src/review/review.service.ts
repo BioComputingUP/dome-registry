@@ -1203,40 +1203,6 @@ export class ReviewService {
     );
   }
 
-  async getscore() {
-    return this.reviewModel.countDocuments({ "optimization.done": 2 });
-  }
-
-  async ownersCount() {
-    return this.reviewModel.aggregate([
-      {
-        $lookup: {
-          from: "users",
-          localField: "user",
-          foreignField: "_id",
-          as: "owner",
-        },
-      },
-      {
-        $match: {
-          public: true,
-        },
-      },
-      {
-        $group: {
-          _id: "$owner",
-          count: {
-            $sum: 1,
-          },
-        },
-      },
-      {
-        $sort: {
-          count: -1,
-        },
-      },
-    ]);
-  }
 
 
   
