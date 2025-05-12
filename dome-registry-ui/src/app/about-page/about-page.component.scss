@@ -1,45 +1,247 @@
-
-
-h4 {
-    margin-top:5px;
-    margin-bottom: auto;
-    padding: 5px;
-    
-}
-h5{
-    
-    margin-top:5px;
-}
-h1{
-    text-align: center;
-}
-
-.card {
-    margin: 0 auto; /* Added */
-    float: none; /* Added */
-    margin-bottom: 10px; /* Added */
-}
-div{
-    margin: auto;
-}
-p,h4,h5,h1{
-    margin-left: 20px;
-   
-}
-table, th, td {
-    border:1px solid black;
+// Define global scroll behavior with slower and smoother transition
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    /* Using a longer duration for the smooth scroll behavior */
+    scroll-behavior: smooth;
   }
 
+  /* This will be applied to Firefox which supports scroll customization */
+  * {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scroll-padding: 5px;
+  }
 
-  ul.nav {
-    padding-left: 0px;
-  
-    
+  /* Attempt to make scrolling smoother in Chrome */
+  body {
+    overflow-y: scroll;
+    overscroll-behavior-y: none;
   }
-  ul.nav > li {
-    display: inline-block;
-    padding: 10px 20px;
+}
+
+// Full-page dark blue gradient background with SVG overlay
+.about-background {
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(180deg, #012437 0%, #045079 100%);
+  background-size: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow-y: auto;
+  /* Using global scroll-behavior defined at html level */
+  scroll-snap-type: y proximity; /* Changed from mandatory to proximity for smoother transitions */
+  scroll-padding: 10px; /* Add padding to create smoother snap effect */
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../../assets/about-page-background.svg') center center no-repeat;
+    background-size: cover;
+    opacity: 0.25; // 20% opacity as requested
+    z-index: 0;
   }
-  
- 
-  
+}
+
+// Content container
+.about-center {
+  position: relative;
+  z-index: 1;
+  max-width: 887px;
+  color: white;
+  text-align: center;
+  flex-shrink: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  scroll-snap-align: start; /* Changed from start to center for smoother transitions */
+  /* Removed scroll-snap-stop: always to allow smoother scrolling */
+  padding: 0 20px;
+}
+
+.about-center h1 {
+  color: #FFF;
+  font-family: Inter, sans-serif;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 49px;
+}
+
+.about-center p {
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 35px;
+}
+
+.white-divider {
+  width: 100%;
+  height: 10px;
+  background-color: white;
+  margin: 0;
+  position: relative;
+  z-index: 10;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.dome-recommendations {
+  position: relative;
+  z-index: 1;
+  max-width: 1250px;
+  width: 100%;
+  color: white;
+  text-align: center;
+  flex-shrink: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  scroll-snap-align: start;
+  padding: 0 20px;
+}
+
+.dome-recommendations-title{
+  color: #FFF;
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-top: 137px;
+}
+
+
+.dome-registry {
+  position: relative;
+  z-index: 1;
+  max-width: 887px;
+  color: white;
+  text-align: center;
+  flex-shrink: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  scroll-snap-align: start;
+  padding: 0 20px;
+}
+
+.dome-registry-title {
+  color: #FFF;
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-top: 60px;
+}
+
+.dome-registry-content {
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 35px;
+  margin-top: 30px;
+  max-width: 800px;
+}
+
+.registry-features {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 800px;
+  margin-top: 50px;
+}
+
+.feature {
+  flex: 1;
+  margin: 0 15px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.feature h3 {
+  color: #FFF;
+  font-family: Inter, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.feature p {
+  color: #FFF;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.progress-bar-container {
+ display: flex;
+  width: 100%;
+  height: 14px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 72px;
+  z-index: 10;
+  background-color: #D9D9D926;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 100%;
+  background-color: #F66729;
+  transform-origin: left;
+}
+
+.dome-recommendations-content{
+  margin-top: 37px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.dome-recommendations-content p{
+  color: #FFF;
+  font-family: Inter, sans-serif;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  padding: 0 40px;
+}
+
+
+@keyframes scaleProgress {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+/* Apply animation to progress bar */
+.progress-bar {
+  animation: scaleProgress linear;
+  animation-timeline: scroll();
+  animation-range: 0 100%;
+}
