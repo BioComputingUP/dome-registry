@@ -1,4 +1,7 @@
-import { Component, OnInit, HostListener, AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
 
 @Component({
   selector: 'app-about-page',
@@ -8,12 +11,9 @@ import { Component, OnInit, HostListener, AfterViewInit, ElementRef, OnDestroy }
 export class AboutPageComponent implements OnInit {
 
   constructor() {
-
-
   }
 
   ngOnInit(): void {
 
   }
-
 }
