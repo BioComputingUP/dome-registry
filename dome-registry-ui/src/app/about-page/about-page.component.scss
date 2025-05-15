@@ -80,7 +80,7 @@ $font-primary: Inter, sans-serif;
   color: white;
   text-align: center;
   flex-shrink: 0;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -109,7 +109,6 @@ $font-primary: Inter, sans-serif;
   margin-top: 72px;
   z-index: 10;
   background-color: #D9D9D926;
-  border: 2px solid red;
 
 }
 
@@ -181,6 +180,7 @@ $font-primary: Inter, sans-serif;
   width: 37%;
   position: relative;
 }
+
 .machine-learning img, .traditional-publications img {
   width: 100%;
 }
@@ -188,7 +188,7 @@ $font-primary: Inter, sans-serif;
 .transparency-container {
   display: flex;
   flex-direction: column;
-
+  margin: 0 10px;
   width: 25%;
   justify-content: center;
   align-items: center;
@@ -210,7 +210,7 @@ $font-primary: Inter, sans-serif;
   font-family: $font-primary;
 }
 
-.transparency{
+.transparency {
   background-color: #F66729;
   border-radius: 9px;
   width: 165px;
@@ -226,4 +226,298 @@ $font-primary: Inter, sans-serif;
   font-weight: 500;
   line-height: 28px; /* 140% */
   text-transform: capitalize;
+}
+
+.transparency-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.full-documentation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 100px;
+  gap: 43px;
+  margin-bottom: 168px;
+}
+
+.full-documentation-line {
+  width: 90%;
+  height: 7px;
+  background-color: #F66729;
+}
+
+.full-documentation {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  padding: 0 72px;
+}
+
+.full-documentation p {
+  color: #FFF;
+  text-align: start;
+  font-family: $font-primary;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  width: 100%;
+}
+
+.full-documentation-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  width: 100%;
+  gap: 11px;
+}
+
+.full-documentation-button button {
+  height: 51px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  color: #000;
+  border: none;
+
+  text-align: center;
+  font-family: $font-primary;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.dome-ML {
+  padding: 11px 52px;
+}
+
+.foundation-publication {
+  padding: 11px 19px;
+}
+
+.right-small-arrow {
+  width: 15px;
+}
+
+.dome-registry {
+  max-width: 1250px;
+  width: 100%;
+}
+
+.implementation-first-container, .implementation-container, .implementation-last-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 94px;
+}
+
+.implementation-title {
+  width: 40%;
+  color: #FFF;
+  font-family: $font-primary;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-left: 23px
+}
+
+.implementation-text {
+  width: 60%;
+  color: #FFF;
+  text-align: justify;
+  font-family: $font-primary;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+.square {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  background-color: #F66729;
+  margin-bottom: 16px;
+}
+
+.implementation-first-container {
+  margin-top: 142px;
+}
+
+.implementation-last-container{
+  margin-bottom: 182px;
+}
+
+.dome-registry-mirroring{
+  max-width: 1300px;
+  width: 100%;
+}
+
+.dome-registry-mirroring-container {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: center;
+  margin-top: 110px;
+}
+
+.infrastructure{
+  width: 40%;
+  margin-right: 120px;
+}
+
+.infrastructure-title{
+  color: #FFF;
+  font-family: $font-primary;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.infrastructure-text{
+  color: #FFF;
+  text-align: justify;
+  font-family: $font-primary;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px; /* 160% */
+}
+.infrastructure button{
+  height: 51px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  color: #000;
+  border: none;
+  padding: 11px 30px;
+  text-align: center;
+  font-family: $font-primary;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.boxes{
+  width: 60%;
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: center;
+  gap: 35px;
+  color: #FFFFFF;
+}
+
+.boxes-l ,.boxes-r{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+}
+
+.box-star , .box-circle,.box-square,.box-triangle{
+  border-radius: 7px;
+  background: #045079;
+  padding: 21px 35px 21px 21px;
+}
+
+.box-title{
+  text-align: justify;
+  font-family: $font-primary;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 32px; /* 160% */
+  margin-top: 40px;
+  margin-bottom: 5px;
+}
+
+.box-text{
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 26px;
+  font-family: $font-primary;
+  margin: 0;
+
+}
+
+@media (max-width: 1220px) {
+  .machine-learning, .traditional-publications {
+    width: 30%;
+  }
+
+  .machine-learning p, .traditional-publications p {
+    font-size: 22px;
+    line-height: 26px;
+  }
+  .transparency-container {
+    margin: 0 15px;
+  }
+
+  .transparency-box img {
+    width: 85%;
+  }
+
+  .transparency {
+    width: 140px;
+    height: 40px;
+    padding: 8px 12px;
+  }
+
+  .transparency p {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+@media (max-width: 970px) {
+  .machine-learning, .traditional-publications {
+    width: 25%;
+  }
+
+  .machine-learning p, .traditional-publications p {
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .transparency-container {
+    margin: 0 25px;
+    gap: 25px;
+  }
+
+  .transparency-box img {
+    width: 75%;
+  }
+
+  .transparency {
+    width: 120px;
+    height: 35px;
+    padding: 6px 10px;
+  }
+
+  .transparency p {
+    font-size: 14px;
+    line-height: 20px;
+  }
 }
