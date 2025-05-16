@@ -29,6 +29,7 @@ import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
 import { NgxMatomoRouterModule } from '@ngx-matomo/router'
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {ToastrModule} from "ngx-toastr";
+import { SubmitComponent } from './submit/submit.component';
 
 // Set Plotly.js from CDN
 PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
@@ -54,6 +55,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     DSWCardComponent,
     NewStateComponent,
     NewIntroPageComponent,
+    SubmitComponent,
   ],
   imports: [
     PlotlyViaCDNModule,

@@ -1,0 +1,60 @@
+.submit-container {
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border: 8px solid #F66729;
+  background: #012136;
+  margin-top: 161px;
+  font-family: Inter, sans-serif;
+
+
+  h1 {
+    margin-top: 65px;
+    color: #FFF;
+    font-size: 60px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  p {
+    color: #FFF;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 26px; /* 162.5% */
+    margin-top: 18px;
+    max-width: 820px;
+  }
+
+  button {
+    margin-top: 34px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    color: #000;
+    border: none;
+    padding: 11px 30px;
+    text-align: center;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-bottom: 65px;
+  }
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.right-small-arrow {
+  width: 15px;
+}
