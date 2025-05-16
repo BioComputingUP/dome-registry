@@ -41,9 +41,9 @@
               <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/about'"><b>About</b></a>
             </li>
           </ul>
-           
-           
-  
+
+
+
           <!-- Right side -->
           <ul class="navbar-nav ms-auto me-0">
             <!-- Get user -->
@@ -63,7 +63,7 @@
                         <div class="small"><i class="bi bi-person-circle text-orcid"></i><b>&nbsp;{{user.orcid}}</b>
                         </div>
                         <div class="small"><i class="bi bi-envelope text-orcid"></i>&nbsp;{{user.email || '-'}}</div>
-                       
+
                       </a>
                     </li>
                     <li>
@@ -75,7 +75,7 @@
                         <i class="bi bi-box-arrow-right"></i>&nbsp;Logout
                       </a>
                     </li>
-                   
+
                   </ul>
                 </li>
               </ng-container>
@@ -119,24 +119,4 @@
       </div>
     </ng-template>
   </main>
-  <!-- Bottom footer (sticky) -->
-  <footer class="d-block flex-grow-0 ">
-    <div class="d-flex flex-row align-items-center bg-gradient py-2">
-      <span class="d-inline ms-3 me-auto">
-        <span class="d-none d-sm-inline">Supported by&nbsp;</span>
-        <a href="https://elixir-europe.org/">
-          <img class="logo-sm cursor-pointer" src="assets/elixir.svg">
-        </a>
-      </span>
-      <span class="d-inline me-auto">
-
-        <span class="d-none d-sm-inline"> <a class="text-white"  href="#">Version 2.1 </a> </span>
-
-      </span>
-      <span class="d-inline me-3">
-        <span class="d-none d-sm-inline">Developed and maintained by&nbsp;</span>
-        <a class="text-white" href="https://github.com/BioComputingUP">BioCompUP <i class="bi bi-github"></i></a>
-      </span>
-    </div>
-  </footer>
 </div>
