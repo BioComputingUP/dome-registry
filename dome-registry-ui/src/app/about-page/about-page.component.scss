@@ -14,7 +14,6 @@ $font-primary: Inter, sans-serif;
   padding-bottom: 100px;
 
 
-
   &::before {
     content: '';
     position: absolute;
@@ -107,7 +106,7 @@ $font-primary: Inter, sans-serif;
   display: flex;
   width: 100%;
   height: 14px;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   margin-top: 72px;
   z-index: 10;
@@ -116,10 +115,11 @@ $font-primary: Inter, sans-serif;
 }
 
 .progress-bar {
-  width: 50%;
+  width: 20%;
   height: 100%;
   background-color: #F66729;
   transform-origin: left;
+  justify-content: start;
 }
 
 .dome-recommendations-content {
@@ -351,8 +351,8 @@ $font-primary: Inter, sans-serif;
 }
 
 .square {
-  width: 15px;
-  height: 15px;
+  width: 13px;
+  height: 13px;
   flex-shrink: 0;
   background-color: #F66729;
   margin-bottom: 16px;
@@ -362,11 +362,11 @@ $font-primary: Inter, sans-serif;
   margin-top: 142px;
 }
 
-.implementation-last-container{
+.implementation-last-container {
   margin-bottom: 182px;
 }
 
-.dome-registry-mirroring{
+.dome-registry-mirroring {
   max-width: 1300px;
   width: 100%;
 }
@@ -379,12 +379,12 @@ $font-primary: Inter, sans-serif;
   margin-top: 110px;
 }
 
-.infrastructure{
+.infrastructure {
   width: 40%;
   margin-right: 120px;
 }
 
-.infrastructure-title{
+.infrastructure-title {
   color: #FFF;
   font-family: $font-primary;
   font-size: 36px;
@@ -393,7 +393,7 @@ $font-primary: Inter, sans-serif;
   line-height: normal;
 }
 
-.infrastructure-text{
+.infrastructure-text {
   color: #FFF;
   text-align: justify;
   font-family: $font-primary;
@@ -402,7 +402,8 @@ $font-primary: Inter, sans-serif;
   font-weight: 400;
   line-height: 32px; /* 160% */
 }
-.infrastructure button{
+
+.infrastructure button {
   height: 51px;
   display: flex;
   justify-content: center;
@@ -420,7 +421,7 @@ $font-primary: Inter, sans-serif;
   line-height: normal;
 }
 
-.boxes{
+.boxes {
   width: 60%;
   display: flex;
   flex-direction: row;
@@ -430,7 +431,7 @@ $font-primary: Inter, sans-serif;
   color: #FFFFFF;
 }
 
-.boxes-l ,.boxes-r{
+.boxes-l, .boxes-r {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -438,14 +439,14 @@ $font-primary: Inter, sans-serif;
   gap: 35px;
 }
 
-.box-star , .box-circle,.box-square,.box-triangle{
+.box-star, .box-circle, .box-square, .box-triangle {
   border-radius: 7px;
   height: 330px;
   background: #045079;
   padding: 21px 35px 21px 21px;
 }
 
-.box-title{
+.box-title {
   text-align: justify;
   font-family: $font-primary;
   font-size: 20px;
@@ -456,7 +457,7 @@ $font-primary: Inter, sans-serif;
   margin-bottom: 5px;
 }
 
-.box-text{
+.box-text {
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -467,7 +468,7 @@ $font-primary: Inter, sans-serif;
 
 }
 
-.dome-registry-codebase{
+.dome-registry-codebase {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -475,7 +476,7 @@ $font-primary: Inter, sans-serif;
   max-width: 1250px;
 }
 
-.dome-registry-codebase-title{
+.dome-registry-codebase-title {
   color: #FFF;
   text-align: center;
   font-family: $font-primary;
@@ -486,25 +487,29 @@ $font-primary: Inter, sans-serif;
   margin-top: 110px;
 }
 
-.dome-registry-codebase-container{
+.dome-registry-codebase-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 114px;
   margin-top: 126px;
+  margin-bottom: 177px;
 
 }
 
-.side{
-  width: 50%;
+.side, .side-l {
+  width: 100%;
   gap: 86px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
 }
 
-.head{
+.open-source {
+  width: 50%;
+}
+
+.head {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -512,7 +517,7 @@ $font-primary: Inter, sans-serif;
   justify-content: start;
   margin-bottom: 22px;
 
-  p{
+  p {
     color: #FFF;
     font-family: $font-primary;
     width: 100%;
@@ -524,7 +529,7 @@ $font-primary: Inter, sans-serif;
   }
 }
 
-.open-source-text{
+.open-source-text {
   color: #FFF;
   text-align: justify;
   font-family: $font-primary;
@@ -532,10 +537,87 @@ $font-primary: Inter, sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 32px; /* 177.778% */
+  width: 90%;
+}
+
+.citing-dome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 1250px;
+  margin-top: 104px;
   width: 100%;
+
+  h1 {
+    color: #FFF;
+    text-align: center;
+    font-family: $font-primary;
+    font-size: 60px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+}
+
+.citing-dome-container{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  margin-bottom: 100px;
+}
+
+.citing-dome-text {
+  color: #FFF;
+  font-family: $font-primary;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 38px; /* 172.727% */
+  margin-top: 50px;
+  margin-bottom: 40px;
+}
+
+.citing-dome-box {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+}
+
+.head-citing-dome-text {
+  color: #FFF;
+  font-family: $font-primary;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 38px; /* 190% */
+}
+
+.citing-dome-box-text{
+  color: #FFF;
+  font-family: $font-primary;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 38px;
+  margin-left: 36px;
+  margin-bottom: 40px;
 }
 
 
+.head-citing-dome {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 23px;
+}
+
+.orange{
+  background-color: #F66729;
+}
 
 @media (max-width: 1220px) {
   .machine-learning, .traditional-publications {
