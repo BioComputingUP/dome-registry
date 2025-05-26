@@ -96,7 +96,7 @@
     </nav>
   </header>
   <!-- Page content (scrollable) -->
-  <main class="d-block flex-grow-1 overflow-hidden">
+  <main class="d-block flex-grow-1 overflow-auto">
     <!-- After user loaded, show page -->
     <ng-container *ngIf="user$ | async; else showLoadingSpinner">
       <!-- Show current page -->
