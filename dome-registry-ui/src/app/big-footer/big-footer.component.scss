@@ -1,73 +1,102 @@
 .big-footer {
-  background-color: #333;
-  color: #fff;
-  padding: 40px 0 20px;
-  margin-top: 50px;
   width: 100%;
-}
-
-.footer-container {
+  max-height: 276px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
+  flex-direction: row;
+  padding: 55px 131px 45px;
 
-.footer-section {
-  flex: 1;
-  min-width: 250px;
-  margin-bottom: 20px;
-  padding: 0 15px;
-}
-
-.footer-section h3 {
-  font-size: 18px;
-  margin-bottom: 15px;
-  color: #f66729; // Using the orange color from the about-page component
-  border-bottom: 1px solid #555;
-  padding-bottom: 8px;
-}
-
-.footer-section p {
-  margin-bottom: 10px;
-  line-height: 1.5;
-}
-
-.footer-section ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-section ul li {
-  margin-bottom: 8px;
-}
-
-.footer-section ul li a {
+  background-color: #002132;
   color: #fff;
-  text-decoration: none;
-  transition: color 0.3s ease;
+
+  p {
+    font-family: Inter, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: normal;
+  }
 }
 
-.footer-section ul li a:hover {
-  color: #f66729; // Using the orange color from the about-page component
-}
+.left {
+  width: 20%;
+  max-height: 53px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 17px;
 
-.footer-bottom {
-  text-align: center;
-  padding-top: 20px;
-  margin-top: 20px;
-  border-top: 1px solid #555;
-}
-
-@media (max-width: 768px) {
-  .footer-container {
-    flex-direction: column;
+  img {
+    width: 50px;
   }
 
-  .footer-section {
-    width: 100%;
-    margin-bottom: 30px;
+  p {
+    margin: 0;
+    color: #fff;
   }
+}
+
+.right {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.middle {
+  width: 50%;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 95px;
+
+  p {
+    margin: 0;
+    color: #fff;
+  }
+}
+
+.middle-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.right-right {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  position: relative;
+
+  p {
+    color: rgba(255, 255, 255, 0.50);
+  }
+
+  .github-link {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    img {
+      width: 28px;
+      height: 28px;
+    }
+  }
+}
+
+:host {
+  display: block;
+  width: 100%;
 }

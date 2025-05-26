@@ -1,0 +1,29 @@
+.small-footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 106px;
+  background-color: #000000;
+  color: rgba(255, 255, 255, 0.39);;
+
+  p {
+    margin: 0;
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .right {
+    display: flex;
+    gap: 16px;
+  }
+  img{
+    height: 40px;
+  }
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
