@@ -1,5 +1,12 @@
 $font-primary: Inter, sans-serif;
 
+
+:host {
+  position: relative; // Contains the absolutely positioned markers
+  overflow: hidden; // Prevents extra scroll space
+  display: block;
+  width: 100%;
+}
 // Full-page dark blue gradient background with SVG overlay
 .about-background {
   width: 100%;
@@ -79,13 +86,11 @@ $font-primary: Inter, sans-serif;
 
 .white-divider {
   width: 100%;
-  height: 10px;
+  height: 6px;
   background-color: white;
   margin: 0;
   position: relative;
   z-index: 10;
-  border-top: 3px solid rgba(0, 0, 0, 0.2);
-  border-bottom: 3px solid rgba(0, 0, 0, 0.2);
 }
 
 .dome-recommendations {
@@ -125,6 +130,8 @@ $font-primary: Inter, sans-serif;
   margin-top: 72px;
   z-index: 10;
   background-color: #D9D9D926;
+  overflow: hidden;
+
 
 }
 
@@ -132,8 +139,8 @@ $font-primary: Inter, sans-serif;
   width: 20%;
   height: 100%;
   background-color: #F66729;
-  transform-origin: left;
-  justify-content: start;
+  z-index: 11;
+
 }
 
 .dome-recommendations-content {
@@ -331,6 +338,30 @@ $font-primary: Inter, sans-serif;
 .dome-registry {
   max-width: 1250px;
   width: 100%;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+.scroll-progress-container {
+  display: flex;
+  width: 100%;
+  height: 14px;
+  justify-content: start;
+  align-items: center;
+  margin-top: 40px;
+  z-index: 10;
+  background-color: rgba(217, 217, 217, 0.15);
+  overflow: hidden;
+  border-radius: 7px;
+}
+
+.scroll-progress-bar {
+  width: 100%;
+  height: 100%;
+  background-color: #00F5FB;
+  transform-origin: left center;
+  transform: scaleX(0);
 }
 
 .implementation-first-container, .implementation-container, .implementation-last-container {
