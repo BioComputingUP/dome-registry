@@ -36,10 +36,13 @@ import {StatModule} from "./stat/stat.module";
         ThrottlerModule.forRootAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
-            useFactory: async (configService: ConfigService) => ({
-                ttl: configService.get<number>('throttle.ttl'),
-                limit: configService.get<number>('throttle.limit'),
-            }),
+            useFactory: async (configService: ConfigService) => [
+                {
+                    name: 'short',
+                    ttl: configService.get('THROTTLE_TTL', 60000), // milliseconds
+                    limit: configService.get('THROTTLE_LIMIT', 10),
+                }
+            ],
         }),
         // Initialize mongoose module (MongoDB)
         MongooseModule.forRootAsync({
