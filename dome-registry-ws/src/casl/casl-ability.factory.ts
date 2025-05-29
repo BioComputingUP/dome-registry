@@ -1,7 +1,7 @@
-import { Review, ReviewDocument } from "src/review/review.schema";
-import { User } from "src/user/user.decorator";
-import { UserSchema } from "src/user/user.schema";
-import { Role } from "src/roles/role.enum";
+import { Review, ReviewDocument } from "../review/review.schema";
+import { User } from "../user/user.decorator";
+import { UserSchema } from "../user/user.schema";
+import { Role } from "../roles/role.enum";
 import {
   AbilityBuilder,
   AbilityClass,
@@ -11,9 +11,9 @@ import {
   MongoAbility,
   MongoQuery,
 } from "@casl/ability";
-import { ListReviewsDto } from "src/review/dto/list-reviews.dto";
+import { ListReviewsDto } from "../review/dto/list-reviews.dto";
 import { Injectable } from "@nestjs/common";
-import { Action } from "src/Actions/action.enum";
+import { Action } from "../Actions/action.enum";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 //import { Action } from "rxjs/internal/scheduler/Action";

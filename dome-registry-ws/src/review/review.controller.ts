@@ -26,7 +26,7 @@ import {User} from "../user/user.decorator";
 import {ApiBody, ApiOperation, ApiResponse, ApiTags,} from "@nestjs/swagger";
 import {Review} from "./review.schema";
 import {ReviewSubmission} from "./dto/submit-wizard.dto";
-import {Role} from "src/roles/role.enum";
+import {Role} from "../roles/role.enum";
 import {EventEmitter2} from "@nestjs/event-emitter";
 import {Response} from "express";
 

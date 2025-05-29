@@ -10,22 +10,22 @@ import {
 } from "mongoose";
 import { v4 as UUID } from "uuid";
 import { Review, ReviewDocument } from "../review.schema";
-import { User, UserDocument } from "src/user/user.schema";
+import { User, UserDocument } from "../../user/user.schema";
 import { computeDomeScore } from "dome-registry-core";
-import { Role } from "src/roles/role.enum";
+import { Role } from "../../roles/role.enum";
 import ShortUniqueId from "short-unique-id";
 import { timestamp } from "rxjs";
-import { ClientService } from "src/apicuron-sub/apicuron-client.service";
+import { ClientService } from "../../apicuron-sub/apicuron-client.service";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { UserModule } from "src/user/user.module";
+import { UserModule } from "../../user/user.module";
 import { title } from "process";
-import { CaslAbilityFactory } from "src/casl/casl-ability.factory";
+import { CaslAbilityFactory } from "../../casl/casl-ability.factory";
 import { Action } from "src/Actions/action.enum";
 import { IsIn } from "class-validator";
 import { GetReviewsDto } from "../dto/get-review-dto";
 import { filterFields } from "../dto/get-review-dto";
 import { accessibleBy } from "@casl/mongoose";
-import { escapeRegex } from "src/casl/utils/regex.utils";
+import { escapeRegex } from "../../casl/utils/regex.utils";
 
 
 

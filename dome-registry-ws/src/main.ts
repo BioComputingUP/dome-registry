@@ -6,6 +6,7 @@ import { AppModule } from "./app.module";
 import { swaggerSetup } from "./swagger/swagger";
 import * as bodyParser from 'body-parser'
 import 'reflect-metadata';
+import 'module-alias/register';
 
 async function bootstrap() {
     // Instantiate application

@@ -20,10 +20,10 @@ import { ReviewService } from "../review.service";
 import { CreateReviewDto } from "../dto/create-review.dto";
 import { UpdateReviewDto } from "../dto/update-review.dto";
 import { ListReviewsDto } from "../dto/list-reviews.dto";
-import { JwtAuthGuard } from "src/jwt-auth/jwt-auth.guard";
-import { UserInterceptor } from "src/user/user.interceptor";
-import { UserService } from "src/user/user.service";
-import { User } from "src/user/user.decorator";
+import { JwtAuthGuard } from "../../jwt-auth/jwt-auth.guard";
+import { UserInterceptor } from "../../user/user.interceptor";
+import { UserService } from "../../user/user.service";
+import { User } from "../../user/user.decorator";
 import { v4 as UUID } from "uuid";
 import {
   ApiBearerAuth,

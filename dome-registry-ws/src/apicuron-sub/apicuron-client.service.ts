@@ -3,7 +3,7 @@ import { HTTP_TOKEN_INJECTION } from "./constants";
 import { HttpService } from "@nestjs/axios";
 import { OnEvent } from "@nestjs/event-emitter";
 import axios from "axios";
-import { ReviewCreatedEvent } from "src/review/events/review-created.event";
+import { ReviewCreatedEvent } from "../review/events/review-created.event";
 
 @Injectable()
 export class ClientService {

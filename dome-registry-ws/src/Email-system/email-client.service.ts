@@ -2,7 +2,7 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { EMAIL_DEFAULTS } from './email.constant';
-import { ReviewCreatedEvent } from 'src/review/events/review-created.event';
+import { ReviewCreatedEvent } from '../review/events/review-created.event';
 
 @Injectable()
 export class EmailService {

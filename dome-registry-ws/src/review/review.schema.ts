@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { Publication, Dataset, Model, Optimization, Evaluation, computeDomeScore } from 'dome-registry-core';
 import { User } from '../user/user.schema';
-import { ReviewState } from 'src/review-state/state.eum';
+import { ReviewState } from '../review-state/state.eum';
 
 
 type ReviewDocument = Review & mongoose.Document;
