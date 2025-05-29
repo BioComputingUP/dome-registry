@@ -48,7 +48,7 @@
     "dome-registry-core": "file:../dome-registry-core",
     "js-yaml": "^4.1.0",
     "module-alias": "^2.2.3",
-    "mongoose": "^6.4.0",
+    "mongoose": "^8.15.1",
     "nodemailer": "^6.9.16",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",

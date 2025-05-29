@@ -19,33 +19,58 @@ async function bootstrap() {
 
     const savePromises = []
 
-for await (const iterator of all){
-    iterator.update({},{ $unset: { tags: 1 }})
-}
+    try {
+        const result = await reviewModel.updateMany(
+            { tags: { $exists: true } }, // Only update documents that have 'tags' field
+            { $unset: { tags: 1 } }      // Remove the 'tags' field
+        );
 
+        console.log(`Updated ${result.modifiedCount} reviews (removed tags field)`);
 
+        /*
+        const reviewsWithTags = await reviewModel.find({ tags: { $exists: true } });
 
+        for (const review of reviewsWithTags) {
+            await reviewModel.updateOne(
+                { _id: review._id },
+                { $unset: { tags: 1 } }
+            );
+            console.log(`Updated review ${review._id}`);
+        }
+        */
 
-    // for await (const iterator of all) {
-    //     // generate uuid
-    //     const rand = new ShortUniqueId();
-    //                         const a =rand().toString().toLowerCase();
-    //                         const prefix = 'DOME-';
-    //                         const c = prefix + a;
-    //                         console.log(c);
-    //     iterator.shortid = a
-        
-    //     const savePromise = iterator.save();
-    //     savePromises.push(savePromise);
-    // }
+        // Commented out UUID generation section (for reference)
+        /*
+        const reviewsToUpdate = await reviewModel.find({ shortid: { $exists: false } });
+        const savePromises = [];
 
+        for (const iterator of reviewsToUpdate) {
+            // generate uuid
+            const rand = new ShortUniqueId();
+            const a = rand().toString().toLowerCase();
+            const prefix = 'DOME-';
+            const c = prefix + a;
+            console.log(c);
 
-    await Promise.all(savePromises)
+            // Use updateOne instead of direct assignment + save
+            const updatePromise = reviewModel.updateOne(
+                { _id: iterator._id },
+                { $set: { shortid: a } }
+            );
+            savePromises.push(updatePromise);
+        }
 
-    const doc = await reviewModel.findOne()
-    console.log('doc', doc)
+        await Promise.all(savePromises);
+        */
 
-    await app.close();
+        const doc = await reviewModel.findOne();
+        console.log('Sample doc after migration:', doc);
+
+    } catch (error) {
+        console.error('Migration failed:', error);
+    } finally {
+        await app.close();
+    }
 }
 
 bootstrap()
