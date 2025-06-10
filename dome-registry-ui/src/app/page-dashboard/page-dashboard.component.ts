@@ -39,7 +39,7 @@ export function notDefinedValidator(): ValidatorFn {
 export class PageDashboardComponent implements OnDestroy {
 
   private readonly initial: Partial<Review>;
-  private readonly userInit: Partial<User>; 
+  private readonly userInit: Partial<User>;
 
   private readonly UpdatesUsers = this.formBuilderUser.group({
   _id : ['',],
@@ -48,8 +48,48 @@ export class PageDashboardComponent implements OnDestroy {
   orcid: ['',],
   organization:['',],
    });
-    
+  private readonly DEFAULT_USER: User = {
+    roles: '',
+    name: '',
+    orcid: '',
+    email: '',
+    organisation: ''
+  };
 
+
+
+  private mapFormToPartialReview(form: any): Partial<Review> {
+    return {
+      ...form,
+      created: form.created ? +form.created : undefined,
+      updated: form.updated ? +form.updated : undefined,
+    };
+  }
+
+  private mapFormToReview(form: any, base?: Partial<Review>): Review {
+    return {
+      shortid: form.shortid,
+      uuid: form.uuid,
+      created: +form.created,
+      updated: +form.updated,
+      publication: form.publication,
+      dataset: form.dataset,
+      optimization: form.optimization,
+      model: form.model,
+      evaluation: form.evaluation,
+      user: base?.user ?? this.DEFAULT_USER,
+      public: base?.public ?? false,
+    };
+  }
+
+  private mapReviewToForm(review?: Review): any {
+    if (!review) return {};
+    return {
+      ...review,
+      created: review.created.toString(),
+      updated: review.updated.toString(),
+    };
+  }
 
 
   public readonly updatesAnnotations = this.formBuilder.group({
@@ -172,7 +212,7 @@ export class PageDashboardComponent implements OnDestroy {
   ) {
 
     // Define initial form value
-    this.initial = this.updatesAnnotations.value;
+    this.initial = this.mapFormToPartialReview(this.updatesAnnotations.value);
 
     // Define uuid retrieval pipeline
     this.fetch$ = this.activeRoute.paramMap.pipe(
@@ -190,12 +230,9 @@ export class PageDashboardComponent implements OnDestroy {
 
     // Define update pipeline
     this.updated$ = this.update$.pipe(
-      // Define current review
-      map(() => ({ ...this.updatesAnnotations.value, shortid: this.review?.shortid } as Review)),
-      // Update current review
+      map(() => this.mapFormToReview(this.updatesAnnotations.value, this.review)),
       switchMap((review) => this.reviewService.upsertReview(review)),
     );
-
     // Define delete pipeline
     this.deleted$ = this.delete$.pipe(
       // Delete current review
@@ -222,7 +259,11 @@ export class PageDashboardComponent implements OnDestroy {
       }),
 
       // Update form
-      tap((review?: Review) => this.updatesAnnotations.patchValue({ ...this.initial, ...review })),
+      tap((review?: Review) => this.updatesAnnotations.patchValue({
+        ...this.mapReviewToForm(review),
+        ...this.initial
+      })),
+
       // Mark fields as touched
       tap((review?: Review) => review?.shortid ? this.updatesAnnotations.markAllAsTouched() : this.updatesAnnotations.markAsUntouched()),
       // Eventually, return default review
@@ -236,7 +277,8 @@ export class PageDashboardComponent implements OnDestroy {
       // // Subscribe to form change
       // expand(() => this.updates.valueChanges),
       // Compute absolute DOME score
-      map((review) => computeDomeScore(this.updatesAnnotations.value)),
+      map(() => computeDomeScore(this.mapFormToReview(this.updatesAnnotations.value, this.review))),
+
       // Compute relative DOME score
       map((scores) => new Map([...scores.entries()]
         .map(([key, [done, skip]]) => [key, {
@@ -272,7 +314,7 @@ export class PageDashboardComponent implements OnDestroy {
     this.delete$.emit();
   }
 
-  //Make the annotation public 
+  //Make the annotation public
 
   public onPublishClick($event: MouseEvent) {
     try {

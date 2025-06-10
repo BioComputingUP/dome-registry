@@ -1,15 +1,37 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Inject, Renderer2 } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { expand, map, merge, Observable, of, share, shareReplay, startWith, Subject, switchMap, takeUntil, tap, } from "rxjs";
-import { ActivatedRoute, Router } from "@angular/router";
-import { Location } from "@angular/common";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Inject,
+  Renderer2
+} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn} from "@angular/forms";
+import {
+  expand,
+  map,
+  merge,
+  Observable,
+  of,
+  share,
+  shareReplay,
+  startWith,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap,
+} from "rxjs";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Location} from "@angular/common";
 
-import { ReviewService } from "../review.service";
-import { Review, computeDomeScore, isValidField } from "dome-registry-core";
-import { AuthService } from "../auth.service";
-import { DOCUMENT } from '@angular/common';
-import { take } from 'rxjs';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {ReviewService} from "../review.service";
+import {Review, computeDomeScore, isValidField} from "dome-registry-core";
+import {AuthService} from "../auth.service";
+import {DOCUMENT} from '@angular/common';
+import {take} from 'rxjs';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrService} from 'ngx-toastr';
 
 
@@ -27,7 +49,7 @@ interface Score {
 export function notDefinedValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     // Check field validity
-    return isValidField('', control.value + '') ? null : { notDefined: true };
+    return isValidField('', control.value + '') ? null : {notDefined: true};
   };
 }
 
@@ -42,6 +64,63 @@ export class PageEditComponent implements OnInit, OnDestroy {
 
   private readonly initial: Partial<Review>;
 
+  private readonly DEFAULT_USER = {
+    name: '',
+    email: '',
+    orcid: '',
+    organisation: '',
+    roles: ''
+  };
+
+  private mapFormToPartialReview(form: any): Partial<Review> {
+    return {
+      ...form,
+      created: form.publication.created ? +form.publication.created : undefined,
+      updated: form.publication.updated ? +form.publication.updated : undefined,
+    };
+  }
+
+  private mapFormToReview(form: any, base?: Partial<Review>): Review {
+    return {
+      shortid: form.shortid,
+      uuid: form.uuid,
+      created: +form.publication.created,
+      updated: +form.publication.updated,
+      publication: {
+        ...form.publication,
+        tags: form.publication.tags?.split(',').map((t: string) => t.trim()) ?? [],
+        done: 0,
+        skip: 0,
+      },
+      dataset: form.dataset,
+      optimization: form.optimization,
+      model: form.model,
+      evaluation: form.evaluation,
+      user: base?.user ?? this.DEFAULT_USER,
+      public: base?.public ?? false,
+    };
+  }
+
+  private mapReviewToForm(review?: Review): any {
+    if (!review) return {};
+    return {
+      shortid: review.shortid,
+      uuid: review.uuid,
+      publication: {
+        ...review.publication,
+        created: review.created.toString(),
+        updated: review.updated.toString(),
+        tags: Array.isArray(review.publication.tags)
+          ? review.publication.tags.join(', ')
+          : review.publication.tags
+      },
+      dataset: review.dataset,
+      optimization: review.optimization,
+      model: review.model,
+      evaluation: review.evaluation,
+    };
+  }
+
   public readonly updates = this.formBuilder.group({
     shortid: ['',],
     uuid: ['',],
@@ -54,7 +133,7 @@ export class PageEditComponent implements OnInit, OnDestroy {
       authors: ['', [notDefinedValidator(),]],
       journal: ['', [notDefinedValidator(),]],
       year: ['', [notDefinedValidator(),]],
-      tags : ['',[notDefinedValidator(),]],
+      tags: ['', [notDefinedValidator(),]],
     }),
     dataset: this.formBuilder.group({
       provenance: ['', [notDefinedValidator(),]],
@@ -152,7 +231,6 @@ export class PageEditComponent implements OnInit, OnDestroy {
   public readonly login = this.authService.url;
 
 
-
   constructor(
     private reviewService: ReviewService,
     private authService: AuthService,
@@ -162,13 +240,12 @@ export class PageEditComponent implements OnInit, OnDestroy {
     private location: Location,
     private router: Router,
     private _renderer2: Renderer2,
-    private toastr:ToastrService,
-  @Inject(DOCUMENT) private _document: Document
-
+    private toastr: ToastrService,
+    @Inject(DOCUMENT) private _document: Document
   ) {
 
     // Define initial form value
-    this.initial = this.updates.value;
+    this.initial = this.mapFormToPartialReview(this.updates.value);
 
     // Define uuid retrieval pipeline
     this.fetch$ = this.activeRoute.paramMap.pipe(
@@ -188,10 +265,9 @@ export class PageEditComponent implements OnInit, OnDestroy {
     // Define update pipeline
     this.updated$ = this.update$.pipe(
       // Define current review
-      map(() => ({ ...this.updates.value, shortid: this.review?.shortid } as Review)),
+      map(() => this.mapFormToReview(this.updates.value, this.review)),
       // Update current review
       switchMap((review) => this.reviewService.upsertReview(review)),
-
     );
 
     // Define delete pipeline
@@ -213,7 +289,7 @@ export class PageEditComponent implements OnInit, OnDestroy {
         const shortid = review?.shortid ? review.shortid : '';
 
         // Define updated URL according to retrieved identifier
-        const route = this.router.createUrlTree(['./', shortid], { relativeTo: this.activeRoute });
+        const route = this.router.createUrlTree(['./', shortid], {relativeTo: this.activeRoute});
         // TODO Remove this
         console.log('Current route', route);
         // // Change current URL
@@ -221,11 +297,15 @@ export class PageEditComponent implements OnInit, OnDestroy {
       }),
 
       // Update form
-      tap((review?: Review) => this.updates.patchValue({ ...this.initial, ...review })),
+      tap((review?: Review) => this.updates.patchValue({
+        ...this.mapReviewToForm(review),
+        ...this.initial
+      })),
+
       // Mark fields as touched
       tap((review?: Review) => review?.shortid ? this.updates.markAllAsTouched() : this.updates.markAsUntouched()),
       // Eventually, return default review
-      map((review) => review ? review : { public: false } as Review),
+      map((review) => review ? review : {public: false} as Review),
       // Cache result
       shareReplay(1),
     );
@@ -235,7 +315,8 @@ export class PageEditComponent implements OnInit, OnDestroy {
       // // Subscribe to form change
       // expand(() => this.updates.valueChanges),
       // Compute absolute DOME score
-      map((review) => computeDomeScore(this.updates.value)),
+      map(() => computeDomeScore(this.mapFormToReview(this.updates.value, this.review))),
+
       // Compute relative DOME score
       map((scores) => new Map([...scores.entries()]
         .map(([key, [done, skip]]) => [key, {
@@ -246,11 +327,11 @@ export class PageEditComponent implements OnInit, OnDestroy {
       )),
       // Cache result
       shareReplay(1),
-
     );
 
 
   }
+
   ngOnInit(): void {
     this.activeRoute.paramMap
 
@@ -262,43 +343,39 @@ export class PageEditComponent implements OnInit, OnDestroy {
       switchMap((shortid) => shortid ? this.reviewService.GetReviewMarkup(shortid) : of(undefined))
     )
 
-    console.log( this.router.url);
+    console.log(this.router.url);
     let full = this.router.url;
     let updatedString = full.replace("/review/", "");
-    
-
 
 
     const a = "flds";
     const b = "rfjek";
     const c = "dfkl";
     this.reviewService.GetReviewMarkup(updatedString).pipe(
-      tap((response)=> {
+      tap((response) => {
         this.jsonLd = this._renderer2.createElement('script');
         this.jsonLd.type = `application/ld+json`;
         this.jsonLd.text = JSON.stringify(response);
-        this._renderer2.appendChild(this._document.body,this.jsonLd);
+        this._renderer2.appendChild(this._document.body, this.jsonLd);
       }),
       takeUntil(this.destroy$.asObservable()),
-
     ).subscribe();
 
 
     this.destroy$
-    .asObservable()
-    .pipe(
-      tap(() => {
-        // Delete markup
-        this._renderer2.removeChild(this._document.body, this.jsonLd);
-      }),
-      take(1)
-    )
-    .subscribe();
-
-
+      .asObservable()
+      .pipe(
+        tap(() => {
+          // Delete markup
+          this._renderer2.removeChild(this._document.body, this.jsonLd);
+        }),
+        take(1)
+      )
+      .subscribe();
 
 
   }
+
   ngOnDestroy(): void {
     this.destroy$.next(true)
   }
@@ -352,12 +429,12 @@ export class PageEditComponent implements OnInit, OnDestroy {
 
   public OnClickdownloadJSonfile($event: MouseEvent) {
     const json = JSON.stringify(this.review, null, 2);
-    const blob = new Blob([json], { type: 'application/json' });
+    const blob = new Blob([json], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
     const a = this._document.createElement('a');
     a.style.display = 'none';
     a.href = url;
-    a.download = this.review?.publication.title +'.json';
+    a.download = this.review?.publication.title + '.json';
     this._document.body.appendChild(a);
     a.click();
 
