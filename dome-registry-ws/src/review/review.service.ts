@@ -1,95 +1,74 @@
-import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
-import { InjectModel } from "@nestjs/mongoose";
-import { Types, Model, Query, QueryOptions, mongo } from "mongoose";
-import { v4 as UUID } from "uuid";
-import { Review, ReviewDocument } from "./review.schema";
-import { User, UserDocument } from "../user/user.schema";
-import { computeDomeScore } from "dome-registry-core";
-import { Role } from "src/roles/role.enum";
+import {BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException} from "@nestjs/common";
+import {InjectModel} from "@nestjs/mongoose";
+import {Types, Model, Query, QueryOptions, mongo} from "mongoose";
+import {v4 as UUID} from "uuid";
+import {Review, ReviewDocument} from "./review.schema";
+import {User, UserDocument} from "../user/user.schema";
+import {computeDomeScore} from "dome-registry-core";
+import {Role} from "../roles/role.enum";
 import ShortUniqueId from "short-unique-id";
-import { timestamp } from "rxjs";
-import { ClientService } from "src/apicuron-sub/apicuron-client.service";
-import { EventEmitter2 } from "@nestjs/event-emitter";
+import {timestamp} from "rxjs";
+import {ClientService} from "src/apicuron-sub/apicuron-client.service";
+import {EventEmitter2} from "@nestjs/event-emitter";
+import {randomBytes} from 'crypto';
 
-import { ReviewCreatedEvent } from "./events/review-created.event";
-import { writeFileSync } from "fs";
+
+import {ReviewCreatedEvent} from "./events/review-created.event";
+import {writeFileSync} from "fs";
+
 @Injectable()
 export class ReviewService {
   private uid: ShortUniqueId;
+
   // Dependency injection
   constructor(
-    @InjectModel(Review.name) private reviewModel: Model<ReviewDocument>,
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private eventEmitter: EventEmitter2
+      @InjectModel(Review.name) private reviewModel: Model<ReviewDocument>,
+      @InjectModel(User.name) private userModel: Model<UserDocument>,
+      private eventEmitter: EventEmitter2
   ) //  private readonly sedEventService: ClientService,
   {
-    const customDictionary = [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9",
-      "a",
-      "b",
-      "c",
-      "d",
-      "e",
-      "f",
-      "g",
-      "h",
-      "i",
-      "j",
-      "k",
-      "l",
-      "m",
-      "n",
-      "o",
-      "p",
-      "q",
-      "r",
-      "s",
-      "t",
-      "u",
-      "v",
-      "w",
-      "x",
-      "y",
-      "z",
-    ];
-    //const dictionnary = '0123456789abcdefghijklmnopqrstuvwxyz';
-    this.uid = new ShortUniqueId({ dictionary: customDictionary });
   }
+
   async aggregateData(groupByField, sortCriteria) {
     try {
       return await this.reviewModel.aggregate([
-        { $match: { public: true } },
+        {$match: {public: true}},
         {
           $group: {
             _id: groupByField,
-            count: { $sum: 1 },
+            count: {$sum: 1},
           },
         },
-        { $sort: sortCriteria },
+        {$sort: sortCriteria},
       ]);
     } catch (error) {
       console.error("Error in aggregateData:", error);
       throw error; // Re-throw the error for the caller to handle
     }
   }
+
   // Find multiple reviews
   // NOTE If user is set, it allows to choose whether to return public or private reviews
   // NOTE If user is not set, it returns only public ones
 
+
+  generateShortId(length: number): string {
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+    let result = '';
+    const bytes = randomBytes(length);
+
+    for (let i = 0; i < length; i++) {
+      result += chars[bytes[i] % chars.length];
+    }
+
+    return result;
+  }
+
   // @Cache({key:'Searche results'})
   async findAll(
-    query: { skip: number; limit: number; text: string; public: boolean ;filter?: string},
-    sort: { by: string; asc: boolean },
-    user?: User
+      query: { skip: number; limit: number; text: string; public: boolean; filter?: string },
+      sort: { by: string; asc: boolean },
+      user?: User
   ) {
     if (user?.roles == Role.Admin) {
       if (user?.organisation == "biocomp") {
@@ -110,7 +89,7 @@ export class ReviewService {
                         // Get only sections in object
                         input: {
                           $filter: {
-                            input: { $objectToArray: "$$ROOT" },
+                            input: {$objectToArray: "$$ROOT"},
                             as: "param",
                             cond: {
                               $in: [
@@ -146,7 +125,7 @@ export class ReviewService {
                             // Update field key with section key
                             as: "field",
                             in: {
-                              k: { $concat: ["$$section.k", "/", "$$field.k"] },
+                              k: {$concat: ["$$section.k", "/", "$$field.k"]},
                               v: "$$field.v",
                             },
                           },
@@ -154,7 +133,7 @@ export class ReviewService {
                       },
                     },
                     initialValue: [],
-                    in: { $concatArrays: ["$$this", "$$value"] },
+                    in: {$concatArrays: ["$$this", "$$value"]},
                   },
                 },
               },
@@ -166,7 +145,7 @@ export class ReviewService {
               matches: {
                 $cond: {
                   // Check if query text is set
-                  if: { $eq: [query.text, ""] },
+                  if: {$eq: [query.text, ""]},
                   // If not, avoid searching
                   then: null,
                   // Otherwise, search for matching fields
@@ -175,9 +154,9 @@ export class ReviewService {
                     $arrayToObject: {
                       $filter: {
                         // Get all fields in current annotation
-                        input: { $objectToArray: "$fields" },
+                        input: {$objectToArray: "$fields"},
                         as: "field",
-                        cond: this.buildMatchCondition(query.text,query.filter)
+                        cond: this.buildMatchCondition(query.text, query.filter)
                       },
                     },
                   },
@@ -198,7 +177,7 @@ export class ReviewService {
                       input: {
                         $filter: {
                           // Get all fields in current annotation
-                          input: { $objectToArray: "$fields" },
+                          input: {$objectToArray: "$fields"},
                           as: "field",
                           cond: {
                             $regexMatch: {
@@ -214,7 +193,7 @@ export class ReviewService {
                     },
                   },
                   initialValue: 0,
-                  in: { $add: ["$$value", "$$this"] },
+                  in: {$add: ["$$value", "$$this"]},
                 },
               },
               // Define number of invalid fields
@@ -227,7 +206,7 @@ export class ReviewService {
                       input: {
                         $filter: {
                           // Get all fields in current annotation
-                          input: { $objectToArray: "$fields" },
+                          input: {$objectToArray: "$fields"},
                           as: "field",
                           cond: {
                             $regexMatch: {
@@ -243,7 +222,7 @@ export class ReviewService {
                     },
                   },
                   initialValue: 0,
-                  in: { $add: ["$$value", "$$this"] },
+                  in: {$add: ["$$value", "$$this"]},
                 },
               },
             },
@@ -253,7 +232,7 @@ export class ReviewService {
             $set: {
               score: {
                 $round: [
-                  { $divide: ["$done", { $add: ["$done", "$skip"] }] },
+                  {$divide: ["$done", {$add: ["$done", "$skip"]}]},
                   2,
                 ],
               },
@@ -277,7 +256,7 @@ export class ReviewService {
               skip: "$$REMOVE",
               // Eventually, remove matches
               matches: {
-                $cond: [{ $ne: ["$matches", null] }, "$matches", "$$REMOVE"],
+                $cond: [{$ne: ["$matches", null]}, "$matches", "$$REMOVE"],
               },
             },
           },
@@ -290,13 +269,13 @@ export class ReviewService {
                 {
                   $or: [
                     // Keep public reviews
-                    { public: true },
+                    {public: true},
                     // Keep private reviews (organization only only)
-                    { public: false },
+                    {public: false},
                   ],
                 },
                 // Filter reviews according to input query
-                { public: query.public },
+                {public: query.public},
               ],
             },
           },
@@ -309,12 +288,12 @@ export class ReviewService {
                   // Case text search is set, then return only matching reviews
                   {
                     $and: [
-                      { $ne: [query.text, ""] },
-                      { $ne: [{ $ifNull: ["$matches", {}] }, {}] },
+                      {$ne: [query.text, ""]},
+                      {$ne: [{$ifNull: ["$matches", {}]}, {}]},
                     ],
                   },
                   // Case text search is not set, then return all reviews
-                  { $eq: [query.text, ""] },
+                  {$eq: [query.text, ""]},
                 ],
               },
             },
@@ -323,11 +302,11 @@ export class ReviewService {
           //here is it
 
           // Sort according to sort variable
-          { $sort: { [sort.by]: sort.asc ? 1 : -1 } },
+          {$sort: {[sort.by]: sort.asc ? 1 : -1}},
           // First, upper bound results
-          { $limit: query.skip + query.limit },
+          {$limit: query.skip + query.limit},
           // Then, apply lower bound
-          { $skip: query.skip },
+          {$skip: query.skip},
         ]);
 
         // console.log(JSON.stringify(data.pipeline()));
@@ -350,7 +329,7 @@ export class ReviewService {
                         // Get only sections in object
                         input: {
                           $filter: {
-                            input: { $objectToArray: "$$ROOT" },
+                            input: {$objectToArray: "$$ROOT"},
                             as: "param",
                             cond: {
                               $in: [
@@ -386,7 +365,7 @@ export class ReviewService {
                             // Update field key with section key
                             as: "field",
                             in: {
-                              k: { $concat: ["$$section.k", "/", "$$field.k"] },
+                              k: {$concat: ["$$section.k", "/", "$$field.k"]},
                               v: "$$field.v",
                             },
                           },
@@ -394,7 +373,7 @@ export class ReviewService {
                       },
                     },
                     initialValue: [],
-                    in: { $concatArrays: ["$$this", "$$value"] },
+                    in: {$concatArrays: ["$$this", "$$value"]},
                   },
                 },
               },
@@ -406,7 +385,7 @@ export class ReviewService {
               matches: {
                 $cond: {
                   // Check if query text is set
-                  if: { $eq: [query.text, ""] },
+                  if: {$eq: [query.text, ""]},
                   // If not, avoid searching
                   then: null,
                   // Otherwise, search for matching fields
@@ -415,7 +394,7 @@ export class ReviewService {
                     $arrayToObject: {
                       $filter: {
                         // Get all fields in current annotation
-                        input: { $objectToArray: "$fields" },
+                        input: {$objectToArray: "$fields"},
                         as: "field",
                         cond: this.buildMatchCondition(query.text, query.filter),
                       },
@@ -438,7 +417,7 @@ export class ReviewService {
                       input: {
                         $filter: {
                           // Get all fields in current annotation
-                          input: { $objectToArray: "$fields" },
+                          input: {$objectToArray: "$fields"},
                           as: "field",
                           cond: {
                             $regexMatch: {
@@ -454,7 +433,7 @@ export class ReviewService {
                     },
                   },
                   initialValue: 0,
-                  in: { $add: ["$$value", "$$this"] },
+                  in: {$add: ["$$value", "$$this"]},
                 },
               },
               // Define number of invalid fields
@@ -467,7 +446,7 @@ export class ReviewService {
                       input: {
                         $filter: {
                           // Get all fields in current annotation
-                          input: { $objectToArray: "$fields" },
+                          input: {$objectToArray: "$fields"},
                           as: "field",
                           cond: {
                             $regexMatch: {
@@ -483,7 +462,7 @@ export class ReviewService {
                     },
                   },
                   initialValue: 0,
-                  in: { $add: ["$$value", "$$this"] },
+                  in: {$add: ["$$value", "$$this"]},
                 },
               },
             },
@@ -493,7 +472,7 @@ export class ReviewService {
             $set: {
               score: {
                 $round: [
-                  { $divide: ["$done", { $add: ["$done", "$skip"] }] },
+                  {$divide: ["$done", {$add: ["$done", "$skip"]}]},
                   2,
                 ],
               },
@@ -517,7 +496,7 @@ export class ReviewService {
               skip: "$$REMOVE",
               // Eventually, remove matches
               matches: {
-                $cond: [{ $ne: ["$matches", null] }, "$matches", "$$REMOVE"],
+                $cond: [{$ne: ["$matches", null]}, "$matches", "$$REMOVE"],
               },
             },
           },
@@ -531,13 +510,13 @@ export class ReviewService {
                 {
                   $or: [
                     // Keep public reviews
-                    { public: true },
+                    {public: true},
                     // Keep private reviews (organization only only)
-                    { public: false, "publication.journal": {$in: user.organizations }},
+                    {public: false, "publication.journal": {$in: user.organizations}},
                   ],
                 },
                 // Filter reviews according to input query
-                { public: query.public },
+                {public: query.public},
               ],
             },
           },
@@ -582,12 +561,12 @@ export class ReviewService {
                   // Case text search is set, then return only matching reviews
                   {
                     $and: [
-                      { $ne: [query.text, ""] },
-                      { $ne: [{ $ifNull: ["$matches", {}] }, {}] },
+                      {$ne: [query.text, ""]},
+                      {$ne: [{$ifNull: ["$matches", {}]}, {}]},
                     ],
                   },
                   // Case text search is not set, then return all reviews
-                  { $eq: [query.text, ""] },
+                  {$eq: [query.text, ""]},
                 ],
               },
             },
@@ -596,14 +575,13 @@ export class ReviewService {
           //here is it
 
           // Sort according to sort variable
-          { $sort: { [sort.by]: sort.asc ? 1 : -1 } },
+          {$sort: {[sort.by]: sort.asc ? 1 : -1}},
           // First, upper bound results
-          { $limit: query.skip + query.limit },
+          {$limit: query.skip + query.limit},
           // Then, apply lower bound
-          { $skip: query.skip },
+          {$skip: query.skip},
         ]);
 
-        
 
         return data;
       }
@@ -612,7 +590,7 @@ export class ReviewService {
       console.log("the logged user is not an admin");
       // Apply aggregation function to model
 
-      const data =  this.reviewModel.aggregate([
+      const data = this.reviewModel.aggregate([
         // Add flattened sections' fields
         {
           $set: {
@@ -626,7 +604,7 @@ export class ReviewService {
                       // Get only sections in object
                       input: {
                         $filter: {
-                          input: { $objectToArray: "$$ROOT" },
+                          input: {$objectToArray: "$$ROOT"},
                           as: "param",
                           cond: {
                             $in: [
@@ -662,7 +640,7 @@ export class ReviewService {
                           // Update field key with section key
                           as: "field",
                           in: {
-                            k: { $concat: ["$$section.k", "/", "$$field.k"] },
+                            k: {$concat: ["$$section.k", "/", "$$field.k"]},
                             v: "$$field.v",
                           },
                         },
@@ -670,7 +648,7 @@ export class ReviewService {
                     },
                   },
                   initialValue: [],
-                  in: { $concatArrays: ["$$this", "$$value"] },
+                  in: {$concatArrays: ["$$this", "$$value"]},
                 },
               },
             },
@@ -682,7 +660,7 @@ export class ReviewService {
             matches: {
               $cond: {
                 // Check if query text is set
-                if: { $eq: [query.text, ""] },
+                if: {$eq: [query.text, ""]},
                 // If not, avoid searching
                 then: null,
                 // Otherwise, search for matching fields
@@ -691,7 +669,7 @@ export class ReviewService {
                   $arrayToObject: {
                     $filter: {
                       // Get all fields in current annotation
-                      input: { $objectToArray: "$fields" },
+                      input: {$objectToArray: "$fields"},
                       as: "field",
                       cond: this.buildMatchCondition(query.text, query.filter),
                     },
@@ -714,7 +692,7 @@ export class ReviewService {
                     input: {
                       $filter: {
                         // Get all fields in current annotation
-                        input: { $objectToArray: "$fields" },
+                        input: {$objectToArray: "$fields"},
                         as: "field",
                         cond: {
                           $regexMatch: {
@@ -730,7 +708,7 @@ export class ReviewService {
                   },
                 },
                 initialValue: 0,
-                in: { $add: ["$$value", "$$this"] },
+                in: {$add: ["$$value", "$$this"]},
               },
             },
             // Define number of invalid fields
@@ -743,7 +721,7 @@ export class ReviewService {
                     input: {
                       $filter: {
                         // Get all fields in current annotation
-                        input: { $objectToArray: "$fields" },
+                        input: {$objectToArray: "$fields"},
                         as: "field",
                         cond: {
                           $regexMatch: {
@@ -759,7 +737,7 @@ export class ReviewService {
                   },
                 },
                 initialValue: 0,
-                in: { $add: ["$$value", "$$this"] },
+                in: {$add: ["$$value", "$$this"]},
               },
             },
           },
@@ -768,7 +746,7 @@ export class ReviewService {
         {
           $set: {
             score: {
-              $round: [{ $divide: ["$done", { $add: ["$done", "$skip"] }] }, 2],
+              $round: [{$divide: ["$done", {$add: ["$done", "$skip"]}]}, 2],
             },
           },
         },
@@ -790,7 +768,7 @@ export class ReviewService {
             skip: "$$REMOVE",
             // Eventually, remove matches
             matches: {
-              $cond: [{ $ne: ["$matches", null] }, "$matches", "$$REMOVE"],
+              $cond: [{$ne: ["$matches", null]}, "$matches", "$$REMOVE"],
             },
           },
         },
@@ -802,13 +780,13 @@ export class ReviewService {
               {
                 $or: [
                   // Keep public reviews
-                  { public: true },
+                  {public: true},
                   // Keep private reviews (current user only)
-                  { public: false, user: new Types.ObjectId(user && user._id) },
+                  {public: false, user: new Types.ObjectId(user && user._id)},
                 ],
               },
               // Filter reviews according to input query
-              { public: query.public },
+              {public: query.public},
             ],
           },
         },
@@ -821,25 +799,25 @@ export class ReviewService {
                 // Case text search is set, then return only matching reviews
                 {
                   $and: [
-                    { $ne: [query.text, ""] },
-                    { $ne: [{ $ifNull: ["$matches", {}] }, {}] },
+                    {$ne: [query.text, ""]},
+                    {$ne: [{$ifNull: ["$matches", {}]}, {}]},
                   ],
                 },
                 // Case text search is not set, then return all reviews
-                { $eq: [query.text, ""] },
+                {$eq: [query.text, ""]},
               ],
             },
           },
         },
         // Remove user information
         //here is it
-        { $project: { user: 0 } },
+        {$project: {user: 0}},
         // Sort according to sort variable
-        { $sort: { [sort.by]: sort.asc ? 1 : -1 } },
+        {$sort: {[sort.by]: sort.asc ? 1 : -1}},
         // First, upper bound results
-        { $limit: query.skip + query.limit },
+        {$limit: query.skip + query.limit},
         // Then, apply lower bound
-        { $skip: query.skip },
+        {$skip: query.skip},
       ]);
 
       const pipeline = data.pipeline();
@@ -973,21 +951,21 @@ export class ReviewService {
       });
     }
 
-    return { $and: conditions };
+    return {$and: conditions};
   }
 
   //**----------Publish the review--------*//
 
   async makePublic(iden: string, user: User) {
     //if()
-    const filter = { uuid: iden };
-    const update = { public: "true" };
+    const filter = {uuid: iden};
+    const update = {public: "true"};
     if (user.roles == Role.Admin) {
       try {
         const updatedDocument = await this.reviewModel.findOneAndUpdate(
-          filter,
-          { $set: { public: true } },
-          { new: true }
+            filter,
+            {$set: {public: true}},
+            {new: true}
         );
         return updatedDocument;
       } catch (error) {
@@ -1001,19 +979,20 @@ export class ReviewService {
   async findOne(uuid: string) {
     // Retrieve review
     return await this.reviewModel
-      // Filter review with given UUI
-      .findOne({ uuid })
-      // .populate("user")
-      .exec();
+        // Filter review with given UUI
+        .findOne({uuid})
+        // .populate("user")
+        .exec();
   }
+
   //** retrieve one specific review with shortid  */
   async findOneShortid(shortid: string) {
     // Retrieve review
     return await this.reviewModel
-      // Filter review with given UUI
-      .findOne({ shortid: shortid })
-      // .populate("user")
-      .exec();
+        // Filter review with given UUI
+        .findOne({shortid: shortid})
+        // .populate("user")
+        .exec();
   }
 
   async create(review: Partial<Review>, user: User) {
@@ -1024,7 +1003,7 @@ export class ReviewService {
     const updated = created;
     // Define unique identifier
     const uuid = UUID();
-    const shortid = this.uid.randomUUID(10);
+    const shortid = this.generateShortId(10);
     // Update review
     review = Object.assign(review, {
       shortid,
@@ -1059,14 +1038,12 @@ export class ReviewService {
     return response;
   }
 
-  async update(review: Partial<Review>): Promise<Review>{
+  async update(review: Partial<Review>): Promise<Review> {
 
 
     if (!review.shortid || !review.uuid) {
       throw new BadRequestException('shortid and uuid are required');
-  }
-
-
+    }
 
 
     // Define update time
@@ -1085,19 +1062,20 @@ export class ReviewService {
     // NOTE An user can update only its own reviews
     // NOTE Only private reviews can be updated
     return this.reviewModel.findOneAndUpdate(
-      // Get only searched and allowed review
-      { shortid: review.shortid, uuid: review.uuid, private:true },
-      // Use input values to update review
-      Object.assign({}, review, { updated }),
-      // Return updated review
-      { new: true,
-        lean:  true
-       }).then(result => {
-        if (!result){
-          throw new NotFoundException('review is not found or authorized');
-        }
-        return result;
-       });
+        // Get only searched and allowed review
+        {shortid: review.shortid, uuid: review.uuid, private: true},
+        // Use input values to update review
+        Object.assign({}, review, {updated}),
+        // Return updated review
+        {
+          new: true,
+          lean: true
+        }).then(result => {
+      if (!result) {
+        throw new NotFoundException('review is not found or authorized');
+      }
+      return result;
+    });
   }
 
   // Remove document according to given UUID
@@ -1109,12 +1087,12 @@ export class ReviewService {
       let deletedReview;
       let rev;
       if (this.isAdmin(user2)) {
-        deletedReview = await this.reviewModel.findOneAndDelete({ uuid });
+        deletedReview = await this.reviewModel.findOneAndDelete({uuid});
       } else {
         console.log('second condition to delete the review for user');
-        rev = await this.reviewModel.findOne({ uuid, public: false });
+        rev = await this.reviewModel.findOne({uuid, public: false});
         console.log(rev);
-        deletedReview = await this.reviewModel.findOneAndDelete({ uuid, public: false, user: user2 });
+        deletedReview = await this.reviewModel.findOneAndDelete({uuid, public: false, user: user2});
       }
 
       return !!deletedReview;
@@ -1124,19 +1102,21 @@ export class ReviewService {
     }
 
   }
+
   private isAdmin(user: User): boolean {
     // Assuming roles are stored as an array in the User object
     return user.roles.includes(Role.Admin);
   }
+
   // Count public annotations
   async countPub(): Promise<number> {
-    const bn = await this.reviewModel.countDocuments({ public: true });
+    const bn = await this.reviewModel.countDocuments({public: true});
     return bn;
   }
 
   // Count private annotations
   async countprivate(): Promise<number> {
-    const bn = await this.reviewModel.countDocuments({ public: false });
+    const bn = await this.reviewModel.countDocuments({public: false});
     return bn;
   }
 
@@ -1146,12 +1126,12 @@ export class ReviewService {
     return bn;
   }
 
- 
+
   // get the Annotations counts form the Database
   async getAnnotationsC() {
     return this.aggregateData(
-        { $trim: { input: "$publication.year" } }, // Group by trimmed year
-        { _id: -1 } // Sort by year in descending order
+        {$trim: {input: "$publication.year"}}, // Group by trimmed year
+        {_id: -1} // Sort by year in descending order
     );
   }
 
@@ -1159,7 +1139,7 @@ export class ReviewService {
   async getJournalsName() {
     return this.aggregateData(
         "$publication.journal", // Group by journal name
-        { count: -1 } // Sort by count in descending order
+        {count: -1} // Sort by count in descending order
     );
   }
 
@@ -1167,7 +1147,7 @@ export class ReviewService {
   async getScoreDataset() {
     return this.aggregateData(
         "$dataset.done", // Group by dataset score
-        { _id: -1 } // Sort by count in descending order
+        {_id: -1} // Sort by count in descending order
     );
   }
 
@@ -1175,7 +1155,7 @@ export class ReviewService {
   async getScoreOptimization() {
     return this.aggregateData(
         "$optimization.done", // Group by dataset score
-        { _id: -1 } // Sort by count in descending order
+        {_id: -1} // Sort by count in descending order
     );
   }
 
@@ -1183,7 +1163,7 @@ export class ReviewService {
   async getScoreEvaluation() {
     return this.aggregateData(
         "$evaluation.done", // Group by dataset score
-        { _id: -1 } // Sort by count in descending order
+        {_id: -1} // Sort by count in descending order
     );
   }
 
@@ -1191,7 +1171,7 @@ export class ReviewService {
   async getScoreModel() {
     return this.aggregateData(
         "$model.done", // Group by dataset score
-        { _id: -1 } // Sort by count in descending order
+        {_id: -1} // Sort by count in descending order
     );
   }
 
@@ -1199,13 +1179,11 @@ export class ReviewService {
   async getScoreOverall() {
     return this.aggregateData(
         "$score", // Group by dataset score
-        { _id: -1 } // Sort by count in descending order
+        {_id: -1} // Sort by count in descending order
     );
   }
 
 
-
-  
 // APi Curon function for bulk submission
   async APICuronAll() {
     return this.reviewModel.aggregate([
@@ -1224,7 +1202,7 @@ export class ReviewService {
       },
       {
         $match: {
-          "owner.orcid": { $exists: true },
+          "owner.orcid": {$exists: true},
           public: true,
         },
       },

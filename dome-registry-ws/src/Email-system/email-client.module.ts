@@ -27,8 +27,8 @@ import { debug } from "console";
               from: '"DOME ML" info@dome-ml.org',
             },
             transportOptions:{
-              logger: true,
-              debug: true,
+              logger: false,
+              debug: false,
               socketTimeout:60000,
             }
 
