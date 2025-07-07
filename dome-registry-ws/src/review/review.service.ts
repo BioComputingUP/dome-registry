@@ -1274,4 +1274,33 @@ export class ReviewService {
       },
     ]);
   }
+
+
+
+
+  async FetchAll() {
+
+  return this.reviewModel.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $unwind: {  path: "$user", preserveNullAndEmptyArrays: true },
+    },
+  ])
+
+
+
+  }
+
+
 }
+
+
+
+

@@ -95,6 +95,18 @@ export class ReviewController {
     // Run query against the database
     return this.reviewService.findAll(_query, _sort, user);
   }
+ 
+@Get("all")
+@ApiOperation({ summary: "Get all reviews  " })
+async Fetchall() {
+  
+ return await this.reviewService.FetchAll();
+
+}
+
+
+
+
 
   //**--------------- Get the number of entries in the database-----------  *//
   @ApiOperation({ summary: "Get the total number of Public entries" })
