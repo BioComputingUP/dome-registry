@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+
 .stat-card {
     background: #f8f9fa;
     border-radius: 10px;
@@ -16,6 +19,7 @@
 .dome{
 
     color: #f47d20;
+    font-family: Inter;
 }
 #intro{
     font-family: Inter;
@@ -31,16 +35,6 @@
 
     margin: auto;
 }
-.card-scroll-container {
-    overflow-x: hidden;
-    padding: 20px 40px;
-    position: relative;
-}
-
-/* Hide scrollbar in Firefox */
-.card-scroll-container::-webkit-scrollbar {
-    display: none;
-}
 
 /* Flex container for cards */
 .card-row {
@@ -52,45 +46,68 @@
 }
 
 /* Individual card styling */
-.scroll-card {
-    min-width: 250px;
-    flex: 0 0 auto;
-    cursor: pointer;
+
+.scroll-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    padding: 0 40px;
+  }
+  
+  .card-wrapper {
+    overflow: hidden;
+    display: inline-block;
+    width: 300px;
+    margin: 10px;
     transition: transform 0.2s;
+  }
+  
+
+.card{
+ border-radius: 10px 10px 0 0;
+    
+    //padding: 20px;
+    //text-align: center;
+    
+    
 }
 
-.scroll-card:hover {
-    transform: translateY(-5px);
-}
-
-/* Navigation arrows */
-.nav-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
+.btn-gradient {
+    background: linear-gradient(90deg, #F66729, #FF922B);
+    color: black;
     border: none;
-    color: white;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 100;
-    transition: background-color 0.2s;
+   border-radius: 0;
+ 
 }
 
-.nav-arrow:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-.nav-arrow:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.nav-left {
+  
+  .scroll-arrow:hover {
+    background: #f8f9fa;
+  }
+  
+  .arrow-left {
     left: 0;
-}
-
-.nav-right {
+  }
+  
+  .arrow-right {
     right: 0;
-}
-
+  }
+  
+  .scroll-arrow::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-top: 3px solid #333;
+    border-right: 3px solid #333;
+  }
+  
+  .arrow-left::after {
+    transform: rotate(-135deg);
+    margin-left: 4px;
+  }
+  
+  .arrow-right::after {
+    transform: rotate(45deg);
+    margin-right: 4px;
+  }

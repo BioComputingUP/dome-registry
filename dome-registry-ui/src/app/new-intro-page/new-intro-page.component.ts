@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit,Inject, Renderer2 } from '@angular/core';
+import { Component, OnDestroy, OnInit,Inject, Renderer2, ViewChild, ElementRef } from '@angular/core';
 import { AuthService } from "../auth.service";
 import { PageSearchComponent } from '../page-search/page-search.component';
 import { ReviewService } from '../review.service';
@@ -16,6 +16,7 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./new-intro-page.component.scss']
 })
 export class NewIntroPageComponent implements OnInit, OnDestroy {
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   jsonLd: any;
   private destroy$ = new Subject<void>();
   // Subscribe to user
@@ -50,6 +51,71 @@ export class NewIntroPageComponent implements OnInit, OnDestroy {
       )
     })
   )
+
+  cards = [
+    { 
+      title: 'Card 1',
+      text: 'Content for card 1',
+      button: 'Action 1',
+      
+    },
+    { 
+      title: 'Card 2',
+      text: 'Content for card 2',
+      button: 'Action 2',
+      
+    },
+    { 
+      title: 'Card 2',
+      text: 'Content for card 2',
+      button: 'Action 2',
+      
+    },{ 
+      title: 'Card 2',
+      text: 'Content for card 2',
+      button: 'Action 2',
+      
+    },{ 
+      title: 'Card 2',
+      text: 'Content for card 2',
+      button: 'Action 2',
+      
+    },{ 
+      title: 'Card 2',
+      text: 'Content for card 2',
+      button: 'Action 2',
+      
+    },{ 
+      title: 'Card 2',
+      text: 'Content for card 2',
+      button: 'Action 2',
+      
+    },{ 
+      title: 'Card 2',
+      text: 'Content for card 2',
+      button: 'Action 2',
+      
+    },{ 
+      title: 'Card 2',
+      text: 'Content for card 2',
+      button: 'Action 2',
+      
+    },
+    { 
+      title: 'Card 2',
+      text: 'Content for card 2',
+      button: 'Action 2',
+      
+    },
+    // Add more cards as needed
+  ];
+
+  scroll(direction: number): void {
+    const element = this.scrollContainer.nativeElement;
+    element.scrollBy({ top: direction * 100, behavior: 'smooth' });
+  }
+  
+
 
   // Dependency injection
   constructor( private authService: AuthService, private reviewService: ReviewService, private userService: UserService,

@@ -1,151 +1,149 @@
 <div class=" container-fluid bg-primary bg-gradient h-100 w-100 py-5">
-    <div>
+  <div>
 
-        <div class=" container pt-2   h-100 w-100  ">
-            <div class="row gx-5 pt-2 align-items-center h-100 w-100">
-                <div class="col-xxl-5">
+    <div class=" container pt-2   h-100 w-100  ">
+      <div class="row gx-5 pt-2 align-items-center h-100 w-100">
+        <div class="col-xxl-5">
 
-                    <!-- Header text content-->
-                    <div class="text-center text-xxl-start">
-                        <h1 id= "intro" class="display-3 fw-bolder mb-1 title dome"><span class="text-gradient d-inline">DOME</span> <span class="title text-white"> Registry</span></h1>
-                        
-                        <div class="text-white mb-4">
-                            <div id= "intro"  class="text-uppercase"><span class="dome">D</span>ATA &middot; <span class="dome">O</span>ptimization &middot; <span class="dome">M</span>ODEL &middot;  <span class="dome">E</span>VALUATION</div>
-                        </div>
-                        <div id= "intro" class="fs-3 fw-light  mb-5 text-white"> A database of <b>
-                            annotations  
-                        </b> for published papers
-                            describing
-                         <b>   machine learning </b> methods in biology.</div>
-                        
-                           
-                            <div class= "row text-center text-white">
+          <!-- Header text content-->
+          <div class="text-center text-xxl-start">
+            <h1 id="intro" class="display-3 fw-bolder mb-1 title dome"><span class="text-gradient d-inline">DOME</span>
+              <span class="title text-white"> Registry</span>
+            </h1>
 
-
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 ">
-                                    <i class="bi bi-people"></i>
-                                    <span class="badge ">Users</span> 
-                                    <p class=""> 255  </p>
-                                         
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12  ">
-                                    
-                                        <i class="bi bi-journals"></i>
-                                         <span class="badge " id>Entries</span>
-                                         <p class=""> 236 </p>
-                                         
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 ">
-                                   
-                                    <i class="bi  bi-clock-history"></i>
-                                    <span class="badge">In progress</span>
-                                    <p class=" "> 50</p>
-                                     
-                                
-
-                                </div>
-                                
-
-                            </div>
-
-
-                         
-                        
-                         <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mt-3">
-                            <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder"
-                                href="resume.html">Browse</a>
-                            <a class="btn btn-primary btn-lg px-5 py-3 fs-6 fw-bolder"
-                                href="projects.html">Browse</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xxl-5 offset-xxl-2">
-                    
-                    <div class="d-flex justify-content-center mt-xxl-0">
-                        <div class=" logo">
-                            <!-- Logo -->
-                            <img class="w-100 h-100" src="../../assets/logo-white-animated.svg" alt="..." />
-
-
-
-
-                        </div>
-                    </div>
-
-
-
-
-                </div>
+            <div class="text-white mb-4">
+              <div id="intro" class="text-uppercase"><span class="dome">D</span>ATA &middot; <span
+                  class="dome">O</span>ptimization &middot; <span class="dome">M</span>ODEL &middot; <span
+                  class="dome">E</span>VALUATION</div>
             </div>
+            <div id="intro" class="fs-3 fw-light  mb-5 text-white"> A database of <b>
+                annotations
+              </b> for published papers
+              describing
+              <b> machine learning </b> methods in biology.
+            </div>
+
+
+            <div class="row text-white justify-content-center">
+
+              <div class="col-12 col-md-4 mb-3 mb-md-0 border-end border-white">
+                <div class="d-flex align-items-center justify-content-center  ">
+                  <i class="bi bi-people fs-1"></i>
+                  <div class="ms-3 ">
+                    <span class="">Users</span>
+                    <p class="dome fw-bold fs-4 m-0 ">{{ countPreson | async }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-4 mb-3 mb-md-0 border-end border-white">
+                <div class="d-flex align-items-center justify-content-center  ">
+                  <i class="bi bi-file-earmark-text fs-1"></i>
+                  <div class="ms-3">
+                    <span>Entries</span>
+                    <p class="dome fw-bold fs-4 m-0 ">{{countCounter$ | async }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12 col-md-4">
+                <div class="d-flex align-items-center justify-content-center  ">
+                  <i class="bi bi-file-earmark-lock fs-1"></i>
+                  <div class="ms-3">
+                    <span> Private
+                    </span>
+
+                    <p class="dome fw-bold fs-4 m-0 ">{{countProgres$ | async}}</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+
+
+
+
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mt-4">
+              <button class="btn btn-gradient btn-lg px-4 py-2 me-sm-3  " [routerLink]="['/search']">Browse <i class="  bi bi-arrow-right "></i> </button>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-xxl-5 offset-xxl-2">
+
+          <div class="d-flex justify-content-center mt-xxl-0">
+            <div class=" logo">
+              <!-- Logo -->
+              <img class="w-100 h-100" src="../../assets/logo-white-animated.svg" alt="..." />
+
+
+
+
+            </div>
+          </div>
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row p-4">
+
+
+
+      <h3 class="text-white ">Latest publications</h3>
+
+      <div class="container">
+
+
+        <!-- Container for horizontal scrolling -->
+
+
+        <div class="container-fluid  px-3">
+
+
+          <div class="position-relative">
+            <!-- Scroll container -->
+            <div class="scroll-container" #scrollContainer>
+              <!-- Cards container -->
+              <div class="d-flex flex-nowrap pb-2">
+                <!-- Card template -->
+                <div class="card-wrapper" id="intro" *ngFor="let card of cards">
+                  <div class="card publication-card">
+                    <div class="card-header text-white bg-primary">
+                      <h5 class="d-block  text-center">Journal name</h5>
+                    </div>
+                    <div class="card-body">
+                      <p>
+
+                        Random text here and the paper information will be here. .
+                      </p>
+                      <p class="card-text">{{card.text}}</p>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Navigation arrows -->
+            <button class="scroll-arrow arrow-left" (click)="scroll(-1)" aria-label="Scroll left"></button>
+            <button class="scroll-arrow arrow-right" (click)="scroll(1)" aria-label="Scroll right"></button>
+          </div>
         </div>
 
-        <div class="row p-5">
 
 
 
-            <p class="text-white ml-5">Latest publications</p>
-           
-            <div class="container">
-                <!-- Navigation arrows -->
-                <button class="nav-arrow nav-left" onclick="scrollCards('left')">
-                    ←
-                </button>
-        
-                <!-- Container for horizontal scrolling -->
-                <div class="card-scroll-container" id="cardContainer">
-                    <!-- Flex row containing cards -->
-                    <div class="card-row" id="cardRow">
-                        <!-- Individual cards -->
-                        <div class="scroll-card card">
-                            <img src="https://via.placeholder.com/200x150" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card Title 1</h5>
-                                <p class="card-text">Some quick example text to build on the card title.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="scroll-card card">
-                            <img src="https://via.placeholder.com/200x150" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card Title 2</h5>
-                                <p class="card-text">Some quick example text to build on the card title.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="scroll-card card">
-                            <img src="https://via.placeholder.com/200x150" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card Title 3</h5>
-                                <p class="card-text">Some quick example text to build on the card title.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="scroll-card card">
-                            <img src="https://via.placeholder.com/200x150" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card Title 4</h5>
-                                <p class="card-text">Some quick example text to build on the card title.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="scroll-card card">
-                            <img src="https://via.placeholder.com/200x150" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Card Title 5</h5>
-                                <p class="card-text">Some quick example text to build on the card title.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        
-                <!-- Navigation arrow for right -->
-                <button class="nav-arrow nav-right" onclick="scrollCards('right')">
-                    →
-                </button>
-            </div>
+        <!-- Navigation arrow for right -->
 
-        </div>     
-         
+      </div>
+
     </div>
+
+  </div>
 
 </div>

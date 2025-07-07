@@ -18,7 +18,7 @@ const params: Route = {
 // Definer available routes
 const routes: Routes = [
   //New intro page 
- // { ...params, path: 'intro2', component: NewIntroPageComponent },
+  { ...params, path: 'intro2', component: NewIntroPageComponent },
   // Define path to introduction page
   { ...params, path: 'intro', component: PageIntroComponent },
   // Define path to statistics page
