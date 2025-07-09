@@ -27,10 +27,43 @@
       <p>Goals</p>
     </div>
     <div class="recoms">
-      <h3>Bridging the ML Reproducibility Gap in Scientific Discovery</h3>
-      <p>Machine learning (ML) is transforming scientific discovery, but describing complex ML methods adequately in
-        traditional publications is challenging. This often hinders understanding, comparison, replication, and reuse,
-        contributing to a "reproducibility crisis" in computational research.</p>
+      <!-- Content for Challenges (default active) -->
+      <div class="recom-content active" id="recom-content-0">
+        <h3>The Challenge</h3>
+        <p>Machine learning (ML) is transforming scientific discovery, but describing complex ML methods adequately in
+          traditional publications is challenging. This often hinders understanding, comparison, replication, and reuse,
+          contributing to a "reproducibility crisis" in computational research.</p>
+      </div>
+
+      <!-- Content for Solution -->
+      <div class="recom-content" id="recom-content-1">
+        <h3>The Solution</h3>
+        <p>The DOME Recommendations provide a structured, community-agreed-upon framework for describing ML methods.
+          They offer guidelines on the essential information needed to understand and potentially replicate an ML
+          application.</p>
+      </div>
+
+      <!-- Content for Key Principles -->
+      <div class="recom-content" id="recom-content-2">
+        <h3>Key Principles</h3>
+        <p>The Recommendations focus on capturing critical details often missing from narrative descriptions, including:
+          Clear identification of the ML task and model type.
+          Detailed information about training, validation, and test datasets.
+          Preprocessing steps and feature engineering specifics.
+          Model architecture and hyperparameters.
+          Training procedures and optimisation details.
+          Evaluation metrics and procedures.
+          Software environment and dependencies.
+        </p>
+      </div>
+
+      <!-- Content for Goals -->
+      <div class="recom-content" id="recom-content-3">
+        <h3>Goal</h3>
+        <p>To make ML methods more FAIR (Findable, Accessible, Interoperable, and Reusable) by providing a standardized
+          checklist and structure for their description.
+        </p>
+      </div>
     </div>
     <div class="machine-learning-container">
       <div class="machine-learning">
@@ -72,10 +105,12 @@
       <div class="full-documentation">
         <p>Full Documentation</p>
         <div class="full-documentation-button">
-          <button class="dome-ML">Dome ML <img src="assets/thin-arrow-right-icon.svg" alt="Right arrow" class="right-small-arrow">
-          </button>
-          <button class="foundation-publication">Foundation Publication <img src="assets/thin-arrow-right-icon.svg"
-                                                                             alt="Right arrow" class="right-small-arrow"></button>
+          <a href="https://dome-ml.org/" class="dome-ML">Dome ML <img src="assets/thin-arrow-right-icon.svg"
+                                                                      alt="Right arrow" class="right-small-arrow">
+          </a>
+          <a href="https://doi.org/10.1038/s41592-021-01205-4" class="foundation-publication">Foundation Publication
+            <img src="assets/thin-arrow-right-icon.svg"
+                 alt="Right arrow" class="right-small-arrow"></a>
         </div>
       </div>
       <div class="full-documentation-line"></div>
@@ -139,7 +174,9 @@
           The DOME Registry is the practical, web-based platform designed to implement the DOME Recommendations. It
           serves
           as a public, searchable database for detailed ML method descriptions.</p>
-        <button>Action Button<img src="assets/thin-arrow-right-icon.svg" alt="Right arrow" class="right-small-arrow"></button>
+        <a href="https://doi.org/10.1038/s41592-021-01205-4">Read Publication<img src="assets/thin-arrow-right-icon.svg"
+                                                                                  alt="Right arrow"
+                                                                                  class="right-small-arrow"></a>
       </div>
       <div class="boxes">
         <div class="boxes-l">
@@ -236,6 +273,9 @@
           <p class="open-source-text">
             The DOME Registry codebase is hosted online on GitHub repository.
           </p>
+
+          <a href="https://github.com/BioComputingUP/dome-registry/" class="dome-ML">View Repository<img
+            src="assets/thin-arrow-right-icon.svg" alt="Right arrow" class="right-small-arrow"></a>
         </div>
       </div>
     </div>
@@ -250,23 +290,25 @@
       <div class="citing-dome-box">
         <div class="head-citing-dome">
           <div class="square"></div>
-          <p class="head-citing-dome-text">To Cite the DOME Recommendations Framework:</p>
+          <p class="head-citing-dome-text">DOME: recommendations for supervised machine learning validation in
+            biology</p>
         </div>
-        <p class="citing-dome-box-text">Please cite our primary publication outlining the recommendations:<br>
-          [Provide full citation for the Nature Methods paper, e.g., Author(s), (Year). Title. Nature Methods,
-          Volume(Issue), Pages. DOI]</p>
+        <p class="citing-dome-box-text"><strong>Please cite our primary publication outlining the recommendations:</strong><br>
+          Walsh, I., Fishman, D., Garcia-Gasulla, D. et al. DOME: recommendations for supervised machine learning
+          validation in biology. Nat Methods 18, 1122–1127 (2021). <a href="https://doi.org/10.1038/s41592-021-01205-4">https://doi.org/10.1038/s41592-021-01205-4</a>
+        </p>
       </div>
       <div class="citing-dome-box">
         <div class="head-citing-dome">
           <div class="square"></div>
           <p class="head-citing-dome-text">To Cite the DOME Registry Platform:</p>
         </div>
-        <p class="citing-dome-box-text">Please cite the publication describing the registry's development and features
-          (or provide a preferred citation
-          statement if no paper exists yet):<br>
-          [Provide full citation for the GigaScience paper or other relevant publication/preferred statement, e.g.,
-          Author(s), (Year). Title. GigaScience, Volume(Issue), Identifier. DOI or URL]<br>
-          Alternatively: "We utilized the DOME Registry ([URL of the Registry]) for method deposition/discovery."</p>
+        <p class="citing-dome-box-text"><strong>Please cite the publication describing the registry's development and
+          features</strong> :<br>
+          Omar Abdelghani Attafi,& al. DOME Registry: implementing
+          community-wide recommendations for reporting supervised machine learning in biology, GigaScience, Volume 13,
+          2024, giae094, <a href="https://doi.org/10.1093/gigascience/giae094">https://doi.org/10.1093/gigascience/giae094</a><br>
+        </p>
       </div>
       <div class="citing-dome-box">
         <div class="head-citing-dome">

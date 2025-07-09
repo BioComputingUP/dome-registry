@@ -30,7 +30,7 @@
     line-height: 26px; /* 162.5% */
   }
 
-  button {
+  button, .tutorial-button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,6 +48,9 @@
     font-style: normal;
     line-height: normal;
     flex-shrink: 0;
+    background-color: white;
+    text-decoration: none;
+    cursor: pointer;
   }
 }
 

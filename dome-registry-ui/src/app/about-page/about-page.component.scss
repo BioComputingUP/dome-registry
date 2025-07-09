@@ -1,52 +1,74 @@
+// Variables
 $font-primary: Inter, sans-serif;
+$color-white: #FFF;
+$color-dark-blue: #003958;
+$color-blue-gradient-start: #012437;
+$color-blue-gradient-end: #045079;
+$color-orange: #F66729;
+$color-cyan: #00F5FB;
 
+// Mixins
+@mixin flex($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
 
+@mixin font($size, $weight: 400, $line-height: normal, $style: normal) {
+  font-family: $font-primary;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height;
+  font-style: $style;
+}
+
+// Host element
 :host {
   position: relative; // Contains the absolutely positioned markers
   overflow: hidden; // Prevents extra scroll space
   display: block;
   width: 100%;
 }
+
 // Full-page dark blue gradient background with SVG overlay
 .about-background {
   width: 100%;
   min-height: 100vh;
-  background: #003958;
-
+  background: $color-dark-blue;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   overflow-x: hidden;
 
-  /* Gradient only in first viewport */
+  // Gradient only in first viewport
   &::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
-    background: linear-gradient(180deg, #012437 0%, #045079 100%);
+    height: 90vh;
+    background: linear-gradient(180deg, $color-blue-gradient-start 0%, $color-blue-gradient-end 100%);
     z-index: 0;
     pointer-events: none;
   }
 
-  /* SVG background */
+  // SVG background
   &::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 90vh;
     background: url('../../assets/about-page-background.svg') center center no-repeat;
     background-size: cover;
     opacity: 0.25;
     z-index: 0;
     pointer-events: none;
   }
-
 }
 
 // Content container
@@ -54,653 +76,566 @@ $font-primary: Inter, sans-serif;
   position: relative;
   z-index: 1;
   max-width: 887px;
-  color: white;
-  text-align: center;
-  flex-shrink: 0;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  height: 90vh;
   padding: 0 20px;
-}
-
-.about-center h1 {
-  color: #FFF;
-  font-family: $font-primary;
-  font-size: 60px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  margin-bottom: 49px;
-}
-
-.about-center p {
+  @include flex(column);
+  flex-shrink: 0;
+  color: $color-white;
   text-align: center;
-  font-family: $font-primary;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 35px;
+
+  h1 {
+    margin-bottom: 49px;
+    color: $color-white;
+    @include font(60px, 700);
+  }
+
+  p {
+    @include font(20px, 400, 35px);
+    text-align: center;
+  }
 }
 
+// White divider line
 .white-divider {
   width: 100%;
   height: 6px;
-  background-color: white;
   margin: 0;
   position: relative;
   z-index: 10;
+  background-color: $color-white;
 }
 
+// DOME Recommendations section
 .dome-recommendations {
   position: relative;
   z-index: 1;
   max-width: 1250px;
   width: 100%;
-  color: white;
-  text-align: center;
-  flex-shrink: 0;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 8px 20px;
+  @include flex(column);
+  flex-shrink: 0;
+  color: $color-white;
+  text-align: center;
   overflow: visible;
 }
 
+// Section title
 .dome-recommendations-title {
-  color: #FFF;
-  text-align: center;
-  font-family: $font-primary;
-  font-size: 60px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
   margin-top: 137px;
+  color: $color-white;
+  @include font(60px, 700);
+  text-align: center;
 }
 
-
+// Progress bar container
 .progress-bar-container {
-  display: flex;
   width: 100%;
   height: 14px;
-  justify-content: start;
-  align-items: center;
   margin-top: 72px;
+  @include flex(row, start);
   z-index: 10;
-  background-color: #D9D9D926;
+  background-color: rgba(217, 217, 217, 0.15);
   overflow: hidden;
-
-
 }
 
+// Progress bar
 .progress-bar {
   width: 20%;
   height: 100%;
-  background-color: #F66729;
   z-index: 11;
-
+  background-color: $color-orange;
+  transition: width 0.5s ease-in-out;
 }
 
+// Recommendations navigation
 .dome-recommendations-content {
-  margin-top: 37px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
+  margin-top: 37px;
+  @include flex(row, space-between);
+
+  p {
+    position: relative;
+    padding: 0 40px;
+    color: $color-white;
+    @include font(30px, 600);
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+      color: $color-orange;
+      transform: translateY(-2px);
+    }
+
+    &.active {
+      color: $color-orange;
+    }
+  }
 }
 
-.dome-recommendations-content p {
-  color: #FFF;
-  font-family: Inter, sans-serif;
-  font-size: 30px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  padding: 0 40px;
-}
 
+// Recommendations content container
 .recoms {
-  margin-top: 142px;
+  position: relative;
   width: 55%;
+  margin-top: 142px;
+  min-height: 200px; // Set a fixed minimum height to prevent layout shifts
+
+  h3 {
+    color: $color-white;
+    @include font(36px, 600);
+    text-align: center;
+  }
+
+  p {
+    margin-top: 25px;
+    color: $color-white;
+    @include font(16px, 400, 28px);
+    text-align: center;
+  }
 }
 
-.recoms h3 {
-  color: #FFF;
-  text-align: center;
-  font-family: $font-primary;
-  font-size: 36px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
+// Individual recommendation content
+.recom-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none; // Prevent interaction with hidden content
+
+  &.active {
+    opacity: 1;
+    z-index: 1;
+    pointer-events: auto; // Allow interaction with active content
+  }
 }
 
-.recoms p {
-  color: #FFF;
-  text-align: center;
-  font-family: $font-primary;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 28px; /* 175% */
-  margin-top: 25px;
-}
-
+// Machine learning comparison container
 .machine-learning-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   margin-top: 86px;
+  @include flex(row);
 }
 
-.machine-learning, .traditional-publications {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 37%;
+// Machine learning and traditional publications sections
+.machine-learning,
+.traditional-publications {
   position: relative;
+  width: 37%;
+  @include flex(column);
+
+  img {
+    width: 100%;
+  }
+
+  p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+    color: $color-cyan;
+    @include font(27px, 700, 32px);
+  }
 }
 
-.machine-learning img, .traditional-publications img {
-  width: 100%;
-}
-
+// Transparency container between the two sections
 .transparency-container {
-  display: flex;
-  flex-direction: column;
-  margin: 0 10px;
   width: 25%;
-  justify-content: center;
-  align-items: center;
+  margin: 0 10px;
+  @include flex(column);
   gap: 38px;
 }
 
-.traditional-publications p, .machine-learning p {
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  font-size: 27px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 32px;
-  color: #00F5FB;
-  font-family: $font-primary;
+// Transparency box
+.transparency-box {
+  @include flex(row);
 }
 
+// Transparency label
 .transparency {
-  background-color: #F66729;
-  border-radius: 9px;
   width: 165px;
   height: 49px;
   padding: 10px 16px;
+  background-color: $color-orange;
+  border-radius: 9px;
+
+  p {
+    color: $color-white;
+    @include font(20px, 500, 28px);
+    text-transform: capitalize;
+  }
 }
 
-.transparency p {
-  color: #FFF;
-  font-family: $font-primary;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 28px; /* 140% */
-  text-transform: capitalize;
-}
-
-.transparency-box {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-
+// Full documentation section
 .full-documentation-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 100%;
-  margin-top: 100px;
+  margin: 100px 0 168px;
+  @include flex(column);
   gap: 43px;
-  margin-bottom: 168px;
 }
 
+// Orange divider line
 .full-documentation-line {
   width: 90%;
   height: 7px;
-  background-color: #F66729;
+  background-color: $color-orange;
 }
 
+// Documentation content row
 .full-documentation {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
   width: 90%;
   padding: 0 72px;
+  @include flex(row, space-between);
+
+  p {
+    width: 100%;
+    color: $color-white;
+    @include font(36px, 600);
+    text-align: start;
+  }
 }
 
-.full-documentation p {
-  color: #FFF;
-  text-align: start;
-  font-family: $font-primary;
-  font-size: 36px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  width: 100%;
-}
-
+// Documentation buttons container
 .full-documentation-button {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: end;
   width: 100%;
+  @include flex(row, end);
   gap: 11px;
+
+  button,
+  a {
+    height: 51px;
+    @include flex;
+    gap: 10px;
+    flex-shrink: 0;
+    border: none;
+    background-color: $color-white;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    @include font(16px, 700);
+    text-align: center;
+  }
 }
 
-.full-documentation-button button {
-  height: 51px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  color: #000;
-  border: none;
-
-  text-align: center;
-  font-family: $font-primary;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-}
-
+// Specific button styles
 .dome-ML {
-  padding: 11px 52px;
+  padding: 11px 26px;
 }
 
 .foundation-publication {
-  padding: 11px 19px;
+  padding: 11px 10px;
 }
 
+// Arrow icon
 .right-small-arrow {
   width: 15px;
 }
 
+// DOME Registry section
 .dome-registry {
+  position: relative;
+  z-index: 1;
   max-width: 1250px;
   width: 100%;
   min-height: 100vh;
-  position: relative;
-  z-index: 1;
 }
 
-.scroll-progress-container {
-  display: flex;
-  width: 100%;
-  height: 14px;
-  justify-content: start;
-  align-items: center;
-  margin-top: 40px;
-  z-index: 10;
-  background-color: rgba(217, 217, 217, 0.15);
-  overflow: hidden;
-  border-radius: 7px;
-}
 
-.scroll-progress-bar {
+// Implementation containers (shared styles)
+.implementation-first-container,
+.implementation-container,
+.implementation-last-container {
   width: 100%;
-  height: 100%;
-  background-color: #00F5FB;
-  transform-origin: left center;
-  transform: scaleX(0);
-}
-
-.implementation-first-container, .implementation-container, .implementation-last-container {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
   margin-bottom: 94px;
+  @include flex(row);
 }
 
+// Implementation title
 .implementation-title {
   width: 40%;
-  color: #FFF;
-  font-family: $font-primary;
-  font-size: 36px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  margin-left: 23px
+  margin-left: 23px;
+  color: $color-white;
+  @include font(36px, 600);
 }
 
+// Implementation text
 .implementation-text {
   width: 60%;
-  color: #FFF;
+  color: $color-white;
+  @include font(20px, 400, 32px);
   text-align: justify;
-  font-family: $font-primary;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 32px;
 }
 
+// Orange square marker
 .square {
   width: 13px;
   height: 13px;
-  flex-shrink: 0;
-  background-color: #F66729;
   margin-bottom: 16px;
+  flex-shrink: 0;
+  background-color: $color-orange;
 }
 
+// First implementation container (additional styles)
 .implementation-first-container {
   margin-top: 142px;
 }
 
+// Last implementation container (additional styles)
 .implementation-last-container {
   margin-bottom: 182px;
 }
 
+// DOME Registry mirroring section
 .dome-registry-mirroring {
   max-width: 1300px;
   width: 100%;
 }
 
+// Mirroring container
 .dome-registry-mirroring-container {
-  display: flex;
-  flex-direction: row;
-  align-items: start;
-  justify-content: center;
   margin-top: 110px;
+  @include flex(row, center, start);
 }
 
+// Infrastructure section
 .infrastructure {
   width: 40%;
   margin-right: 120px;
+
+  // Infrastructure title
+  &-title {
+    color: $color-white;
+    @include font(36px, 600);
+  }
+
+  // Infrastructure text
+  &-text {
+    color: $color-white;
+    @include font(20px, 400, 32px);
+    text-align: justify;
+  }
+
+  // Infrastructure link
+  a {
+    width: 40%;
+    height: 51px;
+    padding: 11px 15px;
+    @include flex;
+    gap: 10px;
+    flex-shrink: 0;
+    border: none;
+    background-color: $color-white;
+    color: #000;
+    @include font(16px, 700);
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+  }
 }
 
-.infrastructure-title {
-  color: #FFF;
-  font-family: $font-primary;
-  font-size: 36px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-}
-
-.infrastructure-text {
-  color: #FFF;
-  text-align: justify;
-  font-family: $font-primary;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 32px; /* 160% */
-}
-
-.infrastructure button {
-  height: 51px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
-  color: #000;
-  border: none;
-  padding: 11px 30px;
-  text-align: center;
-  font-family: $font-primary;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-}
-
+// Boxes container
 .boxes {
   width: 60%;
-  display: flex;
-  flex-direction: row;
-  align-items: start;
-  justify-content: center;
+  @include flex(row, center, start);
   gap: 35px;
-  color: #FFFFFF;
+  color: $color-white;
 }
 
-.boxes-l, .boxes-r {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+// Left and right box columns
+.boxes-l,
+.boxes-r {
+  @include flex(column);
   gap: 35px;
 }
 
-.box-star, .box-circle, .box-square, .box-triangle {
-  border-radius: 7px;
+// Individual boxes
+.box-star,
+.box-circle,
+.box-square,
+.box-triangle {
   height: 330px;
-  background: #045079;
   padding: 21px 35px 21px 21px;
+  background: $color-blue-gradient-end;
+  border-radius: 7px;
 }
 
+// Box title
 .box-title {
+  margin: 40px 0 5px;
+  @include font(20px, 700, 32px);
   text-align: justify;
-  font-family: $font-primary;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 32px; /* 160% */
-  margin-top: 40px;
-  margin-bottom: 5px;
 }
 
+// Box text
 .box-text {
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 26px;
-  font-family: $font-primary;
   margin: 0;
   max-width: 287px;
-
+  @include font(16px, 400, 26px);
 }
 
+// DOME Registry codebase section
 .dome-registry-codebase {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   max-width: 1250px;
+  @include flex(column);
+
+  // Section title
+  &-title {
+    margin-top: 110px;
+    color: $color-white;
+    @include font(60px, 700);
+    text-align: center;
+  }
+
+  // Container for codebase content
+  &-container {
+    margin: 126px 0 177px;
+    @include flex(column);
+    gap: 114px;
+  }
 }
 
-.dome-registry-codebase-title {
-  color: #FFF;
-  text-align: center;
-  font-family: $font-primary;
-  font-size: 60px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  margin-top: 110px;
-}
-
-.dome-registry-codebase-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 114px;
-  margin-top: 126px;
-  margin-bottom: 177px;
-
-}
-
-.side, .side-l {
+// Side sections
+.side,
+.side-l {
   width: 100%;
+  @include flex(row, center, center);
   gap: 86px;
-  display: flex;
-  flex-direction: row;
 }
 
+// Open source section
 .open-source {
   width: 50%;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    height: 51px;
+    padding: 11px 26px;
+    margin-top: 15px;
+    gap: 10px;
+    flex-shrink: 0;
+    border: none;
+    background-color: $color-white;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    @include font(16px, 700);
+    text-align: center;
+  }
 }
 
+// Section header with icon
 .head {
   width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: start;
   margin-bottom: 22px;
+  @include flex(row, start);
 
   p {
-    color: #FFF;
-    font-family: $font-primary;
     width: 100%;
-    font-size: 30px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
     margin-left: 20px;
+    color: $color-white;
+    @include font(30px, 600);
   }
 }
 
+// Open source description text
 .open-source-text {
-  color: #FFF;
-  text-align: justify;
-  font-family: $font-primary;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 32px; /* 177.778% */
   width: 90%;
+  color: $color-white;
+  @include font(18px, 400, 32px);
+  text-align: justify;
 }
 
+// Citing DOME section
 .citing-dome {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  width: 100%;
   max-width: 1250px;
   margin-top: 104px;
-  width: 100%;
+  @include flex(column);
 
+  // Section title
   h1 {
-    color: #FFF;
+    color: $color-white;
+    @include font(60px, 700);
     text-align: center;
-    font-family: $font-primary;
-    font-size: 60px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
   }
 }
 
-.citing-dome-container{
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
+// Citation container
+.citing-dome-container {
   margin-bottom: 100px;
+  @include flex(column, center, start);
 }
 
+// Citation introduction text
 .citing-dome-text {
-  color: #FFF;
-  font-family: $font-primary;
-  font-size: 22px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 38px; /* 172.727% */
-  margin-top: 50px;
-  margin-bottom: 40px;
+  margin: 50px 0 40px;
+  color: $color-white;
+  @include font(22px, 700, 38px);
 }
 
+// Citation box container
 .citing-dome-box {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
+  @include flex(column, center, start);
 }
 
-.head-citing-dome-text {
-  color: #FFF;
-  font-family: $font-primary;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 38px; /* 190% */
-}
-
-.citing-dome-box-text{
-  color: #FFF;
-  font-family: $font-primary;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.8rem;
-  margin-left: 36px;
-  margin-bottom: 40px;
-}
-
-
+// Citation header with icon
 .head-citing-dome {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  @include flex;
   gap: 23px;
 }
 
-.orange{
-  background-color: #F66729;
+// Citation header text
+.head-citing-dome-text {
+  color: $color-white;
+  @include font(20px, 700, 38px);
 }
 
+// Citation content text
+.citing-dome-box-text {
+  margin: 0 0 40px 36px;
+  color: $color-white;
+  @include font(18px, 400, 1.8rem);
+  a {
+    color: $color-white;
+  }
+}
+
+// Orange background utility class
+.orange {
+  background-color: $color-orange;
+}
+
+// Responsive styles
+// Large screens (max-width: 1220px)
 @media (max-width: 1220px) {
-  .machine-learning, .traditional-publications {
+  .machine-learning,
+  .traditional-publications {
     width: 30%;
+    p { @include font(22px, 700, 26px); }
   }
 
-  .machine-learning p, .traditional-publications p {
-    font-size: 22px;
-    line-height: 26px;
-  }
-  .transparency-container {
-    margin: 0 15px;
-  }
-
-  .transparency-box img {
-    width: 85%;
-  }
+  .transparency-container { margin: 0 15px; }
+  .transparency-box img { width: 85%; }
 
   .transparency {
     width: 140px;
     height: 40px;
     padding: 8px 12px;
-  }
-
-  .transparency p {
-    font-size: 16px;
-    line-height: 24px;
+    p { @include font(16px, 500, 24px); }
   }
 }
 
+// Medium screens (max-width: 970px)
 @media (max-width: 970px) {
-  .machine-learning, .traditional-publications {
+  .machine-learning,
+  .traditional-publications {
     width: 25%;
-  }
-
-  .machine-learning p, .traditional-publications p {
-    font-size: 18px;
-    line-height: 22px;
+    p { @include font(18px, 700, 22px); }
   }
 
   .transparency-container {
@@ -708,18 +643,12 @@ $font-primary: Inter, sans-serif;
     gap: 25px;
   }
 
-  .transparency-box img {
-    width: 75%;
-  }
+  .transparency-box img { width: 75%; }
 
   .transparency {
     width: 120px;
     height: 35px;
     padding: 6px 10px;
-  }
-
-  .transparency p {
-    font-size: 14px;
-    line-height: 20px;
+    p { @include font(14px, 500, 20px); }
   }
 }

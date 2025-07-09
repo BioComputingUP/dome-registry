@@ -1,27 +1,27 @@
 <footer class="big-footer">
   <div class="left">
-    <img src="../../assets/logo-white-animated.svg" alt="DOME Registry Logo"/>
-    <p>DOME Registry</p>
+    <a [routerLink]="['/intro']">
+      <img src="../../assets/logo-white-animated.svg" alt="DOME Registry Logo"/>
+      <p>DOME Registry</p>
+    </a>
   </div>
   <div class="right">
     <div class="middle">
       <div class="middle-container">
-        <p>Home</p>
-        <p>Statistics</p>
-        <p>About us</p>
-        <p>Browse</p>
+        <p><a [routerLink]="['/intro']">Home</a></p>
+        <p><a [routerLink]="['/stats']">Statistics</a></p>
+        <p><a [routerLink]="['/about']">About us</a></p>
+        <p><a [routerLink]="['/search']">Browse</a></p>
       </div>
       <div class="middle-container">
-        <p>API</p>
-        <p>Submit</p>
-      </div>
-      <div class="middle-container">
-        <p>Contact us</p>
+        <p><a [routerLink]="['/api']">API</a></p>
+        <p><a [routerLink]="['/review']">Submit</a></p>
       </div>
     </div>
     <div class="right-right">
       <p>Valisneri Department, University of Padova</p>
       <p>+39 546 789 126</p>
+      <p>contact@dome-ml.org</p>
       <p>BioComputing Laboratory</p>
       <a href="https://github.com/BioComputingUP/dome-registry/" target="_blank" class="github-link" aria-label="GitHub Repository">
         <img src="../../assets/github-logo.svg" alt="GitHub Repository"/>
