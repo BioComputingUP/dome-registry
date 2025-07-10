@@ -300,4 +300,17 @@ export class ReviewService {
     return this.httpClient.get(url, {})
   }
 
+
+  public FetchTenLatestReviews(): Observable<Review[]> {
+    // Define endpoint URL
+    const url = this.url + '/latest';
+    // Make request against database
+    return this.httpClient.get<Review[]>(url).pipe(
+      tap((reviews) => {
+        console.log({reviews});
+      }),
+      shareReplay(1)
+    );
+  }
+
 }

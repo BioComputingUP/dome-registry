@@ -205,6 +205,16 @@ async Fetchall() {
     return total;
   }
 
+  @Get("latest")
+   async getLatestReviews(){
+ 
+    const latestReviews = await this.reviewService.fetchTenLatestReviews();
+    if (!latestReviews || latestReviews.length === 0) {
+      throw new NotFoundException("No reviews found");
+    }
+    return latestReviews;
+
+   }
   //**---------------Get Review by Unique shortid UID ------------**/
   @Get(":shortid")
   @ApiOperation({ summary: "Find one review" })
