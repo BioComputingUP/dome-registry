@@ -1218,4 +1218,62 @@ export class ReviewService {
       },
     ]);
   }
+
+
+
+
+  async FetchAll() {
+
+  return this.reviewModel.aggregate([
+    {
+      $lookup: {
+        from: "users",
+        localField: "user",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $unwind: {  path: "$user", preserveNullAndEmptyArrays: true },
+    },
+  ])
+
+
+
+  }
+
+async fetchTenLatestReviews() {
+  return this.reviewModel.aggregate([
+    {
+      $match: { public: true }, // Only public reviews
+    },
+    {
+      $sort: { created: -1 }, // Sort by creation date in descending order
+    },
+    {
+      $limit: 10, // Limit to the 10 most recent reviews
+    },
+    {
+      $project: {
+        _id: 0,
+        title: "$publication.title",
+        shortid: 1,
+        journal: "$publication.journal",
+        year: "$publication.year",
+        created: 1,
+        score: 1,
+      },
+    },
+  ]);
 }
+
+
+
+
+
+
+}
+
+
+
+

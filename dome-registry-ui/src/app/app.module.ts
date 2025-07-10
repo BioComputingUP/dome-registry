@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 //import { SwaggerUIModule } from 'angular-swagger-ui';
 import { PageIntroComponent } from './page-intro/page-intro.component';
 import { ScrollSpyDirective } from './scroll-spy.directive';
-//import { PageStatsComponent } from './page-stats/page-stats.component';
+////import { PageStatsComponent } from './page-stats/page-stats.component';
 import { PlotlyViaCDNModule } from 'angular-plotly.js';
 import { CardSectionComponent } from './card-section/card-section.component';
 import { CardNavComponent } from './card-nav/card-nav.component';
