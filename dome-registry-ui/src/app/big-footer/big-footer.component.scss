@@ -1,10 +1,8 @@
 .big-footer {
   width: 100%;
-  max-height: 276px;
   display: flex;
   flex-direction: row;
-  padding: 55px 131px 45px;
-
+  padding: 55px 8% 45px;
   background-color: #002132;
   color: #fff;
 
@@ -15,11 +13,27 @@
     font-style: normal;
     line-height: normal;
   }
+
+  @media (max-width: 992px) {
+    flex-direction: column;
+    padding: 40px 6% 30px;
+  }
+
+  @media (max-width: 576px) {
+    padding: 30px 5% 20px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 25px 4% 15px;
+
+    p {
+      font-size: 14px;
+    }
+  }
 }
 
 .left {
   width: 20%;
-  max-height: 53px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -43,6 +57,23 @@
     color: #fff;
     text-decoration: none;
   }
+
+  @media (max-width: 992px) {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 480px) {
+    img {
+      width: 40px;
+    }
+
+    gap: 10px;
+
+    a {
+      gap: 10px;
+    }
+  }
 }
 
 .right {
@@ -50,7 +81,12 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+
+  @media (max-width: 992px) {
+    width: 100%;
+    flex-direction: column;
+  }
 }
 
 .middle {
@@ -66,6 +102,21 @@
     margin: 0;
     color: #fff;
   }
+
+  @media (max-width: 992px) {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 768px) {
+    gap: 40px;
+  }
+
+  @media (max-width: 576px) {
+    flex-direction: column;
+    gap: 20px;
+  }
 }
 
 .middle-container {
@@ -76,6 +127,10 @@
   a {
     color: #fff;
     text-decoration: none;
+  }
+
+  @media (max-width: 576px) {
+    gap: 20px;
   }
 }
 
@@ -90,6 +145,7 @@
 
   p {
     color: rgba(255, 255, 255, 0.50);
+    margin-bottom: 5px;
   }
 
   .github-link {
@@ -106,6 +162,23 @@
     img {
       width: 28px;
       height: 28px;
+    }
+  }
+
+  @media (max-width: 992px) {
+    width: 100%;
+    align-items: flex-start;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 480px) {
+    .github-link {
+      margin-top: 10px;
+
+      img {
+        width: 24px;
+        height: 24px;
+      }
     }
   }
 }

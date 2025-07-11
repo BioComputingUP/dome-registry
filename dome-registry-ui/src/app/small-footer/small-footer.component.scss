@@ -5,7 +5,7 @@
   align-items: center;
   padding: 7px 106px;
   background-color: #000000;
-  color: rgba(255, 255, 255, 0.39);;
+  color: rgba(255, 255, 255, 0.39);
 
   p {
     margin: 0;
@@ -18,8 +18,60 @@
     display: flex;
     gap: 16px;
   }
-  img{
+
+  img {
     height: 40px;
+  }
+
+  @media (max-width: 992px) {
+    padding: 7px 60px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 7px 40px;
+
+    .right {
+      gap: 12px;
+    }
+
+    img {
+      height: 35px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    padding: 7px 20px;
+    flex-direction: column;
+    gap: 10px;
+
+    p {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .right {
+      gap: 10px;
+    }
+
+    img {
+      height: 30px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 7px 15px;
+
+    p {
+      font-size: 12px;
+    }
+
+    .right {
+      gap: 8px;
+    }
+
+    img {
+      height: 25px;
+    }
   }
 }
 

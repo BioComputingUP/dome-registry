@@ -339,7 +339,7 @@ $color-cyan: #00F5FB;
 .dome-registry {
   position: relative;
   z-index: 1;
-  max-width: 1250px;
+  max-width: 1150px;
   width: 100%;
   min-height: 100vh;
 }
@@ -351,13 +351,24 @@ $color-cyan: #00F5FB;
 .implementation-last-container {
   width: 100%;
   margin-bottom: 94px;
-  @include flex(row);
+  @include flex(row, space-between, flex-start);
+}
+
+// Title row for horizontal alignment
+.title-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 40%;
+
+  .square {
+    margin-bottom: 0;
+  }
 }
 
 // Implementation title
 .implementation-title {
-  width: 40%;
-  margin-left: 23px;
+  margin: 0 0 0 26px;
   color: $color-white;
   @include font(36px, 600);
 }
@@ -534,9 +545,13 @@ $color-cyan: #00F5FB;
   margin-bottom: 22px;
   @include flex(row, start);
 
+  .square {
+    margin-bottom: 0;
+  }
+
   p {
     width: 100%;
-    margin-left: 20px;
+    margin: 0 0 0 20px;
     color: $color-white;
     @include font(30px, 600);
   }
@@ -587,11 +602,16 @@ $color-cyan: #00F5FB;
 .head-citing-dome {
   @include flex;
   gap: 23px;
+
+  .square {
+    margin-bottom: 0;
+  }
 }
 
 // Citation header text
 .head-citing-dome-text {
   color: $color-white;
+  margin: 0;
   @include font(20px, 700, 38px);
 }
 
@@ -613,6 +633,31 @@ $color-cyan: #00F5FB;
 // Responsive styles
 // Large screens (max-width: 1220px)
 @media (max-width: 1220px) {
+  .about-center {
+    padding: 0 40px;
+    h1 { @include font(50px, 700); }
+    p { @include font(18px, 400, 30px); }
+  }
+
+  .dome-recommendations {
+    padding: 8px 40px;
+  }
+
+  .dome-recommendations-title {
+    margin-top: 100px;
+    @include font(50px, 700);
+  }
+
+  .dome-recommendations-content p {
+    padding: 0 20px;
+    @include font(26px, 600);
+  }
+
+  .recoms {
+    width: 70%;
+    h3 { @include font(32px, 600); }
+  }
+
   .machine-learning,
   .traditional-publications {
     width: 30%;
@@ -628,10 +673,114 @@ $color-cyan: #00F5FB;
     padding: 8px 12px;
     p { @include font(16px, 500, 24px); }
   }
+
+  .full-documentation {
+    padding: 0 40px;
+    p { @include font(30px, 600); }
+  }
+
+  .implementation-title {
+    @include font(30px, 600);
+  }
+
+  .implementation-text {
+    @include font(18px, 400, 28px);
+  }
+
+  .dome-registry-mirroring-container {
+    margin-top: 80px;
+  }
+
+  .infrastructure {
+    margin-right: 60px;
+    &-title { @include font(30px, 600); }
+    &-text { @include font(18px, 400, 28px); }
+  }
+
+  .box-star,
+  .box-circle,
+  .box-square,
+  .box-triangle {
+    height: auto;
+    min-height: 330px;
+    padding: 18px 25px 18px 18px;
+  }
+
+  .box-title { @include font(18px, 700, 26px); }
+  .box-text {
+    max-width: 100%;
+    @include font(14px, 400, 22px);
+  }
+
+  .dome-registry {
+    padding: 0 40px;
+  }
+
+  .dome-registry-mirroring {
+    padding: 0 40px;
+  }
+
+  .dome-registry-codebase {
+    padding: 0 40px;
+  }
+
+  .citing-dome {
+    padding: 0 40px;
+  }
+
+  .dome-registry-codebase-title {
+    margin-top: 80px;
+    @include font(50px, 700);
+  }
+
+  .dome-registry-codebase-container {
+    margin: 80px 0 120px;
+    gap: 80px;
+  }
+
+  .side, .side-l {
+    gap: 50px;
+  }
+
+  .head p { @include font(26px, 600); }
+  .open-source-text { @include font(16px, 400, 28px); }
+
+  .citing-dome h1 { @include font(50px, 700); }
+  .citing-dome-text { @include font(20px, 700, 34px); }
+  .head-citing-dome-text { @include font(18px, 700, 34px); }
+  .citing-dome-box-text { @include font(16px, 400, 1.6rem); }
 }
 
 // Medium screens (max-width: 970px)
 @media (max-width: 970px) {
+  .about-center {
+    h1 { @include font(42px, 700); }
+    p { @include font(16px, 400, 28px); }
+  }
+
+  .dome-recommendations-title {
+    margin-top: 80px;
+    @include font(42px, 700);
+  }
+
+  .dome-recommendations-content {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+
+    p {
+      padding: 0 15px;
+      @include font(22px, 600);
+    }
+  }
+
+  .recoms {
+    width: 85%;
+    margin-top: 100px;
+    h3 { @include font(28px, 600); }
+    p { @include font(15px, 400, 26px); }
+  }
+
   .machine-learning,
   .traditional-publications {
     width: 25%;
@@ -650,5 +799,564 @@ $color-cyan: #00F5FB;
     height: 35px;
     padding: 6px 10px;
     p { @include font(14px, 500, 20px); }
+  }
+
+  .full-documentation {
+    padding: 0 30px;
+    p { @include font(26px, 600); }
+  }
+
+  .full-documentation-button {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .implementation-first-container,
+  .implementation-container,
+  .implementation-last-container {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 60px;
+  }
+
+  .title-row {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .implementation-title {
+    margin-left: 15px;
+    @include font(26px, 600);
+  }
+
+  .implementation-text {
+    width: 100%;
+    @include font(16px, 400, 26px);
+  }
+
+  .dome-registry-mirroring-container {
+    flex-direction: column;
+    margin-top: 60px;
+  }
+
+  .infrastructure {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 40px;
+
+    &-title { @include font(26px, 600); }
+    &-text { @include font(16px, 400, 26px); }
+
+    a {
+      width: 30%;
+      padding: 10px 15px;
+      @include font(14px, 700);
+      margin-right: auto;
+      justify-content: flex-start;
+    }
+  }
+
+  .boxes {
+    width: 100%;
+    gap: 20px;
+  }
+
+  .box-star,
+  .box-circle,
+  .box-square,
+  .box-triangle {
+    height: auto;
+    min-height: 280px;
+    padding: 15px;
+    width: 100%;
+  }
+
+  .box-title { @include font(16px, 700, 24px); }
+  .box-text {
+    max-width: 100%;
+    @include font(14px, 400, 22px);
+  }
+
+  .dome-registry-codebase-title {
+    margin-top: 60px;
+    @include font(42px, 700);
+  }
+
+  .dome-registry-codebase-container {
+    margin: 60px 0 80px;
+    gap: 60px;
+  }
+
+  .side, .side-l {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .open-source {
+    width: 100%;
+  }
+
+  .head p { @include font(22px, 600); }
+  .open-source-text { @include font(15px, 400, 26px); }
+
+  .citing-dome h1 { @include font(42px, 700); }
+  .citing-dome-text { @include font(18px, 700, 30px); }
+  .head-citing-dome-text { @include font(16px, 700, 30px); }
+  .citing-dome-box-text {
+    margin: 0 0 30px 20px;
+    @include font(15px, 400, 1.5rem);
+  }
+}
+
+// Small screens (max-width: 768px)
+@media (max-width: 768px) {
+  .about-center {
+    h1 { @include font(36px, 700); }
+    p { @include font(15px, 400, 26px); }
+  }
+
+  .dome-recommendations-title {
+    margin-top: 60px;
+    @include font(36px, 700);
+  }
+
+  .progress-bar-container {
+    margin-top: 40px;
+  }
+
+  .dome-recommendations-content {
+    margin-top: 25px;
+
+    p {
+      padding: 0 10px;
+      @include font(18px, 600);
+    }
+  }
+
+  .recoms {
+    width: 95%;
+    margin-top: 80px;
+    h3 { @include font(24px, 600); }
+    p { @include font(14px, 400, 24px); }
+  }
+
+  .machine-learning-container {
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .machine-learning,
+  .traditional-publications {
+    width: 30%;
+    p { @include font(16px, 700, 20px); }
+  }
+
+  .dome-illustration {
+    width: 80%;
+    max-width: 200px;
+  }
+
+  .transparency-container {
+    width: 100%;
+    margin: 0;
+    gap: 20px;
+  }
+
+  .transparency-box {
+    justify-content: center;
+  }
+
+  .transparency {
+    width: 150px;
+    height: 40px;
+    p { @include font(16px, 500, 22px); }
+  }
+
+  .full-documentation-container {
+    margin: 60px 0 100px;
+    gap: 30px;
+  }
+
+  .full-documentation {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 0 20px;
+
+    p {
+      text-align: center;
+      @include font(22px, 600);
+    }
+  }
+
+  .full-documentation-button {
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+  }
+
+  .dome-ML {
+    width: 100%;
+    padding: 10px 15px;
+  }
+
+  // Target only the View Repository button
+  .open-source .dome-ML {
+    width: 30%;
+  }
+  .open-source a {
+    width: 60%;
+    padding: 10px 15px;
+    @include font(13px, 700);
+  }
+
+  .foundation-publication {
+    width: 100%;
+    padding: 10px 15px;
+  }
+
+  .implementation-first-container {
+    margin-top: 80px;
+  }
+
+  .implementation-last-container {
+    margin-bottom: 100px;
+  }
+
+  .box-star,
+  .box-circle,
+  .box-square,
+  .box-triangle {
+    min-height: 250px;
+    padding: 12px;
+  }
+
+  .boxes-l, .boxes-r {
+    width: 100%;
+  }
+
+  .dome-registry-codebase-title {
+    @include font(36px, 700);
+  }
+
+  .citing-dome h1 { @include font(36px, 700); }
+  .citing-dome-text {
+    margin: 40px 0 30px;
+    @include font(16px, 700, 28px);
+  }
+}
+
+// Mobile screens (max-width: 480px)
+@media (max-width: 480px) {
+  .about-center {
+    height: auto;
+    min-height: 90vh;
+    padding: 100px 15px 50px;
+
+    h1 {
+      margin-bottom: 30px;
+      @include font(30px, 700);
+    }
+    p { @include font(14px, 400, 24px); }
+  }
+
+  .dome-recommendations-title {
+    margin-top: 50px;
+    @include font(30px, 700);
+  }
+
+  .progress-bar-container {
+    margin-top: 30px;
+    height: 10px;
+  }
+
+  .dome-recommendations-content {
+    margin-top: 20px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+    p {
+      padding: 0 2px;
+      @include font(13px, 600);
+      white-space: nowrap;
+    }
+  }
+
+  .recoms {
+    width: 100%;
+    margin-top: 60px;
+    h3 { @include font(22px, 600); }
+    p { @include font(13px, 400, 22px); }
+  }
+
+  .machine-learning-container {
+    display: none;
+  }
+
+  .machine-learning,
+  .traditional-publications {
+    width: 25%;
+    p { @include font(14px, 700, 18px); }
+  }
+
+  .transparency-container {
+    width: 50%;
+    margin: 0;
+  }
+
+  .transparency-box img {
+    width: 40%;
+  }
+
+  .transparency {
+    width: 110px;
+    height: 32px;
+    p { @include font(12px, 500, 18px); }
+  }
+
+  .full-documentation-container {
+    margin: 50px 0 80px;
+    gap: 20px;
+  }
+
+  .full-documentation {
+    padding: 0 15px;
+    p { @include font(20px, 600); }
+  }
+
+  .implementation-title {
+    @include font(22px, 600);
+  }
+
+  .implementation-text {
+    @include font(14px, 400, 24px);
+  }
+
+  .infrastructure {
+    &-title { @include font(22px, 600); }
+    &-text { @include font(14px, 400, 24px); }
+
+    a {
+      width: 40%;
+      padding: 10px 15px;
+      margin-right: auto;
+      justify-content: flex-start;
+    }
+  }
+
+  .boxes {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .boxes-l, .boxes-r {
+    gap: 15px;
+  }
+
+  .box-star,
+  .box-circle,
+  .box-square,
+  .box-triangle {
+    min-height: auto;
+    padding: 15px;
+  }
+
+  .box-title {
+    margin: 20px 0 5px;
+    @include font(16px, 700, 22px);
+  }
+
+  .box-text { @include font(13px, 400, 20px); }
+
+  .dome-registry-codebase-title {
+    margin-top: 50px;
+    @include font(30px, 700);
+  }
+
+  .dome-registry-codebase-container {
+    margin: 50px 0 70px;
+    gap: 50px;
+  }
+
+  .head p { @include font(20px, 600); }
+  .open-source-text { @include font(14px, 400, 24px); }
+
+  .open-source a.dome-ML {
+    width: 60%;
+    padding: 8px 5px;
+    @include font(12px, 700);
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .citing-dome {
+    margin-top: 70px;
+  }
+
+  .citing-dome h1 { @include font(30px, 700); }
+  .citing-dome-text {
+    margin: 30px 0 25px;
+    @include font(15px, 700, 26px);
+  }
+
+  .head-citing-dome-text { @include font(15px, 700, 26px); }
+
+  .citing-dome-box-text {
+    margin: 0 0 25px 15px;
+    @include font(13px, 400, 1.4rem);
+  }
+}
+
+// Very small screens (max-width: 375px)
+@media (max-width: 375px) {
+  .about-center {
+    padding: 80px 10px 40px;
+
+    h1 {
+      margin-bottom: 25px;
+      @include font(26px, 700);
+    }
+    p { @include font(13px, 400, 22px); }
+  }
+
+  .dome-recommendations-title {
+    margin-top: 40px;
+    @include font(26px, 700);
+  }
+
+  .progress-bar-container {
+    margin-top: 25px;
+    height: 8px;
+  }
+
+  .dome-recommendations-content {
+    margin-top: 12px;
+    gap: 5px;
+
+    p {
+      padding: 0 2px;
+      @include font(12px, 600);
+      white-space: nowrap;
+    }
+  }
+
+  .recoms {
+    margin-top: 50px;
+    h3 { @include font(20px, 600); }
+    p { @include font(12px, 400, 20px); }
+  }
+
+  .machine-learning-container {
+    display: none;
+  }
+
+  .machine-learning,
+  .traditional-publications {
+    width: 95%;
+    p { @include font(16px, 700, 20px); }
+  }
+
+  .transparency-container {
+    width: 95%;
+    gap: 15px;
+  }
+
+  .transparency {
+    width: 110px;
+    height: 32px;
+    p { @include font(12px, 500, 18px); }
+  }
+
+  .full-documentation-container {
+    margin: 40px 0 60px;
+    gap: 15px;
+  }
+
+  .full-documentation {
+    padding: 0 10px;
+    p { @include font(18px, 600); }
+  }
+
+  .dome-ML, .foundation-publication {
+    padding: 8px 12px;
+    @include font(14px, 700);
+  }
+
+  .implementation-first-container {
+    margin-top: 60px;
+  }
+
+  .implementation-title {
+    @include font(20px, 600);
+  }
+
+  .implementation-text {
+    @include font(13px, 400, 22px);
+  }
+
+  .implementation-last-container {
+    margin-bottom: 80px;
+  }
+
+  .infrastructure {
+    &-title { @include font(20px, 600); }
+    &-text { @include font(13px, 400, 22px); }
+
+    a {
+      width: 50%;
+      padding: 8px 12px;
+      @include font(13px, 700);
+      margin-right: auto;
+      justify-content: flex-start;
+    }
+  }
+
+  .box-title { @include font(15px, 700, 20px); }
+  .box-text { @include font(12px, 400, 18px); }
+
+  .dome-registry-codebase-title {
+    margin-top: 40px;
+    @include font(26px, 700);
+  }
+
+  .dome-registry-codebase-container {
+    margin: 40px 0 60px;
+    gap: 40px;
+  }
+
+  .head p { @include font(18px, 600); }
+  .open-source-text { @include font(13px, 400, 22px); }
+
+  .open-source a.dome-ML {
+    width: 100%;
+    padding: 8px 2px;
+    margin: 0;
+    @include font(12px, 700);
+    text-align: center;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .citing-dome {
+    margin-top: 60px;
+  }
+
+  .citing-dome h1 { @include font(26px, 700); }
+  .citing-dome-text {
+    margin: 25px 0 20px;
+    @include font(14px, 700, 24px);
+  }
+
+  .head-citing-dome-text { @include font(14px, 700, 24px); }
+
+  .citing-dome-box-text {
+    margin: 0 0 20px 10px;
+    @include font(12px, 400, 1.3rem);
   }
 }
