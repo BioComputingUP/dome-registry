@@ -753,7 +753,14 @@ $color-cyan: #00F5FB;
 
 // Medium screens (max-width: 970px)
 @media (max-width: 970px) {
+  .about-background {
+    &::before, &::after {
+      height: 80vh;
+    }
+  }
+
   .about-center {
+    height: 80vh;
     h1 { @include font(42px, 700); }
     p { @include font(16px, 400, 28px); }
   }
@@ -911,7 +918,14 @@ $color-cyan: #00F5FB;
 
 // Small screens (max-width: 768px)
 @media (max-width: 768px) {
+  .about-background {
+    &::before, &::after {
+      height: 70vh;
+    }
+  }
+
   .about-center {
+    height: 70vh;
     h1 { @include font(36px, 700); }
     p { @include font(15px, 400, 26px); }
   }
@@ -1050,9 +1064,14 @@ $color-cyan: #00F5FB;
 
 // Mobile screens (max-width: 480px)
 @media (max-width: 480px) {
+  .about-background {
+    &::before, &::after {
+      height: 60vh;
+    }
+  }
+
   .about-center {
-    height: auto;
-    min-height: 90vh;
+    height: 60vh;
     padding: 100px 15px 50px;
 
     h1 {
@@ -1213,7 +1232,14 @@ $color-cyan: #00F5FB;
 
 // Very small screens (max-width: 375px)
 @media (max-width: 375px) {
+  .about-background {
+    &::before, &::after {
+      height: 50vh;
+    }
+  }
+
   .about-center {
+    height: 50vh;
     padding: 80px 10px 40px;
 
     h1 {

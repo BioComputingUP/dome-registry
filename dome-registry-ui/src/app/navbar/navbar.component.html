@@ -1,0 +1,101 @@
+<!-- Upper navbar -->
+<header class="d-block flex-grow-0">
+  <!-- Actual navigation bar (gives functionality) -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <!-- Small logo -->
+      <a class="navbar-brand" href="#">
+        <img class="logo" src="../assets/logo-white-static.svg">
+        <span>&nbsp;DOME Registry</span>
+      </a>
+      <!-- Collapse button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbar-supported-content" aria-controls="navbar-supported-content" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- Collapsable content -->
+      <div class="navbar-collapse collapse " id="navbar-supported-content">
+        <!-- navbar in center -->
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item  ">
+            <a class="nav-link " [routerLinkActive]="['active']" [routerLink]="'/intro'"><b>Home</b></a>
+
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/stats'"><b>Statistics</b></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/search'"><b>Browse</b></a>
+          </li>
+          <li class="nav-item">
+            <!-- <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/review'"><b>Submit</b></a> -->
+            <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/review'"><b>Submit</b></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLinkActive]="['active']" href="/api/"><b>API</b></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLinkActive]="['active']" [routerLink]="'/about'"><b>About</b></a>
+          </li>
+        </ul>
+
+
+
+        <!-- Right side -->
+        <ul class="navbar-nav ms-auto me-0">
+          <!-- Get user -->
+          <ng-container *ngIf="user$ | async as user">
+            <!-- Case user is set -->
+            <ng-container *ngIf="!!user.auth; else userNotAuthorized">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active user-dropdown" href="#" id="navbar-menu" role="button"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="bi bi-person-fill user-icon"></i>{{user.name || user.orcid}}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbar-menu">
+                  <!-- User profile header -->
+                  <li>
+                    <div class="dropdown-item user-profile-header">
+                      <div class="user-name">{{user.name || 'Unknown user'}}</div>
+                      <div class="user-details">
+                        <div><i class="bi bi-person-fill text-orcid"></i><b>{{user.orcid}}</b></div>
+                        <div><i class="bi bi-envelope text-orcid"></i>{{user.email || '-'}}</div>
+                      </div>
+                    </div>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  <!-- User roles -->
+                  <li>
+                    <div class="dropdown-item cursor-pointer">
+                      <i class="bi bi-shield-check text-orcid"></i>{{user.roles || '-'}}
+                    </div>
+                  </li>
+                  <!-- Logout button -->
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <a class="dropdown-item cursor-pointer logout-item" (click)="logout()">
+                      <i class="bi bi-box-arrow-right"></i>Logout
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ng-container>
+            <!-- Otherwise -->
+            <ng-template #userNotAuthorized>
+              <!-- Case user is not set -->
+              <li class="nav-item">
+                <!-- Define value -->
+                <a class="d-flex justify-content-center align-items-center sign-in-content nav-link sign-in-btn" [href]="login">
+                  <span class="text-nowrap">Sign in</span>
+                  <img src="assets/thin-arrow-right-icon.svg"
+                       alt="Right arrow" class="right-small-arrow" />
+                </a>
+              </li>
+            </ng-template>
+          </ng-container>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

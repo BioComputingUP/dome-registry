@@ -1,10 +1,8 @@
-import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
-import {Component, EventEmitter} from '@angular/core';
-import {filter, map, pluck, shareReplay, switchMap, tap} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Component} from '@angular/core';
+import {switchMap} from 'rxjs';
 import {AuthService} from './auth.service';
-import {User} from './user.service';
 import { ReviewService } from './review.service';
-import { PageSearchComponent } from './page-search/page-search.component';
 
 
 @Component({
@@ -25,35 +23,25 @@ export class AppComponent {
     // Emit current user, if any
     switchMap(() => this.authService.user$),
   );
- 
- 
+
+
 
   constructor(
-   
+
     private activeRoute: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
-    private reviewwService:ReviewService
+    private reviewService:ReviewService
   ) {
     // Allow component reloading
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     // Just try to login
     this.authService.login();
   }
-  
+
    //public readonly pagecopm = new PageSearchComponent(this.reviewwService,this.authService);
   //public readonly rs = this.pagecopm.numberofentries();
-  
 
-  // Define login URL
-  public readonly login = this.authService.url;
 
-  // Define logout function
-  public logout() {
-    // Just call logout function
-    this.authService.logout();
-    // Then, reload current page
-    this.router.navigate([this.router.url]);
-  }
 
 }
