@@ -33,6 +33,8 @@ import { SubmitComponent } from './submit/submit.component';
 import { BigFooterComponent } from './big-footer/big-footer.component';
 import { SmallFooterComponent } from './small-footer/small-footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { IntegrationsStandardsComponent } from './integrations-standards/integrations-standards.component';
+import { PoliciesComponent } from './policies/policies.component';
 
 // Set Plotly.js from CDN
 PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
@@ -62,6 +64,8 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     BigFooterComponent,
     SmallFooterComponent,
     NavbarComponent,
+    IntegrationsStandardsComponent,
+    PoliciesComponent,
   ],
   imports: [
     PlotlyViaCDNModule,

@@ -1,0 +1,579 @@
+// Variables
+$font-primary: Inter, sans-serif;
+$color-white: #FFF;
+$color-dark-blue: #003958;
+$color-blue-gradient-start: #012437;
+$color-blue-gradient-end: #045079;
+$color-orange: #F66729;
+$color-cyan: #00F5FB;
+
+// Mixins
+@mixin flex($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin font($size, $weight: 400, $line-height: normal, $style: normal) {
+  font-family: $font-primary;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height;
+  font-style: $style;
+}
+
+// Host element
+:host {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  width: 100%;
+}
+
+// Full-page dark blue gradient background with SVG overlay
+.integrations-background {
+  width: 100%;
+  min-height: 100vh;
+  background: $color-dark-blue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow-x: hidden;
+
+  // Gradient only in first viewport
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 90vh;
+    background: linear-gradient(180deg, $color-blue-gradient-start 0%, $color-blue-gradient-end 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  // SVG background
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 90vh;
+    background: url('../../assets/about-page-background.svg') center center no-repeat;
+    background-size: cover;
+    opacity: 0.25;
+    z-index: 0;
+    pointer-events: none;
+  }
+}
+
+// Content container
+.integrations-center {
+  position: relative;
+  z-index: 1;
+  max-width: 887px;
+  height: 90vh;
+  padding: 0 20px;
+  @include flex(column);
+  flex-shrink: 0;
+  color: $color-white;
+  text-align: center;
+
+  h1 {
+    margin-bottom: 49px;
+    color: $color-white;
+    @include font(60px, 700);
+  }
+
+  p {
+    @include font(20px, 400, 35px);
+    text-align: center;
+  }
+}
+
+// White divider line
+.white-divider {
+  width: 100%;
+  height: 6px;
+  margin: 0;
+  position: relative;
+  z-index: 10;
+  background-color: $color-white;
+}
+
+// Integrations section
+.integrations-section, .standards-section, .future-integrations {
+  position: relative;
+  z-index: 1;
+  max-width: 1150px;
+  width: 100%;
+  min-height: 80vh;
+  padding: 8px 20px;
+}
+
+// Section title
+.integrations-section-title {
+  margin-top: 137px;
+  color: $color-white;
+  @include font(60px, 700);
+  text-align: center;
+}
+
+// Implementation containers (shared styles)
+.implementation-container {
+  width: 100%;
+  max-width: 1150px;
+  margin: 120px auto 30px;
+  padding: 0 30px;
+  @include flex(row, space-between, flex-start);
+}
+
+// Title row for horizontal alignment
+.title-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 40%;
+}
+
+// Logo container and placeholder styles removed as per requirements
+
+// Implementation title
+.implementation-title {
+  margin: 0;
+  color: $color-white;
+  @include font(36px, 600);
+  // Added padding to compensate for removed logo
+  padding-left: 10px;
+}
+
+// Implementation text
+.implementation-text {
+  width: 60%;
+  color: $color-white;
+  @include font(18px, 400, 1.6);
+  text-align: justify;
+
+  p {
+    margin-bottom: 16px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  strong {
+    color: $color-orange;
+    font-weight: 600;
+  }
+
+  // Styling for the Learn More link
+  .learn-more {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    margin-top: 10px;
+    background-color: $color-orange;
+    color: $color-white;
+    text-decoration: none;
+    border-radius: 4px;
+    @include font(16px, 600);
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($color-orange, 10%);
+    }
+  }
+}
+
+
+// Standards container
+.standards-container {
+  margin: 126px 0 177px;
+  @include flex(column);
+  gap: 114px;
+}
+
+// Side sections
+.side, .side-l {
+  width: 100%;
+  @include flex(row, center, center);
+  gap: 86px;
+}
+
+// Standard item
+.standard-item {
+  width: 50%;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    height: 51px;
+    padding: 11px 26px;
+    margin-top: 15px;
+    gap: 10px;
+    flex-shrink: 0;
+    border: none;
+    background-color: $color-white;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+    @include font(16px, 700);
+    text-align: center;
+  }
+}
+
+// Section header with icon
+.head, .head-future {
+  width: 100%;
+  margin-bottom: 22px;
+  @include flex(row, start);
+
+  p {
+    width: 100%;
+    margin: 0;
+    color: $color-white;
+    @include font(30px, 600);
+  }
+}
+
+// Standard description text
+.standard-text {
+  width: 90%;
+  color: $color-white;
+  @include font(18px, 400, 32px);
+  text-align: justify;
+}
+
+// Future integrations container
+.future-integrations-container {
+  margin-top: 50px;
+  @include flex(column, center, start);
+}
+
+// Future text
+.future-text {
+  margin: 0 0 40px 0;
+  color: $color-white;
+  @include font(22px, 700, 38px);
+}
+
+// Future items container
+.future-items {
+  width: 100%;
+  @include flex(column, center, start);
+}
+
+// Future item
+.future-item {
+  width: 100%;
+  margin-bottom: 40px;
+  @include flex(column, center, start);
+}
+
+// Future header text
+.head-future-text {
+  color: $color-white;
+  margin: 0;
+  @include font(24px, 700, 38px);
+}
+
+// Future item text
+.future-item-text {
+  margin: 0 0 20px 36px;
+  color: $color-white;
+  @include font(18px, 400, 1.8rem);
+}
+
+// Orange background utility class
+.orange {
+  background-color: $color-orange;
+}
+
+// Responsive styles
+// Large screens (max-width: 1220px)
+@media (max-width: 1220px) {
+  .integrations-center {
+    padding: 0 40px;
+    h1 { @include font(50px, 700); }
+    p { @include font(18px, 400, 30px); }
+  }
+
+  .integrations-section, .standards-section, .future-integrations {
+    padding: 8px 40px;
+  }
+
+  .implementation-container {
+    margin: 50px auto 80px;
+    padding: 0 25px;
+  }
+
+  .integrations-section-title {
+    margin-top: 100px;
+    @include font(50px, 700);
+  }
+
+  .implementation-title {
+    @include font(30px, 600);
+  }
+
+  // Logo container styles removed as per requirements
+
+  .implementation-text {
+    @include font(17px, 400, 1.5);
+
+    p {
+      margin-bottom: 14px;
+    }
+  }
+
+  .standards-container {
+    margin: 80px 0 120px;
+    gap: 80px;
+  }
+
+  .side, .side-l {
+    gap: 50px;
+  }
+
+  .head p, .head-future p { @include font(26px, 600); }
+  .standard-text { @include font(16px, 400, 28px); }
+  .future-text { @include font(20px, 700, 34px); }
+  .head-future-text { @include font(22px, 700, 34px); }
+  .future-item-text { @include font(16px, 400, 1.6rem); }
+}
+
+// Medium screens (max-width: 970px)
+@media (max-width: 970px) {
+  .integrations-background {
+    &::before, &::after {
+      height: 80vh;
+    }
+  }
+
+  .integrations-center {
+    height: 80vh;
+    h1 { @include font(42px, 700); }
+    p { @include font(16px, 400, 28px); }
+  }
+
+  .integrations-section-title {
+    margin-top: 80px;
+    @include font(42px, 700);
+  }
+
+  .implementation-container {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 40px auto 60px;
+    padding: 0 20px;
+  }
+
+  .title-row {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .implementation-title {
+    // Adjusted padding for responsive layout
+    padding-left: 5px;
+    @include font(26px, 600);
+  }
+
+  // Logo container styles removed as per requirements
+
+  .implementation-text {
+    width: 100%;
+    @include font(16px, 400, 1.5);
+
+    p {
+      margin-bottom: 12px;
+    }
+  }
+
+  .standards-container {
+    margin: 60px 0 80px;
+    gap: 60px;
+  }
+
+  .side, .side-l {
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .standard-item {
+    width: 100%;
+  }
+
+  .head p, .head-future p { @include font(22px, 600); }
+  .standard-text { @include font(15px, 400, 26px); }
+  .future-text { @include font(18px, 700, 30px); }
+  .head-future-text { @include font(20px, 700, 30px); }
+  .future-item-text { @include font(15px, 400, 1.5rem); }
+}
+
+// Small screens (max-width: 768px)
+@media (max-width: 768px) {
+  .integrations-background {
+    &::before, &::after {
+      height: 70vh;
+    }
+  }
+
+  .integrations-center {
+    height: 70vh;
+    h1 { @include font(36px, 700); }
+    p { @include font(15px, 400, 26px); }
+  }
+
+  .integrations-section-title {
+    margin-top: 60px;
+    @include font(36px, 700);
+  }
+
+  .implementation-container {
+    margin: 30px auto 50px;
+    padding: 0 15px;
+  }
+
+  .title-row {
+    margin-bottom: 15px;
+  }
+
+  // Logo container styles removed as per requirements
+
+  .implementation-title {
+    @include font(24px, 600);
+  }
+
+  .implementation-text {
+    @include font(15px, 400, 1.5);
+
+    p {
+      margin-bottom: 10px;
+    }
+  }
+
+  .head p, .head-future p { @include font(20px, 600); }
+  .standard-text { @include font(14px, 400, 24px); }
+  .future-text { @include font(16px, 700, 28px); }
+  .head-future-text { @include font(18px, 700, 28px); }
+  .future-item-text { @include font(14px, 400, 1.4rem); }
+}
+
+// Mobile screens (max-width: 480px)
+@media (max-width: 480px) {
+  .integrations-background {
+    &::before, &::after {
+      height: 60vh;
+    }
+  }
+
+  .integrations-center {
+    height: 60vh;
+    padding: 100px 15px 50px;
+
+    h1 {
+      margin-bottom: 30px;
+      @include font(30px, 700);
+    }
+    p { @include font(14px, 400, 24px); }
+  }
+
+  .integrations-section-title {
+    margin-top: 50px;
+    @include font(30px, 700);
+  }
+
+  .implementation-container {
+    margin: 25px auto 40px;
+    padding: 0 12px;
+  }
+
+  .title-row {
+    margin-bottom: 12px;
+  }
+
+  // Logo container and placeholder styles removed as per requirements
+
+  .implementation-title {
+    @include font(20px, 600);
+  }
+
+  .implementation-text {
+    @include font(14px, 400, 1.4);
+
+    p {
+      margin-bottom: 8px;
+    }
+  }
+
+  .head p, .head-future p { @include font(18px, 600); }
+  .standard-text { @include font(13px, 400, 22px); }
+  .future-text { @include font(15px, 700, 26px); }
+  .head-future-text { @include font(16px, 700, 26px); }
+  .future-item-text { @include font(13px, 400, 1.3rem); }
+}
+
+// Very small screens (max-width: 375px)
+@media (max-width: 375px) {
+  .integrations-background {
+    &::before, &::after {
+      height: 50vh;
+    }
+  }
+
+  .integrations-center {
+    height: 50vh;
+    padding: 80px 10px 40px;
+
+    h1 {
+      margin-bottom: 25px;
+      @include font(26px, 700);
+    }
+    p { @include font(13px, 400, 22px); }
+  }
+
+  .integrations-section-title {
+    margin-top: 40px;
+    @include font(26px, 700);
+  }
+
+  .implementation-container {
+    margin: 20px auto 30px;
+    padding: 0 10px;
+  }
+
+  .title-row {
+    margin-bottom: 10px;
+  }
+
+  // Logo container and placeholder styles removed as per requirements
+
+  .implementation-title {
+    @include font(18px, 600);
+  }
+
+  .implementation-text {
+    @include font(13px, 400, 1.4);
+
+    p {
+      margin-bottom: 6px;
+    }
+
+    .learn-more {
+      padding: 6px 12px;
+      @include font(14px, 600);
+    }
+  }
+
+  .head p, .head-future p { @include font(16px, 600); }
+  .standard-text { @include font(12px, 400, 20px); }
+  .future-text { @include font(14px, 700, 24px); }
+  .head-future-text { @include font(15px, 700, 24px); }
+  .future-item-text { @include font(12px, 400, 1.2rem); }
+}

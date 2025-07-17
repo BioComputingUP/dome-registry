@@ -25,7 +25,7 @@ $color-blue-gradient-end: #045079;
 }
 
 // Apply hover effect only to navbar middle elements, not to sign-in button
-.navbar-nav:not(.ms-auto.me-0) .nav-link:not(.sign-in-btn) {
+.navbar-nav:not(.ms-auto.me-0) .nav-link:not(.sign-in-btn):not(.dropdown-toggle) {
   display: inline-block;
   transform-origin: center;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -55,6 +55,17 @@ $color-blue-gradient-end: #045079;
   }
 }
 
+// Styling for dropdown toggles in the main navbar
+.navbar-nav:not(.ms-auto.me-0) .dropdown-toggle {
+  display: inline-block;
+  transform-origin: center;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+
 // Active state for middle nav elements
 .navbar-nav:not(.ms-auto.me-0) .nav-link.active:not(.sign-in-btn) {
   color: #F46B17;
@@ -67,12 +78,17 @@ $color-blue-gradient-end: #045079;
   }
 }
 
+// Active state for dropdown toggles
+.navbar-nav:not(.ms-auto.me-0) .dropdown-toggle.active {
+  color: #F46B17;
+}
+
 .navbar {
   font-family: $font-primary;
   padding-left: 5%;
   padding-right: 5%;
   position: relative;
-  z-index: 1;
+  z-index: 1040; /* Increased z-index to ensure navbar is above page content */
   height: 75px; /* Increased height */
   background: #0D3144;
   width: 100%;
@@ -277,6 +293,7 @@ $color-blue-gradient-end: #045079;
   min-width: 240px;
   animation: dropdown-fade-in 0.2s ease;
   transform-origin: top right;
+  z-index: 1050; /* Added higher z-index to ensure dropdown appears above other content */
 
   @media (max-width: 576px) {
     min-width: 200px;
