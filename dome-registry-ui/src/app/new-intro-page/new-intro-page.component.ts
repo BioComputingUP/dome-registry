@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { PageSearchComponent } from '../page-search/page-search.component';
-import { ReviewService } from '../review.service';
+import { ReviewService,Review } from '../review.service';
 import { HttpClient } from '@angular/common/http';
 import { result } from 'lodash';
 import {
@@ -27,28 +27,50 @@ import {
 } from 'rxjs';
 import { UserService } from '../user.service';
 import { DOCUMENT } from '@angular/common';
-
+type Reviews = Array<Review>;
 @Component({
   selector: 'app-new-intro-page',
   templateUrl: './new-intro-page.component.html',
   styleUrls: ['./new-intro-page.component.scss'],
 })
 export class NewIntroPageComponent implements OnInit, OnDestroy {
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   jsonLd: any;
   private destroy$ = new Subject<void>();
   // Subscribe to user
   public readonly user$ = this.authService.user$;
+  private allResults: Reviews = []; // Full unfiltered results
+  public readonly latestReviews$: Observable<Reviews>;
+
+  private readonly fetchLatestTrigger$ = new Subject<void>();
+  
   // Define card title
   public readonly title =
     'A database of annotations for published papers describing machine learning methods in biology.';
-  // Compute the total number of entries
+  
+  
+  
+  
+    // Compute the total number of entries
   public readonly count$: Observable<number> = this.reviewService
     .countElements()
     .pipe(shareReplay(1));
-  public readonly countPr$: Observable<number> = this.reviewService
+ 
+ // Compute the total number of private entries
+    public readonly countPr$: Observable<number> = this.reviewService
     .countPrivElements()
     .pipe(shareReplay(1));
+  // Compute the total number of users
   public readonly countUsers$: Observable<number> = this.userService
     .getTotalNumber()
     .pipe(shareReplay(1));
@@ -132,12 +154,11 @@ export class NewIntroPageComponent implements OnInit, OnDestroy {
     },
     // Add more cards as needed
   ];
-
   scroll(direction: number): void {
     const element = this.scrollContainer.nativeElement;
     element.scrollBy({ top: direction * 100, behavior: 'smooth' });
   }
-
+ 
   // Dependency injection
   constructor(
     private authService: AuthService,
@@ -145,9 +166,25 @@ export class NewIntroPageComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private _renderer2: Renderer2,
     @Inject(DOCUMENT) private _document: Document
-  ) {}
+  ) {
+
+  this.latestReviews$ = this.fetchLatestTrigger$.pipe(
+  tap(() => this.allResults = []), // Clear previous results
+  switchMap(() => this.reviewService.FetchTenLatestReviews()),
+  tap((results) => {
+    //this.totalItems = results.length;
+    this.allResults = [...results]; // Store the latest results
+  }));
+
+ 
+}
+
 
   ngOnInit(): void {
+   
+   
+    this.fetchLatestReviews$();
+
     //add jsonLD to the page
     this.reviewService
       .GetHomePageMarkup()
@@ -172,6 +209,11 @@ export class NewIntroPageComponent implements OnInit, OnDestroy {
       )
       .subscribe();
   }
+   public fetchLatestReviews$(): void {
+    // Trigger the latest reviews fetch
+    this.fetchLatestTrigger$.next();
+  }
+
 
   ngOnDestroy(): void {
     this.destroy$.next();
