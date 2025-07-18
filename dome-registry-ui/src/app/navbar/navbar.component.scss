@@ -60,9 +60,33 @@ $color-blue-gradient-end: #045079;
   display: inline-block;
   transform-origin: center;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  padding-right: 18px; /* Make room for custom caret */
 
   &:hover {
-    color: rgba(255, 255, 255, 0.85);
+    color: #F46B17;
+
+    &::after {
+      border-top-color: #F46B17;
+      transform: translateY(2px);
+      filter: drop-shadow(0 2px 2px rgba(244, 107, 23, 0.3));
+    }
+  }
+
+  /* Custom dropdown caret */
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -3px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid white;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
   }
 }
 
@@ -81,6 +105,34 @@ $color-blue-gradient-end: #045079;
 // Active state for dropdown toggles
 .navbar-nav:not(.ms-auto.me-0) .dropdown-toggle.active {
   color: #F46B17;
+
+  &::after {
+    border-top-color: #F46B17;
+    filter: drop-shadow(0 1px 2px rgba(244, 107, 23, 0.3));
+  }
+}
+
+// Show state for dropdown toggles (when dropdown is open)
+.navbar-nav:not(.ms-auto.me-0) .dropdown-toggle.show {
+  color: #F46B17;
+
+  &::after {
+    border-top-color: #F46B17;
+    transform: rotate(180deg); /* Rotate arrow when dropdown is open */
+    margin-top: 0; /* Adjust margin to account for rotation */
+    filter: drop-shadow(0 -1px 2px rgba(244, 107, 23, 0.4)); /* Adjusted shadow direction for rotated arrow */
+    animation: pulse-glow 1.5s infinite alternate ease-in-out; /* Add subtle pulsing effect */
+  }
+}
+
+/* Subtle pulsing animation for the dropdown arrow when open */
+@keyframes pulse-glow {
+  from {
+    filter: drop-shadow(0 -1px 2px rgba(244, 107, 23, 0.3));
+  }
+  to {
+    filter: drop-shadow(0 -2px 4px rgba(244, 107, 23, 0.5));
+  }
 }
 
 .navbar {
@@ -284,6 +336,7 @@ $color-blue-gradient-end: #045079;
   }
 }
 
+// General dropdown menu styling
 .dropdown-menu {
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -312,6 +365,25 @@ $color-blue-gradient-end: #045079;
       margin-right: 8px;
       font-size: 1rem;
       transition: transform 0.15s ease;
+    }
+  }
+}
+
+// Specific styling for the About dropdown menu
+.navbar-nav:not(.ms-auto.me-0) .dropdown-menu {
+  background-color: $color-dark-blue;
+
+  .dropdown-item {
+    color: white;
+    font-weight: 600;
+
+    &:hover, &:focus {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    i {
+      color: #F46B17;
     }
   }
 }
