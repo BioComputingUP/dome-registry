@@ -132,12 +132,18 @@ $color-cyan: #00F5FB;
   @include flex(row, space-between, flex-start);
 }
 
-// Title row for horizontal alignment
+// Add more gap for the last implementation container before the orange divider
+.last-container{
+  margin-bottom: 80px;
+}
+
+// Title row for vertical alignment of title and image
 .title-row {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   width: 40%;
+  margin-right: 20px;
 }
 
 // Logo container and placeholder styles removed as per requirements
@@ -147,8 +153,15 @@ $color-cyan: #00F5FB;
   margin: 0;
   color: $color-white;
   @include font(36px, 600);
-  // Added padding to compensate for removed logo
-  padding-left: 10px;
+  text-align: center;
+}
+
+// Implementation logo image
+.implementation-logo {
+  margin-top: 10px;
+  max-width: 150px;
+  height: auto;
+  max-height: 100px; // Adjust as needed
 }
 
 // Implementation text
@@ -180,7 +193,6 @@ $color-cyan: #00F5FB;
     background-color: $color-orange;
     color: $color-white;
     text-decoration: none;
-    border-radius: 4px;
     @include font(16px, 600);
     transition: background-color 0.3s ease;
 
@@ -312,13 +324,22 @@ $color-cyan: #00F5FB;
     padding: 0 25px;
   }
 
+  .last-container {
+    margin-bottom: 120px;
+  }
+
   .integrations-section-title {
     margin-top: 100px;
     @include font(50px, 700);
   }
 
   .implementation-title {
+    text-align: center;
     @include font(30px, 600);
+  }
+
+  .implementation-logo {
+    max-height: 45px;
   }
 
   // Logo container styles removed as per requirements
@@ -368,9 +389,13 @@ $color-cyan: #00F5FB;
 
   .implementation-container {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     margin: 40px auto 60px;
     padding: 0 20px;
+  }
+
+  .last-container {
+    margin-bottom: 90px;
   }
 
   .title-row {
@@ -379,9 +404,12 @@ $color-cyan: #00F5FB;
   }
 
   .implementation-title {
-    // Adjusted padding for responsive layout
-    padding-left: 5px;
+    text-align: center;
     @include font(26px, 600);
+  }
+
+  .implementation-logo {
+    max-height: 40px;
   }
 
   // Logo container styles removed as per requirements
@@ -440,6 +468,10 @@ $color-cyan: #00F5FB;
     padding: 0 15px;
   }
 
+  .last-container {
+    margin-bottom: 75px;
+  }
+
   .title-row {
     margin-bottom: 15px;
   }
@@ -447,7 +479,12 @@ $color-cyan: #00F5FB;
   // Logo container styles removed as per requirements
 
   .implementation-title {
+    text-align: center;
     @include font(24px, 600);
+  }
+
+  .implementation-logo {
+    max-height: 35px;
   }
 
   .implementation-text {
@@ -494,6 +531,10 @@ $color-cyan: #00F5FB;
     padding: 0 12px;
   }
 
+  .last-container {
+    margin-bottom: 60px;
+  }
+
   .title-row {
     margin-bottom: 12px;
   }
@@ -501,7 +542,12 @@ $color-cyan: #00F5FB;
   // Logo container and placeholder styles removed as per requirements
 
   .implementation-title {
+    text-align: center;
     @include font(20px, 600);
+  }
+
+  .implementation-logo {
+    max-height: 30px;
   }
 
   .implementation-text {
@@ -548,6 +594,10 @@ $color-cyan: #00F5FB;
     padding: 0 10px;
   }
 
+  .last-container{
+    margin-bottom: 45px;
+  }
+
   .title-row {
     margin-bottom: 10px;
   }
@@ -555,7 +605,12 @@ $color-cyan: #00F5FB;
   // Logo container and placeholder styles removed as per requirements
 
   .implementation-title {
+    text-align: center;
     @include font(18px, 600);
+  }
+
+  .implementation-logo {
+    max-height: 25px;
   }
 
   .implementation-text {

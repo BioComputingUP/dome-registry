@@ -72,7 +72,7 @@ $nav-width-tablet: 220px;
   width: $nav-width;
   min-width: $nav-width;
   height: auto; // Changed from fixed height to auto
-  max-height: calc(100vh - 160px); // Added max-height instead of fixed height
+  max-height: calc(100vh - 260px); // Added max-height instead of fixed height
   padding: 20px;
   margin-right: 30px;
   background-color: rgba(0, 0, 0, 0.2);
