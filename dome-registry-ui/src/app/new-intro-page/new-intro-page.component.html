@@ -107,12 +107,14 @@
 
           <div class="position-relative">
             <!-- Scroll container -->
-            <div class="scroll-container" #scrollContainer>
+            <div class="scroll-container" >
               <!-- Cards container -->
               <div class="d-flex flex-nowrap pb-2">
                 <!-- Card template -->
-                <div class="card-wrapper" id="intro" *ngFor="let card of cards">
+                <div class="card-wrapper" id="intro" *ngFor="let review of latestReviews$ | async">
                   <div class="card publication-card">
+
+                    
                     <div class="card-header text-white bg-primary">
                       <h5 class="d-block  text-center">Journal name</h5>
                     </div>
@@ -121,7 +123,7 @@
 
                         Random text here and the paper information will be here. .
                       </p>
-                      <p class="card-text">{{card.text}}</p>
+                      <p class="card-text">{{review.title}}</p>
 
                     </div>
                   </div>
@@ -130,8 +132,7 @@
             </div>
 
             <!-- Navigation arrows -->
-            <button class="scroll-arrow arrow-left" (click)="scroll(-1)" aria-label="Scroll left"></button>
-            <button class="scroll-arrow arrow-right" (click)="scroll(1)" aria-label="Scroll right"></button>
+    
           </div>
         </div>
 
