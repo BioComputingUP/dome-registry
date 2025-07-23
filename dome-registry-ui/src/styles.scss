@@ -7,7 +7,7 @@
 
 // Define gradient background
 .bg-primary.bg-gradient {
-  background: linear-gradient(90deg, shift-color($primary, 60%), $primary) !important;
+  background: $primary !important;
 }
 
 // Define gradient progress

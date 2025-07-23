@@ -1,5 +1,5 @@
 <!-- Outer scaffold -->
-<div class="d-flex flex-column flex-nowrap h-100 w-100 bg-light">
+<div class="d-flex flex-column flex-nowrap h-100 w-100 bg-light overflow-x-hidden">
   <!-- Search input -->
   <div class="d-block position-relative flex-shrink-0 bg-white py-2 mt-2">
     <div class="container-fluid">
@@ -99,7 +99,7 @@
   <div class="d-inline-block position-relative flex-grow-1 bg-light">
     <!-- Table body (scrollable) -->
 
-    <div class="position-absolute left-0 top-0 w-100 h-100 bg-transparent overflow-scroll">
+    <div class="position-absolute left-0 top-0 w-100 h-100 bg-transparent overflow-y-scroll overflow-x-hidden">
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-8 offset-md-2">
@@ -262,7 +262,7 @@
       </div>
     </div>
     <!-- Table header (fixed) -->
-    <div class="position-absolute left-0 top-0 w-100 h-auto bg-transparent overflow-scroll invisible"
+    <div class="position-absolute left-0 top-0 w-100 h-auto bg-transparent overflow-y-scroll overflow-x-hidden invisible"
          style="pointer-events: none">
       <div class="container-fluid bg-light visible">
         <div class="row">

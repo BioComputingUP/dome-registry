@@ -1,5 +1,5 @@
 <!-- Outer scaffold -->
-<div class="d-flex flex-column h-100 w-100 overflow-y-auto">
+<div class="d-flex flex-column h-100 w-100 overflow-y-auto overflow-x-hidden">
   <!-- Retrieve review, if any -->
   <ng-container *ngIf="review$ | async as review">
     <!-- Case user is authorized, show edit form -->
@@ -9,7 +9,7 @@
         scroll-spy>
         <div class="row position-relative overflow-auto">
           <!-- Left shoulder -->
-          <div class="col-2 d-none d-md-block position-fixed h-100 py-6 overflow-auto">
+          <div class="col-2 d-none d-md-block position-fixed h-100 py-6">
             <!-- Vertical navigation -->
             <card-nav id="links" class="d-block mt-3 mb-3 ">
               <a class="nav-link" [routerLink]="[]" fragment="publication" link>Publication</a>
@@ -19,13 +19,13 @@
               <a class="nav-link" [routerLink]="[]" fragment="evaluation" link>Evaluation</a>
             </card-nav>
             <!-- Score wrapper -->
-            <card-template id="scores" class="d-block mb-3 h-100 overflow-scroll ">
+            <card-template id="scores" class="d-block mb-3 h-100">
               <!-- Define card title -->
               <h4 title>Score</h4>
               <!-- Define card body -->
-              <div class="d-block w-100 h-100 p-1 ml-2 overflow-auto" body>
+              <div class="d-block w-100 h-100 p-1 ml-2" body>
                 <!-- Table header -->
-                <div class="d-flex flex-row flex-nowrap text-capitalize w-100  overflow-y-auto ">
+                <div class="d-flex flex-row flex-nowrap text-capitalize w-100">
                   <strong class="text-primary" style="flex: 1;">Section</strong>
                   <strong class="text-primary" style="flex: 0 0 8rem;">Score</strong>
                 </div>
@@ -48,7 +48,7 @@
                   </ng-container>
                 </ng-container>
                 <!-- Describe DOME score -->
-                <small class="d-block text-muted w-100 h-100 mb-3 overflow-y-scoll ">
+                <small class="d-block text-muted w-100 h-100 mb-3">
                   The DOME score is computed as the number of valid fields, divided by the total number of fields <br>
 
                 </small>

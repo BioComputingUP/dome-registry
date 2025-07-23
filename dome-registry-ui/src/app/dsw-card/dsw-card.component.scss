@@ -13,11 +13,11 @@
   .dashboard {
     background: #172042;
     padding: 2em;
-   
+
     grid-template-columns:1fr 1fr 1fr ;
     justify-content: center;
     width:calc(100% - 18em);
-  
+
   }
 .img{
   display: block;
@@ -28,12 +28,20 @@
     display: inline-block;
     transition: transform 0.3s ease;
   }
-  
+
   .btn:hover .bi-arrow-right {
     animation: rotate-arrow 0.3s forwards;
- 
+
   }
   .btn-primary:hover{
     background-color: #F46B17;
   }
 
+  .orange-divider {
+    height: 8px !important;
+    background-color: #F46B17 !important; // Using the secondary color
+    margin-top: 80px !important; // Gap between content and the line
+    margin-bottom: 0px !important; // Gap between the line and the footer
+    width: 100% !important;
+    padding: 0px !important;
+  }

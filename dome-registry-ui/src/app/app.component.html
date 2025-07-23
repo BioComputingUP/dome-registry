@@ -1,9 +1,9 @@
 <!-- Outer container -->
-<div class="d-flex flex-column flex-nowrap vw-100 vh-100">
+<div class="d-flex flex-column flex-nowrap vw-100 vh-100 overflow-x-hidden">
   <!-- Use the navbar component outside of scrollable area -->
   <app-navbar></app-navbar>
   <!-- Page content (scrollable) -->
-  <main class="d-block flex-grow-1 overflow-auto">
+  <main class="d-block flex-grow-1">
     <!-- After user loaded, show page -->
     <ng-container *ngIf="user$ | async; else showLoadingSpinner">
       <!-- Show current page -->
