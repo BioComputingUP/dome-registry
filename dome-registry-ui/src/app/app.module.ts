@@ -36,6 +36,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { IntegrationsStandardsComponent } from './integrations-standards/integrations-standards.component';
 import { PoliciesComponent } from './policies/policies.component';
 import { TeamsComponent } from './teams/teams.component';
+import { GovernanceComponent } from './governance/governance.component';
 
 // Set Plotly.js from CDN
 PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
@@ -68,6 +69,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     IntegrationsStandardsComponent,
     PoliciesComponent,
     TeamsComponent,
+    GovernanceComponent,
   ],
   imports: [
     PlotlyViaCDNModule,

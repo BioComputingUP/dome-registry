@@ -13,6 +13,7 @@ import { NewIntroPageComponent } from './new-intro-page/new-intro-page.component
 import { IntegrationsStandardsComponent } from './integrations-standards/integrations-standards.component';
 import { PoliciesComponent } from './policies/policies.component';
 import { TeamsComponent } from './teams/teams.component';
+import { GovernanceComponent } from './governance/governance.component';
 // Define default parameters
 const params: Route = {
   runGuardsAndResolvers: 'always',
@@ -44,6 +45,8 @@ const routes: Routes = [
   { ...params, path: 'policies', component: PoliciesComponent },
   // set path to teams page
   { ...params, path: 'teams', component: TeamsComponent },
+  // set path to governance page
+  { ...params, path: 'governance', component: GovernanceComponent },
    // set ther new statistics page
 
    {...params, path:'newstate',component:NewStateComponent},
