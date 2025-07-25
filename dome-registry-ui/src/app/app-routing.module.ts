@@ -10,9 +10,6 @@ import { PageDashboardComponent } from './page-dashboard/page-dashboard.componen
 import { DSWCardComponent } from './dsw-card/dsw-card.component';
 import { NewStateComponent } from './new-state/new-state.component';
 import { NewIntroPageComponent } from './new-intro-page/new-intro-page.component';
-import { IntegrationsStandardsComponent } from './integrations-standards/integrations-standards.component';
-import { PoliciesComponent } from './policies/policies.component';
-import { TeamsComponent } from './teams/teams.component';
 // Define default parameters
 const params: Route = {
   runGuardsAndResolvers: 'always',
@@ -20,8 +17,8 @@ const params: Route = {
 };
 // Definer available routes
 const routes: Routes = [
-  //New intro page
- { ...params, path: 'intro2', component: NewIntroPageComponent },
+  //New intro page 
+ // { ...params, path: 'intro2', component: NewIntroPageComponent },
   // Define path to introduction page
   { ...params, path: 'intro', component: PageIntroComponent },
   // Define path to statistics page
@@ -38,13 +35,7 @@ const routes: Routes = [
   {...params,path:'DSW', component: DSWCardComponent},
   // set path to about page
   { ...params, path: 'about', component: AboutPageComponent },
-  // set path to integrations & standards page
-  { ...params, path: 'integrations', component: IntegrationsStandardsComponent },
-  // set path to policies page
-  { ...params, path: 'policies', component: PoliciesComponent },
-  // set path to teams page
-  { ...params, path: 'teams', component: TeamsComponent },
-   // set ther new statistics page
+   // set ther new statistics page 
 
    {...params, path:'newstate',component:NewStateComponent},
   // Set path to search page as default
