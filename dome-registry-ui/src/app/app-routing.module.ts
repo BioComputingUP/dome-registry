@@ -21,7 +21,7 @@ const params: Route = {
 };
 // Definer available routes
 const routes: Routes = [
-  //New intro page
+  //New intro page 
  { ...params, path: 'intro2', component: NewIntroPageComponent },
   // Define path to introduction page
   { ...params, path: 'intro', component: PageIntroComponent },
@@ -50,8 +50,8 @@ const routes: Routes = [
    // set ther new statistics page
 
    {...params, path:'newstate',component:NewStateComponent},
-  // Set path to search page as default
 
+  //  // Set path to search page as default
   { ...params, path: '**', redirectTo: 'intro', pathMatch: 'full' },
 ];
 
