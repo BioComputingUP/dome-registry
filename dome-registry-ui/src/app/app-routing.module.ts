@@ -12,6 +12,7 @@ import { NewStateComponent } from './new-state/new-state.component';
 import { NewIntroPageComponent } from './new-intro-page/new-intro-page.component';
 import { IntegrationsStandardsComponent } from './integrations-standards/integrations-standards.component';
 import { PoliciesComponent } from './policies/policies.component';
+
 // Define default parameters
 const params: Route = {
   runGuardsAndResolvers: 'always',
@@ -44,8 +45,8 @@ const routes: Routes = [
    // set ther new statistics page
 
    {...params, path:'newstate',component:NewStateComponent},
-  // Set path to search page as default
 
+  //  // Set path to search page as default
   { ...params, path: '**', redirectTo: 'intro', pathMatch: 'full' },
 ];
 
