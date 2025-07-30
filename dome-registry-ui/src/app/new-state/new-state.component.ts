@@ -17,16 +17,12 @@ import {ActivatedRoute} from "@angular/router";
 import {ReviewService, journalData} from '../review.service';
 import {StatService}  from "../stat.service";
 import {UserService} from '../user.service';
-
+// import "https://apicuron.org/assets/widgets/apicuron-leaderboard.js";
 @Component({
   selector: 'app-new-state',
   templateUrl: './new-state.component.html',
   styleUrls: ['./new-state.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-
-
-
-
 })
 export class NewStateComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<boolean>();
@@ -38,6 +34,15 @@ export class NewStateComponent implements OnInit, OnDestroy {
   dataradar: any;
   datacombo: any;
   chartOptions: any;
+    constructor(
+    private http: HttpClient,
+    private activeRoute: ActivatedRoute,
+    private elementRef: ElementRef,
+    private statService: StatService,
+    private userService: UserService,
+    private reviewService:ReviewService
+  ) {
+  }
 
   // Retrieve root element
   public get element() {
@@ -351,23 +356,15 @@ export class NewStateComponent implements OnInit, OnDestroy {
   )
 
 
-  constructor(
-    private http: HttpClient,
-    private activeRoute: ActivatedRoute,
-    private elementRef: ElementRef,
-    private statService: StatService,
-    private userService: UserService,
-    private reviewService:ReviewService
-  ) {
-  }
+
 
   ngOnDestroy(): void {
     this.destroy$.next(true);
   }
 
-  ngOnInit(): void {
-
-  }
+ngOnInit(): void {
+    // Initialize the widget
+}
 
 }
 

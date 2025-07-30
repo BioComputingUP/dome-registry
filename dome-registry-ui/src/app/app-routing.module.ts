@@ -14,6 +14,7 @@ import { IntegrationsStandardsComponent } from './integrations-standards/integra
 import { PoliciesComponent } from './policies/policies.component';
 import { TeamsComponent } from './teams/teams.component';
 import { GovernanceComponent } from './governance/governance.component';
+import { WidgetResolverService } from './services/widget-script.guard';
 // Define default parameters
 const params: Route = {
   runGuardsAndResolvers: 'always',
@@ -26,7 +27,11 @@ const routes: Routes = [
   // Define path to introduction page
   { ...params, path: 'intro', component: PageIntroComponent },
   // Define path to statistics page
-  { ...params, path: 'stats', component: NewStateComponent },
+  { ...params, path: 'stats', component: NewStateComponent,
+    resolve: {
+      widget: WidgetResolverService // Use the resolver to load the widget script
+    }
+  },
   // Define path to search page
   { ...params, path: 'search', component: PageSearchComponent },
   // Define path to list of reviews
@@ -48,8 +53,8 @@ const routes: Routes = [
   // set path to governance page
   { ...params, path: 'governance', component: GovernanceComponent },
    // set ther new statistics page
+    //{...params, path:'newstate',component:NewStateComponent},
 
-   {...params, path:'newstate',component:NewStateComponent},
 
   //  // Set path to search page as default
   { ...params, path: '**', redirectTo: 'intro', pathMatch: 'full' },
