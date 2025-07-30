@@ -29,13 +29,13 @@ export class WidgetResolverService implements Resolve<boolean> {
 
       script.onload = () => {
         console.log('Widget script loaded successfully!');
-        // You can initialize the widget here if needed
+        
         resolve(true);
       };
 
       script.onerror = (error) => {
         console.error('Failed to load widget script:', error);
-        reject(false); // On error, you can choose to reject and cancel navigation
+        reject(false); 
       };
 
       this.document.body.appendChild(script);
