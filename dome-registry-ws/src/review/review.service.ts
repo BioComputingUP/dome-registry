@@ -1257,6 +1257,7 @@ async fetchTenLatestReviews() {
       $project: {
         _id: 0,
         title: "$publication.title",
+        authors: "$publication.authors",
         shortid: 1,
         journal: "$publication.journal",
         year: "$publication.year",
@@ -1273,7 +1274,3 @@ async fetchTenLatestReviews() {
 
 
 }
-
-
-
-

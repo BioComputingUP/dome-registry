@@ -228,4 +228,17 @@ export class ReviewService {
     );
   }
 
+  /**
+   * Gets the ten latest reviews from the database
+   * @returns An Observable of an array of Review objects
+   */
+  public getTenLatestReviews(): Observable<Review[]> {
+    // Define endpoint URL
+    const url = this.url + '/latest';
+    // Make request against database
+    return this.httpClient.get<Review[]>(url).pipe(
+      shareReplay(1)
+    );
+  }
+
 }

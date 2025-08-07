@@ -6,7 +6,8 @@
   padding: 7px 106px;
   background-color: #000000;
   color: rgba(255, 255, 255, 0.39);
-  z-index: 1000;
+  z-index: 10;
+  position: relative;
 
   p {
     margin: 0;
@@ -79,4 +80,6 @@
 :host {
   display: block;
   width: 100%;
+  position: relative;
+  z-index: 10;
 }

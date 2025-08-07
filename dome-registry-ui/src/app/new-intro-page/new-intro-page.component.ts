@@ -6,6 +6,7 @@ import {
   Renderer2,
   ViewChild,
   ElementRef,
+  AfterViewInit,
 } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { PageSearchComponent } from '../page-search/page-search.component';
@@ -33,39 +34,28 @@ type Reviews = Array<Review>;
   templateUrl: './new-intro-page.component.html',
   styleUrls: ['./new-intro-page.component.scss'],
 })
-export class NewIntroPageComponent implements OnInit, OnDestroy {
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
+export class NewIntroPageComponent implements OnInit, OnDestroy, AfterViewInit {
+
+
+  @ViewChild('cardsContainer') cardsContainer!: ElementRef;
   jsonLd: any;
   private destroy$ = new Subject<void>();
   // Subscribe to user
   public readonly user$ = this.authService.user$;
-  private allResults: Reviews = []; // Full unfiltered results
+  allResults: Reviews = []; // Full unfiltered results
   public readonly latestReviews$: Observable<Reviews>;
 
   private readonly fetchLatestTrigger$ = new Subject<void>();
-  
+
   // Define card title
   public readonly title =
     'A database of annotations for published papers describing machine learning methods in biology.';
-  
-  
-  
-  
+
     // Compute the total number of entries
   public readonly count$: Observable<number> = this.reviewService
     .countElements()
     .pipe(shareReplay(1));
- 
+
  // Compute the total number of private entries
     public readonly countPr$: Observable<number> = this.reviewService
     .countPrivElements()
@@ -101,64 +91,24 @@ export class NewIntroPageComponent implements OnInit, OnDestroy {
     })
   );
 
-  cards = [
-    {
-      title: 'Card 1',
-      text: 'Content for card 1',
-      button: 'Action 1',
-    },
-    {
-      title: 'Card 2',
-      text: 'Content for card 2',
-      button: 'Action 2',
-    },
-    {
-      title: 'Card 2',
-      text: 'Content for card 2',
-      button: 'Action 2',
-    },
-    {
-      title: 'Card 2',
-      text: 'Content for card 2',
-      button: 'Action 2',
-    },
-    {
-      title: 'Card 2',
-      text: 'Content for card 2',
-      button: 'Action 2',
-    },
-    {
-      title: 'Card 2',
-      text: 'Content for card 2',
-      button: 'Action 2',
-    },
-    {
-      title: 'Card 2',
-      text: 'Content for card 2',
-      button: 'Action 2',
-    },
-    {
-      title: 'Card 2',
-      text: 'Content for card 2',
-      button: 'Action 2',
-    },
-    {
-      title: 'Card 2',
-      text: 'Content for card 2',
-      button: 'Action 2',
-    },
-    {
-      title: 'Card 2',
-      text: 'Content for card 2',
-      button: 'Action 2',
-    },
-    // Add more cards as needed
-  ];
-  scroll(direction: number): void {
-    const element = this.scrollContainer.nativeElement;
-    element.scrollBy({ top: direction * 100, behavior: 'smooth' });
+
+  handleHorizontalScroll = (event: WheelEvent): void => {
+    // Prevent the default vertical scroll
+    event.preventDefault();
+
+    // Get the cards container element
+    const cardsElement = this.cardsContainer.nativeElement;
+
+    // Determine scroll amount based on the wheel delta and multiply by 3 for faster scrolling
+    const scrollAmount = (event.deltaY || event.deltaX)*2;
+
+    // Scroll horizontally with auto behavior for faster response
+    cardsElement.scrollBy({
+      left: scrollAmount,
+      behavior: 'smooth',
+    });
   }
- 
+
   // Dependency injection
   constructor(
     private authService: AuthService,
@@ -168,23 +118,17 @@ export class NewIntroPageComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private _document: Document
   ) {
 
-  this.latestReviews$ = this.fetchLatestTrigger$.pipe(
-  tap(() => this.allResults = []), // Clear previous results
-  switchMap(() => this.reviewService.FetchTenLatestReviews()),
-  tap((results) => {
-    //this.totalItems = results.length;
-    this.allResults = [...results]; // Store the latest results
-  }));
-
- 
+    this.latestReviews$ = this.reviewService.getTenLatestReviews().pipe(
+      tap(() => this.allResults = []),
+      tap((results) => {
+        this.allResults = [...results]; // Store all results
+      })
+    );
+console.log(this.latestReviews$);
 }
 
 
   ngOnInit(): void {
-   
-   
-    this.fetchLatestReviews$();
-
     //add jsonLD to the page
     this.reviewService
       .GetHomePageMarkup()
@@ -209,13 +153,22 @@ export class NewIntroPageComponent implements OnInit, OnDestroy {
       )
       .subscribe();
   }
-   public fetchLatestReviews$(): void {
-    // Trigger the latest reviews fetch
-    this.fetchLatestTrigger$.next();
+
+
+
+  ngAfterViewInit(): void {
+    // Set up horizontal scroll for cards container
+    if (this.cardsContainer && this.cardsContainer.nativeElement) {
+      this.cardsContainer.nativeElement.addEventListener('wheel', this.handleHorizontalScroll);
+    }
   }
 
-
   ngOnDestroy(): void {
+    // Clean up the wheel event listener
+    if (this.cardsContainer && this.cardsContainer.nativeElement) {
+      this.cardsContainer.nativeElement.removeEventListener('wheel', this.handleHorizontalScroll);
+    }
+
     this.destroy$.next();
   }
 }
