@@ -24,7 +24,6 @@ import { PageDashboardComponent } from './page-dashboard/page-dashboard.componen
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { DSWCardComponent } from './dsw-card/dsw-card.component';
 import { NewStateComponent } from './new-state/new-state.component';
-import { NewIntroPageComponent } from './new-intro-page/new-intro-page.component';
 import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
 import { NgxMatomoRouterModule } from '@ngx-matomo/router'
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -62,7 +61,6 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     PageDashboardComponent,
     DSWCardComponent,
     NewStateComponent,
-    NewIntroPageComponent,
     SubmitComponent,
     BigFooterComponent,
     SmallFooterComponent,

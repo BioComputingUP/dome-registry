@@ -1,42 +1,912 @@
-.counter
-{
-   
-    text-align: center;
+/*
+ * DOME Registry UI - New Intro Page Styles
+ * This file contains all styles for the new introduction page of the DOME Registry application.
+ * The page features a responsive design with animated elements and a gradient background.
+ */
+
+/* Import Inter font family with all weights and styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+/*
+ * Color Variables
+ * Defining a consistent color palette for the application
+ * These colors create the branded look and feel of the DOME Registry
+ */
+$color-dark-blue: #003958;       /* Primary dark blue for backgrounds */
+$color-blue-gradient-start: #012437; /* Start color for gradient backgrounds */
+$color-blue-gradient-end: #045079;   /* End color for gradient backgrounds */
+$color-orange: #F66729;          /* Accent color for highlights and CTAs */
+$color-white: #FFF;              /* Text and UI element color */
+$font-family-primary: Inter, sans-serif; /* Primary font family */
+
+/*
+ * Responsive Breakpoints
+ * These breakpoints define where the layout will change to accommodate different screen sizes
+ * Following a mobile-first approach with increasing screen sizes
+ */
+$breakpoint-xl: 1500px;  /* Extra large screens (desktops) */
+$breakpoint-lg: 1300px;  /* Large screens (smaller desktops) */
+$breakpoint-md: 1100px;  /* Medium screens (tablets landscape) */
+$breakpoint-sm: 990px;   /* Small screens (tablets portrait) */
+$breakpoint-xs: 500px;   /* Extra small screens (mobile) */
+
+/*
+ * Utility Mixins
+ * These mixins provide reusable style patterns to maintain consistency
+ * and reduce code duplication throughout the stylesheet
+ */
+
+/**
+ * Flexible Container Mixin
+ * Creates a flexbox container with customizable direction, alignment, and justification
+ * @param {String} $direction - flex-direction property (default: row)
+ * @param {String} $align - align-items property (default: center)
+ * @param {String} $justify - justify-content property (default: center)
+ */
+@mixin flex-container($direction: row, $align: center, $justify: center) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
 }
-.counter-count
-{
-    font-size: 18px;
-    // background-color: ;
-    background-image:linear-gradient(#F46B17,#0F3E62)  ;
-    border-radius: 50%;
+
+/**
+ * Typography Mixin
+ * Applies consistent font styling across the application
+ * @param {Length} $size - font size
+ * @param {Number} $weight - font weight (default: 400)
+ * @param {Color} $color - text color (default: white)
+ */
+@mixin font-style($size, $weight: 400, $color: $color-white) {
+  font-family: $font-family-primary;
+  font-size: $size;
+  font-style: normal;
+  font-weight: $weight;
+  line-height: normal;
+  color: $color;
+}
+
+/**
+ * Absolute Fill Mixin
+ * Makes an element fill its positioned parent completely
+ * Useful for background elements, overlays, and full-coverage effects
+ */
+@mixin absolute-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * Main Container
+ * The root container for the entire intro page
+ * Uses a column flex layout and fills the viewport height
+ */
+.main-container {
+  @include flex-container(column);
+  width: 100%;
+  min-height: 100vh;
+  height: auto;
+  gap: 100px; /* Vertical spacing between major sections */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  background: $color-dark-blue; /* Base background color */
+  color: $color-white; /* Default text color */
+  position: relative; /* Positioning context for pseudo-elements */
+  padding-bottom: 50px; /* Space for footer */
+
+  /*
+   * Gradient Background
+   * Creates a vertical gradient effect in the first viewport
+   * Adds depth and visual interest to the background
+   */
+  &::before {
+    content: '';
+    @include absolute-fill;
+    background: linear-gradient(180deg, $color-blue-gradient-start 0%, $color-blue-gradient-end 100%);
+    z-index: 0; /* Position behind content */
+    pointer-events: none; /* Allow clicks to pass through to elements below */
+  }
+
+  /*
+   * SVG Pattern Overlay
+   * Adds a subtle pattern to the background for visual texture
+   * Semi-transparent to maintain readability of content
+   */
+  &::after {
+    content: '';
+    @include absolute-fill;
+    background: url('../../assets/about-page-background.svg') center center no-repeat;
+    background-size: cover;
+    opacity: 0.25; /* Subtle background pattern */
+    z-index: 0; /* Position behind content */
+    pointer-events: none; /* Allow clicks to pass through to elements below */
+  }
+}
+
+/*
+ * Main Content Container
+ * Primary container for the top section of the page
+ * Houses the main content and hero section
+ */
+.full-container {
+  @include flex-container(row, start);
+  width: 85%; /* Container width relative to parent */
+  height: 70%; /* Container height relative to parent */
+  margin-top: 50px; /* Space from the top of the page */
+  min-height: 400px; /* Ensures consistent vertical spacing regardless of content */
+}
+
+/*
+ * Latest Publications Section
+ * Displays a collection of recent publications in a scrollable container
+ * Positioned below the main content area
+ */
+.latest-publications {
+  width: 85%; /* Match width with full-container for alignment */
+  min-height: 225px; /* Minimum height to accommodate content while allowing expansion */
+  z-index: 3; /* Ensures content appears above background elements */
+  margin-top: 20px; /* Space between this section and the full-container above */
+  overflow: visible; /* Allows card expansion animations to be visible */
+
+  /* Section heading */
+  h2 {
+    @include font-style(16px, 500, rgba(255, 255, 255, 0.50));
+    margin-bottom: 12px; /* Space between heading and cards */
+  }
+}
+
+/*
+ * Scrollable Cards Container
+ * Horizontal scrolling container for publication cards
+ * Implements custom scrollbar styling and smooth scrolling behavior
+ */
+.cards {
+  @include flex-container(row, center, flex-start);
+  width: 100%;
+  gap: 20px; /* Space between cards */
+  overflow-x: auto; /* Enable horizontal scrolling */
+  flex-wrap: nowrap; /* Prevent cards from wrapping to next line */
+  padding-bottom: 10px; /* Space for scrollbar */
+  scroll-behavior: auto; /* Smooth scrolling behavior */
+  will-change: transform; /* Performance optimization for animations */
+  -webkit-overflow-scrolling: touch; /* Smooth inertial scrolling on touch devices */
+
+  /*
+   * Custom Scrollbar Styling
+   * Creates a thin, subtle scrollbar that matches the design aesthetic
+   * Firefox-specific properties
+   */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+
+  /*
+   * WebKit Scrollbar Styling (Chrome, Safari, Edge)
+   * Custom styling for scrollbar components
+   */
+  &::-webkit-scrollbar {
+    height: 6px; /* Thin scrollbar height */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent; /* Transparent track */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent thumb */
+    border-radius: 3px; /* Rounded corners */
+  }
+}
+
+
+
+/*
+ * Publication Card
+ * Individual card component displaying a single publication
+ * Features a header, body content, and interactive hover effect
+ */
+.publications-card {
+  width: 320px;
+  min-width: 320px; /* Prevents cards from shrinking below readable width */
+  min-height: 190px; /* Base height that can expand with content */
+  position: relative; /* Creates positioning context for child elements */
+  background-color: white; /* Card background */
+  border-radius: 10px; /* Rounded corners for modern UI */
+  box-shadow: 0 4px 20.4px 0 rgba(0, 0, 0, 0.25); /* Subtle elevation shadow */
+  transition: transform 0.2s ease; /* Smooth animation for hover interaction */
+
+  /* Interactive hover effect */
+  &:hover {
+    transform: translateY(-5px); /* Slight lift effect to indicate interactivity */
+  }
+}
+
+/*
+ * Publication Card Header
+ * Top section of the publication card containing metadata
+ * Uses the app's dark blue color scheme
+ */
+.publication-header {
+  width: 100%;
+  height: 40px;
+  border-top: 1px solid #3B708C; /* Subtle top border accent */
+  background: #003552; /* Dark blue background matching app theme */
+  border-radius: 10px 10px 0 0; /* Rounded top corners matching card */
+  @include flex-container; /* Centers content horizontally and vertically */
+  margin: 0;
+
+  /* Header text styling */
+  p {
+    @include font-style(13px, 600, rgba(255, 255, 255, 0.52)); /* Semi-transparent white text */
+    margin: 0;
+  }
+}
+
+/*
+ * Publication Card Body
+ * Main content area of the publication card
+ * Contains title, authors, and score information
+ */
+.publication-body {
+  min-height: calc(100% - 40px); /* Fills remaining card height after header */
+  height: auto; /* Allows expansion with content */
+  @include flex-container(column, start, start); /* Vertical layout, aligned to top-left */
+  padding: 12px 20px 45px 20px; /* Extra bottom padding for score placement */
+  gap: 3px; /* Spacing between elements */
+  width: 100%;
+  position: relative; /* For absolute positioning of score */
+
+  /* Publication title styling */
+  p {
+    @include font-style(16px, 400, #000); /* Black text for readability */
+    margin: 0 0 5px; /* Space between title and authors */
+    word-wrap: break-word; /* Handles long titles without overflow */
+  }
+
+  /* Author text styling */
+  span {
+    @include font-style(12px, 400, rgba(0, 0, 0, 0.75)); /* Slightly dimmed text for secondary info */
+    margin: 0;
+  }
+
+  /* Score indicator positioning */
+  .score {
+    position: absolute; /* Positioned relative to publication-body */
+    bottom: 16px; /* Fixed distance from bottom */
+    margin-top: auto; /* Pushes to bottom if space allows */
+  }
+}
+
+
+/*
+ * Main Content Section
+ * Contains the primary content including headings, text, and call-to-action elements
+ * Positioned above background elements with z-index
+ */
+.content-section {
+  @include flex-container(column, start, start); /* Vertical layout, aligned to top-left */
+  z-index: 1; /* Ensures content appears above background elements */
+}
+
+/*
+ * Custom Button
+ * Reusable button component with consistent styling
+ * Used for call-to-action elements throughout the page
+ */
+.custom-button {
+  @include font-style(16px, 600); /* Bold text for emphasis */
+  display: inline-block;
+  text-decoration: none; /* Removes underline from anchor links */
+  padding: 0.5rem 1rem; /* Comfortable padding for clickable area */
+  cursor: pointer; /* Visual indicator of interactivity */
+
+  /* Icon styling within buttons */
+  i {
+    margin-left: 0.3rem; /* Space between text and icon */
+    font-weight: 600; /* Matching font weight with button text */
+  }
+}
+
+/*
+ * DOME Heading
+ * Primary heading displaying the "DOME" brand name
+ * Uses the accent orange color with white text for "Registry"
+ */
+.dome {
+  @include font-style(55px, 700, $color-orange); /* Large, bold, orange text */
+
+  /* "Registry" part of the heading */
+  span {
+    color: $color-white; /* White text for contrast with orange */
+  }
+}
+
+/*
+ * Main Descriptive Text
+ * Subheading text explaining the purpose of DOME Registry
+ * Large, readable white text on dark background
+ */
+.dome-text {
+  width: 80%; /* Constrained width for better readability */
+  @include font-style(28px, 400, $color-white); /* Large, normal weight white text */
+  line-height: 1.3; /* Increased line height for readability */
+}
+
+/*
+ * Vertical Separator
+ * Thin white line used to separate metrics in the metrics container
+ * Creates visual separation between different statistics
+ */
+.small-white-line {
+  width: 1px; /* Very thin line */
+  height: 44px; /* Matches height of surrounding content */
+  background-color: $color-white;
+  opacity: 0.5; /* Semi-transparent for subtle effect */
+  margin-right: 7%; /* Consistent spacing on both sides */
+  margin-left: 7%;
+}
+
+/*
+ * Metrics Container
+ * Horizontal container for displaying key statistics
+ * Contains multiple icon containers separated by vertical lines
+ */
+.metrics-container {
+  @include flex-container(row, center, start); /* Horizontal layout, aligned to start */
+  color: $color-white;
+  margin-top: 2rem; /* Vertical spacing from elements above */
+  margin-bottom: 2rem; /* Vertical spacing from elements below */
+}
+
+/*
+ * Icons Container
+ * Wrapper for individual metric items with icons
+ * Centers content both horizontally and vertically
+ */
+.icons-container {
+  @include flex-container; /* Default center alignment */
+}
+
+/*
+ * Beams Container
+ * Holds the animated beam elements that spell out "DOME"
+ * Positioned absolutely at the bottom of the viewport
+ */
+.beams {
+  @include flex-container(row, center, space-between); /* Horizontal layout with space between items */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  width: 90%; /* Width relative to parent */
+  position: absolute; /* Positioned relative to nearest positioned ancestor */
+  top: calc(100% - 270px); /* Positioned from the bottom of the container */
+  left: 50px; /* Offset from the left edge */
+}
+
+/*
+ * Brain Image
+ * Central brain illustration that anchors the visual design
+ * Positioned in the center of the page
+ */
+.brain {
+  max-width: 450px; /* Maximum width constraint */
+  width: 100%; /* Responsive width */
+}
+
+/*
+ * Beam Container
+ * Individual container for each letter beam (D, O, M, E)
+ * Features floating animation effect with staggered timing
+ */
+.beam-container {
+  @include flex-container(column); /* Vertical layout */
+  flex: 1; /* Flexible growth */
+  width: 100%;
+  max-width: 200px; /* Maximum width constraint */
+  margin: 0 10px; /* Horizontal spacing between beams */
+  transition: transform 0.3s ease; /* Smooth transition for hover effect */
+  animation: floating 3s ease-in-out infinite; /* Continuous floating animation */
+
+  /*
+   * Floating Animation
+   * Creates a gentle up and down movement
+   * Gives a dynamic, floating appearance to the beams
+   */
+  @keyframes floating {
+    0% {
+      transform: translateY(0); /* Starting position */
+    }
+    50% {
+      transform: translateY(-8px); /* Move up at midpoint */
+    }
+    100% {
+      transform: translateY(0); /* Return to starting position */
+    }
+  }
+
+  /* Pause animation on hover for better readability */
+  &:hover {
+    animation-play-state: paused;
+  }
+
+  /*
+   * Staggered Animation Delays
+   * Each beam starts its animation at a different time
+   * Creates a wave-like effect across the DOME letters
+   */
+  &#D {
+    animation-delay: 0s; /* First letter starts immediately */
+  }
+
+  &#O {
+    animation-delay: 0.5s; /* Second letter starts after 0.5s */
+  }
+
+  &#M {
+    animation-delay: 1s; /* Third letter starts after 1s */
+  }
+
+  &#E {
+    animation-delay: 1.5s; /* Fourth letter starts after 1.5s */
+  }
+
+  /* Beam image styling */
+  img {
+    width: 100%;
+    max-width: 500px; /* Maximum width constraint */
+  }
+
+  /* Beam element styling */
+  .beam {
+    width: 150%; /* Wider than container for visual effect */
+    max-width: 600px; /* Maximum width constraint */
     position: relative;
-    color: #ffffff;
-    text-align: center;
-    line-height: 92px;
-    width: 92px;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
-    display: inline-block;
-    left: 50%;
-    margin-top:20px;
-}
+    z-index: 2; /* Positioned above other elements */
+  }
 
-.designer{
-    font-size: 18px;
-   
-     color: white;
-     
- 
-}
-.design{
-    left: 50%;
+  /* Beam text styling */
+  p {
     position: relative;
+    top: -6rem; /* Negative top positioning to overlay text on beam */
+    @include font-style(36px, 600, $color-white); /* Large, bold, white text */
+    line-height: 1.5; /* Increased line height for readability */
+    margin-top: 1rem; /* Space above text */
+    margin-bottom: 1.5rem; /* Space below text */
 
+    /* Subtitle text within beam */
+    span {
+      opacity: 0.5; /* Semi-transparent for secondary information */
+      font-size: 20px; /* Smaller font size for subtitle */
+    }
+  }
 }
 
+/*
+ * Custom Container
+ * Wrapper for the brain image and beams
+ * Positioned with negative margin to overlap with content above
+ */
+.custom-container {
+  position: relative; /* Creates positioning context for absolute children */
+  @include flex-container(column); /* Vertical layout */
+  width: 100%;
+  z-index: 1; /* Ensures content appears above background elements */
+  margin-top: -50px; /* Negative margin to pull content up */
+}
 
-h5,h1{
-    text-align: center;
+/*
+ * Gradient Button
+ * Call-to-action button with orange gradient background
+ * High-visibility element for important actions
+ */
+.gradient-button {
+  background: linear-gradient(90deg, $color-orange, #FF922B); /* Horizontal orange gradient */
+  color: black; /* Dark text for contrast on light background */
+  border: none; /* Clean, borderless design */
+  border-radius: 0; /* Sharp corners for modern look */
+}
+
+/*
+ * Icon with Text
+ * Component for displaying statistics with icons
+ * Used in the metrics container
+ */
+.icon {
+  @include flex-container(row, center, flex-start); /* Horizontal layout, aligned to start */
+
+  /* Numeric value styling */
+  p {
+    @include font-style(28px, 700, $color-orange); /* Large, bold, orange text for emphasis */
+  }
+
+  /* Label text styling */
+  span {
+    @include font-style(14px); /* Smaller white text for labels */
+  }
+
+  /* Icon styling */
+  svg {
+    margin-right: 10px; /* Space between icon and text */
+  }
+}
+/*
+ * Extra Large Screen Adjustments (1500px and below)
+ * First breakpoint for large desktop screens
+ * Slightly reduces sizes while maintaining overall layout
+ */
+@media (max-width: $breakpoint-xl) {
+  /* Reduce brain image size */
+  .brain {
+    max-width: 400px; /* Smaller brain image */
+    width: 100%;
+    margin-bottom: 4rem; /* Increased bottom margin for spacing */
+  }
+
+  /* Adjust container positioning */
+  .custom-container {
+    margin-top: -30px; /* Reduced negative margin for better positioning */
+  }
+
+  /* Reposition beams */
+  .beams {
+    top: calc(100% - 260px); /* Move beams up slightly */
+  }
+
+  /* Adjust beam containers and content */
+  .beam-container {
+    /* Keep original max-width */
+
+    /* Reduce beam image sizes */
+    img {
+      max-width: 450px; /* Smaller beam images */
+    }
+
+    /* Adjust beam element sizing */
+    .beam {
+      max-width: 540px; /* Adjusted max-width for proportional scaling */
+    }
+
+    /* Scale down text sizes */
+    p {
+      font-size: 32px; /* Smaller font size for better fit */
+      top: -5rem; /* Adjusted vertical position for smaller elements */
+
+      span {
+        font-size: 18px; /* Proportionally smaller subtitle text */
+      }
+    }
+  }
+}
+/*
+ * Large Screen Adjustments (1300px and below)
+ * Second breakpoint for smaller desktop screens
+ * Further reduces element sizes and adjusts spacing
+ */
+@media (max-width: $breakpoint-lg) {
+  /* Further reduce brain image size */
+  .brain {
+    max-width: 380px; /* Smaller brain for large screens */
+    margin-bottom: 3rem; /* Adjusted spacing */
+  }
+
+  /* Maintain container positioning from XL breakpoint */
+  .custom-container {
+    margin-top: -30px; /* Same as XL breakpoint */
+  }
+
+  /* Move beams higher */
+  .beams {
+    top: calc(100% - 220px); /* Further adjusted position */
+  }
+
+  /* More compact beam containers */
+  .beam-container {
+    max-width: 160px; /* Reduced width for better fit */
+
+    /* Further reduce image sizes */
+    img {
+      max-width: 380px; /* Smaller images */
+    }
+
+    /* Adjust beam proportions */
+    .beam {
+      max-width: 480px; /* Proportionally adjusted */
+    }
+
+    /* Further reduce text sizes */
+    p {
+      font-size: 26px; /* Smaller text */
+      top: -4rem; /* Adjusted vertical position */
+
+      span {
+        font-size: 14px; /* Smaller subtitle */
+      }
+    }
+  }
+
+  /* Scale down main heading */
+  .dome {
+    font-size: 48px; /* Reduced size for better fit */
+  }
+
+  /* Scale down descriptive text */
+  .dome-text {
+    font-size: 24px; /* Smaller text */
+    width: 85%; /* Slightly wider for better text flow */
+  }
+
+  /* Adjust metrics display */
+  .icon {
+    /* Smaller metric numbers */
+    p {
+      font-size: 24px; /* Reduced size */
+    }
+
+    /* Smaller metric labels */
+    span {
+      font-size: 12px; /* Reduced size */
+    }
+
+    /* Scale down icons */
+    svg {
+      transform: scale(0.9); /* Slightly smaller */
+    }
+  }
+
+  /* Adjust metrics container spacing */
+  .metrics-container {
+    margin-top: 1.5rem; /* Reduced vertical spacing */
+    margin-bottom: 1.5rem;
+  }
+
+  /* Smaller buttons */
+  .custom-button {
+    font-size: 14px; /* Reduced text size */
+    padding: 0.4rem 0.8rem; /* Smaller clickable area */
+  }
+}
+
+/*
+ * Medium Screen Adjustments (1100px and below)
+ * Third breakpoint for tablet landscape view
+ * Significantly reduces element sizes for better fit on smaller screens
+ */
+@media (max-width: $breakpoint-md) {
+  /* Further reduce brain image size */
+  .brain {
+    max-width: 320px; /* Smaller brain for medium screens */
+    margin-bottom: 2.5rem; /* Further reduced spacing */
+  }
+
+  /* Maintain container positioning from larger breakpoints */
+  .custom-container {
+    margin-top: -30px; /* Same as larger breakpoints */
+  }
+
+  /* Move beams even higher */
+  .beams {
+    top: calc(100% - 180px); /* Further adjusted position */
+  }
+
+  /* Even more compact beam containers */
+  .beam-container {
+    max-width: 140px; /* Further reduced width */
+
+    /* Further reduce image sizes */
+    img {
+      max-width: 320px; /* Smaller images for medium screens */
+    }
+
+    /* Adjust beam proportions */
+    .beam {
+      max-width: 420px; /* Proportionally adjusted */
+    }
+
+    /* Further reduce text sizes */
+    p {
+      font-size: 22px; /* Smaller text for better fit */
+      top: -3.5rem; /* Adjusted vertical position */
+
+      span {
+        font-size: 12px; /* Smaller subtitle */
+      }
+    }
+  }
+
+  /* Further scale down main heading */
+  .dome {
+    font-size: 42px; /* Further reduced size */
+  }
+
+  /* Further scale down descriptive text */
+  .dome-text {
+    font-size: 22px; /* Smaller text */
+    width: 90%; /* Wider for better text flow on narrower screens */
+  }
+
+  /* Further adjust metrics display */
+  .icon {
+    /* Smaller metric numbers */
+    p {
+      font-size: 22px; /* Further reduced size */
+    }
+
+    /* Smaller metric labels */
+    span {
+      font-size: 11px; /* Further reduced size */
+    }
+
+    /* Further scale down icons */
+    svg {
+      transform: scale(0.8); /* Smaller for better fit */
+    }
+  }
+
+  /* Further adjust metrics container spacing */
+  .metrics-container {
+    margin-top: 1.2rem; /* Further reduced vertical spacing */
+    margin-bottom: 1.2rem;
+  }
+
+  /* Even smaller buttons */
+  .custom-button {
+    font-size: 13px; /* Further reduced text size */
+    padding: 0.35rem 0.7rem; /* Smaller clickable area */
+  }
+}
+
+/*
+ * Small Screen Adjustments (990px and below)
+ * Fourth breakpoint for tablet portrait and mobile landscape
+ * Major layout changes including removal of decorative elements
+ * Focuses on content readability and usability on smaller devices
+ */
+@media (max-width: $breakpoint-sm) {
+  /* Remove decorative elements to focus on content */
+  .custom-container {
+    display: none; /* Hide brain and beams on smaller screens */
+  }
+
+  /* Realign main container for better mobile experience */
+  .main-container {
+    align-items: flex-start; /* Left-align content */
+    padding-top: 2rem; /* Space below navbar */
+    height: auto; /* Dynamic height based on content */
+    min-height: 100vh; /* Ensure full viewport coverage */
+  }
+
+  /* Optimize content section for smaller screens */
+  .content-section {
+    width: 85%; /* Consistent width with larger screens */
+    max-width: 100%; /* Prevent overflow */
+    margin: 0 auto; /* Center horizontally */
+    text-align: left; /* Left-aligned text for readability */
+    align-items: flex-start; /* Left-align child elements */
+  }
+
+  /* Adjust main content container */
+  .full-container {
+    flex-direction: row; /* Maintain horizontal layout */
+    justify-content: flex-start; /* Left-align content */
+    height: auto; /* Dynamic height */
+    padding: 0; /* Remove padding */
+    margin-bottom: 60px; /* Space for footer */
+  }
+
+  /*
+   * Restore original font sizes for better readability on mobile
+   * Mobile devices are typically held closer to the face,
+   * so text can be larger than on desktop at equivalent screen widths
+   */
+  .dome {
+    font-size: 55px; /* Restore original size */
+  }
+
+  .dome-text {
+    font-size: 28px; /* Restore original size */
+    width: 80%; /* Maintain width from larger screens */
+  }
+
+  /* Restore metrics to original sizes */
+  .icon p {
+    font-size: 28px; /* Restore original size */
+  }
+
+  .icon span {
+    font-size: 14px; /* Restore original size */
+  }
+
+  .icon svg {
+    transform: none; /* Remove scaling */
+  }
+
+  /* Adjust metrics container layout */
+  .metrics-container {
+    margin-top: 2rem; /* Restore original spacing */
+    margin-bottom: 2rem;
+    flex-direction: row; /* Maintain horizontal layout */
+  }
+
+  /* Adjust publications section positioning */
+  .latest-publications {
+    margin-left: 7%; /* Consistent left margin with other elements */
+  }
+
+  /* Restore button to original size */
+  .custom-button {
+    font-size: 16px; /* Original size */
+    padding: 0.5rem 1rem; /* Original padding */
+  }
+}
+
+/*
+ * Extra Small Screen Adjustments (500px and below)
+ * Fifth breakpoint for mobile portrait view
+ * Maximizes content area and significantly reduces element sizes
+ * Optimizes for single-column viewing on small mobile devices
+ */
+@media (max-width: $breakpoint-xs) {
+  /* Expand container width for better use of limited screen space */
+  .full-container {
+    width: 90%; /* Wider container to maximize screen usage */
+    padding: 1rem 0; /* Reduced vertical padding */
+    margin-bottom: 60px; /* Maintain footer space */
+  }
+
+  /* Significantly reduce heading size */
+  .dome {
+    font-size: 40px; /* Smaller heading for mobile */
+  }
+
+  /* Optimize descriptive text for small screens */
+  .dome-text {
+    font-size: 18px; /* Smaller text for better fit */
+    width: 100%; /* Full width to maximize text flow */
+    margin-bottom: 1rem; /* Reduced spacing */
+  }
+
+  /* Compact metrics display */
+  .metrics-container {
+    margin-top: 1rem; /* Minimal spacing */
+    margin-bottom: 1rem;
+    flex-direction: row; /* Maintain horizontal layout */
+    align-items: flex-start; /* Align to top */
+  }
+
+  /* Convert vertical separator to horizontal */
+  .small-white-line {
+    width: 100%; /* Full width horizontal line */
+    height: 1px; /* Thin line */
+    margin: 0.5rem 0; /* Vertical spacing */
+  }
+
+  /* Adjust icons container for mobile */
+  .icons-container {
+    width: 100%; /* Full width */
+    margin-bottom: 0.5rem; /* Minimal spacing */
+  }
+
+  /* Compact icon styling */
+  .icon {
+    /* Smaller metric numbers */
+    p {
+      font-size: 20px; /* Reduced size for mobile */
+    }
+
+    /* Minimal label text */
+    span {
+      font-size: 10px; /* Very small text for labels */
+    }
+
+    /* Compact icons */
+    svg {
+      transform: scale(0.7); /* Significantly smaller */
+      margin-right: 5px; /* Minimal spacing */
+    }
+  }
+
+  /* Compact button styling */
+  .custom-button {
+    font-size: 12px; /* Small text for mobile */
+    padding: 0.3rem 0.6rem; /* Reduced padding but still tap-friendly */
+  }
 }

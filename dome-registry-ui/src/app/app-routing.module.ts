@@ -9,7 +9,6 @@ import { AboutPageComponent } from './about-page/about-page.component';
 import { PageDashboardComponent } from './page-dashboard/page-dashboard.component';
 import { DSWCardComponent } from './dsw-card/dsw-card.component';
 import { NewStateComponent } from './new-state/new-state.component';
-import { NewIntroPageComponent } from './new-intro-page/new-intro-page.component';
 import { IntegrationsStandardsComponent } from './integrations-standards/integrations-standards.component';
 import { PoliciesComponent } from './policies/policies.component';
 import { TeamsComponent } from './teams/teams.component';
@@ -22,7 +21,7 @@ const params: Route = {
 // Definer available routes
 const routes: Routes = [
   // Define path to introduction page
-  { ...params, path: 'intro', component: NewIntroPageComponent },
+  { ...params, path: 'intro', component: PageIntroComponent},
   // Define path to statistics page
   { ...params, path: 'stats', component: NewStateComponent },
   // Define path to search page
