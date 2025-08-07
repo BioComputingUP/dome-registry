@@ -301,11 +301,6 @@ $color-cyan: #00F5FB;
   @include font(18px, 400, 1.8rem);
 }
 
-// Orange background utility class
-.orange {
-  background-color: $color-orange;
-}
-
 // Responsive styles
 // Large screens (max-width: 1220px)
 @media (max-width: 1220px) {
