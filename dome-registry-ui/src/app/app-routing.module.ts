@@ -15,6 +15,7 @@ import { PoliciesComponent } from './policies/policies.component';
 import { TeamsComponent } from './teams/teams.component';
 import { GovernanceComponent } from './governance/governance.component';
 import { WidgetResolverService } from './services/widget-script.guard';
+
 // Define default parameters
 const params: Route = {
   runGuardsAndResolvers: 'always',
@@ -53,8 +54,8 @@ const routes: Routes = [
   // set path to governance page
   { ...params, path: 'governance', component: GovernanceComponent },
    // set ther new statistics page
-    //{...params, path:'newstate',component:NewStateComponent},
 
+      
 
   //  // Set path to search page as default
   { ...params, path: '**', redirectTo: 'intro', pathMatch: 'full' },
