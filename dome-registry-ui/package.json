@@ -13,7 +13,7 @@
     "deploy-prod-quick": "(colC='\\033[0;36m';colN='\\033[0m'; echo ${colC}Running npm build-prod ...${colN} && npm run build-prod && echo ${colC}Rsyncing dist ...${colN} && rsync -avh --delete dist biocomp@persefone:/var/www/dome-registry/ && echo ${colC}Done with deploy-prod-quick!${colC})",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "gogo": "ng generate component new-intro-page --skip-tests=true"
+    "gogo": "ng generate component new-search-page --skip-tests=true"
   },
   "private": true,
   "dependencies": {

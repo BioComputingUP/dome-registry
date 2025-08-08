@@ -42,8 +42,6 @@ import { ScoreComponent } from './score/score.component';
 PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
 PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for full) or 'basic', 'cartesian', 'geo', 'gl3d', 'gl2d', 'mapbox' or 'finance'
 
-// // NOTE this ios required for Plotly to work properly
-// PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
   declarations: [
@@ -74,7 +72,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
   imports: [
     PlotlyViaCDNModule,
     BrowserModule,
-
+     
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
@@ -93,6 +91,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
       closeButton:true,
       progressBar:true
     }),
+    NewStateModule // Import the new state module,
   ],
   providers: [
     // Add authentication interceptor (set cookie)
