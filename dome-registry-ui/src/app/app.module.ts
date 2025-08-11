@@ -37,13 +37,12 @@ import { PoliciesComponent } from './policies/policies.component';
 import { TeamsComponent } from './teams/teams.component';
 import { GovernanceComponent } from './governance/governance.component';
 import { ScoreComponent } from './score/score.component';
+import { NewStateModule } from './new-state/new-state.module';
 
 // Set Plotly.js from CDN
 PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
 PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for full) or 'basic', 'cartesian', 'geo', 'gl3d', 'gl2d', 'mapbox' or 'finance'
 
-// // NOTE this ios required for Plotly to work properly
-// PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
   declarations: [
@@ -60,7 +59,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     AboutPageComponent,
     PageDashboardComponent,
     DSWCardComponent,
-    NewStateComponent,
+  
     SubmitComponent,
     BigFooterComponent,
     SmallFooterComponent,
@@ -74,7 +73,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
   imports: [
     PlotlyViaCDNModule,
     BrowserModule,
-
+     
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
@@ -93,6 +92,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
       closeButton:true,
       progressBar:true
     }),
+    NewStateModule,
   ],
   providers: [
     // Add authentication interceptor (set cookie)

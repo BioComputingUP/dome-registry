@@ -46,24 +46,25 @@
                   <i class="bi bi-info-circle"></i>About
                 </a>
               </li>
-              <li>
-                <a class="dropdown-item" [routerLink]="'/teams'">
-                  <i class="bi bi-people"></i>Teams
-                </a>
-              </li>
+            
               <li>
                 <a class="dropdown-item" [routerLink]="'/integrations'">
                   <i class="bi bi-diagram-3"></i>Integrations & Standards
                 </a>
               </li>
-              <li>
-                <a class="dropdown-item" [routerLink]="'/policies'">
-                  <i class="bi bi-file-text"></i>Policies
+                <li>
+                <a class="dropdown-item" [routerLink]="'/teams'">
+                  <i class="bi bi-people"></i>Teams
                 </a>
               </li>
               <li>
                 <a class="dropdown-item" [routerLink]="'/governance'">
                   <i class="bi bi-diagram-2"></i>Governance
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" [routerLink]="'/policies'">
+                  <i class="bi bi-file-text"></i>Policies
                 </a>
               </li>
             </ul>
@@ -118,8 +119,7 @@
                 <!-- Define value -->
                 <a class="d-flex justify-content-center align-items-center sign-in-content nav-link sign-in-btn" [href]="login">
                   <span class="text-nowrap">Sign in</span>
-                  <img src="assets/thin-arrow-right-icon.svg"
-                       alt="Right arrow" class="right-small-arrow" />
+                  <i class="bi bi-box-arrow-in-right ms-1"></i>
                 </a>
               </li>
             </ng-template>

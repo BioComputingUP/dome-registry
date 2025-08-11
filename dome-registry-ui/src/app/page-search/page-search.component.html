@@ -17,7 +17,7 @@
                               id="searchFilter"
                               data-bs-toggle="dropdown"
                               aria-expanded="false">
-                        <span class="filter-label">All Categories</span>
+                        <span class="filter-label">Search by</span>
                         <i class="bi bi-chevron-down dropdown-icon"></i>
                       </button>
 
@@ -104,14 +104,14 @@
         <div class="row">
           <div class="col-md-8 offset-md-2">
             <!-- Main card -->
-            <div class="card shadow-sm mb-2" style="pointer-events: all">
+           
               <!-- Card header -->
-              <div class="card-header text-white bg-primary">
-                <h4 class="d-block w-100 h-auto text-center">Annotations</h4>
-              </div>
+              
+                <h3 class="d-block w-100 h-auto text-center">Annotations</h3>
+             
 
               <!-- Card body -->
-              <div class="card-body">
+             
                 <div class="d-flex align-items-center justify-content-center w-100 h-100" *ngIf="!results$">
                   <!-- Show spinner -->
                   <div class="spinner-grow text-primary" role="status">
@@ -210,8 +210,8 @@
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              
+           
             <!-- Pagination controls -->
             <div class="d-flex justify-content-center mt-3" *ngIf="totalItems > itemsPerPage">
               <nav aria-label="Page navigation">
@@ -262,21 +262,6 @@
       </div>
     </div>
     <!-- Table header (fixed) -->
-    <div class="position-absolute left-0 top-0 w-100 h-auto bg-transparent overflow-y-scroll overflow-x-hidden invisible"
-         style="pointer-events: none">
-      <div class="container-fluid bg-light visible">
-        <div class="row">
-          <div class="col-12 col-md-8 offset-md-2">
-            <div class="card" style="pointer-events: all">
-              <div class="card-header text-white bg-primary">
-                <div class="text-center mb">
-                  <h4 class="w-100 h-auto">Annotations</h4>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    
   </div>
 </div>
