@@ -70,6 +70,10 @@ npm run start:dev
 ```
 
 
+## Styling System
+
+The DOME Registry uses a comprehensive SCSS-based styling system located in `dome-registry-ui/src/styles/`. This system includes variables, mixins, and component-specific styles to maintain a consistent look and feel across the application. For more information on how to use the styling system, please refer to the [styles README](dome-registry-ui/src/styles/README.md).
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
