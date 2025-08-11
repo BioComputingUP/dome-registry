@@ -1,158 +1,130 @@
-.orange-divider {
-  width: 100%;
-  height: 6px;
-  margin: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+@import "../../styles/base.scss";
+
+// Host styles
+:host {
+  display: block;
+  @extend %full-width;
+  position: relative;
   z-index: 10;
-  background-color: #F66729;
+  padding-top: 6px;
+}
+
+// Component styles
+.orange-divider {
+  @extend %full-width;
+  height: 6px;
+  @extend %reset-margin;
+  @include position-absolute(0, auto, auto, 0, 10);
+  background-color: $secondary;
 }
 
 .big-footer {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  padding: 55px 8% 45px;
-  background-color: #002132;
-  color: #fff;
+  @extend %full-width;
+  @include flex(row, space-between, flex-start);
+  @include responsive-padding(55px 8% 45px, 40px 6% 30px, 30px 5% 20px, 25px 4% 15px);
+  background-color: $color-blue-dark;
+  @extend %white-text;
 
   p {
-    font-family: Inter, sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    font-style: normal;
-    line-height: normal;
-  }
+    @include font(16px, 400, normal, normal);
 
-  @media (max-width: 992px) {
-    flex-direction: column;
-    padding: 40px 6% 30px;
-  }
-
-  @media (max-width: 576px) {
-    padding: 30px 5% 20px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 25px 4% 15px;
-
-    p {
+    @media (max-width: $breakpoint-xs) {
       font-size: 14px;
     }
   }
+
+  @media (max-width: $breakpoint-lg) {
+    flex-direction: column;
+  }
 }
 
-
 .left {
-  width: 20%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 17px;
+  @include responsive-width(20%);
+  @include flex(row, flex-start, center, 17px);
 
   img {
     width: 50px;
+
+    @media (max-width: $breakpoint-xs) {
+      width: 40px;
+    }
   }
 
   p {
-    margin: 0;
-    color: #fff;
+    @extend %reset-margin;
+    @extend %white-text;
   }
 
   a {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 17px;
-    color: #fff;
-    text-decoration: none;
+    @include flex(row, flex-start, center, 17px);
+    @extend %link-style;
+
+    @media (max-width: $breakpoint-xs) {
+      gap: 10px;
+    }
   }
 
-  @media (max-width: 992px) {
-    width: 100%;
+  @media (max-width: $breakpoint-lg) {
     margin-bottom: 30px;
   }
 
-  @media (max-width: 480px) {
-    img {
-      width: 40px;
-    }
-
+  @media (max-width: $breakpoint-xs) {
     gap: 10px;
-
-    a {
-      gap: 10px;
-    }
   }
 }
 
 .right {
-  width: 80%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  @include responsive-width(80%);
+  @include flex(row, space-between, flex-start);
 
-  @media (max-width: 992px) {
-    width: 100%;
+  @media (max-width: $breakpoint-lg) {
     flex-direction: column;
   }
 }
 
 .middle {
-  width: 50%;
+  @include responsive-width(50%);
+  @include flex(row, flex-start, flex-start, 95px);
   margin-left: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 95px;
 
   p {
-    margin: 0;
-    color: #fff;
+    @extend %reset-margin;
+    @extend %white-text;
   }
 
-  @media (max-width: 992px) {
-    width: 100%;
+  @media (max-width: $breakpoint-lg) {
     margin-left: 0;
     margin-bottom: 30px;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: $breakpoint-md) {
     gap: 40px;
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: $breakpoint-sm) {
     flex-direction: column;
     gap: 20px;
   }
 }
 
 .middle-container {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
+  @include flex(column, flex-start, stretch, 32px);
 
   a {
-    color: #fff;
-    text-decoration: none;
+    @extend %link-style;
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: $breakpoint-sm) {
     gap: 20px;
   }
 }
 
 .right-right {
-  width: 50%;
+  @include responsive-width(50%);
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-end;
+  @include flex(column, flex-start, flex-end);
   position: relative;
 
   p {
@@ -162,44 +134,28 @@
 
   .github-link {
     margin-top: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.2s ease;
+    @include flex(row, center, center);
+    @include transition(opacity, 0.2s);
 
     &:hover {
       opacity: 0.8;
     }
 
     img {
-      width: 28px;
-      height: 28px;
+      @include size(28px);
+
+      @media (max-width: $breakpoint-xs) {
+        @include size(24px);
+      }
+    }
+
+    @media (max-width: $breakpoint-xs) {
+      margin-top: 10px;
     }
   }
 
-  @media (max-width: 992px) {
-    width: 100%;
+  @media (max-width: $breakpoint-lg) {
     align-items: flex-start;
     margin-top: 10px;
   }
-
-  @media (max-width: 480px) {
-    .github-link {
-      margin-top: 10px;
-
-      img {
-        width: 24px;
-        height: 24px;
-      }
-    }
-  }
-}
-
-
-:host {
-  display: block;
-  width: 100%;
-  position: relative;
-  z-index: 10;
-  padding-top: 6px;
 }

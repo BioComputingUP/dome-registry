@@ -1,0 +1,45 @@
+@import 'variables';
+// Common placeholders
+%reset-margin {
+  margin: 0;
+}
+
+%reset-padding {
+  padding: 0;
+}
+
+%full-width {
+  width: 100%;
+}
+
+%white-text {
+  color: $color-white;
+}
+
+%center-text {
+  text-align: center;
+}
+
+%justify-text {
+  text-align: justify;
+}
+
+%section-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+%button-base {
+  border: none;
+  background-color: $color-white;
+  color: #000;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+%link-style {
+  color: $color-white;
+  text-decoration: none;
+}

@@ -1,37 +1,35 @@
-// Variables
-$font-primary: Inter, sans-serif;
-$color-dark-blue: #003958;
-$color-blue-gradient-start: #012437;
-$color-blue-gradient-end: #045079;
+@import '../../styles/variables';
+@import '../../styles/mixins';
+@import '../../styles/base';
 
 .nav-item {
   margin-left: 15px;
 
-  @media (min-width: 992px) {
+  @include for-desktop {
     margin-left: 25px;
   }
 
-  @media (max-width: 991px) {
+  @include for-mobile {
     margin-left: 0;
     margin-bottom: 10px;
   }
 }
 
 .nav-link {
-  color: white;
+  @extend %white-text;
   position: relative;
   padding: 8px 0;
-  transition: all 0.3s ease;
+  @include transition;
 }
 
 // Apply hover effect only to navbar middle elements, not to sign-in button
 .navbar-nav:not(.ms-auto.me-0) .nav-link:not(.sign-in-btn):not(.dropdown-toggle) {
   display: inline-block;
   transform-origin: center;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  @include transition(all, 0.3s, cubic-bezier(0.175, 0.885, 0.32, 1.275));
 
   &:hover {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba($color-white, 0.85);
 
     &::after {
       width: 100%;
@@ -42,13 +40,11 @@ $color-blue-gradient-end: #045079;
 
   &::after {
     content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
+    @include position-absolute(auto, auto, -2px, 0);
     width: 100%;
     height: 2px;
-    background-color: rgba(244, 107, 23, 0.7);
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background-color: rgba($navbar-orange, 0.7);
+    @include transition(all, 0.3s, cubic-bezier(0.175, 0.885, 0.32, 1.275));
     opacity: 0;
     transform: scaleX(0);
     transform-origin: center;
@@ -59,68 +55,66 @@ $color-blue-gradient-end: #045079;
 .navbar-nav:not(.ms-auto.me-0) .dropdown-toggle {
   display: inline-block;
   transform-origin: center;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  @include transition(all, 0.3s, cubic-bezier(0.175, 0.885, 0.32, 1.275));
   position: relative;
   padding-right: 18px; /* Make room for custom caret */
 
   &:hover {
-    color: #F46B17;
+    color: $navbar-orange;
 
     &::after {
-      border-top-color: #F46B17;
+      border-top-color: $navbar-orange;
       transform: translateY(2px);
-      filter: drop-shadow(0 2px 2px rgba(244, 107, 23, 0.3));
+      filter: drop-shadow(0 2px 2px rgba($navbar-orange, 0.3));
     }
   }
 
   /* Custom dropdown caret */
   &::after {
     content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
+    @include position-absolute(50%, 0, auto, auto);
     margin-top: -3px;
     width: 0;
     height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 6px solid white;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-top: 6px solid $color-white;
+    @include transition(all, 0.3s, cubic-bezier(0.175, 0.885, 0.32, 1.275));
     filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
   }
 }
 
 // Active state for middle nav elements
 .navbar-nav:not(.ms-auto.me-0) .nav-link.active:not(.sign-in-btn) {
-  color: #F46B17;
+  color: $navbar-orange;
 
   &::after {
     width: 100%;
     opacity: 1;
     transform: scaleX(1);
-    background-color: #F46B17;
+    background-color: $navbar-orange;
   }
 }
 
 // Active state for dropdown toggles
 .navbar-nav:not(.ms-auto.me-0) .dropdown-toggle.active {
-  color: #F46B17;
+  color: $navbar-orange;
 
   &::after {
-    border-top-color: #F46B17;
-    filter: drop-shadow(0 1px 2px rgba(244, 107, 23, 0.3));
+    border-top-color: $navbar-orange;
+    filter: drop-shadow(0 1px 2px rgba($navbar-orange, 0.3));
   }
 }
 
 // Show state for dropdown toggles (when dropdown is open)
 .navbar-nav:not(.ms-auto.me-0) .dropdown-toggle.show {
-  color: #F46B17;
+  color: $navbar-orange;
 
   &::after {
-    border-top-color: #F46B17;
+    border-top-color: $navbar-orange;
     transform: rotate(180deg); /* Rotate arrow when dropdown is open */
     margin-top: 0; /* Adjust margin to account for rotation */
-    filter: drop-shadow(0 -1px 2px rgba(244, 107, 23, 0.4)); /* Adjusted shadow direction for rotated arrow */
+    filter: drop-shadow(0 -1px 2px rgba($navbar-orange, 0.4)); /* Adjusted shadow direction for rotated arrow */
     animation: pulse-glow 1.5s infinite alternate ease-in-out; /* Add subtle pulsing effect */
   }
 }
@@ -128,49 +122,48 @@ $color-blue-gradient-end: #045079;
 /* Subtle pulsing animation for the dropdown arrow when open */
 @keyframes pulse-glow {
   from {
-    filter: drop-shadow(0 -1px 2px rgba(244, 107, 23, 0.3));
+    filter: drop-shadow(0 -1px 2px rgba($navbar-orange, 0.3));
   }
   to {
-    filter: drop-shadow(0 -2px 4px rgba(244, 107, 23, 0.5));
+    filter: drop-shadow(0 -2px 4px rgba($navbar-orange, 0.5));
   }
 }
 
 .navbar {
-  font-family: $font-primary;
   padding-left: 5%;
   padding-right: 5%;
   position: relative;
   z-index: 1040; /* Increased z-index to ensure navbar is above page content */
-  height: 75px; /* Increased height */
-  background: #0D3144;
-  width: 100%;
+  height: $navbar-height;
+  background: $navbar-bg;
+  @extend %full-width;
 
-  @media (min-width: 1200px) {
+  @media (min-width: $breakpoint-xl) {
     padding-left: 120px;
     padding-right: 120px;
   }
 
-  @media (max-width: 991px) {
+  @include for-mobile {
     height: auto;
-    min-height: 75px;
+    min-height: $navbar-height;
   }
 }
 
 .container-fluid {
   height: 100%;
 
-  @media (max-width: 991px) {
+  @include for-mobile {
     padding: 10px 15px;
   }
 }
 
 // Styling for the navbar toggler button
 .navbar-toggler {
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba($color-white, 0.3);
   padding: 5px 10px;
 
   &:focus {
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 0 3px rgba($color-white, 0.25);
     outline: none;
   }
 
@@ -181,12 +174,10 @@ $color-blue-gradient-end: #045079;
 
 // Styling for the collapsed navbar
 .navbar-collapse {
-  @media (max-width: 991px) {
-    background-color: #0D3144;
-    padding: 10px 0;
+  @include for-mobile {
+    background-color: $navbar-bg;
     margin: 0 -15px;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 10px 15px;
 
     .navbar-nav {
       margin-top: 10px;
@@ -205,15 +196,15 @@ $color-blue-gradient-end: #045079;
 
     // Add some spacing between the two navbar-nav sections
     .navbar-nav + .navbar-nav {
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba($color-white, 0.1);
       padding-top: 10px;
     }
   }
 }
 
 .sign-in-btn {
-  background-color: #F66729;
-  color: white !important;
+  background-color: $secondary;
+  color: $color-white !important;
   padding: 8px 15px !important;
   border-radius: 0;
   font-weight: 600;
@@ -221,12 +212,12 @@ $color-blue-gradient-end: #045079;
   min-width: 100px;
   height: 43px;
 
-  @media (min-width: 992px) {
+  @include for-desktop {
     padding: 8px 25px !important;
     width: 120px;
   }
 
-  @media (max-width: 991px) {
+  @include for-mobile {
     height: 38px;
     margin-top: 10px;
     width: 110px;
@@ -239,99 +230,94 @@ $color-blue-gradient-end: #045079;
 
 .right-small-arrow {
   width: 18px;
-  color:#FFFFFF;
+  color: $color-white;
   filter: brightness(0) invert(1);
 
-  @media (max-width: 991px) {
+  @include for-mobile {
     width: 14px;
   }
 }
 
 .sign-in-content {
-  gap: 0.5rem; /* Default gap */
+  @include flex($gap: 0.5rem); /* Default gap */
 
-  @media (min-width: 992px) {
+  @include for-desktop {
     gap: 0.5rem; /* Larger gap for larger screens */
   }
 
-  @media (max-width: 991px) {
+  @include for-mobile {
     gap: 0.25rem; /* Smaller gap for smaller screens */
   }
 }
 
-.logo{
-  width: 50px;
+.logo {
+  @include size(50px);
   margin-right: 10px;
 
-  @media (max-width: 576px) {
-    width: 40px;
+  @include for-small-mobile {
+    @include size(40px);
     margin-right: 5px;
   }
 }
 
 .navbar-brand {
-  @media (max-width: 576px) {
-    font-size: 0.9rem;
+  @include for-small-mobile {
+    @include font(0.9rem);
   }
 
   span {
-    color: white;
+    @extend %white-text;
 
-    @media (max-width: 400px) {
-      font-size: 0.85rem;
+    @include for-extra-small-mobile {
+      @include font(0.85rem);
     }
   }
 }
 
 .user-dropdown {
-  display: flex;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.1);
+  @include flex($justify: flex-start);
+  background-color: rgba($color-white, 0.1);
   border-radius: 6px;
   padding: 6px 12px !important;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  @include font(inherit, 500);
+  @include transition(all, 0.2s);
+  border: 1px solid rgba($color-white, 0.1);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  color: white !important;
+  color: $color-white !important;
 
-  @media (max-width: 991px) {
+  @include for-mobile {
     margin-top: 10px;
     margin-bottom: 5px;
     justify-content: center;
   }
 
-  @media (max-width: 576px) {
-    font-size: 0.9rem;
+  @include for-small-mobile {
+    @include font(0.9rem);
     padding: 5px 10px !important;
   }
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba($color-white, 0.2);
+    border-color: rgba($color-white, 0.2);
   }
 }
 
 .user-icon {
-  color: #F46B17;
-  font-size: 1.2rem;
+  color: $navbar-orange;
+  @include font(1.2rem);
   margin-right: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.15);
+  @include flex;
+  background-color: rgba($color-white, 0.15);
   border-radius: 50%;
   padding: 4px;
-  height: 28px;
-  width: 28px;
-  transition: all 0.2s ease;
+  @include size(28px);
+  @include transition(all, 0.2s);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(244, 107, 23, 0.2);
+  border: 1px solid rgba($navbar-orange, 0.2);
 
-  @media (max-width: 576px) {
-    font-size: 1rem;
-    height: 24px;
-    width: 24px;
+  @include for-small-mobile {
+    @include font(1rem);
+    @include size(24px);
     padding: 3px;
   }
 }
@@ -348,7 +334,7 @@ $color-blue-gradient-end: #045079;
   transform-origin: top right;
   z-index: 1050; /* Added higher z-index to ensure dropdown appears above other content */
 
-  @media (max-width: 576px) {
+  @include for-small-mobile {
     min-width: 200px;
     margin-top: 5px;
     width: 100%;
@@ -356,34 +342,34 @@ $color-blue-gradient-end: #045079;
 
   .dropdown-item {
     padding: 6px 16px;
-    transition: all 0.15s ease;
+    @include transition(all, 0.15s);
     border-left: 2px solid transparent;
     margin: 1px 0;
 
     i {
-      color: #F46B17;
+      color: $navbar-orange;
       margin-right: 8px;
-      font-size: 1rem;
-      transition: transform 0.15s ease;
+      @include font(1rem);
+      @include transition(transform, 0.15s);
     }
   }
 }
 
 // Specific styling for the About dropdown menu
 .navbar-nav:not(.ms-auto.me-0) .dropdown-menu {
-  background-color: $color-dark-blue;
+  background-color: $primary;
 
   .dropdown-item {
-    color: white;
-    font-weight: 600;
+    @extend %white-text;
+    @include font(inherit, 600);
 
     &:hover, &:focus {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: white;
+      background-color: rgba($color-white, 0.1);
+      @extend %white-text;
     }
 
     i {
-      color: #F46B17;
+      color: $navbar-orange;
     }
   }
 }
@@ -400,29 +386,26 @@ $color-blue-gradient-end: #045079;
 }
 
 .text-orcid {
-  color: #F46B17 !important;
+  color: $navbar-orange !important;
 }
 
 .user-profile-header {
   padding: 12px !important;
-  background-color: rgba(244, 107, 23, 0.03);
+  background-color: rgba($navbar-orange, 0.03);
   border-radius: 6px;
   margin: 0 8px 4px;
 
   .user-name {
-    font-weight: 700;
-    font-size: 1.15rem;
+    @include font(1.15rem, 700);
     margin-bottom: 6px;
     color: #222;
     letter-spacing: -0.01em;
-    display: flex;
-    align-items: center;
+    @include flex($justify: flex-start);
 
     &::before {
       content: '';
       display: inline-block;
-      width: 8px;
-      height: 8px;
+      @include size(8px);
       background-color: #4CAF50;
       border-radius: 50%;
       margin-right: 8px;
@@ -432,19 +415,18 @@ $color-blue-gradient-end: #045079;
 
   .user-details {
     color: #555;
-    font-size: 0.9rem;
+    @include font(0.9rem);
     padding-left: 16px;
-    border-left: 2px solid rgba(244, 107, 23, 0.2);
+    border-left: 2px solid rgba($navbar-orange, 0.2);
 
     div {
       margin-bottom: 4px;
-      display: flex;
-      align-items: center;
+      @include flex($justify: flex-start);
 
       i {
         width: 16px;
         margin-right: 8px;
-        font-size: 0.95rem;
+        @include font(0.95rem);
       }
 
       &:last-child {
@@ -462,30 +444,28 @@ $color-blue-gradient-end: #045079;
   &::after {
     content: '';
     display: block;
-    width: 40px;
-    height: 1px;
-    background-color: rgba(244, 107, 23, 0.2);
-    position: absolute;
-    left: 16px;
-    top: -1px;
+    @include size(40px, 1px);
+    background-color: rgba($navbar-orange, 0.2);
+    @include position-absolute(-1px, auto, auto, 16px);
   }
 }
 
 .logout-item {
-  color: #dc3545;
+
+  color: $logout-color;
   margin: 2px 8px 4px;
   border-radius: 6px;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  @include font(inherit, 500);
+  @include transition(all, 0.2s);
 
   i {
-    color: #dc3545 !important;
-    transition: transform 0.2s ease;
+    color: $logout-color !important;
+    @include transition(transform, 0.2s);
   }
 
   &:hover, &:focus {
-    background-color: rgba(220, 53, 69, 0.08) !important;
-    color: #c82333;
+    background-color: rgba($logout-color, 0.08) !important;
+    color: $logout-hover-color;
 
     i {
       transform: translateX(2px);

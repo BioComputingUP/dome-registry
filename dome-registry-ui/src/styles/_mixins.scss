@@ -1,0 +1,421 @@
+@import 'variables';
+
+// Common mixins
+
+@mixin responsive-width($desktop-width, $tablet-width: 100%) {
+  width: $desktop-width;
+
+  @media (max-width: $breakpoint-lg) {
+    width: $tablet-width;
+  }
+}
+
+@mixin responsive-padding($desktop, $tablet, $mobile, $xs-mobile) {
+  padding: $desktop;
+
+  @media (max-width: $breakpoint-lg) {
+    padding: $tablet;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $mobile;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    padding: $xs-mobile;
+  }
+}
+@mixin flex($direction: row, $justify: center, $align: center, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  @if $gap != 0 {
+    gap: $gap;
+  }
+}
+
+@mixin font($size, $weight: 400, $line-height: normal, $style: normal) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height;
+  font-style: $style;
+}
+
+@mixin position-absolute($top: auto, $right: auto, $bottom: auto, $left: auto, $z-index: auto) {
+  position: absolute;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+  @if $z-index != auto {
+    z-index: $z-index;
+  }
+}
+
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin transition($property: all, $duration: 0.3s, $timing: ease) {
+  transition: $property $duration $timing;
+}
+
+// Media query mixins
+@mixin for-desktop {
+  @media (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin for-mobile {
+  @media (max-width: $breakpoint-lg - 1) {
+    @content;
+  }
+}
+
+@mixin for-small-mobile {
+  @media (max-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
+@mixin for-extra-small-mobile {
+  @media (max-width: 400px) {
+    @content;
+  }
+}
+
+@mixin page-background-with-gradient {
+  position: relative;
+  display: block;
+  @extend %full-width;
+  background: $primary;
+  min-height: 100vh;
+
+  &::before {
+    content: '';
+    @include position-absolute(0, auto, auto, 0, 0);
+    @include size(100%);
+    background: linear-gradient(180deg, $color-blue-gradient-start 0%, $color-blue-gradient-end 100%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    @include position-absolute(0, auto, auto, 0, 0);
+    @include size(100%);
+    background: url('../assets/about-page-background.svg') center center no-repeat;
+    background-size: cover;
+    opacity: 0.25;
+    pointer-events: none;
+  }
+}
+
+// Content wrapper mixin
+@mixin content-wrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  color: $color-white;
+
+  @media (max-width: $breakpoint-lg) {
+    padding: 20px;
+  }
+}
+
+// Content container mixin
+@mixin content-container {
+  flex: 1;
+  padding: 20px;
+  background-color: $color-white-05;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+// Team member card mixin
+@mixin team-member-card {
+  display: flex;
+  margin-bottom: 40px;
+  padding: 25px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, $color-white-12, $color-white-08);
+  border: 1px solid $color-white-15;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  // Subtle background pattern
+  &::after {
+    content: '';
+    @include position-absolute(0, auto, auto, 0);
+    @include size(100%);
+    background-image:
+      radial-gradient(circle at 25% 25%, $color-white-05 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, $color-white-05 1px, transparent 1px);
+    background-size: 30px 30px;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  &::before {
+    content: '';
+    @include position-absolute(0, auto, auto, 0);
+    width: 4px;
+    height: 100%;
+    background: $secondary;
+    opacity: 0.8;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25), 0 5px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    flex-direction: column;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 25px 20px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    padding: 20px 15px;
+    margin-bottom: 30px;
+  }
+}
+
+// Side navigation mixin
+@mixin side-navigation {
+  position: sticky;
+  top: 80px;
+  width: $nav-width;
+  min-width: $nav-width;
+  height: auto;
+  max-height: calc(100vh - 260px);
+  padding: 20px;
+  margin-right: 30px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+
+  // Navigation title
+  .nav-title {
+    @include font(20px, 700, 1.2);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: $secondary;
+  }
+
+  // Navigation list
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+
+      &.sub-item {
+        padding-left: 15px;
+        margin-bottom: 8px;
+
+        .nav-link {
+          @include font(14px, 400, 1.4);
+          padding: 5px 10px;
+        }
+      }
+    }
+  }
+
+  // Navigation links
+  .nav-link {
+    display: block;
+    @include font(16px, 500, 1.4);
+    color: $color-white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    &.active {
+      background-color: $secondary;
+      color: $color-white;
+      font-weight: 600;
+    }
+  }
+}
+
+// Content text styles mixin
+@mixin content-text-styles {
+  // Paragraphs
+  p {
+    @include font(18px, 400, 1.6);
+    margin-bottom: 20px;
+    @extend %justify-text;
+  }
+
+  // Strong text
+  strong {
+    font-weight: 700;
+    color: $secondary;
+  }
+
+  // Links
+  a {
+    color: $color-link;
+    text-decoration: underline;
+    @include transition(color, 0.2s);
+
+    &:hover {
+      color: $secondary;
+    }
+  }
+
+  // Lists
+  ul, ol {
+    margin: 0 0 20px 20px;
+    padding-left: 20px;
+
+    li {
+      @include font(18px, 400, 1.6);
+      margin-bottom: 10px;
+    }
+  }
+
+  // Nested lists
+  ul ul, ol ol, ul ol, ol ul {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+// Social links mixin
+@mixin social-links {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+
+  @media (max-width: $breakpoint-md) {
+    justify-content: center;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, $color-white-15, $color-white-05);
+    color: $color-white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid $color-white-20;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+
+    @media (max-width: $breakpoint-xs) {
+      width: 38px;
+      height: 38px;
+
+      i {
+        font-size: 18px;
+      }
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    i {
+      font-size: 20px;
+      transition: all 0.3s ease;
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(246, 103, 41, 0.4);
+      border-color: rgba(246, 103, 41, 0.5);
+
+      &::before {
+        opacity: 1;
+      }
+
+      i {
+        transform: scale(1.1);
+        text-shadow: 0 0 10px $color-white-70;
+      }
+    }
+
+    // Different hover colors for different social platforms
+    &[title="GitHub Profile"]:hover {
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(110, 84, 148, 0.6);
+      border-color: rgba(110, 84, 148, 0.7);
+
+      &::before {
+        background: #6e5494;
+      }
+    }
+
+    &[title="LinkedIn Profile"]:hover {
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(10, 102, 194, 0.6);
+      border-color: rgba(10, 102, 194, 0.7);
+
+      &::before {
+        background: #0a66c2;
+      }
+    }
+
+    &[title="ORCID Profile"]:hover {
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(166, 206, 57, 0.6);
+      border-color: rgba(166, 206, 57, 0.7);
+
+      &::before {
+        background: #a6ce39;
+      }
+    }
+
+    &[title="Lab Website"]:hover, &[title="Personal Website"]:hover, &[title="Institutional Profile"]:hover {
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 180, 216, 0.6);
+      border-color: rgba(0, 180, 216, 0.7);
+
+      &::before {
+        background: #00b4d8;
+      }
+    }
+  }
+}

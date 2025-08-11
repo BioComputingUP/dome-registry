@@ -1,9 +1,56 @@
 // Override variables
-$primary: #0D3144;
-$secondary: #f47d20;
+$primary: #003958;
+$secondary: #F66729;
 
 // Define orcid color
 $orcid-green: #9cce50;
 
 // Override invalid color
 $form-feedback-invalid-color: $secondary;
+
+
+//Color Variables
+$color-white: #FFF;
+$color-blue-gradient-start: #012437;
+$color-blue-dark: #002132;
+$color-blue-gradient-end: #045079;
+$color-cyan: #00F5FB;
+$color-link: #4a90e2;
+$navbar-bg: #0D3144;
+$navbar-orange: #F46B17;
+$logout-color: #dc3545;
+$logout-hover-color: #c82333;
+$color-black: #000;
+
+// Transparent white colors
+$color-white-05: rgba(255, 255, 255, 0.05);
+$color-white-08: rgba(255, 255, 255, 0.08);
+$color-white-10: rgba(255, 255, 255, 0.1);
+$color-white-12: rgba(255, 255, 255, 0.12);
+$color-white-15: rgba(255, 255, 255, 0.15);
+$color-white-20: rgba(255, 255, 255, 0.2);
+$color-white-30: rgba(255, 255, 255, 0.3);
+$color-white-39: rgba(255, 255, 255, 0.39);
+$color-white-40: rgba(255, 255, 255, 0.4);
+$color-white-50: rgba(255, 255, 255, 0.5);
+$color-white-70: rgba(255, 255, 255, 0.7);
+$color-white-90: rgba(255, 255, 255, 0.9);
+
+// nav
+$nav-width: 250px;
+$navbar-height: 75px;
+$nav-width-mobile: 200px;
+$nav-width-tablet: 220px;
+
+// Breakpoint variables
+$breakpoint-xxxl: 1500px;
+$breakpoint-xxl: 1300px;
+$breakpoint-xl: 1100px;
+$breakpoint-lg: 992px;
+$breakpoint-md: 768px;
+$breakpoint-sm: 576px;
+$breakpoint-xs: 480px;
+$breakpoint-xxs: 375px;
+
+//Fonts
+$font-primary: Inter, sans-serif;

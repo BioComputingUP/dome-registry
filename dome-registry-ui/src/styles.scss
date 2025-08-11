@@ -4,12 +4,16 @@
 @import "styles/scrollbar";
 @import "styles/overflow";
 @import "styles/cursor";
+@import "styles/variables";
 
 // Define gradient background
 .bg-primary.bg-gradient {
   background: $primary !important;
 }
 
+body {
+  font-family: $font-primary;
+}
 // Define gradient progress
 .progress.progress-gradient {
   // Set positioning

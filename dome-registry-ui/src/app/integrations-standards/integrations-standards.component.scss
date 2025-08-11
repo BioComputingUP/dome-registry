@@ -1,105 +1,54 @@
-// Variables
-$font-primary: Inter, sans-serif;
-$color-white: #FFF;
-$color-dark-blue: #003958;
-$color-blue-gradient-start: #012437;
-$color-blue-gradient-end: #045079;
-$color-orange: #F66729;
-$color-cyan: #00F5FB;
-
-// Mixins
-@mixin flex($direction: row, $justify: center, $align: center) {
-  display: flex;
-  flex-direction: $direction;
-  justify-content: $justify;
-  align-items: $align;
-}
-
-@mixin font($size, $weight: 400, $line-height: normal, $style: normal) {
-  font-family: $font-primary;
-  font-size: $size;
-  font-weight: $weight;
-  line-height: $line-height;
-  font-style: $style;
-}
-
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+@import '../../styles/base.scss';
 // Host element
 :host {
   position: relative;
   overflow: hidden;
   display: block;
-  width: 100%;
+  @extend %full-width;
 }
 
 // Full-page dark blue gradient background with SVG overlay
 .integrations-background {
-  width: 100%;
-  min-height: 100vh;
-  background: $color-dark-blue;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
+  @include page-background-with-gradient;
+  @include flex(column, center, center);
   overflow-x: hidden;
 
-  // Gradient only in first viewport
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+  // Limit gradient and background to first viewport
+  &::before, &::after {
     height: 90vh;
-    background: linear-gradient(180deg, $color-blue-gradient-start 0%, $color-blue-gradient-end 100%);
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  // SVG background
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 90vh;
-    background: url('../../assets/about-page-background.svg') center center no-repeat;
-    background-size: cover;
-    opacity: 0.25;
-    z-index: 0;
-    pointer-events: none;
   }
 }
 
 // Content container
 .integrations-center {
-  position: relative;
-  z-index: 1;
+  @extend %section-container;
+  @extend %white-text;
+  @extend %center-text;
   max-width: 887px;
   height: 90vh;
   padding: 0 20px;
   @include flex(column);
   flex-shrink: 0;
-  color: $color-white;
-  text-align: center;
 
   h1 {
     margin-bottom: 49px;
-    color: $color-white;
+    @extend %white-text;
     @include font(60px, 700);
   }
 
   p {
     @include font(20px, 400, 35px);
-    text-align: center;
+    @extend %center-text;
   }
 }
 
 // White divider line
 .white-divider {
-  width: 100%;
+  @extend %full-width;
+  @extend %reset-margin;
   height: 6px;
-  margin: 0;
   position: relative;
   z-index: 10;
   background-color: $color-white;
@@ -107,10 +56,8 @@ $color-cyan: #00F5FB;
 
 // Integrations section
 .integrations-section, .standards-section, .future-integrations {
-  position: relative;
-  z-index: 1;
+  @extend %section-container;
   max-width: 1150px;
-  width: 100%;
   min-height: 80vh;
   padding: 8px 20px;
 }
@@ -118,14 +65,14 @@ $color-cyan: #00F5FB;
 // Section title
 .integrations-section-title {
   margin-top: 137px;
-  color: $color-white;
+  @extend %white-text;
+  @extend %center-text;
   @include font(60px, 700);
-  text-align: center;
 }
 
 // Implementation containers (shared styles)
 .implementation-container {
-  width: 100%;
+  @extend %full-width;
   max-width: 1150px;
   margin: 120px auto 30px;
   padding: 0 30px;
@@ -139,9 +86,7 @@ $color-cyan: #00F5FB;
 
 // Title row for vertical alignment of title and image
 .title-row {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include flex(column, center, center);
   width: 40%;
   margin-right: 20px;
 }
@@ -150,10 +95,10 @@ $color-cyan: #00F5FB;
 
 // Implementation title
 .implementation-title {
-  margin: 0;
-  color: $color-white;
+  @extend %reset-margin;
+  @extend %white-text;
+  @extend %center-text;
   @include font(36px, 600);
-  text-align: center;
 }
 
 // Implementation logo image
@@ -167,9 +112,9 @@ $color-cyan: #00F5FB;
 // Implementation text
 .implementation-text {
   width: 60%;
-  color: $color-white;
+  @extend %white-text;
+  @extend %justify-text;
   @include font(18px, 400, 1.6);
-  text-align: justify;
 
   p {
     margin-bottom: 16px;
@@ -180,7 +125,7 @@ $color-cyan: #00F5FB;
   }
 
   strong {
-    color: $color-orange;
+    color: $secondary;
     font-weight: 600;
   }
 
@@ -190,14 +135,14 @@ $color-cyan: #00F5FB;
     align-items: center;
     padding: 8px 16px;
     margin-top: 10px;
-    background-color: $color-orange;
-    color: $color-white;
-    text-decoration: none;
+    background-color: $secondary;
+    @extend %white-text;
+    @extend %link-style;
     @include font(16px, 600);
-    transition: background-color 0.3s ease;
+    @include transition(background-color);
 
     &:hover {
-      background-color: darken($color-orange, 10%);
+      background-color: darken($secondary, 10%);
     }
   }
 }
@@ -212,7 +157,7 @@ $color-cyan: #00F5FB;
 
 // Side sections
 .side, .side-l {
-  width: 100%;
+  @extend %full-width;
   @include flex(row, center, center);
   gap: 86px;
 }
@@ -229,26 +174,21 @@ $color-cyan: #00F5FB;
     margin-top: 15px;
     gap: 10px;
     flex-shrink: 0;
-    border: none;
-    background-color: $color-white;
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+    @extend %button-base;
     @include font(16px, 700);
-    text-align: center;
   }
 }
 
 // Section header with icon
 .head, .head-future {
-  width: 100%;
+  @extend %full-width;
   margin-bottom: 22px;
   @include flex(row, start);
 
   p {
-    width: 100%;
-    margin: 0;
-    color: $color-white;
+    @extend %full-width;
+    @extend %reset-margin;
+    @extend %white-text;
     @include font(30px, 600);
   }
 }
@@ -256,9 +196,9 @@ $color-cyan: #00F5FB;
 // Standard description text
 .standard-text {
   width: 90%;
-  color: $color-white;
+  @extend %white-text;
+  @extend %justify-text;
   @include font(18px, 400, 32px);
-  text-align: justify;
 }
 
 // Future integrations container
@@ -270,40 +210,40 @@ $color-cyan: #00F5FB;
 // Future text
 .future-text {
   margin: 0 0 40px 0;
-  color: $color-white;
+  @extend %white-text;
   @include font(22px, 700, 38px);
 }
 
 // Future items container
 .future-items {
-  width: 100%;
+  @extend %full-width;
   @include flex(column, center, start);
 }
 
 // Future item
 .future-item {
-  width: 100%;
+  @extend %full-width;
   margin-bottom: 40px;
   @include flex(column, center, start);
 }
 
 // Future header text
 .head-future-text {
-  color: $color-white;
-  margin: 0;
+  @extend %white-text;
+  @extend %reset-margin;
   @include font(24px, 700, 38px);
 }
 
 // Future item text
 .future-item-text {
   margin: 0 0 20px 36px;
-  color: $color-white;
+  @extend %white-text;
   @include font(18px, 400, 1.8rem);
 }
 
 // Responsive styles
-// Large screens (max-width: 1220px)
-@media (max-width: 1220px) {
+// Large screens
+@media (max-width: $breakpoint-xl) {
   .integrations-center {
     padding: 0 40px;
     h1 { @include font(50px, 700); }
@@ -363,8 +303,8 @@ $color-cyan: #00F5FB;
   .future-item-text { @include font(16px, 400, 1.6rem); }
 }
 
-// Medium screens (max-width: 970px)
-@media (max-width: 970px) {
+// Medium screens
+@media (max-width: $breakpoint-lg) {
   .integrations-background {
     &::before, &::after {
       height: 80vh;
@@ -439,8 +379,8 @@ $color-cyan: #00F5FB;
   .future-item-text { @include font(15px, 400, 1.5rem); }
 }
 
-// Small screens (max-width: 768px)
-@media (max-width: 768px) {
+// Small screens
+@media (max-width: $breakpoint-md) {
   .integrations-background {
     &::before, &::after {
       height: 70vh;
@@ -497,8 +437,8 @@ $color-cyan: #00F5FB;
   .future-item-text { @include font(14px, 400, 1.4rem); }
 }
 
-// Mobile screens (max-width: 480px)
-@media (max-width: 480px) {
+// Mobile screens
+@media (max-width: $breakpoint-xs) {
   .integrations-background {
     &::before, &::after {
       height: 60vh;
@@ -560,8 +500,8 @@ $color-cyan: #00F5FB;
   .future-item-text { @include font(13px, 400, 1.3rem); }
 }
 
-// Very small screens (max-width: 375px)
-@media (max-width: 375px) {
+// Very small screens
+@media (max-width: $breakpoint-xxs) {
   .integrations-background {
     &::before, &::after {
       height: 50vh;

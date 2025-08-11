@@ -1,105 +1,165 @@
-// Variables
-$font-primary: Inter, sans-serif;
-$color-white: #FFF;
-$color-dark-blue: #003958;
-$color-blue-gradient-start: #012437;
-$color-blue-gradient-end: #045079;
-$color-orange: #F66729;
-$color-cyan: #00F5FB;
-
-// Mixins
-@mixin flex($direction: row, $justify: center, $align: center) {
-  display: flex;
-  flex-direction: $direction;
-  justify-content: $justify;
-  align-items: $align;
-}
-
-@mixin font($size, $weight: 400, $line-height: normal, $style: normal) {
-  font-family: $font-primary;
-  font-size: $size;
-  font-weight: $weight;
-  line-height: $line-height;
-  font-style: $style;
-}
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+@import '../../styles/base.scss';
 
 // Host element
 :host {
   position: relative; // Contains the absolutely positioned markers
   overflow: hidden; // Prevents extra scroll space
   display: block;
-  width: 100%;
+  @extend %full-width;
 }
 
 // Full-page dark blue gradient background with SVG overlay
 .about-background {
-  width: 100%;
+  @extend %full-width;
   min-height: 100vh;
-  background: $color-dark-blue;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background: $primary;
+  @include flex(column, center, center);
   position: relative;
   overflow-x: hidden;
 
+  // Common pseudo-element styles
+  &::before,
+  &::after {
+    content: '';
+    @include position-absolute(0, auto, auto, 0, 0);
+    @extend %full-width;
+    height: 90vh;
+    pointer-events: none;
+  }
+
   // Gradient only in first viewport
   &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 90vh;
     background: linear-gradient(180deg, $color-blue-gradient-start 0%, $color-blue-gradient-end 100%);
-    z-index: 0;
-    pointer-events: none;
   }
 
   // SVG background
   &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 90vh;
     background: url('../../assets/about-page-background.svg') center center no-repeat;
     background-size: cover;
     opacity: 0.25;
-    z-index: 0;
-    pointer-events: none;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    &::before, &::after {
+      height: 80vh;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    &::before, &::after {
+      height: 70vh;
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    &::before, &::after {
+      height: 60vh;
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    &::before, &::after {
+      height: 50vh;
+    }
   }
 }
 
 // Content container
 .about-center {
-  position: relative;
-  z-index: 1;
+  @extend %section-container;
   max-width: 887px;
   height: 90vh;
   padding: 0 20px;
   @include flex(column);
   flex-shrink: 0;
-  color: $color-white;
-  text-align: center;
+  @extend %white-text;
+  @extend %center-text;
 
   h1 {
     margin-bottom: 49px;
-    color: $color-white;
+    @extend %white-text;
     @include font(60px, 700);
   }
 
   p {
     @include font(20px, 400, 35px);
-    text-align: center;
+    @extend %center-text;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    padding: 0 40px;
+
+    h1 {
+      @include font(50px, 700);
+    }
+
+    p {
+      @include font(18px, 400, 30px);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    height: 80vh;
+
+    h1 {
+      @include font(42px, 700);
+    }
+
+    p {
+      @include font(16px, 400, 28px);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    height: 70vh;
+
+    h1 {
+      @include font(36px, 700);
+    }
+
+    p {
+      @include font(15px, 400, 26px);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    height: 60vh;
+    padding: 100px 15px 50px;
+
+    h1 {
+      margin-bottom: 30px;
+      @include font(30px, 700);
+    }
+
+    p {
+      @include font(14px, 400, 24px);
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    height: 50vh;
+    padding: 80px 10px 40px;
+
+    h1 {
+      margin-bottom: 25px;
+      @include font(26px, 700);
+    }
+
+    p {
+      @include font(13px, 400, 22px);
+    }
   }
 }
 
 // White divider line
 .white-divider {
-  width: 100%;
+  @extend %full-width;
   height: 6px;
-  margin: 0;
+  @extend %reset-margin;
   position: relative;
   z-index: 10;
   background-color: $color-white;
@@ -107,36 +167,80 @@ $color-cyan: #00F5FB;
 
 // DOME Recommendations section
 .dome-recommendations {
-  position: relative;
-  z-index: 1;
+  @extend %section-container;
   max-width: 1250px;
-  width: 100%;
   min-height: 100vh;
   padding: 8px 20px;
   @include flex(column);
   flex-shrink: 0;
-  color: $color-white;
-  text-align: center;
+  @extend %white-text;
+  @extend %center-text;
   overflow: visible;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    padding: 8px 40px;
+  }
 }
 
 // Section title
 .dome-recommendations-title {
   margin-top: 137px;
-  color: $color-white;
+  @extend %white-text;
   @include font(60px, 700);
-  text-align: center;
+  @extend %center-text;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    margin-top: 100px;
+    @include font(50px, 700);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    margin-top: 80px;
+    @include font(42px, 700);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    margin-top: 60px;
+    @include font(36px, 700);
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    margin-top: 50px;
+    @include font(30px, 700);
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    margin-top: 40px;
+    @include font(26px, 700);
+  }
 }
 
 // Progress bar container
 .progress-bar-container {
-  width: 100%;
+  @extend %full-width;
   height: 14px;
   margin-top: 72px;
   @include flex(row, start);
   z-index: 10;
   background-color: rgba(217, 217, 217, 0.15);
   overflow: hidden;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-sm) {
+    margin-top: 40px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    margin-top: 30px;
+    height: 10px;
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    margin-top: 25px;
+    height: 8px;
+  }
 }
 
 // Progress bar
@@ -144,31 +248,82 @@ $color-cyan: #00F5FB;
   width: 20%;
   height: 100%;
   z-index: 11;
-  background-color: $color-orange;
-  transition: width 0.5s ease-in-out;
+  background-color: $secondary;
+  @include transition(width, 0.5s, ease-in-out);
 }
 
 // Recommendations navigation
 .dome-recommendations-content {
-  width: 100%;
+  @extend %full-width;
   margin-top: 37px;
   @include flex(row, space-between);
 
   p {
     position: relative;
     padding: 0 40px;
-    color: $color-white;
+    @extend %white-text;
     @include font(30px, 600);
     cursor: pointer;
-    transition: color 0.3s ease, transform 0.2s ease;
+    @include transition(all, 0.3s, ease);
 
     &:hover {
-      color: $color-orange;
+      color: $secondary;
       transform: translateY(-2px);
     }
 
     &.active {
-      color: $color-orange;
+      color: $secondary;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    p {
+      padding: 0 20px;
+      @include font(26px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+
+    p {
+      padding: 0 15px;
+      @include font(22px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    margin-top: 25px;
+
+    p {
+      padding: 0 10px;
+      @include font(18px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    margin-top: 20px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+
+    p {
+      padding: 0 2px;
+      @include font(13px, 600);
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    margin-top: 12px;
+    gap: 5px;
+
+    p {
+      padding: 0 2px;
+      @include font(12px, 600);
+      white-space: nowrap;
     }
   }
 }
@@ -182,27 +337,85 @@ $color-cyan: #00F5FB;
   min-height: 200px; // Set a fixed minimum height to prevent layout shifts
 
   h3 {
-    color: $color-white;
+    @extend %white-text;
     @include font(36px, 600);
-    text-align: center;
+    @extend %center-text;
   }
 
   p {
     margin-top: 25px;
-    color: $color-white;
+    @extend %white-text;
     @include font(16px, 400, 28px);
-    text-align: center;
+    @extend %center-text;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    width: 70%;
+
+    h3 {
+      @include font(32px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 85%;
+    margin-top: 100px;
+
+    h3 {
+      @include font(28px, 600);
+    }
+
+    p {
+      @include font(15px, 400, 26px);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 95%;
+    margin-top: 80px;
+
+    h3 {
+      @include font(24px, 600);
+    }
+
+    p {
+      @include font(14px, 400, 24px);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 100%;
+    margin-top: 60px;
+
+    h3 {
+      @include font(22px, 600);
+    }
+
+    p {
+      @include font(13px, 400, 22px);
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    margin-top: 50px;
+
+    h3 {
+      @include font(20px, 600);
+    }
+
+    p {
+      @include font(12px, 400, 20px);
+    }
   }
 }
 
 // Individual recommendation content
 .recom-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+  @include position-absolute(0, auto, auto, 0);
+  @extend %full-width;
   opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+  @include transition(opacity, 0.5s, ease-in-out);
   pointer-events: none; // Prevent interaction with hidden content
 
   &.active {
@@ -214,9 +427,20 @@ $color-cyan: #00F5FB;
 
 // Machine learning comparison container
 .machine-learning-container {
-  width: 100%;
+  @extend %full-width;
   margin-top: 86px;
   @include flex(row);
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    display: none;
+  }
 }
 
 // Machine learning and traditional publications sections
@@ -227,18 +451,56 @@ $color-cyan: #00F5FB;
   @include flex(column);
 
   img {
-    width: 100%;
+    @extend %full-width;
   }
 
   p {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    z-index: 1;
+    @include position-absolute(50%, auto, auto, 50%, 1);
+    @extend %full-width;
     transform: translate(-50%, -50%);
     color: $color-cyan;
     @include font(27px, 700, 32px);
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    width: 30%;
+
+    p {
+      @include font(22px, 700, 26px);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 25%;
+
+    p {
+      @include font(18px, 700, 22px);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 30%;
+
+    p {
+      @include font(16px, 700, 20px);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 25%;
+
+    p {
+      @include font(14px, 700, 18px);
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    width: 95%;
+
+    p {
+      @include font(16px, 700, 20px);
+    }
   }
 }
 
@@ -246,43 +508,137 @@ $color-cyan: #00F5FB;
 .transparency-container {
   width: 25%;
   margin: 0 10px;
-  @include flex(column);
-  gap: 38px;
+  @include flex(column, center, center, 38px);
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    margin: 0 15px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    margin: 0 25px;
+    gap: 25px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+    margin: 0;
+    gap: 20px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 50%;
+    margin: 0;
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    width: 95%;
+    gap: 15px;
+  }
 }
 
 // Transparency box
 .transparency-box {
   @include flex(row);
+
+  img {
+    // Responsive adjustments
+    @media (max-width: $breakpoint-xl) {
+      width: 85%;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      width: 75%;
+    }
+
+    @media (max-width: $breakpoint-xs) {
+      width: 40%;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-sm) {
+    justify-content: center;
+  }
 }
 
 // Transparency label
 .transparency {
-  width: 165px;
-  height: 49px;
+  @include size(165px, 49px);
   padding: 10px 16px;
-  background-color: $color-orange;
+  background-color: $secondary;
   border-radius: 9px;
 
   p {
-    color: $color-white;
+    @extend %white-text;
     @include font(20px, 500, 28px);
     text-transform: capitalize;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    @include size(140px, 40px);
+    padding: 8px 12px;
+
+    p {
+      @include font(16px, 500, 24px);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    @include size(120px, 35px);
+    padding: 6px 10px;
+
+    p {
+      @include font(14px, 500, 20px);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    @include size(150px, 40px);
+
+    p {
+      @include font(16px, 500, 22px);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    @include size(110px, 32px);
+
+    p {
+      @include font(12px, 500, 18px);
+    }
   }
 }
 
 // Full documentation section
 .full-documentation-container {
-  width: 100%;
+  @extend %full-width;
   margin: 100px 0 168px;
-  @include flex(column);
-  gap: 43px;
+  @include flex(column, center, center, 43px);
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    margin: 60px 0 100px;
+    gap: 30px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    margin: 50px 0 80px;
+    gap: 20px;
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    margin: 40px 0 60px;
+    gap: 15px;
+  }
 }
 
 // Orange divider line
 .full-documentation-line {
   width: 90%;
   height: 7px;
-  background-color: $color-orange;
+  background-color: $secondary;
 }
 
 // Documentation content row
@@ -292,18 +648,62 @@ $color-cyan: #00F5FB;
   @include flex(row, space-between);
 
   p {
-    width: 100%;
-    color: $color-white;
+    @extend %full-width;
+    @extend %white-text;
     @include font(36px, 600);
     text-align: start;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    padding: 0 40px;
+
+    p {
+      @include font(30px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    padding: 0 30px;
+
+    p {
+      @include font(26px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 0 20px;
+
+    p {
+      text-align: center;
+      @include font(22px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    padding: 0 15px;
+
+    p {
+      @include font(20px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    padding: 0 10px;
+
+    p {
+      @include font(18px, 600);
+    }
   }
 }
 
 // Documentation buttons container
 .full-documentation-button {
-  width: 100%;
-  @include flex(row, end);
-  gap: 11px;
+  @extend %full-width;
+  @include flex(row, end, center, 11px);
 
   button,
   a {
@@ -311,23 +711,53 @@ $color-cyan: #00F5FB;
     @include flex;
     gap: 10px;
     flex-shrink: 0;
-    border: none;
-    background-color: $color-white;
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+    @extend %button-base;
     @include font(16px, 700);
-    text-align: center;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+    align-items: center;
+    width: auto;
   }
 }
 
 // Specific button styles
 .dome-ML {
   padding: 11px 26px;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+    padding: 10px 15px;
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    padding: 8px 12px;
+    @include font(14px, 700);
+  }
 }
 
 .foundation-publication {
   padding: 11px 10px;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+    padding: 10px 15px;
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    padding: 8px 12px;
+    @include font(14px, 700);
+  }
 }
 
 // Arrow icon
@@ -337,79 +767,160 @@ $color-cyan: #00F5FB;
 
 // DOME Registry section
 .dome-registry {
-  position: relative;
-  z-index: 1;
+  @extend %section-container;
   max-width: 1150px;
-  width: 100%;
   min-height: 100vh;
-}
 
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    padding: 0 40px;
+  }
+}
 
 // Implementation containers (shared styles)
 .implementation-first-container,
 .implementation-container,
 .implementation-last-container {
-  width: 100%;
+  @extend %full-width;
   margin-bottom: 94px;
   @include flex(row, space-between, flex-start);
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 60px;
+  }
 }
 
 // Title row for horizontal alignment
 .title-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  @include flex(row, flex-start, center);
   width: 40%;
 
   .square {
     margin-bottom: 0;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+    margin-bottom: 15px;
   }
 }
 
 // Implementation title
 .implementation-title {
   margin: 0 0 0 26px;
-  color: $color-white;
+  @extend %white-text;
   @include font(36px, 600);
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    @include font(30px, 600);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    margin-left: 15px;
+    @include font(26px, 600);
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    @include font(22px, 600);
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    @include font(20px, 600);
+  }
 }
 
 // Implementation text
 .implementation-text {
   width: 60%;
-  color: $color-white;
+  @extend %white-text;
   @include font(20px, 400, 32px);
-  text-align: justify;
+  @extend %justify-text;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    @include font(18px, 400, 28px);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+    @include font(16px, 400, 26px);
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    @include font(14px, 400, 24px);
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    @include font(13px, 400, 22px);
+  }
 }
 
 // Orange square marker
 .square {
-  width: 13px;
-  height: 13px;
+  @include size(13px);
   margin-bottom: 16px;
   flex-shrink: 0;
-  background-color: $color-orange;
+  background-color: $secondary;
 }
 
 // First implementation container (additional styles)
 .implementation-first-container {
   margin-top: 142px;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    margin-top: 80px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    margin-top: 60px;
+  }
 }
 
 // Last implementation container (additional styles)
 .implementation-last-container {
   margin-bottom: 182px;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    margin-bottom: 100px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    margin-bottom: 80px;
+  }
 }
 
 // DOME Registry mirroring section
 .dome-registry-mirroring {
   max-width: 1300px;
-  width: 100%;
+  @extend %full-width;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    padding: 0 40px;
+  }
 }
 
 // Mirroring container
 .dome-registry-mirroring-container {
   margin-top: 110px;
-  @include flex(row, center, start);
+  @include flex(row, center, flex-start);
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    margin-top: 80px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+    margin-top: 60px;
+  }
 }
 
 // Infrastructure section
@@ -419,15 +930,49 @@ $color-cyan: #00F5FB;
 
   // Infrastructure title
   &-title {
-    color: $color-white;
+    @extend %white-text;
     @include font(36px, 600);
+
+    // Responsive adjustments
+    @media (max-width: $breakpoint-xl) {
+      @include font(30px, 600);
+    }
+
+    @media (max-width: $breakpoint-md) {
+      @include font(26px, 600);
+    }
+
+    @media (max-width: $breakpoint-xs) {
+      @include font(22px, 600);
+    }
+
+    @media (max-width: $breakpoint-xxs) {
+      @include font(20px, 600);
+    }
   }
 
   // Infrastructure text
   &-text {
-    color: $color-white;
+    @extend %white-text;
     @include font(20px, 400, 32px);
-    text-align: justify;
+    @extend %justify-text;
+
+    // Responsive adjustments
+    @media (max-width: $breakpoint-xl) {
+      @include font(18px, 400, 28px);
+    }
+
+    @media (max-width: $breakpoint-md) {
+      @include font(16px, 400, 26px);
+    }
+
+    @media (max-width: $breakpoint-xs) {
+      @include font(14px, 400, 24px);
+    }
+
+    @media (max-width: $breakpoint-xxs) {
+      @include font(13px, 400, 22px);
+    }
   }
 
   // Infrastructure link
@@ -438,29 +983,73 @@ $color-cyan: #00F5FB;
     @include flex;
     gap: 10px;
     flex-shrink: 0;
-    border: none;
-    background-color: $color-white;
-    color: #000;
+    @extend %button-base;
     @include font(16px, 700);
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
+
+    // Responsive adjustments
+    @media (max-width: $breakpoint-md) {
+      width: 30%;
+      padding: 10px 15px;
+      @include font(14px, 700);
+      margin-right: auto;
+      justify-content: flex-start;
+    }
+
+    @media (max-width: $breakpoint-xs) {
+      width: 40%;
+    }
+
+    @media (max-width: $breakpoint-xxs) {
+      width: 50%;
+      padding: 8px 12px;
+      @include font(13px, 700);
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    margin-right: 60px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 40px;
   }
 }
 
 // Boxes container
 .boxes {
   width: 60%;
-  @include flex(row, center, start);
-  gap: 35px;
-  color: $color-white;
+  @include flex(row, center, flex-start, 35px);
+  @extend %white-text;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+    gap: 20px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    flex-direction: column;
+    gap: 15px;
+  }
 }
 
 // Left and right box columns
 .boxes-l,
 .boxes-r {
-  @include flex(column);
-  gap: 35px;
+  @include flex(column, center, stretch, 35px);
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    gap: 20px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    gap: 15px;
+    width: 100%;
+  }
 }
 
 // Individual boxes
@@ -472,20 +1061,80 @@ $color-cyan: #00F5FB;
   padding: 21px 35px 21px 21px;
   background: $color-blue-gradient-end;
   border-radius: 7px;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    height: auto;
+    min-height: 330px;
+    padding: 18px 25px 18px 18px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    height: auto;
+    min-height: 280px;
+    padding: 15px;
+    width: 100%;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    min-height: 250px;
+    padding: 12px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    min-height: auto;
+    padding: 15px;
+  }
 }
 
 // Box title
 .box-title {
   margin: 40px 0 5px;
   @include font(20px, 700, 32px);
-  text-align: justify;
+  @extend %justify-text;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    @include font(18px, 700, 26px);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    @include font(16px, 700, 24px);
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    margin: 20px 0 5px;
+    @include font(16px, 700, 22px);
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    @include font(15px, 700, 20px);
+  }
 }
 
 // Box text
 .box-text {
-  margin: 0;
+  @extend %reset-margin;
   max-width: 287px;
   @include font(16px, 400, 26px);
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    max-width: 100%;
+    @include font(14px, 400, 22px);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    @include font(14px, 400, 22px);
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    @include font(13px, 400, 20px);
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    @include font(12px, 400, 18px);
+  }
 }
 
 // DOME Registry codebase section
@@ -496,25 +1145,80 @@ $color-cyan: #00F5FB;
   // Section title
   &-title {
     margin-top: 110px;
-    color: $color-white;
+    @extend %white-text;
     @include font(60px, 700);
-    text-align: center;
+    @extend %center-text;
+
+    // Responsive adjustments
+    @media (max-width: $breakpoint-xl) {
+      margin-top: 80px;
+      @include font(50px, 700);
+    }
+
+    @media (max-width: $breakpoint-md) {
+      margin-top: 60px;
+      @include font(42px, 700);
+    }
+
+    @media (max-width: $breakpoint-xs) {
+      margin-top: 50px;
+      @include font(30px, 700);
+    }
+
+    @media (max-width: $breakpoint-xxs) {
+      margin-top: 40px;
+      @include font(26px, 700);
+    }
   }
 
   // Container for codebase content
   &-container {
     margin: 126px 0 177px;
-    @include flex(column);
-    gap: 114px;
+    @include flex(column, center, stretch, 114px);
+
+    // Responsive adjustments
+    @media (max-width: $breakpoint-xl) {
+      margin: 80px 0 120px;
+      gap: 80px;
+    }
+
+    @media (max-width: $breakpoint-md) {
+      margin: 60px 0 80px;
+      gap: 60px;
+    }
+
+    @media (max-width: $breakpoint-xs) {
+      margin: 50px 0 70px;
+      gap: 50px;
+    }
+
+    @media (max-width: $breakpoint-xxs) {
+      margin: 40px 0 60px;
+      gap: 40px;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    padding: 0 40px;
   }
 }
 
 // Side sections
 .side,
 .side-l {
-  width: 100%;
-  @include flex(row, center, center);
-  gap: 86px;
+  @extend %full-width;
+  @include flex(row, center, center, 86px);
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    gap: 50px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+    gap: 40px;
+  }
 }
 
 // Open source section
@@ -529,79 +1233,211 @@ $color-cyan: #00F5FB;
     margin-top: 15px;
     gap: 10px;
     flex-shrink: 0;
-    border: none;
-    background-color: $color-white;
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+    @extend %button-base;
     @include font(16px, 700);
-    text-align: center;
+
+    // Responsive adjustments for specific button
+    &.dome-ML {
+      // Responsive adjustments
+      @media (max-width: $breakpoint-sm) {
+        width: 30%;
+      }
+
+      @media (max-width: $breakpoint-xs) {
+        width: 60%;
+        padding: 8px 5px;
+        @include font(12px, 700);
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      @media (max-width: $breakpoint-xxs) {
+        width: 100%;
+        padding: 8px 2px;
+        margin: 0;
+        display: block;
+      }
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    width: 100%;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    a {
+      width: 60%;
+      padding: 10px 15px;
+      @include font(13px, 700);
+    }
   }
 }
 
 // Section header with icon
 .head {
-  width: 100%;
+  @extend %full-width;
   margin-bottom: 22px;
-  @include flex(row, start);
+  @include flex(row, flex-start);
 
   .square {
     margin-bottom: 0;
   }
 
   p {
-    width: 100%;
+    @extend %full-width;
     margin: 0 0 0 20px;
-    color: $color-white;
+    @extend %white-text;
     @include font(30px, 600);
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    p {
+      @include font(26px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    p {
+      @include font(22px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    p {
+      @include font(20px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    p {
+      @include font(18px, 600);
+    }
   }
 }
 
 // Open source description text
 .open-source-text {
   width: 90%;
-  color: $color-white;
+  @extend %white-text;
   @include font(18px, 400, 32px);
-  text-align: justify;
+  @extend %justify-text;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    @include font(16px, 400, 28px);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    @include font(15px, 400, 26px);
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    @include font(14px, 400, 24px);
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    @include font(13px, 400, 22px);
+  }
 }
 
 // Citing DOME section
 .citing-dome {
-  width: 100%;
+  @extend %full-width;
   max-width: 1250px;
   margin-top: 104px;
   @include flex(column);
 
   // Section title
   h1 {
-    color: $color-white;
+    @extend %white-text;
     @include font(60px, 700);
-    text-align: center;
+    @extend %center-text;
+
+    // Responsive adjustments
+    @media (max-width: $breakpoint-xl) {
+      @include font(50px, 700);
+    }
+
+    @media (max-width: $breakpoint-md) {
+      @include font(42px, 700);
+    }
+
+    @media (max-width: $breakpoint-sm) {
+      @include font(36px, 700);
+    }
+
+    @media (max-width: $breakpoint-xs) {
+      @include font(30px, 700);
+    }
+
+    @media (max-width: $breakpoint-xxs) {
+      @include font(26px, 700);
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    padding: 0 40px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    margin-top: 70px;
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    margin-top: 60px;
   }
 }
 
 // Citation container
 .citing-dome-container {
   margin-bottom: 100px;
-  @include flex(column, center, start);
+  @include flex(column, center, flex-start);
 }
 
 // Citation introduction text
 .citing-dome-text {
   margin: 50px 0 40px;
-  color: $color-white;
+  @extend %white-text;
   @include font(22px, 700, 38px);
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    @include font(20px, 700, 34px);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    @include font(18px, 700, 30px);
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    margin: 40px 0 30px;
+    @include font(16px, 700, 28px);
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    margin: 30px 0 25px;
+    @include font(15px, 700, 26px);
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    margin: 25px 0 20px;
+    @include font(14px, 700, 24px);
+  }
 }
 
 // Citation box container
 .citing-dome-box {
-  @include flex(column, center, start);
+  @include flex(column, center, flex-start);
 }
 
 // Citation header with icon
 .head-citing-dome {
-  @include flex;
-  gap: 23px;
+  @include flex(row, center, center, 23px);
 
   .square {
     margin-bottom: 0;
@@ -610,773 +1446,54 @@ $color-cyan: #00F5FB;
 
 // Citation header text
 .head-citing-dome-text {
-  color: $color-white;
-  margin: 0;
+  @extend %white-text;
+  @extend %reset-margin;
   @include font(20px, 700, 38px);
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    @include font(18px, 700, 34px);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    @include font(16px, 700, 30px);
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    @include font(15px, 700, 26px);
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    @include font(14px, 700, 24px);
+  }
 }
 
 // Citation content text
 .citing-dome-box-text {
   margin: 0 0 40px 36px;
-  color: $color-white;
+  @extend %white-text;
   @include font(18px, 400, 1.8rem);
+
   a {
-    color: $color-white;
-  }
-}
-
-// Responsive styles
-// Large screens (max-width: 1220px)
-@media (max-width: 1220px) {
-  .about-center {
-    padding: 0 40px;
-    h1 { @include font(50px, 700); }
-    p { @include font(18px, 400, 30px); }
+    @extend %white-text;
   }
 
-  .dome-recommendations {
-    padding: 8px 40px;
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    @include font(16px, 400, 1.6rem);
   }
 
-  .dome-recommendations-title {
-    margin-top: 100px;
-    @include font(50px, 700);
-  }
-
-  .dome-recommendations-content p {
-    padding: 0 20px;
-    @include font(26px, 600);
-  }
-
-  .recoms {
-    width: 70%;
-    h3 { @include font(32px, 600); }
-  }
-
-  .machine-learning,
-  .traditional-publications {
-    width: 30%;
-    p { @include font(22px, 700, 26px); }
-  }
-
-  .transparency-container { margin: 0 15px; }
-  .transparency-box img { width: 85%; }
-
-  .transparency {
-    width: 140px;
-    height: 40px;
-    padding: 8px 12px;
-    p { @include font(16px, 500, 24px); }
-  }
-
-  .full-documentation {
-    padding: 0 40px;
-    p { @include font(30px, 600); }
-  }
-
-  .implementation-title {
-    @include font(30px, 600);
-  }
-
-  .implementation-text {
-    @include font(18px, 400, 28px);
-  }
-
-  .dome-registry-mirroring-container {
-    margin-top: 80px;
-  }
-
-  .infrastructure {
-    margin-right: 60px;
-    &-title { @include font(30px, 600); }
-    &-text { @include font(18px, 400, 28px); }
-  }
-
-  .box-star,
-  .box-circle,
-  .box-square,
-  .box-triangle {
-    height: auto;
-    min-height: 330px;
-    padding: 18px 25px 18px 18px;
-  }
-
-  .box-title { @include font(18px, 700, 26px); }
-  .box-text {
-    max-width: 100%;
-    @include font(14px, 400, 22px);
-  }
-
-  .dome-registry {
-    padding: 0 40px;
-  }
-
-  .dome-registry-mirroring {
-    padding: 0 40px;
-  }
-
-  .dome-registry-codebase {
-    padding: 0 40px;
-  }
-
-  .citing-dome {
-    padding: 0 40px;
-  }
-
-  .dome-registry-codebase-title {
-    margin-top: 80px;
-    @include font(50px, 700);
-  }
-
-  .dome-registry-codebase-container {
-    margin: 80px 0 120px;
-    gap: 80px;
-  }
-
-  .side, .side-l {
-    gap: 50px;
-  }
-
-  .head p { @include font(26px, 600); }
-  .open-source-text { @include font(16px, 400, 28px); }
-
-  .citing-dome h1 { @include font(50px, 700); }
-  .citing-dome-text { @include font(20px, 700, 34px); }
-  .head-citing-dome-text { @include font(18px, 700, 34px); }
-  .citing-dome-box-text { @include font(16px, 400, 1.6rem); }
-}
-
-// Medium screens (max-width: 970px)
-@media (max-width: 970px) {
-  .about-background {
-    &::before, &::after {
-      height: 80vh;
-    }
-  }
-
-  .about-center {
-    height: 80vh;
-    h1 { @include font(42px, 700); }
-    p { @include font(16px, 400, 28px); }
-  }
-
-  .dome-recommendations-title {
-    margin-top: 80px;
-    @include font(42px, 700);
-  }
-
-  .dome-recommendations-content {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-
-    p {
-      padding: 0 15px;
-      @include font(22px, 600);
-    }
-  }
-
-  .recoms {
-    width: 85%;
-    margin-top: 100px;
-    h3 { @include font(28px, 600); }
-    p { @include font(15px, 400, 26px); }
-  }
-
-  .machine-learning,
-  .traditional-publications {
-    width: 25%;
-    p { @include font(18px, 700, 22px); }
-  }
-
-  .transparency-container {
-    margin: 0 25px;
-    gap: 25px;
-  }
-
-  .transparency-box img { width: 75%; }
-
-  .transparency {
-    width: 120px;
-    height: 35px;
-    padding: 6px 10px;
-    p { @include font(14px, 500, 20px); }
-  }
-
-  .full-documentation {
-    padding: 0 30px;
-    p { @include font(26px, 600); }
-  }
-
-  .full-documentation-button {
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 10px;
-  }
-
-  .implementation-first-container,
-  .implementation-container,
-  .implementation-last-container {
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 60px;
-  }
-
-  .title-row {
-    width: 100%;
-    margin-bottom: 15px;
-  }
-
-  .implementation-title {
-    margin-left: 15px;
-    @include font(26px, 600);
-  }
-
-  .implementation-text {
-    width: 100%;
-    @include font(16px, 400, 26px);
-  }
-
-  .dome-registry-mirroring-container {
-    flex-direction: column;
-    margin-top: 60px;
-  }
-
-  .infrastructure {
-    width: 100%;
-    margin-right: 0;
-    margin-bottom: 40px;
-
-    &-title { @include font(26px, 600); }
-    &-text { @include font(16px, 400, 26px); }
-
-    a {
-      width: 30%;
-      padding: 10px 15px;
-      @include font(14px, 700);
-      margin-right: auto;
-      justify-content: flex-start;
-    }
-  }
-
-  .boxes {
-    width: 100%;
-    gap: 20px;
-  }
-
-  .box-star,
-  .box-circle,
-  .box-square,
-  .box-triangle {
-    height: auto;
-    min-height: 280px;
-    padding: 15px;
-    width: 100%;
-  }
-
-  .box-title { @include font(16px, 700, 24px); }
-  .box-text {
-    max-width: 100%;
-    @include font(14px, 400, 22px);
-  }
-
-  .dome-registry-codebase-title {
-    margin-top: 60px;
-    @include font(42px, 700);
-  }
-
-  .dome-registry-codebase-container {
-    margin: 60px 0 80px;
-    gap: 60px;
-  }
-
-  .side, .side-l {
-    flex-direction: column;
-    gap: 40px;
-  }
-
-  .open-source {
-    width: 100%;
-  }
-
-  .head p { @include font(22px, 600); }
-  .open-source-text { @include font(15px, 400, 26px); }
-
-  .citing-dome h1 { @include font(42px, 700); }
-  .citing-dome-text { @include font(18px, 700, 30px); }
-  .head-citing-dome-text { @include font(16px, 700, 30px); }
-  .citing-dome-box-text {
+  @media (max-width: $breakpoint-md) {
     margin: 0 0 30px 20px;
     @include font(15px, 400, 1.5rem);
   }
-}
 
-// Small screens (max-width: 768px)
-@media (max-width: 768px) {
-  .about-background {
-    &::before, &::after {
-      height: 70vh;
-    }
-  }
-
-  .about-center {
-    height: 70vh;
-    h1 { @include font(36px, 700); }
-    p { @include font(15px, 400, 26px); }
-  }
-
-  .dome-recommendations-title {
-    margin-top: 60px;
-    @include font(36px, 700);
-  }
-
-  .progress-bar-container {
-    margin-top: 40px;
-  }
-
-  .dome-recommendations-content {
-    margin-top: 25px;
-
-    p {
-      padding: 0 10px;
-      @include font(18px, 600);
-    }
-  }
-
-  .recoms {
-    width: 95%;
-    margin-top: 80px;
-    h3 { @include font(24px, 600); }
-    p { @include font(14px, 400, 24px); }
-  }
-
-  .machine-learning-container {
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-  }
-
-  .machine-learning,
-  .traditional-publications {
-    width: 30%;
-    p { @include font(16px, 700, 20px); }
-  }
-
-  .dome-illustration {
-    width: 80%;
-    max-width: 200px;
-  }
-
-  .transparency-container {
-    width: 100%;
-    margin: 0;
-    gap: 20px;
-  }
-
-  .transparency-box {
-    justify-content: center;
-  }
-
-  .transparency {
-    width: 150px;
-    height: 40px;
-    p { @include font(16px, 500, 22px); }
-  }
-
-  .full-documentation-container {
-    margin: 60px 0 100px;
-    gap: 30px;
-  }
-
-  .full-documentation {
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    padding: 0 20px;
-
-    p {
-      text-align: center;
-      @include font(22px, 600);
-    }
-  }
-
-  .full-documentation-button {
-    flex-direction: column;
-    align-items: center;
-    width: auto;
-  }
-
-  .dome-ML {
-    width: 100%;
-    padding: 10px 15px;
-  }
-
-  // Target only the View Repository button
-  .open-source .dome-ML {
-    width: 30%;
-  }
-  .open-source a {
-    width: 60%;
-    padding: 10px 15px;
-    @include font(13px, 700);
-  }
-
-  .foundation-publication {
-    width: 100%;
-    padding: 10px 15px;
-  }
-
-  .implementation-first-container {
-    margin-top: 80px;
-  }
-
-  .implementation-last-container {
-    margin-bottom: 100px;
-  }
-
-  .box-star,
-  .box-circle,
-  .box-square,
-  .box-triangle {
-    min-height: 250px;
-    padding: 12px;
-  }
-
-  .boxes-l, .boxes-r {
-    width: 100%;
-  }
-
-  .dome-registry-codebase-title {
-    @include font(36px, 700);
-  }
-
-  .citing-dome h1 { @include font(36px, 700); }
-  .citing-dome-text {
-    margin: 40px 0 30px;
-    @include font(16px, 700, 28px);
-  }
-}
-
-// Mobile screens (max-width: 480px)
-@media (max-width: 480px) {
-  .about-background {
-    &::before, &::after {
-      height: 60vh;
-    }
-  }
-
-  .about-center {
-    height: 60vh;
-    padding: 100px 15px 50px;
-
-    h1 {
-      margin-bottom: 30px;
-      @include font(30px, 700);
-    }
-    p { @include font(14px, 400, 24px); }
-  }
-
-  .dome-recommendations-title {
-    margin-top: 50px;
-    @include font(30px, 700);
-  }
-
-  .progress-bar-container {
-    margin-top: 30px;
-    height: 10px;
-  }
-
-  .dome-recommendations-content {
-    margin-top: 20px;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-
-    p {
-      padding: 0 2px;
-      @include font(13px, 600);
-      white-space: nowrap;
-    }
-  }
-
-  .recoms {
-    width: 100%;
-    margin-top: 60px;
-    h3 { @include font(22px, 600); }
-    p { @include font(13px, 400, 22px); }
-  }
-
-  .machine-learning-container {
-    display: none;
-  }
-
-  .machine-learning,
-  .traditional-publications {
-    width: 25%;
-    p { @include font(14px, 700, 18px); }
-  }
-
-  .transparency-container {
-    width: 50%;
-    margin: 0;
-  }
-
-  .transparency-box img {
-    width: 40%;
-  }
-
-  .transparency {
-    width: 110px;
-    height: 32px;
-    p { @include font(12px, 500, 18px); }
-  }
-
-  .full-documentation-container {
-    margin: 50px 0 80px;
-    gap: 20px;
-  }
-
-  .full-documentation {
-    padding: 0 15px;
-    p { @include font(20px, 600); }
-  }
-
-  .implementation-title {
-    @include font(22px, 600);
-  }
-
-  .implementation-text {
-    @include font(14px, 400, 24px);
-  }
-
-  .infrastructure {
-    &-title { @include font(22px, 600); }
-    &-text { @include font(14px, 400, 24px); }
-
-    a {
-      width: 40%;
-      padding: 10px 15px;
-      margin-right: auto;
-      justify-content: flex-start;
-    }
-  }
-
-  .boxes {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .boxes-l, .boxes-r {
-    gap: 15px;
-  }
-
-  .box-star,
-  .box-circle,
-  .box-square,
-  .box-triangle {
-    min-height: auto;
-    padding: 15px;
-  }
-
-  .box-title {
-    margin: 20px 0 5px;
-    @include font(16px, 700, 22px);
-  }
-
-  .box-text { @include font(13px, 400, 20px); }
-
-  .dome-registry-codebase-title {
-    margin-top: 50px;
-    @include font(30px, 700);
-  }
-
-  .dome-registry-codebase-container {
-    margin: 50px 0 70px;
-    gap: 50px;
-  }
-
-  .head p { @include font(20px, 600); }
-  .open-source-text { @include font(14px, 400, 24px); }
-
-  .open-source a.dome-ML {
-    width: 60%;
-    padding: 8px 5px;
-    @include font(12px, 700);
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .citing-dome {
-    margin-top: 70px;
-  }
-
-  .citing-dome h1 { @include font(30px, 700); }
-  .citing-dome-text {
-    margin: 30px 0 25px;
-    @include font(15px, 700, 26px);
-  }
-
-  .head-citing-dome-text { @include font(15px, 700, 26px); }
-
-  .citing-dome-box-text {
+  @media (max-width: $breakpoint-xs) {
     margin: 0 0 25px 15px;
     @include font(13px, 400, 1.4rem);
   }
-}
 
-// Very small screens (max-width: 375px)
-@media (max-width: 375px) {
-  .about-background {
-    &::before, &::after {
-      height: 50vh;
-    }
-  }
-
-  .about-center {
-    height: 50vh;
-    padding: 80px 10px 40px;
-
-    h1 {
-      margin-bottom: 25px;
-      @include font(26px, 700);
-    }
-    p { @include font(13px, 400, 22px); }
-  }
-
-  .dome-recommendations-title {
-    margin-top: 40px;
-    @include font(26px, 700);
-  }
-
-  .progress-bar-container {
-    margin-top: 25px;
-    height: 8px;
-  }
-
-  .dome-recommendations-content {
-    margin-top: 12px;
-    gap: 5px;
-
-    p {
-      padding: 0 2px;
-      @include font(12px, 600);
-      white-space: nowrap;
-    }
-  }
-
-  .recoms {
-    margin-top: 50px;
-    h3 { @include font(20px, 600); }
-    p { @include font(12px, 400, 20px); }
-  }
-
-  .machine-learning-container {
-    display: none;
-  }
-
-  .machine-learning,
-  .traditional-publications {
-    width: 95%;
-    p { @include font(16px, 700, 20px); }
-  }
-
-  .transparency-container {
-    width: 95%;
-    gap: 15px;
-  }
-
-  .transparency {
-    width: 110px;
-    height: 32px;
-    p { @include font(12px, 500, 18px); }
-  }
-
-  .full-documentation-container {
-    margin: 40px 0 60px;
-    gap: 15px;
-  }
-
-  .full-documentation {
-    padding: 0 10px;
-    p { @include font(18px, 600); }
-  }
-
-  .dome-ML, .foundation-publication {
-    padding: 8px 12px;
-    @include font(14px, 700);
-  }
-
-  .implementation-first-container {
-    margin-top: 60px;
-  }
-
-  .implementation-title {
-    @include font(20px, 600);
-  }
-
-  .implementation-text {
-    @include font(13px, 400, 22px);
-  }
-
-  .implementation-last-container {
-    margin-bottom: 80px;
-  }
-
-  .infrastructure {
-    &-title { @include font(20px, 600); }
-    &-text { @include font(13px, 400, 22px); }
-
-    a {
-      width: 50%;
-      padding: 8px 12px;
-      @include font(13px, 700);
-      margin-right: auto;
-      justify-content: flex-start;
-    }
-  }
-
-  .box-title { @include font(15px, 700, 20px); }
-  .box-text { @include font(12px, 400, 18px); }
-
-  .dome-registry-codebase-title {
-    margin-top: 40px;
-    @include font(26px, 700);
-  }
-
-  .dome-registry-codebase-container {
-    margin: 40px 0 60px;
-    gap: 40px;
-  }
-
-  .head p { @include font(18px, 600); }
-  .open-source-text { @include font(13px, 400, 22px); }
-
-  .open-source a.dome-ML {
-    width: 100%;
-    padding: 8px 2px;
-    margin: 0;
-    @include font(12px, 700);
-    text-align: center;
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .citing-dome {
-    margin-top: 60px;
-  }
-
-  .citing-dome h1 { @include font(26px, 700); }
-  .citing-dome-text {
-    margin: 25px 0 20px;
-    @include font(14px, 700, 24px);
-  }
-
-  .head-citing-dome-text { @include font(14px, 700, 24px); }
-
-  .citing-dome-box-text {
+  @media (max-width: $breakpoint-xxs) {
     margin: 0 0 20px 10px;
     @include font(12px, 400, 1.3rem);
   }

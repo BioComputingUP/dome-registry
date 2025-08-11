@@ -1,37 +1,30 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+@import '../../styles/base';
+
 .small-footer {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 7px 106px;
-  background-color: #000000;
-  color: rgba(255, 255, 255, 0.39);
+  @extend %full-width;
+  @include flex(row, space-between, center);
+  @include responsive-padding(7px 106px, 7px 60px, 7px 20px, 7px 15px);
+  background-color: $color-black;
+  color: $color-white-39;
   z-index: 10;
   position: relative;
 
   p {
-    margin: 0;
-    font-family: Inter, sans-serif;
-    font-size: 14px;
-    font-weight: 400;
+    @extend %reset-margin;
+    @include font(14px, 400);
   }
 
   .right {
-    display: flex;
-    gap: 16px;
+    @include flex(row, center, center, 16px);
   }
 
   img {
     height: 40px;
   }
 
-  @media (max-width: 992px) {
-    padding: 7px 60px;
-  }
-
-  @media (max-width: 768px) {
-    padding: 7px 40px;
-
+  @media (max-width: $breakpoint-md) {
     .right {
       gap: 12px;
     }
@@ -41,8 +34,7 @@
     }
   }
 
-  @media (max-width: 576px) {
-    padding: 7px 20px;
+  @media (max-width: $breakpoint-sm) {
     flex-direction: column;
     gap: 10px;
 
@@ -60,11 +52,9 @@
     }
   }
 
-  @media (max-width: 480px) {
-    padding: 7px 15px;
-
+  @media (max-width: $breakpoint-xs) {
     p {
-      font-size: 12px;
+      @include font(12px, 400);
     }
 
     .right {
@@ -79,7 +69,7 @@
 
 :host {
   display: block;
-  width: 100%;
+  @extend %full-width;
   position: relative;
   z-index: 10;
 }

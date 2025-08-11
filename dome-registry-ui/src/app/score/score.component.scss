@@ -1,34 +1,31 @@
-.score-container{
-  width: 100%;
+@import '../../styles/variables';
+@import '../../styles/mixins';
+@import '../../styles/base';
 
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  h1,p{
-    color: #000;
-    font-family: Inter,sans-serif;
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    margin: 0;
+.score-container {
+  @extend %full-width;
+  @include flex(row, space-between, center, 10px);
+
+  h1, p {
+    color: $color-black;
+    @include font(16px, 600);
+    @extend %reset-margin;
   }
 }
-.score-wrapper{
-  width: 168px;
-  height: 12px;
+
+.score-wrapper {
+  @include size(168px, 12px);
   border-radius: 6px;
-  background-color: #003958;
+  background-color: $primary;
 }
-.score{
+
+.score {
   height: 100%;
   /* Width is now set dynamically in the template */
   border-radius: 6px;
-  background-color: #F66729;
+  background-color: $secondary;
 }
 
 :host {
-  width: 100%;
+  @extend %full-width;
 }
