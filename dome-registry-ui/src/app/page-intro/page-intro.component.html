@@ -65,13 +65,7 @@
         <div class="small-white-line"></div>
         <div class="icons-container">
           <div class="icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="61" height="61" viewBox="0 0 61 61" fill="none">
-              <path
-                d="M55.202 34.0148C53.4054 45.9588 43.0992 55.1162 30.6543 55.1162C16.9437 55.1162 5.8291 44.0016 5.8291 30.291C5.8291 16.5804 16.9437 5.46582 30.6543 5.46582C40.8342 5.46582 49.583 11.5931 53.4138 20.3609"
-                stroke="white" stroke-width="3.72378" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M43.0669 20.3608H53.99C54.8126 20.3608 55.4795 19.694 55.4795 18.8713V7.94824"
-                    stroke="white" stroke-width="3.72378" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <i class="bi bi-file-earmark-lock bootstrap-icon"></i>
             <div>
               <span>Private</span>
               <p>{{ countProgres$ | async }}</p>
@@ -117,25 +111,34 @@
     </div>
   </div>
   <div class="latest-publications">
-    <h2>LATEST PUBLICATIONS</h2>
-    <div class="cards" #cardsContainer>
-      <div *ngFor="let review of latestReviews$ | async"
-           class="publications-card">
-        <div class="publication-header">
-          <p>{{ review.journal }}</p>
-        </div>
-        <div class="publication-body">
-          <p>
-            {{ review.title.length > 80 ? review.title.substring(0, 80) + '...' : review.title }}
-          </p>
-          <span>
-          {{ review.authors.length > 80 ? review.authors.substring(0, 80) + '...' : review.authors }}
-        </span>
-          <div class="score">
-            <app-score [dataScore]="review.score"></app-score>
+    <h2>LATEST PUBLISHED ANNOTATIONS</h2>
+    <div class="cards-container">
+      <button class="scroll-button scroll-left" (click)="scrollLeft()">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      <div class="cards" #cardsContainer>
+        <div *ngFor="let review of latestReviews$ | async"
+             class="publications-card"
+             [routerLink]="['/review', review.shortid]">
+          <div class="publication-header">
+            <p>{{ review.journal }}</p>
+          </div>
+          <div class="publication-body">
+            <p>
+              {{ review.title.length > 80 ? review.title.substring(0, 80) + '...' : review.title }}
+            </p>
+            <span>
+            {{ review.authors.length > 80 ? review.authors.substring(0, 80) + '...' : review.authors }}
+          </span>
+            <div class="score">
+              <app-score [dataScore]="review.score"></app-score>
+            </div>
           </div>
         </div>
       </div>
+      <button class="scroll-button scroll-right" (click)="scrollRight()">
+        <i class="bi bi-chevron-right"></i>
+      </button>
     </div>
   </div>
 </div>

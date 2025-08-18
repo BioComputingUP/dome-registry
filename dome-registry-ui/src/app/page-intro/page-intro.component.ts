@@ -109,6 +109,30 @@ export class PageIntroComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    // Scroll left when the left button is clicked
+    scrollLeft(): void {
+        if (this.cardsContainer && this.cardsContainer.nativeElement) {
+            const cardsElement = this.cardsContainer.nativeElement;
+            // Scroll by the width of one card plus its margin (340px)
+            cardsElement.scrollBy({
+                left: -340,
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    // Scroll right when the right button is clicked
+    scrollRight(): void {
+        if (this.cardsContainer && this.cardsContainer.nativeElement) {
+            const cardsElement = this.cardsContainer.nativeElement;
+            // Scroll by the width of one card plus its margin (340px)
+            cardsElement.scrollBy({
+                left: 340,
+                behavior: 'smooth'
+            });
+        }
+    }
+
     // Dependency injection
     constructor(
         private authService: AuthService,

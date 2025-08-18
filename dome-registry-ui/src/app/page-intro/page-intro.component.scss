@@ -56,17 +56,61 @@
   }
 }
 
+.cards-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.scroll-button {
+  position: absolute;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  i {
+    font-size: 20px;
+    color: $primary;
+  }
+
+  &.scroll-left {
+    left: -60px;
+  }
+
+  &.scroll-right {
+    right: -60px;
+  }
+}
+
 .cards {
   @include flex(row, flex-start, center);
-  @extend %full-width;
+  width: 100%;
   gap: 20px;
   overflow-x: auto;
   flex-wrap: nowrap;
   padding-bottom: 10px;
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
   will-change: transform;
   -webkit-overflow-scrolling: touch;
-
   scrollbar-width: thin;
   scrollbar-color: $color-white-30 transparent;
 
@@ -95,6 +139,7 @@
   border-radius: 10px;
   box-shadow: 0 4px 20.4px 0 rgba(0, 0, 0, 0.25);
   @include transition(transform);
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-5px);
@@ -316,6 +361,12 @@
   svg {
     margin-right: 10px;
   }
+
+  .bootstrap-icon {
+    color: white;
+    font-size: 53px;
+    margin-right: 10px;
+  }
 }
 @media (max-width: $breakpoint-xxxl) {
   .brain {
@@ -407,6 +458,10 @@
     svg {
       transform: scale(0.9);
     }
+
+    .bootstrap-icon {
+      font-size: 48px;
+    }
   }
 
   .metrics-container {
@@ -475,6 +530,10 @@
 
     svg {
       transform: scale(0.8);
+    }
+
+    .bootstrap-icon {
+      font-size: 42px;
     }
   }
 
@@ -548,10 +607,31 @@
     margin-left: 7%;
   }
 
+  .scroll-button {
+    width: 36px;
+    height: 36px;
+
+    i {
+      font-size: 18px;
+    }
+
+    &.scroll-left {
+      left: -50px;
+    }
+
+    &.scroll-right {
+      right: -50px;
+    }
+  }
+
   .custom-button {
     font-size: 16px;
     padding: 0.5rem 1rem;
   }
+  .bootstrap-icon {
+    font-size: 53px;
+  }
+
 }
 
 @media (max-width: $breakpoint-sm) {
@@ -601,6 +681,28 @@
     svg {
       transform: scale(0.7);
       margin-right: 5px;
+    }
+
+    .bootstrap-icon {
+      font-size: 37px;
+      margin-right: 5px;
+    }
+  }
+
+  .scroll-button {
+    width: 30px;
+    height: 30px;
+
+    i {
+      font-size: 16px;
+    }
+
+    &.scroll-left {
+      left: -15px;
+    }
+
+    &.scroll-right {
+      right: -15px;
     }
   }
 
