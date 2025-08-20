@@ -51,6 +51,7 @@ export class ListReviewsDto {
   @ApiProperty({
     description: "Type of sort",
     example: "Year | Title | Authors | Score",
+    default: "created",
   })
   @Type(() => String)
   @IsIn([
@@ -58,8 +59,9 @@ export class ListReviewsDto {
     "publication.title",
     "publication.authors",
     "score",
+    "_id"
   ])
-  sort: string = "date";
+  sort: string = "publication.year";
 
   @ApiProperty({
     description: "Async or not",
