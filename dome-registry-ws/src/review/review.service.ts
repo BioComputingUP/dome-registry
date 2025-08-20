@@ -242,6 +242,7 @@ export class ReviewService {
           {
             $project: {
               // Keep these fields
+              _id:1,
               created: 1,
               updated: 1,
               user: 1,
@@ -302,7 +303,7 @@ export class ReviewService {
           //here is it
 
           // Sort according to sort variable
-          {$sort: {[sort.by]: sort.asc ? 1 : -1}},
+          {$sort: {[sort.by]: sort.asc ? 1 : -1, '_id':-1}},
           // First, upper bound results
           {$limit: query.skip + query.limit},
           // Then, apply lower bound
@@ -754,6 +755,7 @@ export class ReviewService {
         {
           $project: {
             // Keep these fields
+            _id:1,
             created: 1,
             updated: 1,
             user: 1,
@@ -813,7 +815,7 @@ export class ReviewService {
         //here is it
         {$project: {user: 0}},
         // Sort according to sort variable
-        {$sort: {[sort.by]: sort.asc ? 1 : -1}},
+        {$sort: {[sort.by]: sort.asc ? 1 : -1, '_id':-1}},
         // First, upper bound results
         {$limit: query.skip + query.limit},
         // Then, apply lower bound
@@ -1239,23 +1241,24 @@ export class ReviewService {
   ])
 
 
-
+ 
   }
 
 async fetchTenLatestReviews() {
+  //_id somewhere 
   return this.reviewModel.aggregate([
     {
       $match: { public: true }, // Only public reviews
     },
     {
-      $sort: { created: -1 }, // Sort by creation date in descending order
+      $sort: { "publication.year": -1 , "_id":-1}, // Sort by creation date in descending order
     },
     {
       $limit: 10, // Limit to the 10 most recent reviews
     },
     {
       $project: {
-        _id: 0,
+        _id: 1,
         title: "$publication.title",
         authors: "$publication.authors",
         shortid: 1,
