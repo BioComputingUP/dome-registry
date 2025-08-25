@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PageSearchComponent } from './page-search/page-search.component';
@@ -37,7 +38,8 @@ import { PoliciesComponent } from './policies/policies.component';
 import { TeamsComponent } from './teams/teams.component';
 import { GovernanceComponent } from './governance/governance.component';
 import { ScoreComponent } from './score/score.component';
-import { NewStateModule } from './new-state/new-state.module';
+import { ReviewService } from './review.service';
+import { StatService } from './stat.service';
 
 // Set Plotly.js from CDN
 PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
@@ -45,60 +47,71 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PageSearchComponent,
-    PageEditComponent,
-    PageIntroComponent,
-    ScrollSpyDirective,
-    CardSectionComponent,
-    CardNavComponent,
-    CardTemplateComponent,
-    ScrollEndDirective,
-    SwaggerAPiComponent,
-    AboutPageComponent,
-    PageDashboardComponent,
-    DSWCardComponent,
-  
+    declarations: [
+        AppComponent,
+        PageSearchComponent,
+        PageEditComponent,
+        PageIntroComponent,
+        ScrollSpyDirective,
+        CardSectionComponent,
+        CardNavComponent,
+        CardTemplateComponent,
+        ScrollEndDirective,
+        SwaggerAPiComponent,
+        AboutPageComponent,
+        PageDashboardComponent,
+        DSWCardComponent,
+        NewStateComponent,
+        SubmitComponent,
+        BigFooterComponent,
+        SmallFooterComponent,
+        NavbarComponent,
+        IntegrationsStandardsComponent,
+        PoliciesComponent,
+        TeamsComponent,
+        GovernanceComponent,
+        ScoreComponent,
+    ],
+    imports: [
+        PlotlyViaCDNModule,
+        BrowserModule,
+        CommonModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        NgbModule,
+        NgbPaginationModule,
+        BrowserAnimationsModule,
+        AppRoutingModule,
+        CookieModule.forRoot(),
+        NgxMatomoTrackerModule.forRoot({
+            trackerUrl: 'https://matomo.biocomputingup.it/',
+            siteId: '23',
+            scriptUrl: 'https://matomo.biocomputingup.it/matomo.js'
+        }),
+        NgxMatomoRouterModule,
+        BrowserModule,
+        BrowserAnimationsModule, // Required for animations
+        ToastrModule.forRoot({// Toastr configuration
+            timeOut: 3000,        // Default auto-close time (3 sec)
+            positionClass: 'toast-top-right',
+            preventDuplicates: true,
+            closeButton: true,
+            progressBar: true
+        }),
+    ],
+    providers: [
+        // Add authentication interceptor (set cookie)
+        {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+        ReviewService,
+        StatService,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  exports: [
     SubmitComponent,
     BigFooterComponent,
-    SmallFooterComponent,
-    NavbarComponent,
-    IntegrationsStandardsComponent,
-    PoliciesComponent,
-    TeamsComponent,
-    GovernanceComponent,
-    ScoreComponent,
+    SmallFooterComponent
   ],
-  imports: [
-    PlotlyViaCDNModule,
-    BrowserModule,
-     
-    ReactiveFormsModule,
-    HttpClientModule,
-    NgbModule,
-    NgbPaginationModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    CookieModule.forRoot(),
-    NgxMatomoTrackerModule.forRoot({ trackerUrl: 'https://matomo.biocomputingup.it/', siteId: '23', scriptUrl: 'https://matomo.biocomputingup.it/matomo.js' }),
-    NgxMatomoRouterModule,
-    BrowserModule,
-    BrowserAnimationsModule, // Required for animations
-    ToastrModule.forRoot({// Toastr configuration
-      timeOut: 3000,        // Default auto-close time (3 sec)
-      positionClass:'toast-top-right',
-      preventDuplicates: true,
-      closeButton:true,
-      progressBar:true
-    }),
-    NewStateModule,
-  ],
-  providers: [
-    // Add authentication interceptor (set cookie)
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-  ],
-  bootstrap: [AppComponent,]
+    bootstrap: [AppComponent,]
 })
 export class AppModule {
 }

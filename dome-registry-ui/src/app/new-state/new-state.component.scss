@@ -1,132 +1,789 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+@import '../../styles/base.scss';
 
-#leaderboard {
-color: black;
-
+// Host element
+:host {
+  position: relative; // Contains the absolutely positioned markers
+  overflow: hidden; // Prevents extra scroll space
+  display: block;
+  @extend %full-width;
 }
 
+// Full-page dark blue gradient background with SVG overlay
+.main-container {
+  @extend %full-width;
+  min-height: 90vh;
+  background: $primary;
+  @include flex(column, center, center);
+  position: relative;
+  overflow-x: hidden;
 
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding:0;
-}
-
-
-
-
-
-.dashboard {
-    background: #172042;
-    padding: 2em;
-
-    grid-template-columns:1fr 1fr 1fr ;
-    justify-content: center;
-    width:calc(100% - 18em);
-
-
-}
-
-
-.list li {
-display: flex;
-justify-content: space-between;
-align-items: center;
-
-
-}
-.list li:not(:last-child){
-    margin-bottom: 1px;
-    border-bottom:2px #2a335e solid;
-
-}
-
-.list span{
-    color: #F46B17;
-
-}
-
-.sales {
-
-    display: grid;
-    grid-template-columns: repeat(4,1fr) ;
-    grid-gap: 2em;
-//    margin : 2em 0 ;
-
-}
-.sales > div {
-    box-shadow:
-    0 0 15px rgba( 0,0,0,0.5);
-    border-radius:15px;
-    padding: 1em;
-}
-.sales h1 {
-  margin: 0.5em 0;
-}
-.sales small {
- color: #fff;
-}
-.sales > div:nth-child(even) {
-    background: linear-gradient(0deg,#3581bb,#F46B17);
-
-}
-.sales > div:nth-child(odd){
-background: linear-gradient(0deg, #178add,#03dcee);
-}
-
-.text {
-    padding:1em;
-}
-
-
-.scientificChart {
-    grid-column-start: span 3;
-}
-@media screen and (max-width: 1150px) {
-    .dashboard, .sales{
-    grid-template-columns: 1fr 1fr;
-    }
-
-    .text-horizontal {
-
-        grid-column-start: span 1;
-    }
-}
-    @media screen and (max-width: 1050px) {
-        .sidebar {
-             max-width: initial;
-             text-align: center;
-             padding: 5em 1em 1em 1em;
-
-        }
-    .sidebar a span:not(.material-icon),
-    .note,
-    .sidebar-footer,
-    .title {
-        display: none;
-
-    }
-    .sidebar a .material-icon {
-        margin: 0;
-    }
-    .dashboard {
-       width: calc(100% - 4.1em);
-    }
-
-
-
-
-}
-
-.col-6.panel.list{
-  align-content: center;
-}
-
-td, th {
-    border-width: 2px;
+  // Common pseudo-element styles
+  &::before,
+  &::after {
+    content: '';
+    @include position-absolute(0, auto, auto, 0, 0);
+    @extend %full-width;
+    height: 90vh;
+    pointer-events: none;
   }
 
-.dashboard.w-100.h-100{
-  padding-right:0 ;
-  padding-bottom: 1rem;
+  // Gradient only in first viewport
+  &::before {
+    background: linear-gradient(180deg, $color-blue-gradient-start 0%, $color-blue-gradient-end 100%);
+  }
+
+  // SVG background
+  &::after {
+    background: url('../../assets/about-page-background.svg') center center no-repeat;
+    background-size: cover;
+    opacity: 0.25;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    &::before, &::after {
+      height: 80vh;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    &::before, &::after {
+      height: 70vh;
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    &::before, &::after {
+      height: 60vh;
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    &::before, &::after {
+      height: 50vh;
+    }
+  }
+
+  h1 {
+    margin-bottom: 20px;
+    @extend %white-text;
+    @include font(60px, 700);
+
+    p {
+      @include font(20px, 400, 35px);
+      @extend %center-text;
+    }
+  }
+
+  // Content container
 }
 
+.stat-center {
+  @extend %section-container;
+  width: 100%;
+  max-width: 1200px; // Increased max-width to accommodate the squares better
+  height: 90vh;
+  padding: 0 20px;
+  @include flex(column, center, center);
+  flex-shrink: 0;
+  @extend %white-text;
+  @extend %center-text;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xxxl) {
+    max-width: 1100px;
+  }
+
+  @media (max-width: $breakpoint-xxl) {
+    max-width: 1000px;
+  }
+
+  @media (max-width: $breakpoint-xl) {
+    max-width: 900px;
+    padding: 0 40px;
+
+    h1 {
+      @include font(50px, 700);
+    }
+
+    p {
+      @include font(18px, 400, 30px);
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    max-width: 800px;
+    padding: 0 30px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    height: 80vh;
+    max-width: 700px;
+    padding: 0 25px;
+
+    h1 {
+      @include font(42px, 700);
+    }
+
+    p {
+      @include font(16px, 400, 28px);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    height: 70vh;
+    max-width: 540px;
+    padding: 0 20px;
+
+    h1 {
+      @include font(36px, 700);
+    }
+
+    p {
+      @include font(15px, 400, 26px);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    height: auto; // Change to auto height for very small screens
+    min-height: 60vh; // Ensure minimum height
+    padding: 100px 15px 50px;
+
+    h1 {
+      margin-bottom: 15px;
+      @include font(30px, 700);
+    }
+
+    p {
+      @include font(14px, 400, 24px);
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    min-height: 50vh;
+    padding: 80px 10px 40px;
+
+    h1 {
+      margin-bottom: 10px;
+      @include font(26px, 700);
+    }
+
+    p {
+      @include font(13px, 400, 22px);
+    }
+  }
+}
+
+
+// White divider line
+.white-divider {
+  @extend %full-width;
+  height: 6px;
+  @extend %reset-margin;
+  position: relative;
+  z-index: 10;
+  background-color: $color-white;
+}
+
+#white-divider-2 {
+  margin-bottom: 135px;
+}
+
+#white-divider-3 {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.partner-section {
+  width: 100%; // Changed from 70% to 100% for full width
+  @include flex(column, center, center);
+  margin-bottom: 150px;
+
+  h1 {
+    color: $color-white;
+    @include font(60px, 700);
+    margin-bottom: 115px;
+  }
+}
+
+.partner-content {
+  width: 70%;
+  @include flex(row, center, center);
+  gap: 184px; // Gap between top and bottom parts
+}
+
+.partner-description {
+  width: 40%;
+
+  h2 {
+    color: $color-white;
+    @include font(26px, 600);
+    margin-bottom: 26px;
+  }
+
+  h3 {
+    color: $color-white;
+    @include font(16px, 400);
+    line-height: 26px;
+    margin-bottom: 36px;
+    text-align: justify;
+
+  }
+}
+
+.custom-button {
+  @include font(16px, 700);
+  color: $color-white;
+  display: inline-block;
+  text-decoration: none;
+  padding: 11px 19px;
+  cursor: pointer;
+
+  i {
+    margin-left: 0.3rem;
+    font-weight: 600;
+  }
+}
+
+.gradient-button {
+  background: linear-gradient(90deg, $secondary, #FF922B);
+  color: black;
+  border: none;
+  border-radius: 0;
+}
+
+.partner-image {
+  width: 50%;
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+.feature-tag {
+  background-color: #F667293D;
+  @include flex(column, center, center);
+  padding: 6px 11px;
+  width: 150px;
+  border-radius: 18px;
+  margin-bottom: 17px;
+
+  p {
+    @include font(16px, 600);
+    color: $secondary;
+    margin: 0;
+  }
+}
+
+.row-stats {
+  @include flex(column, center, center);
+  margin-bottom: 30px;
+}
+
+// Row for dome squares
+.row-dome {
+  @include flex(row, center, center);
+  gap: 35px;
+  margin: 30px 0;
+  flex-wrap: wrap; // Allow wrapping on very small screens
+  width: 100%; // Ensure full width
+
+  .square {
+    flex: 1; // Allow squares to grow and shrink
+    min-width: 200px; // Minimum width to maintain readability
+    max-width: 250px; // Maximum width to maintain design
+    height: 200px;
+    border: 15px solid $secondary;
+    padding: 20px;
+    display: flex;
+    @include flex(column, space-between, flex-start);
+
+    h3 {
+      @include font(20px, 500, 27px, normal);
+    }
+
+    p {
+      @include font(32px, 600, normal, normal);
+    }
+  }
+
+  .square:first-child {
+    border-left: 0;
+  }
+
+  .square:nth-child(3) {
+    border-bottom: 0;
+    padding-bottom: 35px;
+  }
+
+  .square:last-child {
+    border-right: 0;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    gap: 25px;
+
+    .square {
+      min-width: 180px;
+      max-width: 220px;
+      height: 180px;
+
+      h3 {
+        @include font(18px, 500, 24px, normal);
+      }
+
+      p {
+        @include font(28px, 600, normal, normal);
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    gap: 20px;
+
+    .square {
+      min-width: 160px;
+      max-width: 200px;
+      height: 160px;
+      border-width: 12px;
+
+      h3 {
+        @include font(16px, 500, 22px, normal);
+      }
+
+      p {
+        @include font(24px, 600, normal, normal);
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    gap: 15px;
+
+    .square {
+      min-width: 115px;
+      max-width: 155px;
+      height: 115px;
+      border-width: 10px;
+      padding: 15px;
+
+      h3 {
+        @include font(14px, 500, 20px, normal);
+      }
+
+      p {
+        @include font(22px, 600, normal, normal);
+      }
+    }
+  }
+
+  // Custom breakpoint at 600px for better transition
+  @media (max-width: 600px) {
+    gap: 12px;
+    justify-content: center;
+
+    .square {
+      min-width: 110px;
+      max-width: 140px;
+      height: 110px;
+      border-width: 9px;
+      padding: 12px;
+
+      h3 {
+        @include font(13px, 500, 19px, normal);
+        margin-bottom: 4px;
+      }
+
+      p {
+        @include font(21px, 600, normal, normal);
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    gap: 10px;
+    justify-content: center;
+
+    .square {
+      min-width: 100px;
+      max-width: 130px;
+      height: 100px;
+      border-width: 8px;
+      padding: 10px;
+
+      h3 {
+        @include font(12px, 500, 18px, normal);
+        margin-bottom: 5px;
+      }
+
+      p {
+        @include font(20px, 600, normal, normal);
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    gap: 8px;
+    flex-direction: row; // Ensure horizontal layout
+    flex-wrap: wrap; // Allow wrapping if needed
+    justify-content: center;
+
+    .square {
+      min-width: 77px;
+      max-width: 110px;
+      height: 80px;
+      border-width: 6px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      h3 {
+        @include font(11px, 500, 16px, normal);
+        margin-bottom: 5px;
+        text-align: center; // Center text for better readability
+      }
+
+      p {
+        @include font(18px, 600, normal, normal);
+        text-align: center; // Center text for better readability
+        margin-top: auto; // Push to bottom
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    gap: 5px;
+    flex-direction: row; // Ensure horizontal layout
+    flex-wrap: wrap; // Allow wrapping if needed
+
+    .square {
+      min-width: 70px;
+      max-width: 90px;
+      height: 90px;
+      border-width: 4px;
+      padding: 6px;
+      margin-bottom: 5px; // Add space between rows if they wrap
+
+      h3 {
+        @include font(10px, 500, 14px, normal);
+        margin-bottom: 3px;
+        text-align: center;
+      }
+
+      p {
+        @include font(16px, 600, normal, normal);
+        text-align: center;
+      }
+    }
+  }
+
+  // Hide boxes for screens smaller than breakpoint-xxs
+  @media (max-width: ($breakpoint-xxs - 1px)) {
+    .square {
+      display: none; // Make boxes invisible
+    }
+  }
+}
+
+.dataset {
+  width: 70%;
+  @include flex(column, center, center);
+  margin-top: 145px;
+
+  h1 {
+    @include font(60px, 700);
+    margin-bottom: 10px;
+  }
+
+  p {
+    @include font(16px, 400, 26px);
+    color: $color-white;
+  }
+}
+
+.dataset-content {
+  @extend %full-width;
+  @include flex(row, space-between, start);
+  margin-top: 50px;
+  margin-bottom: 160px;
+}
+
+// Progress section
+.progress {
+  width: 40%;
+  @include flex(row, flex-start, center);
+  position: relative;
+  gap: 30px;
+  height: 300px;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+// Vertical progress bar container
+.progress-bar-container {
+  border-radius: 0;
+  width: 14px;
+  height: 300px;
+  @include flex(column, start);
+  z-index: 10;
+  background-color: rgba(217, 217, 217, 0.15);
+  position: relative;
+}
+
+// Vertical progress bar
+.progress-bar {
+  width: 100%;
+  height: 20%;
+  z-index: 11;
+  position: absolute;
+  background-color: $secondary;
+  top: 0;
+  @include transition(height, 0.5s, ease-in-out);
+}
+
+// Progress titles
+.progress-titles {
+  @include flex(column, space-between, flex-start);
+  height: 300px;
+
+  p {
+    position: relative;
+    @extend %white-text;
+    @include font(30px, 600);
+    cursor: pointer;
+    @include transition(all, 0.3s, ease);
+    margin-bottom: 75px;
+
+    &:hover {
+      color: $secondary;
+      transform: translateX(5px);
+    }
+
+    &.active {
+      color: $secondary;
+    }
+  }
+}
+
+// Dynamic content section
+.dynamic {
+  width: 50%;
+  @include flex(column, center, start);
+  height: 600px; // Fixed height to maintain consistency
+  position: relative; // For positioning child elements
+  h2 {
+    color: $color-white;
+    @include font(26px, 600);
+    margin-bottom: 12px;
+  }
+
+  h3 {
+    color: $color-white;
+    @include font(16px, 400);
+    margin-bottom: 48px;
+    line-height: 26px;
+  }
+}
+
+// Dynamic content sections
+.dynamic-content {
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute; // Position absolutely to prevent layout shifts
+  top: 0;
+  left: 0;
+  right: 0;
+  @include transition(all, 0.5s, ease);
+  pointer-events: none; // Prevent interaction with hidden content
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto; // Re-enable interaction for active content
+  }
+}
+
+.journals {
+  background-color: #F667293D;
+  @include flex(column, center, center);
+  padding: 6px 11px;
+  width: 100px;
+  border-radius: 18px;
+  margin-bottom: 17px;
+
+  p {
+    @include font(16px, 600);
+    color: $secondary;
+    margin: 0;
+  }
+}
+
+
+.journals-graph,
+.papers-graph,
+.scores-graph {
+  width: 100%;
+  height: 400px; // Consistent height for all graph containers
+  background-color: transparent;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  // Style for label text
+  text {
+    fill: white;
+    font-size: 18px;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  }
+
+  // Style for polylines (arrows)
+  polyline {
+    stroke-width: 2;
+    fill: none;
+  }
+
+  .pie-slice {
+    // Hover effect removed as per requirements
+  }
+
+  // Label styles removed as per requirements
+  // Slice name styles removed as per requirements
+
+}
+
+.score-distribution {
+  width: 70%;
+  @include flex(column, center, center);
+
+  h1 {
+    color: $color-white;
+    @include font(60px, 700);
+    margin-bottom: 78px;
+  }
+}
+
+// Score content blocks
+.score-content-block {
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute; // Position absolutely to prevent layout shifts
+  top: 0;
+  left: 0;
+  right: 0;
+  @include flex(row, space-between, flex-start);
+  @include transition(all, 0.5s, ease);
+  pointer-events: none; // Prevent interaction with hidden content
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto; // Re-enable interaction for active content
+    position: relative; // Reset position for active block
+  }
+}
+
+.score-dynamic {
+  width: 100%;
+  position: relative;
+  min-height: 400px; // Ensure container has height even when content is absolute
+  margin-bottom: 150px;
+}
+
+.score-distribution-boxes {
+  width: 100%;
+  @include flex(row, center, center);
+  gap: 30px;
+  margin-bottom: 150px;
+}
+
+.box {
+  width: 268px;
+  height: 181px;
+  flex-shrink: 0;
+  border-radius: 7px;
+  background: #022940;
+  @include flex(column, start, start);
+  gap:20px;
+  padding: 12px 0 0 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  h2{
+    @include font(26px, 600);
+    color: $color-blue-gradient-end; // Muted text for inactive boxes
+    line-height: normal;
+  }
+
+  .box-icon {
+    @include flex(column, center, center);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #032D47; // Muted background for inactive boxes
+
+    svg path {
+      stroke: rgba(51, 149, 202, 0.36) // Muted stroke color for inactive boxes
+    }
+  }
+
+  &.active {
+    border: 4px solid $secondary; // Bright border for active box
+    box-shadow: 0 4px 47.1px 22px rgba(0, 0, 0, 0.25);
+    background: $primary;
+
+    h2 {
+      color: $color-white; // Bright text for active box
+    }
+
+    .box-icon {
+      background: #032D47; // Original background for active box
+
+      svg path {
+        stroke: $secondary; // Original bright orange stroke for active box
+      }
+    }
+  }
+
+  &:hover:not(.active) {
+    border-color: rgba(246, 103, 41, 0.5); // Slightly brighter on hover for inactive boxes
+  }
+}
+
+.score{
+  width: 150px;
+}
+
+.score-content{
+  width: 40%;
+
+  h2{
+    color: $color-white;
+    @include font(26px, 600);
+    margin-bottom: 19px;
+  }
+  h3{
+    color: $color-white;
+    @include font(16px, 400);
+    line-height: 26px;
+  }
+}
+.score-graph{
+  width: 50%;
+}

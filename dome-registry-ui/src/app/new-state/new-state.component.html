@@ -1,324 +1,256 @@
-<div id='outer-div' class="dashboard w-100 h-100 overflow-x-hidden bg-primary" >
-
-
-  <div id="inner-div" class="overflow-y-auto overflow-x-hidden w-100 h-100">
-
-
-    <!-- Card header -->
-    <div class=" container text-white  ">
-
-      <div class="row">
-
-        <div class="sales mb-3 text-white  ">
-          <div class="col-3 w-auto">
-            <h4>Users</h4>
-            <h1>{{ countPreson | async }}</h1>
-
-          </div>
-          <div class="col-3 w-auto">
-            <h4>
-              Public annotations
-            </h4>
-            <h1>{{ countCounter$ | async }} </h1>
-
-          </div>
-          <div class="col-3 w-auto">
-            <h4>Private annotations </h4>
-            <h1>{{ countProgres$ | async }}</h1>
-
-          </div>
-          <div class="col-3 w-auto">
-            <h4>Total annotations </h4>
-            <h1>{{ countTotalE$ | async }}</h1>
-
-
-          </div>
-        </div>
-
-      </div>
-
-      <div class="row m-2">
-
-        <!-- start of the card -->
-        <div class="card">
-          <div class="card-body .">
-            <div class="card-title costum-card-hearder text-black text-center mb-4 "><h2>Top 10 annotated journals </h2>
-            </div>
-
-            <div class="row  text-black">
-              <div class="col-md-6 panel list ">
-                <li>
-                  <h3>Journal</h3>
-                  <span>Annotations </span>
-                </li>
-                <!-- shows the 9 first journals-->
-                <li *ngFor="let group of journalsNames$ | async">
-                  <b><p class="text-black">{{ group._id }}</p></b>
-                  <span>{{ group.count }}</span>
-                </li>
-                <!-- shows the other journals at the end -->
-                <li>
-                  <b><p class="text-black">Other</p></b>
-                  <span>{{ otherCount$ | async }}</span>
-                </li>
-
-
-              </div>
-              <div class="col-md-6 my-auto">
-                <ng-container [ngTemplateOutlet]="section"
-                              [ngTemplateOutletContext]="{ title: 'Top Journals', id: 'journal', graph: journal$ | async }"></ng-container>
-
-              </div>
-
-
-            </div>
-          </div>
-          <!-- the end of the card  -->
-        </div>
-      </div>
-
-
-      <div class="row m-2">
-        <div class="card">
-          <div class="card-body text-center">
-            <div class="card-title text-black "><h2>Number of Annotated Papers (Based on Publication Year)</h2></div>
-            <div class="row text-black">
-              <div class="col-md-6 mt-3 panel list ">
-                <li>
-                  <h3>Year</h3>
-                  <span>Annotations count </span>
-                </li>
-                <li *ngFor="let group of journalsYear$ | async">
-                  <b>
-                  <p class="text-black">{{ group._id }}</p>
-                  </b>
-                  <span>{{ group.count }}</span>
-                </li>
-
-              </div>
-
-              <div class="col-md-6 my-auto">
-
-                <ng-container [ngTemplateOutlet]="section"
-                              [ngTemplateOutletContext]="{ title: 'Year', id: 'year', graph: (year$ | async) }"></ng-container>
-
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="row m-2">
-        <div class="card">
-          <div class="card-body text-center">
-            <div class="card-title text-black mb-3 "><h2>Distribution of the DOME score</h2></div>
-
-            <div class="row text-black">
-              <div class="col-6  panel list">
-                <li>
-                  <h3>Score</h3>
-                  <span>Annotations count </span>
-                </li>
-                <li *ngFor="let group of scoreOverall$ | async">
-                  <b>
-                    <p class="text-black">{{ group._id }}%</p>
-                  </b>
-                  <span>{{ group.count }}</span>
-                </li>
-
-
-              </div>
-              <div class="col-6 my-auto">
-                <ng-container [ngTemplateOutlet]="section"
-                              [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['total']}"></ng-container>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="row m-2">
-        <div class="card">
-          <div class="card-body text-center">
-            <div class="card-title text-black mb-3">
-              <h2>DOME Score Distribution (Dataset section)</h2>
-            </div>
-            <div class="row text-black">
-
-              <div class="col-6  my-auto panel list ">
-                <li>
-                  <h3>Score (Dataset)</h3>
-                  <span>Annotations count </span>
-                </li>
-                <li *ngFor="let group of scoreDataset$ | async">
-                  <b>
-                  <p class="text-black">{{ group._id }}/4</p>
-                  </b>
-                  <span>{{ group.count }}</span>
-                </li>
-
-
-              </div>
-
-              <div class="col-6 my-auto">
-                <ng-container [ngTemplateOutlet]="section"
-                              [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['dataset']}"></ng-container>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-
-
-      </div>
-
-      <div class="row m-2">
-        <div class="card">
-          <div class="card-body text-center">
-            <div class="card-title text-black"><h2>DOME Score Distribution (Optimization section)</h2></div>
-            <div class="row">
-              <div class="col-md-6 text-black my-auto panel list">
-                <li>
-                  <h3>Score (Optimization)</h3>
-                  <span>Annotations count </span>
-                </li>
-                <li *ngFor="let group of scoreOptimization$ | async">
-                  <b>
-                    <p class="text-black">{{ group._id }}/8</p></b>
-                  <span>{{ group.count }}</span>
-                </li>
-
-
-              </div>
-              <div class="col-md-6">
-                <ng-container [ngTemplateOutlet]="section"
-                              [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['optimization']}"></ng-container>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="row m-2">
-        <div class="card">
-          <div class="card-body text-center">
-            <div class="card-title text-black"><h2>Dome score distribution(Model section)</h2></div>
-            <div class="row">
-              <div class="col-md-6 my-auto text-black panel list">
-                <li>
-                  <h3>Score (Model)</h3>
-                  <span>Annotations count </span>
-                </li>
-                <li *ngFor="let group of scoreModel$ | async">
-                  <b>
-                    <p class="text-black">{{ group._id }}/4</p></b>
-                  <span>{{ group.count }}</span>
-                </li>
-
-              </div>
-              <div class="col-md-6">
-                <ng-container [ngTemplateOutlet]="section"
-                              [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['model']}"></ng-container>
-
-              </div>
-
-            </div>
-
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div class="row m-2">
-        <div class="card">
-          <div class="card-body text-center">
-            <div class="card-title text-black"><h2>Dome score distribution(Evaluation section)</h2></div>
-            <div class="row">
-              <div class="col-md-6 my-auto text-black panel list">
-                <li>
-                  <h3>Score (Evaluation)</h3>
-                  <span>Annotations count </span>
-                </li>
-                <li *ngFor="let group of scoreEvaluation$ | async">
-                  <b>
-                    <p class="text-black">{{ group._id }}/5</p></b>
-                  <span>{{ group.count }}</span>
-                </li>
-
-
-              </div>
-              <div class="col-md-6 my-auto">
-                <ng-container [ngTemplateOutlet]="section"
-                              [ngTemplateOutletContext]="{ title: 'DOME Score (overall)', id: 'score-total', graph: (score$ | async)?.['evaluation']}"></ng-container>
-
-              </div>
-
-            </div>
-
-
-          </div>
-            
-        </div>
-
-      </div>
- 
-      <div class=" my-4 mx-2  "  id="leaderboard">
-      <div class="card">
-        <div class="card-body text-center">
-          <img src="https://apicuron.org/assets/APICURON.svg" alt="apicuron logo" class="img-fluid mb-3" style="max-width: 200px;">
-          <div class="card-title text-black mb-3"><h2>Top Contributers</h2></div>
-         
-          <apicuron-leaderboard resource="dome_id" [options]="['total-leaderboard']"></apicuron-leaderboard>
-          
-      </div>  
-        
-
-      </div>
-
-
-
-      
-      <div class="row m-2">
-
-
-        <ng-template let-id='id' let-title='title' let-graph='graph' #section>
-
-
-          <!-- Actual card -->
-
-          <!-- Set card title -->
-
-          <!-- Set card body -->
-
-          <!-- Define statistics card body -->
-          <div class="statistics-card-body">
-            <!-- Case graph is not set -->
-            <div class="d-flex align-items-center justify-content-center w-100 h-100" *ngIf="!graph">
-              <!-- Show spinner -->
-              <div class="spinner-grow text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </div>
-            <!-- Otherwise -->
-            <div class="d-block overflow-hidden w-100 h-100" *ngIf="!!graph">
-              <!-- Show graph -->
-              <plotly-plot [data]="graph.data" [layout]="graph.layout" [config]="graph.config"></plotly-plot>
-            </div>
-          </div>
-        </ng-template>
-      </div>
-
-       
+<div class="main-container">
+  <div class="stat-center">
+    <div class="row-stats">
+      <h1>Statistics</h1>
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </p>
     </div>
-
+    <div class="row-dome">
+      <div class="square">
+        <h3>Users</h3>
+        <p>{{ userCount$ | async }}</p>
+      </div>
+      <div class="square">
+        <h3>Public Annotations</h3>
+        <p>{{ publicAnnotationsCount$ | async }}</p>
+      </div>
+      <div class="square">
+        <h3>Private Annotations</h3>
+        <p>{{ privateAnnotationsCount$ | async }}</p>
+      </div>
+      <div class="square">
+        <h3>Total Annotations</h3>
+        <p>{{ totalAnnotationsCount$ | async }}</p>
+      </div>
+    </div>
   </div>
-</div>
+  <div class="white-divider" id="white-divider-1"></div>
 
+  <div class="dataset">
+    <h1>Dataset</h1>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    </p>
+    <div class="dataset-content">
+      <div class="progress">
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="vertical-scroll-progress"></div>
+        </div>
+        <div class="progress-titles">
+          <p>1. Top 10 Annotated Journals</p>
+          <p>2. Number of Annotated Papers</p>
+          <p>3. Distribution of Dome Score</p>
+        </div>
+      </div>
+      <div class="dynamic">
+        <!-- Content for Top 10 Annotated Journals (default active) -->
+        <div class="dynamic-content active" id="dynamic-content-0">
+          <div class="journals">
+            <p>Journals</p>
+          </div>
+          <h2>
+            Here is the most annotated journals so far
+          </h2>
+          <h3>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </h3>
+          <div class="journals-graph" #pieChart></div>
+        </div>
+
+        <!-- Content for Number of Annotated Papers -->
+        <div class="dynamic-content" id="dynamic-content-1">
+          <div class="journals">
+            <p>Papers</p>
+          </div>
+          <h2>
+            Number of Annotated Papers
+          </h2>
+          <h3>
+            Statistics about the number of papers that have been annotated.
+          </h3>
+          <div class="papers-graph" #barChart></div>
+        </div>
+
+        <!-- Content for Distribution of Dome Score -->
+        <div class="dynamic-content" id="dynamic-content-2">
+          <div class="journals">
+            <p>Scores</p>
+          </div>
+          <h2>
+            Distribution of Dome Score
+          </h2>
+          <h3>
+            Analysis of the distribution of Dome scores across annotations.
+          </h3>
+          <div class="scores-graph" #scoresChart></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="white-divider" id="white-divider-2"></div>
+  <div class="score-distribution">
+    <h1>Score Distribution</h1>
+
+    <div class="score-distribution-boxes">
+      <div class="box active">
+        <div class="box-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="29" height="33" viewBox="0 0 29 33" fill="none">
+            <path d="M8.46716 2.9292L19.4918 2.9292L24.714 8.9292V25.5959" stroke="#F66729" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M3.8252 27.5959V8.9292C3.8252 7.82463 4.72062 6.9292 5.82519 6.9292H16.8065C17.038 6.9292 17.2581 7.02942 17.41 7.20398L21.036 11.37C21.1627 11.5157 21.2325 11.7022 21.2325 11.8953V27.5959C21.2325 28.7004 20.3371 29.5959 19.2325 29.5959H5.8252C4.72063 29.5959 3.8252 28.7004 3.8252 27.5959Z"
+              stroke="#F66729" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16.5906 6.9292V11.4625C16.5906 11.9044 16.9487 12.2625 17.3906 12.2625H21.2325" stroke="#F66729"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>Database</h2>
+      </div>
+      <div class="box">
+        <div class="box-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="29" height="33" viewBox="0 0 29 33" fill="none">
+            <path d="M8.46716 2.9292L19.4918 2.9292L24.714 8.9292V25.5959" stroke="#F66729" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M3.8252 27.5959V8.9292C3.8252 7.82463 4.72062 6.9292 5.82519 6.9292H16.8065C17.038 6.9292 17.2581 7.02942 17.41 7.20398L21.036 11.37C21.1627 11.5157 21.2325 11.7022 21.2325 11.8953V27.5959C21.2325 28.7004 20.3371 29.5959 19.2325 29.5959H5.8252C4.72063 29.5959 3.8252 28.7004 3.8252 27.5959Z"
+              stroke="#F66729" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16.5906 6.9292V11.4625C16.5906 11.9044 16.9487 12.2625 17.3906 12.2625H21.2325" stroke="#F66729"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>Optimization</h2>
+      </div>
+      <div class="box">
+        <div class="box-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="29" height="33" viewBox="0 0 29 33" fill="none">
+            <path d="M8.46716 2.9292L19.4918 2.9292L24.714 8.9292V25.5959" stroke="#F66729" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M3.8252 27.5959V8.9292C3.8252 7.82463 4.72062 6.9292 5.82519 6.9292H16.8065C17.038 6.9292 17.2581 7.02942 17.41 7.20398L21.036 11.37C21.1627 11.5157 21.2325 11.7022 21.2325 11.8953V27.5959C21.2325 28.7004 20.3371 29.5959 19.2325 29.5959H5.8252C4.72063 29.5959 3.8252 28.7004 3.8252 27.5959Z"
+              stroke="#F66729" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16.5906 6.9292V11.4625C16.5906 11.9044 16.9487 12.2625 17.3906 12.2625H21.2325" stroke="#F66729"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>Model</h2>
+      </div>
+      <div class="box">
+        <div class="box-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="29" height="33" viewBox="0 0 29 33" fill="none">
+            <path d="M8.46716 2.9292L19.4918 2.9292L24.714 8.9292V25.5959" stroke="#F66729" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round"/>
+            <path
+              d="M3.8252 27.5959V8.9292C3.8252 7.82463 4.72062 6.9292 5.82519 6.9292H16.8065C17.038 6.9292 17.2581 7.02942 17.41 7.20398L21.036 11.37C21.1627 11.5157 21.2325 11.7022 21.2325 11.8953V27.5959C21.2325 28.7004 20.3371 29.5959 19.2325 29.5959H5.8252C4.72063 29.5959 3.8252 28.7004 3.8252 27.5959Z"
+              stroke="#F66729" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16.5906 6.9292V11.4625C16.5906 11.9044 16.9487 12.2625 17.3906 12.2625H21.2325" stroke="#F66729"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>Evaluation</h2>
+      </div>
+    </div>
+    <div class="score-dynamic">
+      <!-- Database content (default active) -->
+      <div class="score-content-block active" id="score-content-0">
+        <div class="score-content">
+          <div class="journals score">
+            <p>Latest Updates</p>
+          </div>
+          <h2>
+            Database Distribution
+          </h2>
+          <h3>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut venenatis tristique lorem et mollis. Sed dictum
+            ex
+            nisi, sit amet aliquet lacus pretium finibus. Nullam ut justo sem. Fusce cursus lorem id ante aliquet
+            suscipit.
+          </h3>
+        </div>
+        <div class="score-graph" #dbDistChart></div>
+      </div>
+
+      <!-- Optimization content -->
+      <div class="score-content-block" id="score-content-1">
+        <div class="score-content">
+          <div class="journals score">
+            <p>Latest Updates</p>
+          </div>
+          <h2>
+            Optimization Metrics
+          </h2>
+          <h3>
+            Detailed analysis of optimization metrics and performance indicators across different models and datasets.
+            These metrics help evaluate the efficiency and effectiveness of various optimization techniques.
+          </h3>
+        </div>
+        <div class="score-graph" #optimizationChart></div>
+      </div>
+
+      <!-- Model content -->
+      <div class="score-content-block" id="score-content-2">
+        <div class="score-content">
+          <div class="journals score">
+            <p>Latest Updates</p>
+          </div>
+          <h2>
+            Model Performance
+          </h2>
+          <h3>
+            Comprehensive overview of model performance metrics, including accuracy, precision, recall, and F1 score.
+            This analysis helps identify strengths and weaknesses in different modeling approaches.
+          </h3>
+        </div>
+        <div class="score-graph" #modelChart></div>
+      </div>
+
+      <!-- Evaluation content -->
+      <div class="score-content-block" id="score-content-3">
+        <div class="score-content">
+          <div class="journals score">
+            <p>Latest Updates</p>
+          </div>
+          <h2>
+            Evaluation Results
+          </h2>
+          <h3>
+            Summary of evaluation results across different datasets and test scenarios. These results provide insights
+            into the overall performance and reliability of the system under various conditions.
+          </h3>
+        </div>
+        <div class="score-graph" #evaluationChart></div>
+      </div>
+    </div>
+  </div>
+  <div class="white-divider" id="white-divider-2"></div>
+  <div class="partner-section">
+    <h1>Partner Resource</h1>
+    <div class="partner-content">
+      <div class="partner-description">
+        <h2>
+          APICURON
+        </h2>
+        <h3>
+          APICURON collects and aggregates activity events from third party resources and
+          generates statistics, achievements and leaderboards! <br>
+          APICURON is endorsed by the International Society for Biocuration (ISB) as a service dedicated to crediting
+          and recognizing the invaluable work of professional and volunteer biocurators.
+        </h3>
+        <a class="custom-button gradient-button" >visit Website
+          <i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path>
+              <path d="M12 5l7 7-7 7"></path>
+            </svg>
+          </i>
+        </a>
+      </div>
+      <div class="partner-image">
+        <img src="assets/Frame%2087.png" alt="apicuron">
+      </div>
+    </div>
+  </div>
+  <app-submit></app-submit>
+  <app-big-footer></app-big-footer>
+</div>
