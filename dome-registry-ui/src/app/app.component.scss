@@ -5,8 +5,10 @@ footer{
     color: white;
 }
 
+main {
+    padding-top: 75px; /* Equal to navbar height to prevent content from being hidden */
+}
+
 .nav-item{
-
     margin-left: 25px;
-
 }

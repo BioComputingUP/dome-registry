@@ -132,7 +132,10 @@
 .navbar {
   padding-left: 5%;
   padding-right: 5%;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 1040; /* Increased z-index to ensure navbar is above page content */
   height: $navbar-height;
   background: $navbar-bg;
