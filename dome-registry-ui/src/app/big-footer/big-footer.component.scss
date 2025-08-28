@@ -37,6 +37,7 @@
 
   @media (max-width: $breakpoint-lg) {
     flex-direction: column;
+    align-items: center;
   }
 }
 
@@ -68,6 +69,7 @@
 
   @media (max-width: $breakpoint-lg) {
     margin-bottom: 30px;
+    justify-content: center;
   }
 
   @media (max-width: $breakpoint-xs) {
@@ -81,6 +83,7 @@
 
   @media (max-width: $breakpoint-lg) {
     flex-direction: column;
+    align-items: center;
   }
 }
 
@@ -97,6 +100,10 @@
   @media (max-width: $breakpoint-lg) {
     margin-left: 0;
     margin-bottom: 30px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 32px
   }
 
   @media (max-width: $breakpoint-md) {
@@ -114,8 +121,15 @@
 
   a {
     @extend %link-style;
-  }
+    transition: color 0.2s ease;
 
+    &:hover {
+      color: $secondary;
+    }
+  }
+  @media (max-width: $breakpoint-lg) {
+  align-items: center;
+  }
   @media (max-width: $breakpoint-sm) {
     gap: 20px;
   }
@@ -124,12 +138,38 @@
 .right-right {
   @include responsive-width(50%);
   height: 100%;
-  @include flex(column, flex-start, flex-end);
+  @include flex(column, flex-start, flex-start);
   position: relative;
+  padding-left: 15px;
+
+  a {
+    @extend %link-style;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $secondary;
+    }
+  }
 
   p {
-    color: rgba(255, 255, 255, 0.50);
-    margin-bottom: 5px;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 10px;
+    line-height: 1.4;
+
+    i {
+      margin-right: 8px;
+      color: $secondary;
+    }
+
+    &.copyright {
+      margin-top: 10px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+
+      i {
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
   }
 
   .github-link {
@@ -155,7 +195,17 @@
   }
 
   @media (max-width: $breakpoint-lg) {
-    align-items: flex-start;
+    align-items: center;
     margin-top: 10px;
+    padding-left: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    p {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
   }
 }
