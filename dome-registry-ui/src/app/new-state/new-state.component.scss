@@ -2,6 +2,76 @@
 @import '../../styles/mixins.scss';
 @import '../../styles/base.scss';
 
+// DRY Mixins for responsive design
+@mixin responsive-font($base-size, $weight: 400, $line-height: null) {
+  @include font($base-size, $weight, $line-height);
+
+  @media (max-width: $breakpoint-xxxl) { @include font($base-size * 0.92, $weight, $line-height); }
+  @media (max-width: $breakpoint-xxl) { @include font($base-size * 0.84, $weight, $line-height); }
+  @media (max-width: $breakpoint-xl) { @include font($base-size * 0.76, $weight, $line-height); }
+  @media (max-width: $breakpoint-lg) { @include font($base-size * 0.68, $weight, $line-height); }
+  @media (max-width: $breakpoint-md) { @include font($base-size * 0.6, $weight, $line-height); }
+  @media (max-width: $breakpoint-sm) { @include font($base-size * 0.52, $weight, $line-height); }
+  @media (max-width: $breakpoint-xs) { @include font($base-size * 0.46, $weight, $line-height); }
+  @media (max-width: $breakpoint-xxs) { @include font($base-size * 0.4, $weight, $line-height); }
+}
+
+@mixin responsive-spacing($property, $base-value) {
+  #{$property}: $base-value;
+
+  @media (max-width: $breakpoint-xxxl) { #{$property}: $base-value * 0.9; }
+  @media (max-width: $breakpoint-xxl) { #{$property}: $base-value * 0.8; }
+  @media (max-width: $breakpoint-xl) { #{$property}: $base-value * 0.7; }
+  @media (max-width: $breakpoint-lg) { #{$property}: $base-value * 0.6; }
+  @media (max-width: $breakpoint-md) { #{$property}: $base-value * 0.5; }
+  @media (max-width: $breakpoint-sm) { #{$property}: $base-value * 0.45; }
+  @media (max-width: $breakpoint-xs) { #{$property}: $base-value * 0.35; }
+  @media (max-width: $breakpoint-xxs) { #{$property}: $base-value * 0.25; }
+}
+
+@mixin responsive-width($base-width, $increase: false) {
+  width: $base-width;
+
+  @if $increase {
+    // For widths that increase as screen size decreases
+    @media (max-width: $breakpoint-xxxl) { width: $base-width + 5%; }
+    @media (max-width: $breakpoint-xxl) { width: $base-width + 10%; }
+    @media (max-width: $breakpoint-xl) { width: $base-width + 15%; }
+    @media (max-width: $breakpoint-lg) { width: $base-width + 20%; }
+    @media (max-width: $breakpoint-md) { width: $base-width + 25%; }
+    @media (max-width: $breakpoint-sm) { width: $base-width + 30%; }
+    @media (max-width: $breakpoint-xs) { width: 100%; }
+  } @else {
+    // For widths that decrease as screen size decreases
+    @media (max-width: $breakpoint-xxxl) { width: $base-width * 0.95; }
+    @media (max-width: $breakpoint-xxl) { width: $base-width * 0.9; }
+    @media (max-width: $breakpoint-xl) { width: $base-width * 0.85; }
+    @media (max-width: $breakpoint-lg) { width: $base-width * 0.8; }
+    @media (max-width: $breakpoint-md) { width: $base-width * 0.75; }
+    @media (max-width: $breakpoint-sm) { width: $base-width * 0.7; }
+    @media (max-width: $breakpoint-xs) { width: $base-width * 0.65; }
+  }
+}
+
+// Reusable divider class
+.divider {
+  @extend %full-width;
+  height: 6px;
+  @extend %reset-margin;
+  position: relative;
+  z-index: 10;
+  background-color: $color-white;
+
+  &.with-spacing {
+    @include responsive-spacing(margin-top, 50px);
+    @include responsive-spacing(margin-bottom, 50px);
+  }
+
+  &.bottom-space {
+    @include responsive-spacing(margin-bottom, 135px);
+  }
+}
+
 // Host element
 :host {
   position: relative; // Contains the absolutely positioned markers
@@ -27,6 +97,12 @@
     @extend %full-width;
     height: 90vh;
     pointer-events: none;
+
+    // Responsive height adjustments
+    @media (max-width: $breakpoint-md) { height: 80vh; }
+    @media (max-width: $breakpoint-sm) { height: 70vh; }
+    @media (max-width: $breakpoint-xs) { height: 60vh; }
+    @media (max-width: $breakpoint-xxs) { height: 50vh; }
   }
 
   // Gradient only in first viewport
@@ -41,38 +117,13 @@
     opacity: 0.25;
   }
 
-  // Responsive adjustments
-  @media (max-width: $breakpoint-md) {
-    &::before, &::after {
-      height: 80vh;
-    }
-  }
-
-  @media (max-width: $breakpoint-sm) {
-    &::before, &::after {
-      height: 70vh;
-    }
-  }
-
-  @media (max-width: $breakpoint-xs) {
-    &::before, &::after {
-      height: 60vh;
-    }
-  }
-
-  @media (max-width: $breakpoint-xxs) {
-    &::before, &::after {
-      height: 50vh;
-    }
-  }
-
   h1 {
-    margin-bottom: 20px;
+    @include responsive-spacing(margin-bottom, 20px);
     @extend %white-text;
-    @include font(60px, 700);
+    @include responsive-font(60px, 700);
 
     p {
-      @include font(20px, 400, 35px);
+      @include responsive-font(20px, 400, 35px);
       @extend %center-text;
     }
   }
@@ -83,7 +134,7 @@
 .stat-center {
   @extend %section-container;
   width: 100%;
-  max-width: 1200px; // Increased max-width to accommodate the squares better
+  max-width: 1200px;
   height: 90vh;
   padding: 0 20px;
   @include flex(column, center, center);
@@ -91,145 +142,144 @@
   @extend %white-text;
   @extend %center-text;
 
-  // Responsive adjustments
-  @media (max-width: $breakpoint-xxxl) {
-    max-width: 1100px;
-  }
-
-  @media (max-width: $breakpoint-xxl) {
-    max-width: 1000px;
-  }
-
+  // Responsive max-width adjustments
+  @media (max-width: $breakpoint-xxxl) { max-width: 1100px; }
+  @media (max-width: $breakpoint-xxl) { max-width: 1000px; }
   @media (max-width: $breakpoint-xl) {
     max-width: 900px;
     padding: 0 40px;
-
-    h1 {
-      @include font(50px, 700);
-    }
-
-    p {
-      @include font(18px, 400, 30px);
-    }
   }
-
   @media (max-width: $breakpoint-lg) {
     max-width: 800px;
     padding: 0 30px;
   }
-
   @media (max-width: $breakpoint-md) {
     height: 80vh;
     max-width: 700px;
     padding: 0 25px;
-
-    h1 {
-      @include font(42px, 700);
-    }
-
-    p {
-      @include font(16px, 400, 28px);
-    }
   }
-
   @media (max-width: $breakpoint-sm) {
     height: 70vh;
     max-width: 540px;
     padding: 0 20px;
-
-    h1 {
-      @include font(36px, 700);
-    }
-
-    p {
-      @include font(15px, 400, 26px);
-    }
   }
-
   @media (max-width: $breakpoint-xs) {
     height: auto; // Change to auto height for very small screens
     min-height: 60vh; // Ensure minimum height
     padding: 100px 15px 50px;
-
-    h1 {
-      margin-bottom: 15px;
-      @include font(30px, 700);
-    }
-
-    p {
-      @include font(14px, 400, 24px);
-    }
   }
-
   @media (max-width: $breakpoint-xxs) {
     min-height: 50vh;
     padding: 80px 10px 40px;
+  }
 
-    h1 {
+  h1 {
+    @include responsive-font(60px, 700);
+    @include responsive-spacing(margin-bottom, 20px);
+
+    @media (max-width: $breakpoint-xs) {
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: $breakpoint-xxs) {
       margin-bottom: 10px;
-      @include font(26px, 700);
     }
+  }
 
-    p {
-      @include font(13px, 400, 22px);
-    }
+  p {
+    @include responsive-font(20px, 400, 35px);
   }
 }
 
 
 // White divider line
 .white-divider {
-  @extend %full-width;
-  height: 6px;
-  @extend %reset-margin;
-  position: relative;
-  z-index: 10;
-  background-color: $color-white;
+  @extend .divider; // Use the reusable divider class
 }
 
 #white-divider-2 {
-  margin-bottom: 135px;
+  @extend .divider, .bottom-space;
 }
 
 #white-divider-3 {
-  margin-top: 50px;
-  margin-bottom: 50px;
+  @extend .divider, .with-spacing;
 }
 
 .partner-section {
-  width: 100%; // Changed from 70% to 100% for full width
+  width: 100%;
   @include flex(column, center, center);
-  margin-bottom: 150px;
+  @include responsive-spacing(margin-bottom, 150px);
+
+  // Add responsive padding for smaller screens
+  @media (max-width: $breakpoint-sm) { padding: 0 20px; }
+  @media (max-width: $breakpoint-xs) { padding: 0 15px; }
+  @media (max-width: $breakpoint-xxs) { padding: 0 10px; }
 
   h1 {
     color: $color-white;
-    @include font(60px, 700);
-    margin-bottom: 115px;
+    @include responsive-font(60px, 700);
+    @include responsive-spacing(margin-bottom, 115px);
   }
 }
 
 .partner-content {
-  width: 70%;
+  @include responsive-width(70%, true); // Use true for width that increases as screen size decreases
   @include flex(row, center, center);
-  gap: 184px; // Gap between top and bottom parts
+  @include responsive-spacing(gap, 184px);
+
+  // Special handling for medium screens and below
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column; // Change to column layout for smaller screens
+    align-items: center;
+    gap: 60px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    gap: 50px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    gap: 40px;
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    gap: 30px;
+  }
 }
 
 .partner-description {
-  width: 40%;
+  @include responsive-width(40%, true); // Width increases as screen size decreases
+
+  // Special handling for medium screens and below
+  @media (max-width: $breakpoint-md) {
+    width: 90%;
+    text-align: center;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 95%;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 100%;
+  }
 
   h2 {
     color: $color-white;
-    @include font(26px, 600);
-    margin-bottom: 26px;
+    @include responsive-font(26px, 600);
+    @include responsive-spacing(margin-bottom, 26px);
   }
 
   h3 {
     color: $color-white;
-    @include font(16px, 400);
-    line-height: 26px;
-    margin-bottom: 36px;
+    @include responsive-font(16px, 400);
+    @include responsive-spacing(line-height, 26px);
+    @include responsive-spacing(margin-bottom, 36px);
     text-align: justify;
 
+    @media (max-width: $breakpoint-md) {
+      text-align: center;
+    }
   }
 }
 
@@ -244,6 +294,58 @@
   i {
     margin-left: 0.3rem;
     font-weight: 600;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    @include font(15px, 700);
+    padding: 10px 17px;
+
+    i {
+      margin-left: 0.25rem;
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    @include font(14px, 700);
+    padding: 9px 15px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    @include font(13px, 700);
+    padding: 8px 14px;
+    display: block;
+    margin: 0 auto;
+    width: fit-content;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    @include font(12px, 700);
+    padding: 7px 12px;
+
+    i {
+      margin-left: 0.2rem;
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    @include font(11px, 700);
+    padding: 6px 10px;
+
+    i svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    @include font(10px, 700);
+    padding: 5px 8px;
+
+    i svg {
+      width: 12px;
+      height: 12px;
+    }
   }
 }
 
@@ -261,6 +363,48 @@
     max-width: 100%;
     height: auto;
   }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xxxl) {
+    width: 48%;
+  }
+
+  @media (max-width: $breakpoint-xxl) {
+    width: 46%;
+  }
+
+  @media (max-width: $breakpoint-xl) {
+    width: 44%;
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    width: 42%;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 80%;
+    margin-bottom: 20px;
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 85%;
+    margin-bottom: 15px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 90%;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    width: 95%;
+    margin-bottom: 5px;
+  }
 }
 
 .feature-tag {
@@ -275,6 +419,73 @@
     @include font(16px, 600);
     color: $secondary;
     margin: 0;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    width: 140px;
+    padding: 5px 10px;
+    margin-bottom: 15px;
+    border-radius: 16px;
+
+    p {
+      @include font(15px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    width: 130px;
+    padding: 5px 9px;
+    margin-bottom: 14px;
+    border-radius: 15px;
+
+    p {
+      @include font(14px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 120px;
+    padding: 4px 8px;
+    margin-bottom: 12px;
+    border-radius: 14px;
+
+    p {
+      @include font(13px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 110px;
+    padding: 4px 7px;
+    margin-bottom: 10px;
+    border-radius: 13px;
+
+    p {
+      @include font(12px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 100px;
+    padding: 3px 6px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+
+    p {
+      @include font(11px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    width: 90px;
+    padding: 3px 5px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+
+    p {
+      @include font(10px, 600);
+    }
   }
 }
 
@@ -504,6 +715,65 @@
     @include font(16px, 400, 26px);
     color: $color-white;
   }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    width: 80%;
+    margin-top: 120px;
+
+    h1 {
+      @include font(50px, 700);
+    }
+
+    p {
+      @include font(15px, 400, 24px);
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    width: 85%;
+    margin-top: 100px;
+
+    h1 {
+      @include font(45px, 700);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 90%;
+    margin-top: 80px;
+
+    h1 {
+      @include font(40px, 700);
+    }
+
+    p {
+      @include font(14px, 400, 22px);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 95%;
+    margin-top: 60px;
+
+    h1 {
+      @include font(35px, 700);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 100%;
+    padding: 0 15px;
+    margin-top: 40px;
+
+    h1 {
+      @include font(30px, 700);
+    }
+
+    p {
+      @include font(13px, 400, 20px);
+    }
+  }
 }
 
 .dataset-content {
@@ -511,6 +781,37 @@
   @include flex(row, space-between, start);
   margin-top: 50px;
   margin-bottom: 160px;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    margin-top: 40px;
+    margin-bottom: 140px;
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    margin-top: 35px;
+    margin-bottom: 120px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    margin-top: 30px;
+    margin-bottom: 100px;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    margin-top: 25px;
+    margin-bottom: 80px;
+    gap: 40px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    margin-top: 20px;
+    margin-bottom: 60px;
+    gap: 30px;
+  }
 }
 
 // Progress section
@@ -522,6 +823,33 @@
   height: 300px;
   background-color: transparent;
   border-radius: 0;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    gap: 25px;
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    gap: 20px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 90%;
+    gap: 15px;
+    height: 250px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 95%;
+    gap: 12px;
+    height: 220px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 100%;
+    gap: 10px;
+    height: 200px;
+  }
 }
 
 // Vertical progress bar container
@@ -533,6 +861,22 @@
   z-index: 10;
   background-color: rgba(217, 217, 217, 0.15);
   position: relative;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    height: 250px;
+    width: 12px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    height: 220px;
+    width: 10px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    height: 200px;
+    width: 8px;
+  }
 }
 
 // Vertical progress bar
@@ -557,7 +901,6 @@
     @include font(30px, 600);
     cursor: pointer;
     @include transition(all, 0.3s, ease);
-    margin-bottom: 75px;
 
     &:hover {
       color: $secondary;
@@ -566,6 +909,40 @@
 
     &.active {
       color: $secondary;
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    p {
+      @include font(28px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    p {
+      @include font(26px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    height: 250px;
+    p {
+      @include font(24px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    height: 220px;
+    p {
+      @include font(22px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    height: 200px;
+    p {
+      @include font(20px, 600);
     }
   }
 }
@@ -585,8 +962,75 @@
   h3 {
     color: $color-white;
     @include font(16px, 400);
-    margin-bottom: 48px;
     line-height: 26px;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    h2 {
+      @include font(24px, 600);
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      @include font(15px, 400);
+      line-height: 24px;
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    h2 {
+      @include font(22px, 600);
+    }
+
+    h3 {
+      line-height: 22px;
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 90%;
+    height: auto; // Change to auto height for better responsiveness
+    min-height: 400px; // Ensure minimum height
+
+    h2 {
+      @include font(20px, 600);
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      @include font(14px, 400);
+      line-height: 20px;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 95%;
+    min-height: 350px;
+
+    h2 {
+      @include font(18px, 600);
+    }
+
+    h3 {
+      @include font(13px, 400);
+      line-height: 18px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 100%;
+    min-height: 300px;
+
+    h2 {
+      @include font(16px, 600);
+      margin-bottom: 6px;
+    }
+
+    h3 {
+      @include font(12px, 400);
+      line-height: 16px;
+    }
   }
 }
 
@@ -623,12 +1067,59 @@
     color: $secondary;
     margin: 0;
   }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    width: 95px;
+    padding: 5px 10px;
+
+    p {
+      @include font(15px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    width: 90px;
+
+    p {
+      @include font(14px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 85px;
+    padding: 4px 9px;
+    margin-bottom: 15px;
+
+    p {
+      @include font(13px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 80px;
+    padding: 4px 8px;
+    margin-bottom: 12px;
+
+    p {
+      @include font(12px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 75px;
+    padding: 3px 7px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+
+    p {
+      @include font(11px, 600);
+    }
+  }
 }
 
 
-.journals-graph,
-.papers-graph,
-.scores-graph {
+.journals-graph {
   width: 100%;
   height: 400px; // Consistent height for all graph containers
   background-color: transparent;
@@ -657,13 +1148,194 @@
     fill: none;
   }
 
-  .pie-slice {
-    // Hover effect removed as per requirements
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    height: 350px;
+
+    text {
+      font-size: 16px;
+    }
   }
 
-  // Label styles removed as per requirements
-  // Slice name styles removed as per requirements
+  @media (max-width: $breakpoint-lg) {
+    height: 320px;
 
+    text {
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    height: 300px;
+
+    text {
+      font-size: 14px;
+    }
+
+    polyline {
+      stroke-width: 1.5;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    height: 280px;
+
+    text {
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    height: 250px;
+
+    text {
+      font-size: 12px;
+    }
+
+    polyline {
+      stroke-width: 1;
+    }
+  }
+}
+
+.papers-graph {
+  width: 100%;
+  height: 400px; // Consistent height for all graph containers
+  background-color: transparent;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  // Style for label text
+  text {
+    fill: white;
+    font-size: 18px;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  }
+
+  // Style for bars
+  rect.bar {
+    transition: fill 0.3s ease;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    height: 350px;
+
+    text {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    height: 320px;
+
+    text {
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    height: 300px;
+
+    text {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    height: 280px;
+
+    text {
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    height: 250px;
+
+    text {
+      font-size: 12px;
+    }
+  }
+}
+
+.scores-graph {
+  width: 100%;
+  height: 400px; // Consistent height for all graph containers
+  background-color: transparent;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  // Style for label text
+  text {
+    fill: white;
+    font-size: 18px;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  }
+
+  // Style for bars
+  rect.bar {
+    transition: fill 0.3s ease;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    height: 350px;
+
+    text {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    height: 320px;
+
+    text {
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    height: 300px;
+
+    text {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    height: 280px;
+
+    text {
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    height: 250px;
+
+    text {
+      font-size: 12px;
+    }
+  }
 }
 
 .score-distribution {
@@ -674,6 +1346,75 @@
     color: $color-white;
     @include font(60px, 700);
     margin-bottom: 78px;
+  }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xxxl) {
+    width: 75%;
+  }
+
+  @media (max-width: $breakpoint-xxl) {
+    width: 80%;
+
+    h1 {
+      @include font(55px, 700);
+      margin-bottom: 70px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xl) {
+    width: 85%;
+
+    h1 {
+      @include font(50px, 700);
+      margin-bottom: 60px;
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    width: 90%;
+
+    h1 {
+      @include font(45px, 700);
+      margin-bottom: 50px;
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 95%;
+
+    h1 {
+      @include font(40px, 700);
+      margin-bottom: 40px;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 100%;
+    padding: 0 20px;
+
+    h1 {
+      @include font(35px, 700);
+      margin-bottom: 35px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    padding: 0 15px;
+
+    h1 {
+      @include font(30px, 700);
+      margin-bottom: 30px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    padding: 0 10px;
+
+    h1 {
+      @include font(26px, 700);
+      margin-bottom: 25px;
+    }
   }
 }
 
@@ -697,6 +1438,25 @@
     pointer-events: auto; // Re-enable interaction for active content
     position: relative; // Reset position for active block
   }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    gap: 25px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    gap: 20px;
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    gap: 15px;
+  }
 }
 
 .score-dynamic {
@@ -704,6 +1464,37 @@
   position: relative;
   min-height: 400px; // Ensure container has height even when content is absolute
   margin-bottom: 150px;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    min-height: 380px;
+    margin-bottom: 130px;
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    min-height: 360px;
+    margin-bottom: 110px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    min-height: 650px; // Increased for stacked layout
+    margin-bottom: 90px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    min-height: 600px;
+    margin-bottom: 70px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    min-height: 550px;
+    margin-bottom: 50px;
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    min-height: 500px;
+    margin-bottom: 40px;
+  }
 }
 
 .score-distribution-boxes {
@@ -711,12 +1502,66 @@
   @include flex(row, center, center);
   gap: 30px;
   margin-bottom: 150px;
+  flex-wrap: nowrap; // Keep boxes in a single row by default
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    gap: 25px;
+    margin-bottom: 130px;
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    gap: 20px;
+    margin-bottom: 110px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    gap: 15px;
+    margin-bottom: 90px;
+  }
+
+  // At this breakpoint, switch to 2x2 grid layout
+  @media (max-width: $breakpoint-sm) {
+    flex-wrap: wrap; // Allow wrapping for 2x2 grid
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 70px;
+
+    // Make each box take up close to 50% of the container width to ensure 2 per row
+    .box {
+      width: calc(50% - 12px);
+      min-width: auto;
+      max-width: none;
+      flex-basis: calc(50% - 12px); // Add flex-basis for better control
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    gap: 10px;
+    margin-bottom: 50px;
+
+    .box {
+      width: calc(50% - 10px);
+      flex-basis: calc(50% - 10px);
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    gap: 8px;
+    margin-bottom: 40px;
+
+    .box {
+      width: calc(50% - 8px);
+      flex-basis: calc(50% - 8px);
+    }
+  }
 }
+
 
 .box {
   width: 268px;
   height: 181px;
-  flex-shrink: 0;
+  flex-shrink: 1; // Allow boxes to shrink when needed
   border-radius: 7px;
   background: #022940;
   @include flex(column, start, start);
@@ -764,10 +1609,147 @@
   &:hover:not(.active) {
     border-color: rgba(246, 103, 41, 0.5); // Slightly brighter on hover for inactive boxes
   }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    width: 240px;
+    height: 170px;
+    gap: 18px;
+    padding: 10px 0 0 14px;
+
+    h2 {
+      @include font(24px, 600);
+    }
+
+    .box-icon {
+      width: 75px;
+      height: 75px;
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    width: 220px;
+    height: 160px;
+    gap: 16px;
+    padding: 10px 0 0 12px;
+
+    h2 {
+      @include font(22px, 600);
+    }
+
+    .box-icon {
+      width: 70px;
+      height: 70px;
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 190px;
+    height: 150px;
+    gap: 14px;
+    padding: 8px 0 0 10px;
+
+    h2 {
+      @include font(20px, 600);
+    }
+
+    .box-icon {
+      width: 65px;
+      height: 65px;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    // Width is now controlled by the parent container for 2x2 grid
+    // height adjusted proportionally
+    height: 140px;
+    gap: 12px;
+    padding: 8px 0 0 10px;
+
+    h2 {
+      @include font(18px, 600);
+    }
+
+    .box-icon {
+      width: 60px;
+      height: 60px;
+    }
+
+    &.active {
+      border-width: 3px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    // Width is now controlled by the parent container for 2x2 grid
+    height: 120px;
+    gap: 10px;
+    padding: 6px 0 0 8px;
+
+    h2 {
+      @include font(16px, 600);
+    }
+
+    .box-icon {
+      width: 50px;
+      height: 50px;
+    }
+
+    &.active {
+      border-width: 2px;
+      box-shadow: 0 2px 20px 10px rgba(0, 0, 0, 0.25);
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    // Width is now controlled by the parent container for 2x2 grid
+    height: 100px;
+    gap: 8px;
+    padding: 5px 0 0 6px;
+
+    h2 {
+      @include font(14px, 600);
+    }
+
+    .box-icon {
+      width: 40px;
+      height: 40px;
+    }
+
+    &.active {
+      border-width: 2px;
+      box-shadow: 0 2px 15px 8px rgba(0, 0, 0, 0.25);
+    }
+  }
 }
 
 .score{
   width: 150px;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    width: 140px;
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    width: 130px;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 120px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 110px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 100px;
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    width: 90px;
+  }
 }
 
 .score-content{
@@ -783,7 +1765,86 @@
     @include font(16px, 400);
     line-height: 26px;
   }
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-xl) {
+    h2 {
+      @include font(24px, 600);
+      margin-bottom: 17px;
+    }
+    h3 {
+      @include font(15px, 400);
+      line-height: 24px;
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    h2 {
+      @include font(22px, 600);
+      margin-bottom: 15px;
+    }
+    h3 {
+      @include font(14px, 400);
+      line-height: 22px;
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    width: 90%;
+    text-align: center;
+
+    h2 {
+      @include font(20px, 600);
+      margin-bottom: 12px;
+    }
+    h3 {
+      @include font(13px, 400);
+      line-height: 20px;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 95%;
+
+    h2 {
+      @include font(18px, 600);
+      margin-bottom: 10px;
+    }
+    h3 {
+      @include font(12px, 400);
+      line-height: 18px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 100%;
+
+    h2 {
+      @include font(16px, 600);
+      margin-bottom: 8px;
+    }
+    h3 {
+      @include font(11px, 400);
+      line-height: 16px;
+    }
+  }
 }
 .score-graph{
   width: 50%;
+
+  // Responsive adjustments
+  @media (max-width: $breakpoint-md) {
+    width: 90%;
+    height: 300px;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    width: 95%;
+    height: 280px;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    width: 100%;
+    height: 250px;
+  }
 }

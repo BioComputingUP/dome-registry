@@ -24,13 +24,10 @@ import { AboutPageComponent } from './about-page/about-page.component';
 import { PageDashboardComponent } from './page-dashboard/page-dashboard.component';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { DSWCardComponent } from './dsw-card/dsw-card.component';
-import { NewStateComponent } from './new-state/new-state.component';
 import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
 import { NgxMatomoRouterModule } from '@ngx-matomo/router'
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {ToastrModule} from "ngx-toastr";
-import { SubmitComponent } from './submit/submit.component';
-import { BigFooterComponent } from './big-footer/big-footer.component';
 import { SmallFooterComponent } from './small-footer/small-footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { IntegrationsStandardsComponent } from './integrations-standards/integrations-standards.component';
@@ -40,6 +37,8 @@ import { GovernanceComponent } from './governance/governance.component';
 import { ScoreComponent } from './score/score.component';
 import { ReviewService } from './review.service';
 import { StatService } from './stat.service';
+import { NewStateModule } from './new-state/new-state.module';
+import { SharedModule } from './shared/shared.module';
 
 // Set Plotly.js from CDN
 PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
@@ -61,9 +60,6 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
         AboutPageComponent,
         PageDashboardComponent,
         DSWCardComponent,
-        NewStateComponent,
-        SubmitComponent,
-        BigFooterComponent,
         SmallFooterComponent,
         NavbarComponent,
         IntegrationsStandardsComponent,
@@ -98,6 +94,8 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
             closeButton: true,
             progressBar: true
         }),
+        NewStateModule,
+        SharedModule
     ],
     providers: [
         // Add authentication interceptor (set cookie)
@@ -107,8 +105,6 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
-    SubmitComponent,
-    BigFooterComponent,
     SmallFooterComponent
   ],
     bootstrap: [AppComponent,]
