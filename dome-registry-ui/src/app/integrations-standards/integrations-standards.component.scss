@@ -44,6 +44,17 @@
   }
 }
 
+.integrations-topic {
+  @extend %full-width;
+  @extend %center-text;
+  @extend %white-text;
+  margin-top: 137px;
+
+  h1 {
+    @include font(60px, 700, 35px);
+  }
+}
+
 // White divider line
 .white-divider {
   @extend %full-width;
@@ -80,7 +91,7 @@
 }
 
 // Add more gap for the last implementation container before the orange divider
-.last-container{
+.last-container {
   margin-bottom: 80px;
 }
 
@@ -246,8 +257,14 @@
 @media (max-width: $breakpoint-xl) {
   .integrations-center {
     padding: 0 40px;
-    h1 { @include font(50px, 700); }
-    p { @include font(18px, 400, 30px); }
+
+    h1 {
+      @include font(50px, 700);
+    }
+
+    p {
+      @include font(18px, 400, 30px);
+    }
   }
 
   .integrations-section, .standards-section, .future-integrations {
@@ -296,11 +313,21 @@
     gap: 50px;
   }
 
-  .head p, .head-future p { @include font(26px, 600); }
-  .standard-text { @include font(16px, 400, 28px); }
-  .future-text { @include font(20px, 700, 34px); }
-  .head-future-text { @include font(22px, 700, 34px); }
-  .future-item-text { @include font(16px, 400, 1.6rem); }
+  .head p, .head-future p {
+    @include font(26px, 600);
+  }
+  .standard-text {
+    @include font(16px, 400, 28px);
+  }
+  .future-text {
+    @include font(20px, 700, 34px);
+  }
+  .head-future-text {
+    @include font(22px, 700, 34px);
+  }
+  .future-item-text {
+    @include font(16px, 400, 1.6rem);
+  }
 }
 
 // Medium screens
@@ -313,8 +340,22 @@
 
   .integrations-center {
     height: 80vh;
-    h1 { @include font(42px, 700); }
-    p { @include font(16px, 400, 28px); }
+
+    h1 {
+      @include font(42px, 700);
+    }
+
+    p {
+      @include font(16px, 400, 28px);
+    }
+  }
+
+  .integrations-topic {
+    margin-top: 80px;
+
+    h1 {
+      @include font(42px, 700, 30px);
+    }
   }
 
   .integrations-section-title {
@@ -372,11 +413,21 @@
     width: 100%;
   }
 
-  .head p, .head-future p { @include font(22px, 600); }
-  .standard-text { @include font(15px, 400, 26px); }
-  .future-text { @include font(18px, 700, 30px); }
-  .head-future-text { @include font(20px, 700, 30px); }
-  .future-item-text { @include font(15px, 400, 1.5rem); }
+  .head p, .head-future p {
+    @include font(22px, 600);
+  }
+  .standard-text {
+    @include font(15px, 400, 26px);
+  }
+  .future-text {
+    @include font(18px, 700, 30px);
+  }
+  .head-future-text {
+    @include font(20px, 700, 30px);
+  }
+  .future-item-text {
+    @include font(15px, 400, 1.5rem);
+  }
 }
 
 // Small screens
@@ -389,8 +440,22 @@
 
   .integrations-center {
     height: 70vh;
-    h1 { @include font(36px, 700); }
-    p { @include font(15px, 400, 26px); }
+
+    h1 {
+      @include font(36px, 700);
+    }
+
+    p {
+      @include font(15px, 400, 26px);
+    }
+  }
+
+  .integrations-topic {
+    margin-top: 60px;
+
+    h1 {
+      @include font(36px, 700, 28px);
+    }
   }
 
   .integrations-section-title {
@@ -430,11 +495,21 @@
     }
   }
 
-  .head p, .head-future p { @include font(20px, 600); }
-  .standard-text { @include font(14px, 400, 24px); }
-  .future-text { @include font(16px, 700, 28px); }
-  .head-future-text { @include font(18px, 700, 28px); }
-  .future-item-text { @include font(14px, 400, 1.4rem); }
+  .head p, .head-future p {
+    @include font(20px, 600);
+  }
+  .standard-text {
+    @include font(14px, 400, 24px);
+  }
+  .future-text {
+    @include font(16px, 700, 28px);
+  }
+  .head-future-text {
+    @include font(18px, 700, 28px);
+  }
+  .future-item-text {
+    @include font(14px, 400, 1.4rem);
+  }
 }
 
 // Mobile screens
@@ -453,7 +528,18 @@
       margin-bottom: 30px;
       @include font(30px, 700);
     }
-    p { @include font(14px, 400, 24px); }
+
+    p {
+      @include font(14px, 400, 24px);
+    }
+  }
+
+  .integrations-topic {
+    margin-top: 40px;
+
+    h1 {
+      @include font(30px, 700, 24px);
+    }
   }
 
   .integrations-section-title {
@@ -493,11 +579,21 @@
     }
   }
 
-  .head p, .head-future p { @include font(18px, 600); }
-  .standard-text { @include font(13px, 400, 22px); }
-  .future-text { @include font(15px, 700, 26px); }
-  .head-future-text { @include font(16px, 700, 26px); }
-  .future-item-text { @include font(13px, 400, 1.3rem); }
+  .head p, .head-future p {
+    @include font(18px, 600);
+  }
+  .standard-text {
+    @include font(13px, 400, 22px);
+  }
+  .future-text {
+    @include font(15px, 700, 26px);
+  }
+  .head-future-text {
+    @include font(16px, 700, 26px);
+  }
+  .future-item-text {
+    @include font(13px, 400, 1.3rem);
+  }
 }
 
 // Very small screens
@@ -516,7 +612,18 @@
       margin-bottom: 25px;
       @include font(26px, 700);
     }
-    p { @include font(13px, 400, 22px); }
+
+    p {
+      @include font(13px, 400, 22px);
+    }
+  }
+
+  .integrations-topic {
+    margin-top: 30px;
+
+    h1 {
+      @include font(26px, 700, 22px);
+    }
   }
 
   .integrations-section-title {
@@ -529,7 +636,7 @@
     padding: 0 10px;
   }
 
-  .last-container{
+  .last-container {
     margin-bottom: 45px;
   }
 
@@ -561,9 +668,19 @@
     }
   }
 
-  .head p, .head-future p { @include font(16px, 600); }
-  .standard-text { @include font(12px, 400, 20px); }
-  .future-text { @include font(14px, 700, 24px); }
-  .head-future-text { @include font(15px, 700, 24px); }
-  .future-item-text { @include font(12px, 400, 1.2rem); }
+  .head p, .head-future p {
+    @include font(16px, 600);
+  }
+  .standard-text {
+    @include font(12px, 400, 20px);
+  }
+  .future-text {
+    @include font(14px, 700, 24px);
+  }
+  .head-future-text {
+    @include font(15px, 700, 24px);
+  }
+  .future-item-text {
+    @include font(12px, 400, 1.2rem);
+  }
 }
