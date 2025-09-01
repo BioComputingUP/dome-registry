@@ -130,9 +130,9 @@
             <span>
             {{ review.authors.length > 80 ? review.authors.substring(0, 80) + '...' : review.authors }}
           </span>
-            <div class="score">
-              <app-score [dataScore]="review.score"></app-score>
-            </div>
+          </div>
+          <div class="score">
+            <app-score [dataScore]="review.score"></app-score>
           </div>
         </div>
       </div>

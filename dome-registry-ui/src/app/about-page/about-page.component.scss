@@ -618,6 +618,10 @@
   @include flex(column, center, center, 43px);
 
   // Responsive adjustments
+  @media (max-width: $breakpoint-lg) {
+    margin: 80px 0 130px;
+    gap: 35px;
+  }
   @media (max-width: $breakpoint-md) {
     margin: 60px 0 100px;
     gap: 30px;
@@ -660,6 +664,13 @@
 
     p {
       @include font(30px, 600);
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    p {
+      width: 60%;
+      @include font(28px, 600);
     }
   }
 
@@ -716,6 +727,19 @@
   }
 
   // Responsive adjustments
+  @media (max-width: $breakpoint-lg) {
+    width: 40%;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+
+    button,
+    a {
+      height: 45px;
+      @include font(15px, 700);
+    }
+  }
+
   @media (max-width: $breakpoint-md) {
     flex-direction: column;
     align-items: flex-end;
@@ -734,6 +758,11 @@
   padding: 11px 26px;
 
   // Responsive adjustments
+  @media (max-width: $breakpoint-lg) {
+    width: 100%;
+    padding: 10px 20px;
+  }
+
   @media (max-width: $breakpoint-sm) {
     width: 100%;
     padding: 10px 15px;
@@ -749,6 +778,11 @@
   padding: 11px 10px;
 
   // Responsive adjustments
+  @media (max-width: $breakpoint-lg) {
+    width: 100%;
+    padding: 10px 8px;
+  }
+
   @media (max-width: $breakpoint-sm) {
     width: 100%;
     padding: 10px 15px;
@@ -977,7 +1011,7 @@
 
   // Infrastructure link
   a {
-    width: 40%;
+    width: 50%;
     height: 51px;
     padding: 11px 15px;
     @include flex;
@@ -987,20 +1021,26 @@
     @include font(16px, 700);
 
     // Responsive adjustments
+    @media (max-width: $breakpoint-lg) {
+      width: 65%;
+      padding: 10px 15px;
+      @include font(15px, 700);
+    }
+
     @media (max-width: $breakpoint-md) {
-      width: 30%;
+      width: 40%;
       padding: 10px 15px;
       @include font(14px, 700);
       margin-right: auto;
-      justify-content: flex-start;
+      justify-content: center;
     }
 
     @media (max-width: $breakpoint-xs) {
-      width: 40%;
+      width: 60%;
     }
 
     @media (max-width: $breakpoint-xxs) {
-      width: 50%;
+      width: 70%;
       padding: 8px 12px;
       @include font(13px, 700);
     }
@@ -1228,6 +1268,7 @@
   a {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     height: 51px;
     padding: 11px 26px;
     margin-top: 15px;
@@ -1235,43 +1276,84 @@
     flex-shrink: 0;
     @extend %button-base;
     @include font(16px, 700);
+    text-align: center;
+    transition: all 0.3s ease;
 
     // Responsive adjustments for specific button
     &.dome-ML {
-      // Responsive adjustments
-      @media (max-width: $breakpoint-sm) {
-        width: 30%;
-      }
-
-      @media (max-width: $breakpoint-xs) {
-        width: 60%;
-        padding: 8px 5px;
-        @include font(12px, 700);
-        text-align: center;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      @media (max-width: $breakpoint-xxs) {
-        width: 100%;
-        padding: 8px 2px;
-        margin: 0;
-        display: block;
-      }
+      // Base styles for dome-ML that apply to all sizes
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 
   // Responsive adjustments
+  @media (max-width: $breakpoint-xxxl) {
+    a {
+      width: 45%;
+      padding: 11px 22px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xxl) {
+    a {
+      width: 50%;
+      padding: 11px 20px;
+    }
+  }
+
+  @media (max-width: $breakpoint-xl) {
+    a {
+      width: 55%;
+      padding: 11px 18px;
+      @include font(15px, 700);
+    }
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    a {
+      width: 60%;
+      padding: 10px 16px;
+      height: 48px;
+      @include font(15px, 700);
+    }
+  }
+
   @media (max-width: $breakpoint-md) {
     width: 100%;
+    a {
+      width: 45%;
+      padding: 10px 15px;
+      height: 45px;
+      @include font(14px, 700);
+    }
   }
 
   @media (max-width: $breakpoint-sm) {
     a {
-      width: 60%;
-      padding: 10px 15px;
+      width: 50%;
+      padding: 9px 14px;
+      height: 42px;
       @include font(13px, 700);
+    }
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    a {
+      width: 65%;
+      padding: 8px 12px;
+      height: 40px;
+      @include font(13px, 700);
+    }
+  }
+
+  @media (max-width: $breakpoint-xxs) {
+    a {
+      width: 85%;
+      padding: 8px 10px;
+      height: 38px;
+      @include font(12px, 700);
     }
   }
 }

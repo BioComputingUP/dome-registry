@@ -121,7 +121,7 @@
                     <div id="doi-help" class="form-text">DOI of the published article</div>
                   </div>
                   <!-- Annotation tags -->
-                  <div class="mb-3">
+                  <div class="mb-3" *ngIf="review.publication.tags && review.publication.tags.length > 0">
                     <label for="tags" class="form-label">Tags</label>
 
                     <div class="tags-container">

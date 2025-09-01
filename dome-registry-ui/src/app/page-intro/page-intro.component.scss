@@ -129,7 +129,6 @@
 }
 
 
-
 .publications-card {
   width: 320px;
   min-width: 320px;
@@ -166,7 +165,7 @@
   min-height: calc(100% - 40px);
   height: auto;
   @include flex(column, flex-start, flex-start);
-  padding: 12px 20px 45px 20px;
+  padding: 12px 20px 0px 20px;
   gap: 3px;
   @extend %full-width;
   position: relative;
@@ -184,11 +183,12 @@
     margin: 0;
   }
 
-  .score {
-    position: absolute;
-    bottom: 16px;
-    margin-top: auto;
-  }
+}
+
+.score {
+  position: absolute;
+  bottom: 16px;
+  margin: 0 20px;
 }
 
 
@@ -368,6 +368,7 @@
     margin-right: 10px;
   }
 }
+
 @media (max-width: $breakpoint-xxxl) {
   .brain {
     max-width: 400px;
@@ -402,6 +403,7 @@
     }
   }
 }
+
 @media (max-width: $breakpoint-xxl) {
   .brain {
     max-width: 380px;

@@ -117,6 +117,59 @@
   // Team member styling
   .team-member {
     @include team-member-card;
+    @include flex(row);
+
+    &:hover {
+      .member-photo .photo-placeholder {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(246, 103, 41, 0.3);
+      }
+    }
+
+    .member-photo {
+      @include size(130px);
+      min-width: 130px;
+      margin-right: 25px;
+      position: relative;
+
+      &::after {
+        content: '';
+        @include position-absolute(-5px, -5px, -5px, -5px);
+        border-radius: 50%;
+        background: linear-gradient(145deg, rgba(246, 103, 41, 0.2), rgba(246, 103, 41, 0));
+        z-index: -1;
+        opacity: 0.7;
+      }
+
+      .photo-placeholder {
+        @include size(100%);
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+        border-radius: 50%;
+        @include flex;
+        @extend %white-text;
+        font-size: 14px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        @include transition;
+        position: relative;
+        overflow: hidden;
+
+        .member-photo-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+        }
+
+        &::before {
+          content: '';
+          @include position-absolute(-50%, auto, auto, -50%);
+          @include size(200%);
+          background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+          opacity: 0.5;
+        }
+      }
+    }
 
     // Member info
     .member-info {
@@ -150,6 +203,57 @@
     // Social links
     .social-links {
       @include social-links;
+    }
+  }
+
+  // Media query to match teams component styling for screens smaller than $breakpoint-md
+  @media (max-width: $breakpoint-md) {
+    .team-member {
+      &::before {
+        @include size(100%, 4px);
+        top: 0;
+        left: 0;
+      }
+
+      .member-photo {
+        margin: 0 auto 25px;
+      }
+
+      .member-info {
+        h3 {
+          display: block;
+          text-align: center;
+
+          &::after {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+          }
+        }
+      }
+    }
+  }
+
+  // Media query for small mobile screens
+  @media (max-width: $breakpoint-xs) {
+    .team-member {
+      .member-photo {
+        @include size(100px);
+        min-width: 100px;
+        margin-bottom: 20px;
+      }
+
+      .member-info {
+        h3 {
+          @include font(20px, 700, 1.2);
+          margin-bottom: 10px;
+        }
+
+        p {
+          @include font(14px, 400, 1.5);
+          margin-bottom: 8px;
+        }
+      }
     }
   }
 }
