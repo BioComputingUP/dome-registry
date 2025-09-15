@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { ExtraOptions, Route, RouterModule, Routes } from '@angular/router';
 import { PageSearchComponent } from "./page-search/page-search.component";
 import { PageEditComponent } from "./page-edit/page-edit.component";
+import { PageEditModernComponent } from "./page-edit-modern/page-edit-modern.component";
 import { PageIntroComponent } from "./page-intro/page-intro.component";
 //import { PageStatsComponent } from "./page-stats/page-stats.component";
 import { SwaggerAPiComponent } from "./swagger-api/swagger-api.component";
@@ -34,8 +35,12 @@ const routes: Routes = [
   { ...params, path: 'search', component: PageSearchComponent },
   // Define path to list of reviews
   { ...params, path: 'review', component: DSWCardComponent },
+  // Define path to list of reviews with modern UI
+  { ...params, path: 'review-modern', component: PageEditModernComponent },
   // Define path to edit page, with id
   { ...params, path: 'review/:shortid', component: PageEditComponent },
+  // Define path to modern edit page, with id
+  { ...params, path: 'review-modern/:shortid', component: PageEditModernComponent },
   //Define path to the dashboard
   { ...params, path: 'dashboard', component: PageDashboardComponent },
   // Dfine a path to DSW
@@ -52,7 +57,7 @@ const routes: Routes = [
   { ...params, path: 'governance', component: GovernanceComponent },
    // set ther new statistics page
 
-      
+
 
   //  // Set path to search page as default
   { ...params, path: '**', redirectTo: 'intro', pathMatch: 'full' },

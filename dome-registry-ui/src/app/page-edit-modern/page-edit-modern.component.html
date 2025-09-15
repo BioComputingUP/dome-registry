@@ -1,0 +1,650 @@
+<!-- Modern Page Edit Component -->
+<div class="page-edit-modern" *ngIf="review$ | async as review">
+  <!-- Floating particles for creative background -->
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+
+  <!-- User Authentication Check -->
+  <ng-container *ngIf="user.auth || review.shortid; else signInFirst">
+    <!-- Main Content Container -->
+    <div class="main-container" [root]="element" [target]="'.section-nav-item'" scroll-spy>
+      <!-- Main Content Area -->
+      <div class="content-area">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+          <!-- Header with DOME ID and Score -->
+          <header class="page-header">
+            <div class="dome-id">
+              <i class="bi bi-database-check"></i>
+              <div class="dome-id-content">
+                <span class="label">DOME-ID</span>
+                <span class="value">{{review.shortid || 'New Entry'}}</span>
+              </div>
+            </div>
+
+            <div class="score-summary">
+              <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
+                <ng-container *ngIf="kv.key === 'total'">
+                  <div class="total-score">
+                    <div class="score-circle" title="The DOME score is computed as the number of valid fields, divided by the total number of fields.">
+                      <span class="score-value">{{kv.value.percentage!.toFixed(0)}}%</span>
+                      <svg viewBox="0 0 36 36" class="circular-chart">
+                        <path class="circle-bg"
+                          d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <path class="circle"
+                          [attr.stroke-dasharray]="kv.value.percentage + ', 100'"
+                          d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                      </svg>
+                      <div class="score-tooltip">The DOME score is computed as the number of valid fields, divided by the total number of fields.</div>
+                    </div>
+                    <span class="score-label">Total Score</span>
+                    <div class="download-json">
+                      <button class="download-button" type="button" (click)="OnClickdownloadJSonfile($event)">
+                        <i class="bi bi-save"></i>
+                        <span>Download JSON</span>
+                      </button>
+                      <button class="cite-button" type="button" (click)="openCiteModal()">
+                        <i class="bi bi-quote"></i>
+                        <span>Cite</span>
+                      </button>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </header>
+
+          <!-- Detailed Score Card -->
+          <div class="score-card">
+            <h3>Section Scores</h3>
+            <div class="score-grid">
+              <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
+                <ng-container *ngIf="kv.key as name">
+                  <ng-container *ngIf="name != 'publication' && name != 'total'">
+                    <ng-container *ngIf="kv.value as score">
+                      <div class="score-item" [class.active]="activeSection === name" (click)="setActiveSection(name)">
+                        <div class="score-name">{{name}}</div>
+                        <div class="score-details">
+                          <span class="score-fraction">{{score.done}} / {{score.done + score.skip}}</span>
+                          <span class="score-percentage">{{score.percentage!.toFixed(0)}}%</span>
+                        </div>
+                        <div class="score-progress">
+                          <div class="progress-fill" [style.width.%]="score.percentage"></div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Content -->
+        <div class="form-content">
+          <!-- Navigation Bar with Progress Roadmap -->
+          <div class="navigation-bar">
+            <!-- Left Side - Progress Roadmap -->
+            <div class="progress-roadmap">
+              <div class="roadmap-step"
+                   [class.active]="activeSection === 'publication'"
+                   [class.completed]="activeSection !== 'publication'"
+                   (click)="setActiveSection('publication')">
+                <div class="step-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
+                <div class="step-label">Publication</div>
+              </div>
+              <div class="roadmap-connector" [class.active]="activeSection !== 'publication'"></div>
+
+              <div class="roadmap-step"
+                   [class.active]="activeSection === 'dataset'"
+                   [class.completed]="activeSection !== 'publication' && activeSection !== 'dataset'"
+                   [class.upcoming]="activeSection === 'publication'"
+                   (click)="setActiveSection('dataset')">
+                <div class="step-icon"><i class="bi bi-server"></i></div>
+                <div class="step-label">Dataset</div>
+              </div>
+              <div class="roadmap-connector" [class.active]="activeSection !== 'publication' && activeSection !== 'dataset'"></div>
+
+              <div class="roadmap-step"
+                   [class.active]="activeSection === 'optimization'"
+                   [class.completed]="activeSection === 'model' || activeSection === 'evaluation'"
+                   [class.upcoming]="activeSection === 'publication' || activeSection === 'dataset'"
+                   (click)="setActiveSection('optimization')">
+                <div class="step-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                <div class="step-label">Optimization</div>
+              </div>
+              <div class="roadmap-connector" [class.active]="activeSection === 'model' || activeSection === 'evaluation'"></div>
+
+              <div class="roadmap-step"
+                   [class.active]="activeSection === 'model'"
+                   [class.completed]="activeSection === 'evaluation'"
+                   [class.upcoming]="activeSection === 'publication' || activeSection === 'dataset' || activeSection === 'optimization'"
+                   (click)="setActiveSection('model')">
+                <div class="step-icon"><i class="bi bi-gear-wide-connected"></i></div>
+                <div class="step-label">Model</div>
+              </div>
+              <div class="roadmap-connector" [class.active]="activeSection === 'evaluation'"></div>
+
+              <div class="roadmap-step"
+                   [class.active]="activeSection === 'evaluation'"
+                   [class.upcoming]="activeSection !== 'evaluation'"
+                   (click)="setActiveSection('evaluation')">
+                <div class="step-icon"><i class="bi bi-clipboard2-check-fill"></i></div>
+                <div class="step-label">Evaluation</div>
+              </div>
+            </div>
+
+            <!-- Right Side - Navigation Buttons -->
+            <div class="navigation-buttons">
+              <button class="nav-button prev-button"
+                      [disabled]="activeSection === 'publication'"
+                      (click)="setActiveSection(
+                        activeSection === 'dataset' ? 'publication' :
+                        activeSection === 'optimization' ? 'dataset' :
+                        activeSection === 'model' ? 'optimization' :
+                        activeSection === 'evaluation' ? 'model' : 'publication'
+                      )">
+                <i class="bi bi-arrow-left"></i>
+                <span>Previous</span>
+              </button>
+
+              <button class="nav-button next-button"
+                      [disabled]="activeSection === 'evaluation'"
+                      (click)="setActiveSection(
+                        activeSection === 'publication' ? 'dataset' :
+                        activeSection === 'dataset' ? 'optimization' :
+                        activeSection === 'optimization' ? 'model' :
+                        activeSection === 'model' ? 'evaluation' : 'evaluation'
+                      )">
+                <span>Next</span>
+                <i class="bi bi-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <form [formGroup]="updates">
+
+            <!-- Publication Section -->
+            <section class="form-section" formGroupName="publication" [class.active]="activeSection === 'publication'">
+              <h2>Publication <i class="bi bi-file-earmark-text-fill"></i></h2>
+
+              <div class="form-field">
+                <label for="title">Title</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="title" formControlName="title" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('title')?.value">
+                  {{updates.get('publication')?.get('title')?.value || 'No title provided'}}
+                </div>
+                <div class="field-help">Title of the article</div>
+              </div>
+
+              <div class="form-field">
+                <label for="authors">Authors</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="authors" formControlName="authors" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('authors')?.value">
+                  {{updates.get('publication')?.get('authors')?.value || 'No authors provided'}}
+                </div>
+                <div class="field-help">Authors which contributes to the article</div>
+              </div>
+
+              <div class="form-field">
+                <label for="journal">Publication Journal</label>
+                <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="journal" formControlName="journal" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('journal')?.value">
+                  {{updates.get('publication')?.get('journal')?.value || 'No journal provided'}}
+                </div>
+                <div class="field-help">Name of the journal where the paper has been published</div>
+              </div>
+
+              <div class="form-field">
+                <label for="year">Publication Year</label>
+                <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="year" formControlName="year" [readonly]="!user.roles?.includes('admin') && review.public" [class.admin-input]="user.roles?.includes('admin')">
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('year')?.value">
+                  {{updates.get('publication')?.get('year')?.value || 'No year provided'}}
+                </div>
+                <div class="field-help">Year of publication, as a number</div>
+              </div>
+
+              <div class="form-field">
+                <label for="doi">DOI</label>
+                <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="doi" formControlName="doi" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('doi')?.value">
+                  {{updates.get('publication')?.get('doi')?.value || 'No DOI provided'}}
+                </div>
+                <div class="field-help">DOI of the published article</div>
+              </div>
+
+              <div class="form-field" *ngIf="review.publication.tags && review.publication.tags.length > 0">
+                <label>Tags</label>
+                <div class="tags-container">
+                  <span *ngFor="let tag of review.publication.tags" class="tag">{{ tag | uppercase }}</span>
+                </div>
+                <div class="field-help">Tags related to the published article</div>
+              </div>
+
+              <div class="form-field dates">
+                <div class="date-item"><strong>Created:</strong> {{review.created | date}}</div>
+                <div class="date-item"><strong>Last update:</strong> {{review.updated | date}}</div>
+              </div>
+            </section>
+
+            <!-- Dataset Section -->
+            <section class="form-section" formGroupName="dataset" [class.active]="activeSection === 'dataset'">
+              <h2>Dataset <i class="bi bi-server"></i></h2>
+
+              <div class="form-field">
+                <label for="data-source">Dataset Source</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-source" formControlName="provenance" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('dataset')?.get('provenance')?.value">
+                  {{updates.get('dataset')?.get('provenance')?.value || 'No dataset source provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Source of the dataset?</li>
+                    <li>Number of data points?</li>
+                    <li>Data used in previous paper and/or by community?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="data-splits">Dataset Splits</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-splits" formControlName="splits" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('dataset')?.get('splits')?.value">
+                  {{updates.get('dataset')?.get('splits')?.value || 'No dataset splits provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>How many data splits?</li>
+                    <li>How many data points in each split?</li>
+                    <li>If number of data splits is greater than two (2), what where other splits?</li>
+                    <li>What is the distribution of data points in each data split?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="data-redundancy">Dataset Redundancy</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-redundancy" formControlName="redundancy" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('dataset')?.get('redundancy')?.value">
+                  {{updates.get('dataset')?.get('redundancy')?.value || 'No dataset redundancy information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>How were the datasets split?</li>
+                    <li>Are the training and test sets independent?</li>
+                    <li>How was this enforced?</li>
+                    <li>How does the distribution compare to previously published ML datasets?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="data-availability">Dataset Availability</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-availability" formControlName="availability" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('dataset')?.get('availability')?.value">
+                  {{updates.get('dataset')?.get('availability')?.value || 'No dataset availability information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Are the data, including the data splits used, released in a public forum?</li>
+                    <li>If yes, where and how (license)?</li>
+                    <li>How was this enforced?</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <!-- Optimization Section -->
+            <section class="form-section" formGroupName="optimization" [class.active]="activeSection === 'optimization'">
+              <h2>Optimization <i class="bi bi-graph-up-arrow"></i></h2>
+
+              <div class="form-field">
+                <label for="optim-algorithm">Optimization Algorithm</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-algorithm" formControlName="algorithm" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('algorithm')?.value">
+                  {{updates.get('optimization')?.get('algorithm')?.value || 'No optimization algorithm provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>What is the machine-learning algorithm class used?</li>
+                    <li>Is the machine-learning algorithm new?</li>
+                    <li>If it is a new ML algorithm, why was it not published in a machine-learning journal?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="optim-meta-desc">Meta-predictor</label>
+                <div *ngIf="!review.public || user.roles?.includes('admin')" class="checkbox-field">
+                  <input type="checkbox" id="optim-is-meta" [class.admin-input]="user.roles?.includes('admin')">
+                  <label for="optim-is-meta">Is the algorithm a meta-predictor?</label>
+                </div>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-meta-desc" formControlName="meta" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('meta')?.value">
+                  {{updates.get('optimization')?.get('meta')?.value || 'No meta-predictor information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Does the model use data from other machine-learning algorithms as input?</li>
+                    <li>If it is a meta-predictor, which machine-learning methods constitute the whole?</li>
+                    <li>If it is a meta-predictor, is it completely clear that training data is independent?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="optim-encoding">Data Encoding</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-encoding" formControlName="encoding" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('encoding')?.value">
+                  {{updates.get('optimization')?.get('encoding')?.value || 'No data encoding information provided'}}
+                </div>
+                <div class="field-help">How was the data encoded and pre-processed for the machine-learning algorithm?</div>
+              </div>
+
+              <div class="form-field">
+                <label for="optim-params">Input Parameters</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-params" formControlName="parameters" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('parameters')?.value">
+                  {{updates.get('optimization')?.get('parameters')?.value || 'No input parameters information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>How many parameters (p) are used in the model?</li>
+                    <li>How was p selected?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="optim-features">Input Features</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-features" formControlName="features" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('features')?.value">
+                  {{updates.get('optimization')?.get('features')?.value || 'No input features information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>How many features (f) are used as input?</li>
+                    <li>Was feature selection performed?</li>
+                    <li>If feature selection performed, was it done using the training set only?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="optim-fitting">Fitting Method</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-fitting" formControlName="fitting" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('fitting')?.value">
+                  {{updates.get('optimization')?.get('fitting')?.value || 'No fitting method information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Is the number of parameters much larger than the number of training points?</li>
+                    <li>If yes to previous question, how was over-fitting ruled out?</li>
+                    <li>Conversely, how was under-fitting ruled out?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="optim-regular">Regularization Method</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-regular" formControlName="regularization" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('regularization')?.value">
+                  {{updates.get('optimization')?.get('regularization')?.value || 'No regularization method information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Were any over-fitting prevention techniques performed?</li>
+                    <li>If yes, which ones?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="optim-config">Configuration Available</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-config" formControlName="config" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('config')?.value">
+                  {{updates.get('optimization')?.get('config')?.value || 'No configuration availability information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Are the hyper-parameter configurations, optimization schedule, model files and optimization parameters reported available?</li>
+                    <li>If yes, where and how (license)?</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <!-- Model Section -->
+            <section class="form-section" formGroupName="model" [class.active]="activeSection === 'model'">
+              <h2>Model <i class="bi bi-gear-wide-connected"></i></h2>
+
+              <div class="form-field">
+                <label for="model-inter">Interpretability</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="model-inter" formControlName="interpretability" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('model')?.get('interpretability')?.value">
+                  {{updates.get('model')?.get('interpretability')?.value || 'No interpretability information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Is the model blackbox or transparent?</li>
+                    <li>If the model is transparent, can you give clear examples for this?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="model-out">Output</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="model-out" formControlName="output" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('model')?.get('output')?.value">
+                  {{updates.get('model')?.get('output')?.value || 'No output information provided'}}
+                </div>
+                <div class="field-help">Is the model classification or regression?</div>
+              </div>
+
+              <div class="form-field">
+                <label for="model-time">Execution Time</label>
+                <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="model-time" formControlName="duration" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('model')?.get('duration')?.value">
+                  {{updates.get('model')?.get('duration')?.value || 'No execution time information provided'}}
+                </div>
+                <div class="field-help">How much time did it take for the model to run</div>
+              </div>
+
+              <div class="form-field">
+                <label for="model-avail">Software Availability</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="model-avail" formControlName="availability" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('model')?.get('availability')?.value">
+                  {{updates.get('model')?.get('availability')?.value || 'No software availability information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Is the source code released?</li>
+                    <li>Is a method to run the algorithm such as executable, web server, virtual machine or container instance released?</li>
+                    <li>If yes to public release, where and how (license)?</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <!-- Evaluation Section -->
+            <section class="form-section" formGroupName="evaluation" [class.active]="activeSection === 'evaluation'">
+              <h2>Evaluation <i class="bi bi-clipboard2-check-fill"></i></h2>
+
+              <div class="form-field">
+                <label for="eval-method">Evaluation Method</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="eval-method" formControlName="method" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('evaluation')?.get('method')?.value">
+                  {{updates.get('evaluation')?.get('method')?.value || 'No evaluation method information provided'}}
+                </div>
+                <div class="field-help">How was the method evaluated? (E.g. cross-validation, independent dataset, novel experiments)</div>
+              </div>
+
+              <div class="form-field">
+                <label for="eval-perform">Performance Measures</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="eval-perform" formControlName="measure" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('evaluation')?.get('measure')?.value">
+                  {{updates.get('evaluation')?.get('measure')?.value || 'No performance measures information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Which performance metrics are reported?</li>
+                    <li>Is this set of metrics representative (e.g. compared to the literature)?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="eval-comparison">Methods Comparison</label>
+                <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="eval-comparison" formControlName="comparison" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('evaluation')?.get('comparison')?.value">
+                  {{updates.get('evaluation')?.get('comparison')?.value || 'No methods comparison information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Was a comparison to publicly available methods performed on benchmark datasets?</li>
+                    <li>Was a comparison to simpler baselines performed?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="eval-confidence">Evaluation Confidence</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="eval-confidence" formControlName="confidence" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('evaluation')?.get('confidence')?.value">
+                  {{updates.get('evaluation')?.get('confidence')?.value || 'No evaluation confidence information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Do the performance metrics have confidence intervals?</li>
+                    <li>Are the results statistically significant to claim that the method is superior to others and baselines?</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label for="eval-available">Evaluation Availability</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="eval-available" formControlName="availability" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('evaluation')?.get('availability')?.value">
+                  {{updates.get('evaluation')?.get('availability')?.value || 'No evaluation availability information provided'}}
+                </div>
+                <div class="field-help">
+                  <ul>
+                    <li>Are the raw evaluation files available?</li>
+                    <li>If public released, where and how (license)?</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+          </form>
+
+          <!-- Action Footer -->
+          <footer class="action-footer" *ngIf="(user.roles?.includes('user') && !review.public) || user.roles?.includes('admin')">
+            <div class="identifiers">
+              <div class="identifier-item">
+                <span class="label">Unique Identifier:</span>
+                <span class="value" [class.has-value]="!!review.uuid">{{ review.uuid || '-' }}</span>
+              </div>
+              <div class="identifier-item">
+                <span class="label">Short Unique Identifier:</span>
+                <span class="value" [class.has-value]="!!review.shortid">{{ review.shortid || '-' }}</span>
+              </div>
+            </div>
+
+            <div class="action-buttons" *ngIf="review.public == false">
+              <button class="delete-button" type="button" [disabled]="!review.uuid" (click)="onDeleteClick($event)">
+                <i class="bi bi-x-square"></i>
+                <span>Delete</span>
+              </button>
+
+              <button class="save-button" type="button" (click)="onSaveClick($event)">
+                <i class="bi bi-floppy-fill"></i>
+                <span>Save</span>
+              </button>
+
+              <button class="publish-button" *ngIf="user.roles?.includes('admin') && review.public == false"
+                      type="button" [disabled]="!review.uuid" (click)="onPublishClick($event)">
+                <i class="bi bi-check2-circle"></i>
+                <span>Publish</span>
+              </button>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Sign In Template -->
+  <ng-template #signInFirst>
+    <div class="sign-in-container">
+      <div class="sign-in-card">
+        <h2>Submit</h2>
+        <div class="card-content">
+          <p>
+            The DOME registry affords the opportunity for users to contribute annotations. These submitted
+            annotations will be subject to a rigorous manual review process,
+            culminating in eventual publication. Published annotations will be accessible to the public but
+            rendered immutable.
+            Conversely, unpublished annotations will remain subject to user-driven viewing, editing, and deletion.
+          </p>
+          <p>
+            It is essential to underscore that access to this functionality is restricted solely to authorized
+            users.
+            Hence, we kindly request that you authenticate through ORCID if you intend to engage with this service
+            in an academic capacity
+          </p>
+          <div class="sign-in-action">
+            <a class="sign-in-button" [href]="login">
+              <i class="bi bi-person-circle"></i>
+              <span>Sign in</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Citation Modal -->
+  <div class="cite-modal-overlay" *ngIf="isCiteModalOpen" (click)="onModalOverlayClick($event)">
+    <div class="cite-modal" role="dialog" aria-labelledby="cite-modal-title" aria-modal="true">
+      <div class="modal-header">
+        <h3 id="cite-modal-title">Citation Information</h3>
+        <button class="close-button" type="button" (click)="closeCiteModal()" aria-label="Close">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="modal-content">
+        <div class="citation-section">
+          <div class="section-header">
+            <h4>Direct Link</h4>
+            <button class="copy-button" type="button" (click)="copyToClipboard(directLinkInput)">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+          <div class="input-group">
+            <input #directLinkInput type="text" [value]="currentPageUrl" readonly class="citation-input" aria-label="Direct link URL">
+          </div>
+        </div>
+
+        <div class="citation-section">
+          <div class="section-header">
+            <h4>BibTeX</h4>
+            <button class="copy-button" type="button" (click)="copyToClipboard(bibtexTextarea)">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+          <div class="textarea-group">
+            <textarea #bibtexTextarea readonly class="citation-textarea" aria-label="BibTeX citation">{{bibTexCitation}}</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

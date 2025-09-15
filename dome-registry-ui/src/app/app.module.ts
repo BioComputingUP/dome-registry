@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PageSearchComponent } from './page-search/page-search.component';
 import { PageEditComponent } from './page-edit/page-edit.component';
+import { PageEditModernComponent } from './page-edit-modern/page-edit-modern.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { ReactiveFormsModule } from "@angular/forms";
@@ -50,6 +51,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
         AppComponent,
         PageSearchComponent,
         PageEditComponent,
+        PageEditModernComponent,
         PageIntroComponent,
         ScrollSpyDirective,
         CardSectionComponent,
