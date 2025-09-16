@@ -3,7 +3,11 @@
     <div class="row-stats">
       <h1>Statistics</h1>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        The central activity of the DOME Registry is the curation of machine
+learning methods in biology from relevant publications.
+Data collection, annotation and integration in The DOME Registry is
+the result the efforts of expert curators and authors.
+
       </p>
     </div>
     <div class="row-dome">
@@ -29,9 +33,7 @@
 
   <div class="dataset">
     <h1>Dataset</h1>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    </p>
+    
     <div class="dataset-content">
       <div class="progress">
         <div class="progress-bar-container">
@@ -39,8 +41,8 @@
         </div>
         <div class="progress-titles">
           <p>1. Top 10 Annotated Journals</p>
-          <p>2. Number of Annotated Papers</p>
-          <p>3. Distribution of Dome Score</p>
+          <p>2. Curated Papers Per Year</p>
+          <p>3. Distribution of DOME Score</p>
         </div>
       </div>
       <div class="dynamic">
@@ -50,26 +52,24 @@
             <p>Journals</p>
           </div>
           <h2>
-            Here is the most annotated journals so far
+           Top Annotated Journals in the DOME Registry
           </h2>
-          <h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </h3>
+     
           <!-- Pie chart for journals -->
           <div class="journals-graph" #journalsChart></div>
         </div>
 
         <!-- Content for Number of Annotated Papers -->
         <div class="dynamic-content" id="dynamic-content-1">
-          <div class="journals">
-            <p>Papers</p>
+          <div class="journals ">
+            <p>Yearly</p>
           </div>
           <h2>
             Number of Annotated Papers
           </h2>
           <h3>
-            Statistics about the number of papers that have been annotated.
-          </h3>
+            Distribution of Annotated Papers by Publication Year.
+                     </h3>
           <!-- Bar chart for annotated papers -->
           <div class="papers-graph" #papersChart></div>
         </div>
@@ -77,10 +77,10 @@
         <!-- Content for Distribution of Dome Score -->
         <div class="dynamic-content" id="dynamic-content-2">
           <div class="journals">
-            <p>Scores</p>
+            <p>Score</p>
           </div>
           <h2>
-            Distribution of Dome Score
+            Distribution of DOME Score
           </h2>
           <h3>
             Analysis of the distribution of Dome scores across annotations.
@@ -108,7 +108,7 @@
                   stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
-        <h2>Database</h2>
+        <h2>DATA</h2>
       </div>
       <div class="box">
         <div class="box-icon">
@@ -161,13 +161,12 @@
             <p>Latest Updates</p>
           </div>
           <h2>
-            Database Distribution
+            DATA Score Distribution
           </h2>
           <h3>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut venenatis tristique lorem et mollis. Sed dictum
-            ex
-            nisi, sit amet aliquet lacus pretium finibus. Nullam ut justo sem. Fusce cursus lorem id ante aliquet
-            suscipit.
+           
+
+Clear reporting of dataset size, composition, and class balance is essential, along with methods for handling imbalanced data. Models may also struggle with covariate shift (differences between training and related datasets) or small training sizes, for which transfer learning or specialized algorithms may help.
           </h3>
         </div>
         <div class="score-graph" #dbDistChart></div>
@@ -180,11 +179,10 @@
             <p>Latest Updates</p>
           </div>
           <h2>
-            Optimization Metrics
+            Optimization  score distribution
           </h2>
           <h3>
-            Detailed analysis of optimization metrics and performance indicators across different models and datasets.
-            These metrics help evaluate the efficiency and effectiveness of various optimization techniques.
+           Optimization (training) adjusts model parameters, hyperparameters, and preprocessing steps to maximize performance. Poor optimization can cause overfitting (excellent training performance but poor generalization) or underfitting (too simple models for complex data). Feature selection can help reduce overfitting but must be applied only to training data to avoid inflated performance estimates.
           </h3>
         </div>
         <div class="score-graph" #optimizationChart></div>
@@ -197,11 +195,11 @@
             <p>Latest Updates</p>
           </div>
           <h2>
-            Model Performance
+            Model score distribution
           </h2>
           <h3>
-            Comprehensive overview of model performance metrics, including accuracy, precision, recall, and F1 score.
-            This analysis helps identify strengths and weaknesses in different modeling approaches.
+            Comprehensive overview of model section, including Interpetapillity,output, Execution time, and Software availability.
+            This analysis helps identify strengths and weaknesses of the annotation in the model section modeling approaches.
           </h3>
         </div>
         <div class="score-graph" #modelChart></div>
@@ -239,7 +237,7 @@
           APICURON is endorsed by the International Society for Biocuration (ISB) as a service dedicated to crediting
           and recognizing the invaluable work of professional and volunteer biocurators.
         </h3>
-        <a class="custom-button gradient-button" >visit Website
+        <a class="custom-button gradient-button"  href="https://apicuron.org/">visit Website
           <i>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                  stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

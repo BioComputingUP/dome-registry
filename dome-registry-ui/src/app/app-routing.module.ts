@@ -36,11 +36,11 @@ const routes: Routes = [
   // Define path to list of reviews
   { ...params, path: 'review', component: DSWCardComponent },
   // Define path to list of reviews with modern UI
-  { ...params, path: 'review-modern', component: PageEditModernComponent },
+  //{ ...params, path: 'review-modern', component: PageEditModernComponent },
   // Define path to edit page, with id
-  { ...params, path: 'review/:shortid', component: PageEditComponent },
+  { ...params, path: 'review/:shortid', component: PageEditModernComponent },
   // Define path to modern edit page, with id
-  { ...params, path: 'review-modern/:shortid', component: PageEditModernComponent },
+  //{ ...params, path: 'review-modern/:shortid', component: PageEditModernComponent },
   //Define path to the dashboard
   { ...params, path: 'dashboard', component: PageDashboardComponent },
   // Dfine a path to DSW
