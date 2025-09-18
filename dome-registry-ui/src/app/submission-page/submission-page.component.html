@@ -1,0 +1,253 @@
+<div id="outer-div" class="w-100 h-100">
+  <div id="inner-div" class="overflow-auto w-100 h-100">
+    <div class="submission-page">
+      <!-- Floating particles for visual interest -->
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+
+      <div class="main-container">
+        <!-- 1. Hero Section -->
+        <section id="hero" class="section hero-section">
+          <h1>Submission</h1>
+          <h2>Submit your machine learning methods to the DOME Registry</h2>
+          <p>
+            Welcome to the DOME Registry submission portal. Here, you can use the internationally recognised DOME
+            Recommendations format to create a detailed entry on machine learning methods in a FAIR and open database.
+            You can begin your submission through the DOME Wizard below: </p>
+          <div class="cta-buttons">
+            <a href="https://dome.dsw.elixir-europe.org/" class="cta-button primary" target="_blank"
+               rel="noopener noreferrer">
+              <i class="bi bi-arrow-right-circle"></i>
+              Go to DOME Wizard
+            </a>
+          </div>
+        </section>
+
+        <!-- 2. Benefits Section -->
+        <section id="benefits" class="section benefits-section">
+          <h2 class="section-title">Why Submit Your Methods to the DOME Registry?</h2>
+          <div class="benefits-grid">
+            <div class="benefit-card">
+              <div class="benefit-icon">
+                <i class="bi bi-search"></i>
+              </div>
+              <h3>Increase Visibility & Discoverability</h3>
+              <p>Make your machine learning methods more visible and discoverable by the research community and industry
+                practitioners.</p>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-icon">
+                <i class="bi bi-check2-circle"></i>
+              </div>
+              <h3>Promote Reproducibility & Transparency</h3>
+              <p>Commit to transparent science by providing the detailed information others need to understand,
+                replicate, or build upon your work.</p>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-icon">
+                <i class="bi bi-share"></i>
+              </div>
+              <h3>Facilitate Method Sharing & Reuse</h3>
+              <p>Enable efficient sharing and adaptation of methods, reducing redundancy and accelerating scientific
+                progress.</p>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-icon">
+                <i class="bi bi-award"></i>
+              </div>
+              <h3>Gain Recognition for Method Development</h3>
+              <p>Receive credit for your methodological contributions. Submissions can be linked to your <a
+                href="https://orcid.org/" target="_blank" rel="noopener noreferrer" style="color: #F66729">ORCID</a>
+                profile,
+                and recognition provided via <a href="https://apicuron.org/" target="_blank" rel="noopener noreferrer"
+                                                style="color: #F66729">APICURON</a>
+                direct to your ORCID (see DOME Registry account page).
+              </p>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-icon">
+                <i class="bi bi-journal-check"></i>
+              </div>
+              <h3>Meet Funder & Publisher Requirements</h3>
+              <p>Align with increasing expectations from funders and journals for comprehensive method sharing as part
+                of the publication process. Find out more on our journals page.</p>
+            </div>
+
+            <div class="benefit-card">
+              <div class="benefit-icon">
+                <i class="bi bi-collection"></i>
+              </div>
+              <h3>Centralise Your Methods</h3>
+              <p>Keep a standardised and accessible record of your lab or institution's machine learning outputs.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. Guidelines Section -->
+        <section id="guidelines" class="section guidelines-section">
+          <h2 class="section-title">What can I submit to the DOME Registry?</h2>
+          <div class="guidelines-content">
+            <div class="guidelines-intro">
+              <p>The DOME Registry focuses on capturing detailed descriptions of machine learning (ML) methods that have
+                been disseminated through scientific literature. Our goal is to create a structured, searchable
+                repository of these methods to enhance their visibility, understanding, and reproducibility.</p>
+
+              <strong>You can submit methods described in:</strong>
+              <ul>
+                <li><span class="highlight">Peer-Reviewed Publications:</span> Methods detailed in formally published
+                  journal articles or conference papers.
+                </li>
+                <li><span class="highlight">Pre-prints:</span> Methods shared via pre-print servers (e.g., arXiv,
+                  bioRxiv). While not yet peer-reviewed, making these methods findable and visible early is valuable.
+                </li>
+              </ul>
+
+              <strong>Types of Machine Learning Method Information we Capture:</strong>
+              <p>Submissions should aim to include comprehensive details on machine learning methods in alignment with
+                the DOME Recommendations such as:</p>
+            </div>
+
+            <div class="categories-grid">
+              <div class="category-card">
+                <h3><i class="bi bi-database"></i> Data</h3>
+                <p>Describes the datasets used for developing and testing the model, including details on their source,
+                  preprocessing steps, and how they were partitioned for training, validation, and testing.
+                </p>
+              </div>
+
+              <div class="category-card">
+                <h3><i class="bi bi-graph-up"></i> Optimization</h3>
+                <p>Details the process used to train the model, including the objective function, the specific
+                  optimisation algorithm (e.g., Adam, SGD), associated hyperparameters (e.g., learning rate, batch size,
+                  epochs), regularization techniques, and the computational environment (software libraries, versions,
+                  hardware) used for training.</p>
+              </div>
+
+              <div class="category-card">
+                <h3><i class="bi bi-gear-wide-connected"></i> Model</h3>
+                <p>Describes the machine learning model architecture itself, including the type of model (e.g., logistic
+                  regression, convolutional neural network), its specific structure (if applicable, e.g., layers), and
+                  any intrinsic model parameters set before training.
+                </p>
+              </div>
+
+              <div class="category-card">
+                <h3><i class="bi bi-clipboard-check"></i> Evaluation</h3>
+                <p>Outlines how the trained model's performance was assessed, specifying the metrics used (e.g.,
+                  accuracy, AUC, F1-score), the evaluation strategy (e.g., performance on a held-out test set,
+                  cross-validation), and the results obtained.</p>
+              </div>
+            </div>
+
+            <div class="requirements-list">
+              <h3>Submission Requirements</h3>
+              <ul>
+                <li>The primary requirement is that the method has been described in a <strong>citable publication,
+                  pre-print</strong> or document with a <strong>DOI</strong>
+                </li>
+                <li>Your entry should provide sufficient detail, complementing the original publication, to allow
+                  another expert to understand the nuances of the method's implementation
+                </li>
+                <li>Submissions are structured using the DOME Wizard, which guides you in providing the necessary
+                  information fields
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Process Section -->
+        <section id="process" class="section process-section">
+          <h2 class="section-title">Submission Process</h2>
+          <div class="process-steps">
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h3>Prepare Your Method</h3>
+                <p> Gather all necessary details, steps, materials, parameters, and other relevant information for your
+                  method. Refer to our Training page for tips on effective curation.</p>
+              </div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h3>Sign In</h3>
+                <p>Access the submission system by signing in with your DOME Registry account, which uses your ORCID
+                  credentials. If you don't have an account, you can create one easily via ORCID. [Link to DOME Registry
+                  Account page]
+                </p>
+              </div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h3>Use the DOME Wizard</h3>
+                <p>Launch the "DOME Wizard submit" tool. This user-friendly interface will guide you through structuring
+                  and entering your method details field-by-field, ensuring necessary metadata is captured.
+                </p>
+              </div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h3>Submit for Review/Registration</h3>
+                <p>Once complete, submit your entry through the Wizard. Depending on the workflow, there may be
+                  automated checks or a brief curation overview before it becomes publicly available in the registry.
+                </p>
+              </div>
+            </div>
+
+            <div class="step-item">
+              <div class="step-number">5</div>
+              <div class="step-content">
+                <h3>Method Published</h3>
+                <p>Your method is assigned a persistent identifier and becomes searchable within the DOME Registry.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="video-container">
+            <h3>Watch the Tutorial</h3>
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe width="100%" height="450" src="https://www.youtube.com/embed/fmVppa9ESw0?si=VgIbqKVx3oV6ftpl"
+                      title="YouTube video player" frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Call-to-Action Section -->
+        <section id="cta" class="section cta-section">
+          <h2>Ready to contribute?</h2>
+          <div class="cta-buttons">
+            <a href="https://dome.dsw.elixir-europe.org/" class="cta-button primary" target="_blank"
+               rel="noopener noreferrer">
+              <i class="bi bi-arrow-right-circle"></i>
+              Go to DOME Wizard
+            </a>
+          </div>
+
+          <div class="help-section">
+            <h3>Need help?</h3>
+            <p>Visit our training page for detailed guides, tutorials, and FAQs about the submission process.</p>
+            <a href="/training" class="help-link">Go to Training Page <i class="bi bi-arrow-right"></i></a>
+          </div>
+        </section>
+      </div>
+
+      <!-- Footer -->
+      <app-big-footer></app-big-footer>
+    </div>
+  </div>
+</div>

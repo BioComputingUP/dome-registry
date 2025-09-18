@@ -9,6 +9,7 @@ import { SwaggerAPiComponent } from "./swagger-api/swagger-api.component";
 import { AboutPageComponent } from './about-page/about-page.component';
 import { PageDashboardComponent } from './page-dashboard/page-dashboard.component';
 import { DSWCardComponent } from './dsw-card/dsw-card.component';
+import { SubmissionPageComponent } from './submission-page/submission-page.component';
 import { NewStateComponent } from './new-state/new-state.component';
 import { IntegrationsStandardsComponent } from './integrations-standards/integrations-standards.component';
 import { PoliciesComponent } from './policies/policies.component';
@@ -34,7 +35,7 @@ const routes: Routes = [
   // Define path to search page
   { ...params, path: 'search', component: PageSearchComponent },
   // Define path to list of reviews
-  { ...params, path: 'review', component: DSWCardComponent },
+  { ...params, path: 'review', component: SubmissionPageComponent },
   // Define path to list of reviews with modern UI
   //{ ...params, path: 'review-modern', component: PageEditModernComponent },
   // Define path to edit page, with id
@@ -43,8 +44,8 @@ const routes: Routes = [
   //{ ...params, path: 'review-modern/:shortid', component: PageEditModernComponent },
   //Define path to the dashboard
   { ...params, path: 'dashboard', component: PageDashboardComponent },
-  // Dfine a path to DSW
-  {...params,path:'DSW', component: DSWCardComponent},
+  // Define a path to DSW
+  {...params,path:'DSW', component: SubmissionPageComponent},
   // set path to about page
   { ...params, path: 'about', component: AboutPageComponent },
   // set path to integrations & standards page

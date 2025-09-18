@@ -40,6 +40,7 @@ import { ReviewService } from './review.service';
 import { StatService } from './stat.service';
 import { NewStateModule } from './new-state/new-state.module';
 import { SharedModule } from './shared/shared.module';
+import { SubmissionPageComponent } from './submission-page/submission-page.component';
 
 // Set Plotly.js from CDN
 PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
@@ -69,6 +70,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
         TeamsComponent,
         GovernanceComponent,
         ScoreComponent,
+        SubmissionPageComponent,
     ],
     imports: [
         PlotlyViaCDNModule,
