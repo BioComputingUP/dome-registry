@@ -1,0 +1,235 @@
+<div class="professional-search">
+  <!-- Background particles for visual interest -->
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+
+  <!-- Main content container -->
+  <div class="main-container">
+    <!-- Search section - New Design -->
+    <section class="search-panel">
+      <div class="search-panel-header">
+        <h2 class="search-title">Advanced Search</h2>
+        <p class="search-subtitle">Find publications, authors, and research data</p>
+      </div>
+
+      <div class="search-panel-body">
+        <!-- Main search bar -->
+        <div class="search-bar-container">
+          <!-- Filter dropdown button -->
+          <div class="filter-wrapper">
+            <button class="filter-button" (click)="toggleFilterDropdown()" [attr.aria-expanded]="isFilterDropdownOpen">
+              <span class="filter-label">{{activeFilter}}</span>
+              <i class="filter-icon" [class.open]="isFilterDropdownOpen"></i>
+            </button>
+
+            <!-- Custom dropdown menu -->
+            <div class="filter-dropdown" [class.open]="isFilterDropdownOpen">
+              <div class="dropdown-item" (click)="updateFilter('all')">All Categories</div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-item" (click)="updateFilter('title')">Title</div>
+              <div class="dropdown-item" (click)="updateFilter('authors')">Authors</div>
+              <div class="dropdown-item" (click)="updateFilter('publication')">Publication</div>
+              <div class="dropdown-item" (click)="updateFilter('tags')">Tags</div>
+            </div>
+          </div>
+
+          <!-- Search input with icon -->
+          <div class="search-input-wrapper">
+            <i class="search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search for publications, authors, or keywords..."
+                  (keyup)="onTextChange($event)" #input>
+          </div>
+
+          <!-- Public/Private toggle -->
+          <div class="toggle-container" *ngIf="public$ | async as public_">
+            <label class="toggle-label" for="search-public">Public</label>
+            <div class="toggle-switch">
+              <input type="checkbox" id="search-public" class="toggle-input"
+                    (click)="onPublicChange(public_ !== 'true')" [disabled]="!auth" [checked]="public_ === 'true'">
+              <span class="toggle-slider"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sorting controls -->
+        <div class="sort-panel" *ngIf="sort$ | async as sort">
+          <div class="sort-label">Sort by:</div>
+          <div class="sort-options">
+            <button class="sort-button" [class.active]="sort.by === 'publication.title'"
+                    (click)="onSortChange('publication.title')">
+              <span>Title</span>
+              <i class="sort-icon" *ngIf="sort.by === 'publication.title'"
+                [class.asc]="sort.asc === 'true'"></i>
+            </button>
+
+            <button class="sort-button" [class.active]="sort.by === 'publication.authors'"
+                    (click)="onSortChange('publication.authors')">
+              <span>Authors</span>
+              <i class="sort-icon" *ngIf="sort.by === 'publication.authors'"
+                [class.asc]="sort.asc === 'true'"></i>
+            </button>
+
+            <button class="sort-button" [class.active]="sort.by === 'publication.year'"
+                    (click)="onSortChange('publication.year')">
+              <span>Year</span>
+              <i class="sort-icon" *ngIf="sort.by === 'publication.year'"
+                [class.asc]="sort.asc === 'true'"></i>
+            </button>
+
+            <button class="sort-button" [class.active]="sort.by === 'score'"
+                    (click)="onSortChange('score')">
+              <span>Score</span>
+              <i class="sort-icon" *ngIf="sort.by === 'score'"
+                [class.asc]="sort.asc === 'true'"></i>
+            </button>
+          </div>
+
+          <button class="download-button" (click)="OnClickdownloadJSonfile($event)">
+            <span>Bulk Download</span>
+            <i class="download-icon"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results section -->
+    <section class="results-section">
+      <!-- Loading spinner -->
+      <div class="loading-container" *ngIf="!results$">
+        <div class="spinner"></div>
+        <span class="visually-hidden">Loading results...</span>
+      </div>
+
+      <!-- Results list -->
+      <div class="results-list">
+        <div class="result-card" *ngFor="let review of results$ | async">
+          <!-- Review title -->
+          <h3 class="result-title" [routerLink]="['/review', review.shortid]">
+            {{ review.publication.title || "Undefined" }}
+          </h3>
+
+          <!-- Matching fields -->
+          <ng-container *ngIf="review.matches!.size > 0">
+            <div class="match-section">
+              <h4 class="match-heading">Matching fields</h4>
+              <div class="match-item" *ngFor="let item of review.matches | keyvalue"
+                   [routerLink]="['/review', review.shortid]" [fragment]="item.key.split('/').pop()">
+                <span class="match-field">{{ item.key }}</span>
+                <ng-container *ngIf="item.value as match">
+                  <span class="match-prefix">{{ match.prefix }}</span>
+                  <mark class="match-highlight">{{ match.match }}</mark>
+                  <span class="match-suffix">{{ match.suffix }}</span>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Authors -->
+          <div class="info-row">
+            <span class="info-label">Authors</span>
+            <span class="info-value">{{ review.publication.authors }}</span>
+          </div>
+
+          <!-- Publication -->
+          <div class="info-row">
+            <span class="info-label">Publication</span>
+            <a class="info-link" *ngIf="review.publication.doi"
+               [href]="'https://pubmed.ncbi.nlm.nih.gov/' + review.publication.pmid">
+              {{ review.publication.doi }}
+              <i class="link-icon"></i>
+            </a>
+            <span class="info-value">
+              {{ review.publication.journal || "-" }}, {{ review.publication.year || "-" }}
+            </span>
+          </div>
+
+          <!-- Visibility -->
+          <div class="info-row" *ngIf="review.public == false">
+            <span class="info-label">Visibility</span>
+            <span class="info-value private">
+              <i class="lock-icon"></i> Private
+            </span>
+          </div>
+
+          <!-- Tags -->
+          <div class="info-row" *ngIf="review.publication.tags && review.publication.tags.length > 0">
+            <span class="info-label">Tags</span>
+            <div class="tags-container">
+              <span class="tag" *ngFor="let tag of review.publication.tags">{{ tag || '-' }}</span>
+            </div>
+          </div>
+
+          <!-- Created date -->
+          <div class="info-row">
+            <span class="info-label">Created</span>
+            <span class="info-value">{{ review.created | date }}</span>
+          </div>
+
+          <!-- Last update -->
+          <div class="info-row">
+            <span class="info-label">Last update</span>
+            <span class="info-value">{{ review.updated | date }}</span>
+          </div>
+
+          <!-- DOME-id -->
+          <div class="info-row">
+            <span class="info-label">DOME-id</span>
+            <span class="info-value">{{ review.shortid }}</span>
+          </div>
+
+          <!-- Score -->
+          <div class="score-row">
+            <span class="info-label">Score</span>
+            <span class="score-value">{{ review.score!.toFixed(2) }}</span>
+            <div class="score-bar-container">
+              <div class="score-bar" [style.width]="(review.score! * 100).toFixed(0) + '%'"
+                   [attr.aria-valuenow]="(review.score! * 100).toFixed(2)"
+                   [attr.aria-valuemin]="0" [attr.aria-valuemax]="100"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-container" *ngIf="totalItems > itemsPerPage">
+        <nav class="pagination" aria-label="Page navigation">
+          <!-- First page button -->
+          <button class="page-button first" [disabled]="currentPage === 1"
+                  (click)="goToPage(1)" aria-label="First page">
+            <i class="page-icon first"></i>
+          </button>
+
+          <!-- Previous page button -->
+          <button class="page-button prev" [disabled]="currentPage === 1"
+                  (click)="goToPage(currentPage - 1)" aria-label="Previous page">
+            <i class="page-icon prev"></i>
+          </button>
+
+          <!-- Page numbers -->
+          <ng-container *ngFor="let page of visiblePages">
+            <span class="page-ellipsis" *ngIf="page === -1">...</span>
+            <button *ngIf="page !== -1" class="page-button number"
+                    [class.active]="page === currentPage"
+                    (click)="goToPage(page)">
+              {{ page }}
+            </button>
+          </ng-container>
+
+          <!-- Next page button -->
+          <button class="page-button next" [disabled]="currentPage === totalPages"
+                  (click)="goToPage(currentPage + 1)" aria-label="Next page">
+            <i class="page-icon next"></i>
+          </button>
+
+          <!-- Last page button -->
+          <button class="page-button last" [disabled]="currentPage === totalPages"
+                  (click)="goToPage(totalPages)" aria-label="Last page">
+            <i class="page-icon last"></i>
+          </button>
+        </nav>
+      </div>
+    </section>
+  </div>
+</div>

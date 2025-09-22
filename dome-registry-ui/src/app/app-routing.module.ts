@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ExtraOptions, Route, RouterModule, Routes } from '@angular/router';
 import { PageSearchComponent } from "./page-search/page-search.component";
+import { ProfessionalSearchComponent } from "./professional-search/professional-search.component";
 import { PageEditComponent } from "./page-edit/page-edit.component";
 import { PageEditModernComponent } from "./page-edit-modern/page-edit-modern.component";
 import { PageIntroComponent } from "./page-intro/page-intro.component";
@@ -33,7 +34,7 @@ const routes: Routes = [
     }
   },
   // Define path to search page
-  { ...params, path: 'search', component: PageSearchComponent },
+  { ...params, path: 'search', component: ProfessionalSearchComponent },
   // Define path to list of reviews
   { ...params, path: 'review', component: SubmissionPageComponent },
   // Define path to list of reviews with modern UI

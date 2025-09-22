@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PageSearchComponent } from './page-search/page-search.component';
+import { ProfessionalSearchComponent } from './professional-search/professional-search.component';
 import { PageEditComponent } from './page-edit/page-edit.component';
 import { PageEditModernComponent } from './page-edit-modern/page-edit-modern.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -51,6 +52,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
     declarations: [
         AppComponent,
         PageSearchComponent,
+        ProfessionalSearchComponent,
         PageEditComponent,
         PageEditModernComponent,
         PageIntroComponent,
