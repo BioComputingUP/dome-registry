@@ -7,8 +7,32 @@
 
   <!-- Main content container -->
   <div class="main-container">
-    <!-- Search section - New Design -->
-    <section class="search-panel">
+    <!-- Left sidebar stack: auth-panel (when logged in) + search-panel -->
+    <div class="sidebar-stack">
+      <!-- Auth-only panel -->
+      <section class="auth-panel" *ngIf="auth">
+        <div class="search-panel-header">
+          <h2 class="search-title">Visibility</h2>
+          <p class="search-subtitle">Control access to search results</p>
+        </div>
+
+        <div class="search-panel-body">
+          <div class="search-bar-container">
+            <!-- Public/Private toggle moved here -->
+            <div class="toggle-container" *ngIf="public$ | async as public_">
+              <label class="toggle-label">Public</label>
+              <div class="toggle-switch">
+                <input type="checkbox" id="search-public-auth" class="toggle-input"
+                       (click)="onPublicChange(public_ !== 'true')" [checked]="public_ === 'true'">
+                <span class="toggle-slider" (click)="onPublicChange(public_ !== 'true')"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search section - New Design -->
+      <section class="search-panel">
       <div class="search-panel-header">
         <h2 class="search-title">Advanced Search</h2>
         <p class="search-subtitle">Find publications, authors, and research data</p>
@@ -17,10 +41,16 @@
       <div class="search-panel-body">
         <!-- Main search bar -->
         <div class="search-bar-container">
+          <!-- Search input with icon -->
+          <div class="search-input-wrapper">
+            <i class="search-icon"></i>
+            <input type="text" class="search-input" placeholder="Search for publications, authors, or keywords..."
+                   (keyup)="onTextChange($event)" #input>
+          </div>
           <!-- Filter dropdown button -->
           <div class="filter-wrapper">
             <button class="filter-button" (click)="toggleFilterDropdown()" [attr.aria-expanded]="isFilterDropdownOpen">
-              <span class="filter-label">{{activeFilter}}</span>
+              <span class="filter-label">{{ activeFilter }}</span>
               <i class="filter-icon" [class.open]="isFilterDropdownOpen"></i>
             </button>
 
@@ -35,55 +65,51 @@
             </div>
           </div>
 
-          <!-- Search input with icon -->
-          <div class="search-input-wrapper">
-            <i class="search-icon"></i>
-            <input type="text" class="search-input" placeholder="Search for publications, authors, or keywords..."
-                  (keyup)="onTextChange($event)" #input>
-          </div>
 
-          <!-- Public/Private toggle -->
-          <div class="toggle-container" *ngIf="public$ | async as public_">
-            <label class="toggle-label" for="search-public">Public</label>
-            <div class="toggle-switch">
-              <input type="checkbox" id="search-public" class="toggle-input"
-                    (click)="onPublicChange(public_ !== 'true')" [disabled]="!auth" [checked]="public_ === 'true'">
-              <span class="toggle-slider"></span>
-            </div>
-          </div>
         </div>
 
-        <!-- Sorting controls -->
-        <div class="sort-panel" *ngIf="sort$ | async as sort">
-          <div class="sort-label">Sort by:</div>
-          <div class="sort-options">
-            <button class="sort-button" [class.active]="sort.by === 'publication.title'"
-                    (click)="onSortChange('publication.title')">
-              <span>Title</span>
-              <i class="sort-icon" *ngIf="sort.by === 'publication.title'"
-                [class.asc]="sort.asc === 'true'"></i>
+        <!-- Sorting controls moved directly to search-panel-body -->
+        <div *ngIf="sort$ | async as sort" class="sort-controls-container">
+          <div class="sort-dropdown-wrapper">
+            <button class="sort-dropdown-button" (click)="toggleSortDropdown()"
+                    [attr.aria-expanded]="isSortDropdownOpen">
+              <span class="sort-label">Sort by: </span>
+              <span class="active-sort">{{ getActiveSortLabel(sort.by) }}</span>
+              <i class="sort-direction-icon" [class.asc]="sort.asc === 'true'"></i>
+              <i class="filter-icon" [class.open]="isSortDropdownOpen"></i>
             </button>
 
-            <button class="sort-button" [class.active]="sort.by === 'publication.authors'"
-                    (click)="onSortChange('publication.authors')">
-              <span>Authors</span>
-              <i class="sort-icon" *ngIf="sort.by === 'publication.authors'"
-                [class.asc]="sort.asc === 'true'"></i>
-            </button>
-
-            <button class="sort-button" [class.active]="sort.by === 'publication.year'"
-                    (click)="onSortChange('publication.year')">
-              <span>Year</span>
-              <i class="sort-icon" *ngIf="sort.by === 'publication.year'"
-                [class.asc]="sort.asc === 'true'"></i>
-            </button>
-
-            <button class="sort-button" [class.active]="sort.by === 'score'"
-                    (click)="onSortChange('score')">
-              <span>Score</span>
-              <i class="sort-icon" *ngIf="sort.by === 'score'"
-                [class.asc]="sort.asc === 'true'"></i>
-            </button>
+            <!-- Sort options dropdown -->
+            <div class="sort-dropdown" [class.open]="isSortDropdownOpen">
+              <div class="sort-dropdown-item"
+                   [class.active]="sort.by === 'publication.title'"
+                   (click)="onSortChange('publication.title')">
+                <span>Title</span>
+                <i class="sort-icon" *ngIf="sort.by === 'publication.title'"
+                   [class.asc]="sort.asc === 'true'"></i>
+              </div>
+              <div class="sort-dropdown-item"
+                   [class.active]="sort.by === 'publication.authors'"
+                   (click)="onSortChange('publication.authors')">
+                <span>Authors</span>
+                <i class="sort-icon" *ngIf="sort.by === 'publication.authors'"
+                   [class.asc]="sort.asc === 'true'"></i>
+              </div>
+              <div class="sort-dropdown-item"
+                   [class.active]="sort.by === 'publication.year'"
+                   (click)="onSortChange('publication.year')">
+                <span>Year</span>
+                <i class="sort-icon" *ngIf="sort.by === 'publication.year'"
+                   [class.asc]="sort.asc === 'true'"></i>
+              </div>
+              <div class="sort-dropdown-item"
+                   [class.active]="sort.by === 'score'"
+                   (click)="onSortChange('score')">
+                <span>Score</span>
+                <i class="sort-icon" *ngIf="sort.by === 'score'"
+                   [class.asc]="sort.asc === 'true'"></i>
+              </div>
+            </div>
           </div>
 
           <button class="download-button" (click)="OnClickdownloadJSonfile($event)">
@@ -93,6 +119,7 @@
         </div>
       </div>
     </section>
+    </div>
 
     <!-- Results section -->
     <section class="results-section">
@@ -129,7 +156,8 @@
           <!-- Authors -->
           <div class="info-row">
             <span class="info-label">Authors</span>
-            <span class="info-value">{{ review.publication.authors }}</span>
+            <span
+              class="info-value">{{ review.publication.authors.length > 60 ? review.publication.authors.substring(0, 60) + '...' : review.publication.authors }}</span>
           </div>
 
           <!-- Publication -->
@@ -161,31 +189,31 @@
             </div>
           </div>
 
-          <!-- Created date -->
+          <!-- Created and Last update on one line -->
           <div class="info-row">
             <span class="info-label">Created</span>
             <span class="info-value">{{ review.created | date }}</span>
-          </div>
-
-          <!-- Last update -->
-          <div class="info-row">
             <span class="info-label">Last update</span>
             <span class="info-value">{{ review.updated | date }}</span>
           </div>
 
-          <!-- DOME-id -->
-          <div class="info-row">
+          <!-- DOME-id + Cite -->
+          <div class="info-row dome-id-row">
             <span class="info-label">DOME-id</span>
             <span class="info-value">{{ review.shortid }}</span>
+            <button class="cite-button" type="button" (click)="openCiteModal(review)">
+              <i class="bi bi-quote"></i>
+              <span>Cite</span>
+            </button>
           </div>
 
           <!-- Score -->
           <div class="score-row">
             <span class="info-label">Score</span>
-            <span class="score-value">{{ review.score!.toFixed(2) }}</span>
+            <span class="score-value">{{ getScorePercent(review.score!).toFixed(0) + '%' }}</span>
             <div class="score-bar-container">
-              <div class="score-bar" [style.width]="(review.score! * 100).toFixed(0) + '%'"
-                   [attr.aria-valuenow]="(review.score! * 100).toFixed(2)"
+              <div class="score-bar" [style.width]="getScorePercent(review.score!) + '%'"
+                   [attr.aria-valuenow]="getScorePercent(review.score!).toFixed(0)"
                    [attr.aria-valuemin]="0" [attr.aria-valuemax]="100"></div>
             </div>
           </div>
@@ -194,42 +222,86 @@
 
       <!-- Pagination -->
       <div class="pagination-container" *ngIf="totalItems > itemsPerPage">
-        <nav class="pagination" aria-label="Page navigation">
-          <!-- First page button -->
-          <button class="page-button first" [disabled]="currentPage === 1"
-                  (click)="goToPage(1)" aria-label="First page">
-            <i class="page-icon first"></i>
-          </button>
+        <nav class="pager" aria-label="Pagination">
+          <ul class="pager__list">
+            <li>
+              <button class="pager__btn pager__btn--first" [disabled]="currentPage === 1"
+                      (click)="goToPage(1)" aria-label="First page">
+                &laquo;&laquo;
+              </button>
+            </li>
+            <li>
+              <button class="pager__btn pager__btn--prev" [disabled]="currentPage === 1"
+                      (click)="goToPage(currentPage - 1)" aria-label="Previous page">
+                &laquo; Prev
+              </button>
+            </li>
 
-          <!-- Previous page button -->
-          <button class="page-button prev" [disabled]="currentPage === 1"
-                  (click)="goToPage(currentPage - 1)" aria-label="Previous page">
-            <i class="page-icon prev"></i>
-          </button>
+            <ng-container *ngFor="let page of visiblePages">
+              <li *ngIf="page === -1" class="pager__ellipsis" aria-hidden="true">&hellip;</li>
+              <li *ngIf="page !== -1">
+                <button class="pager__btn pager__btn--number"
+                        [class.is-active]="page === currentPage"
+                        (click)="goToPage(page)"
+                        [attr.aria-current]="page === currentPage ? 'page' : null">
+                  {{ page }}
+                </button>
+              </li>
+            </ng-container>
 
-          <!-- Page numbers -->
-          <ng-container *ngFor="let page of visiblePages">
-            <span class="page-ellipsis" *ngIf="page === -1">...</span>
-            <button *ngIf="page !== -1" class="page-button number"
-                    [class.active]="page === currentPage"
-                    (click)="goToPage(page)">
-              {{ page }}
-            </button>
-          </ng-container>
-
-          <!-- Next page button -->
-          <button class="page-button next" [disabled]="currentPage === totalPages"
-                  (click)="goToPage(currentPage + 1)" aria-label="Next page">
-            <i class="page-icon next"></i>
-          </button>
-
-          <!-- Last page button -->
-          <button class="page-button last" [disabled]="currentPage === totalPages"
-                  (click)="goToPage(totalPages)" aria-label="Last page">
-            <i class="page-icon last"></i>
-          </button>
+            <li>
+              <button class="pager__btn pager__btn--next" [disabled]="currentPage === totalPages"
+                      (click)="goToPage(currentPage + 1)" aria-label="Next page">
+                Next &raquo;
+              </button>
+            </li>
+            <li>
+              <button class="pager__btn pager__btn--last" [disabled]="currentPage === totalPages"
+                      (click)="goToPage(totalPages)" aria-label="Last page">
+                &raquo;&raquo;
+              </button>
+            </li>
+          </ul>
         </nav>
       </div>
     </section>
+  </div>
+</div>
+
+
+<!-- Citation Modal -->
+<div class="cite-modal-overlay" *ngIf="isCiteModalOpen" (click)="onModalOverlayClick($event)">
+  <div class="cite-modal" role="dialog" aria-labelledby="cite-modal-title" aria-modal="true">
+    <div class="modal-header">
+      <h3 id="cite-modal-title">Citation Information</h3>
+      <button class="close-button" type="button" (click)="closeCiteModal()" aria-label="Close">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="modal-content">
+      <div class="citation-section">
+        <div class="section-header">
+          <h4>Direct Link</h4>
+          <button class="copy-button" type="button" (click)="copyToClipboard(directLinkInput)">
+            <i class="bi bi-clipboard"></i>
+          </button>
+        </div>
+        <div class="input-group">
+          <input #directLinkInput type="text" [value]="currentPageUrl" readonly class="citation-input" aria-label="Direct link URL">
+        </div>
+      </div>
+
+      <div class="citation-section">
+        <div class="section-header">
+          <h4>BibTeX</h4>
+          <button class="copy-button" type="button" (click)="copyToClipboard(bibtexTextarea)">
+            <i class="bi bi-clipboard"></i>
+          </button>
+        </div>
+        <div class="textarea-group">
+          <textarea #bibtexTextarea readonly class="citation-textarea" aria-label="BibTeX citation">{{bibTexCitation}}</textarea>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

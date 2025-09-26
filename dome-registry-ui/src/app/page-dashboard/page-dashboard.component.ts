@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { expand, map, merge, Observable, of, share, shareReplay, startWith, Subject, switchMap, takeUntil, tap, } from "rxjs";
+import {Component, ElementRef, EventEmitter, OnDestroy} from '@angular/core';
+import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { map, merge, Observable, of,shareReplay, Subject, switchMap, takeUntil, tap, } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
 
@@ -39,7 +39,7 @@ export function notDefinedValidator(): ValidatorFn {
 export class PageDashboardComponent implements OnDestroy {
 
   private readonly initial: Partial<Review>;
-  private readonly userInit: Partial<User>; 
+  private readonly userInit: Partial<User>;
 
   private readonly UpdatesUsers = this.formBuilderUser.group({
   _id : ['',],
@@ -48,7 +48,7 @@ export class PageDashboardComponent implements OnDestroy {
   orcid: ['',],
   organization:['',],
    });
-    
+
 
 
 
@@ -272,7 +272,7 @@ export class PageDashboardComponent implements OnDestroy {
     this.delete$.emit();
   }
 
-  //Make the annotation public 
+  //Make the annotation public
 
   public onPublishClick($event: MouseEvent) {
     try {

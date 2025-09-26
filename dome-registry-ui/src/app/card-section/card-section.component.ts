@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, ElementRef, OnInit} from '@angular/core';
 import {FormGroup} from "@angular/forms";
-import {isValidField, notDefinedValues} from "dome-registry-core";
+import {isValidField} from "dome-registry-core";
 
 @Component({
   selector: 'card-section',

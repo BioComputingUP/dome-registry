@@ -1,15 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   OnDestroy,
   OnInit,
   Renderer2,
   Inject,
   ViewChild,
   ElementRef,
+  HostListener,
 } from '@angular/core';
-import {FormControl} from '@angular/forms';
 import {
   Observable,
   BehaviorSubject,
@@ -19,21 +18,17 @@ import {
   debounceTime,
   map,
   tap,
-  startWith,
   Subject,
-  takeUntil, filter,
+  takeUntil,
 } from 'rxjs';
 import {
-  Field,
-  Offset,
-  Query,
+  Field, Query,
   Review,
   ReviewService,
   Sort,
 } from '../review.service';
 import {AuthService} from '../auth.service';
 import {DOCUMENT} from '@angular/common';
-import {take} from 'rxjs';
 
 type Reviews = Array<Review>;
 
@@ -54,6 +49,12 @@ interface Score {
 export class ProfessionalSearchComponent implements OnInit, OnDestroy {
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
   jsonLD: any;
+
+  // Citation modal state
+  public isCiteModalOpen = false;
+  public currentPageUrl: string = '';
+  public bibTexCitation: string = '';
+  public citeTargetReview: Review | null = null;
 
   // Search behavior subjects
   public readonly text$ = new BehaviorSubject<string>(''); // Search text input
@@ -87,6 +88,7 @@ export class ProfessionalSearchComponent implements OnInit, OnDestroy {
 
   // UI state
   public isFilterDropdownOpen = false;
+  public isSortDropdownOpen = false;
   public activeFilter = 'All Categories';
 
   constructor(
@@ -117,7 +119,7 @@ export class ProfessionalSearchComponent implements OnInit, OnDestroy {
       tap(() => {
         // Reset to first page whenever query changes
         this.currentPage = 1;
-        this.page$.next({ page: 1, pageSize: this.itemsPerPage });
+        this.page$.next({page: 1, pageSize: this.itemsPerPage});
       })
     );
 
@@ -151,7 +153,7 @@ export class ProfessionalSearchComponent implements OnInit, OnDestroy {
   // Navigation to specific page
   public goToPage(page: number): void {
     if (page < 1 || page > this.totalPages || page === this.currentPage) return;
-    this.page$.next({ page, pageSize: this.itemsPerPage });
+    this.page$.next({page, pageSize: this.itemsPerPage});
   }
 
   // Calculate total pages for pagination controls
@@ -186,6 +188,12 @@ export class ProfessionalSearchComponent implements OnInit, OnDestroy {
     return pages;
   }
 
+  public getScorePercent(score: number): number {
+    if (score == null || Number.isNaN(score)) return 0;
+    const percent = score * 100;
+    return Math.max(0, Math.min(100, percent));
+  }
+
   public onTextChange(event: KeyboardEvent) {
     this.text$.next((event.target as HTMLInputElement).value);
   }
@@ -193,34 +201,38 @@ export class ProfessionalSearchComponent implements OnInit, OnDestroy {
   public toggleFilterDropdown(): void {
     this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
 
-    // If opening the dropdown, calculate and set its position
-    if (this.isFilterDropdownOpen) {
-      setTimeout(() => {
-        const button = document.querySelector('.filter-button') as HTMLElement;
-        const dropdown = document.querySelector('.filter-dropdown') as HTMLElement;
+    // Close sort dropdown if it's open
+    if (this.isFilterDropdownOpen && this.isSortDropdownOpen) {
+      this.isSortDropdownOpen = false;
+    }
 
-        if (button && dropdown) {
-          const buttonRect = button.getBoundingClientRect();
+    // Let CSS handle the positioning naturally
+    // No need to set explicit coordinates
+  }
 
-          // Set the dropdown position to match the button's position
-          dropdown.style.width = buttonRect.width + 'px';
-          dropdown.style.left = buttonRect.left + 'px';
-          dropdown.style.top = (buttonRect.bottom + 10) + 'px';
-        }
-      }, 0);
+  public toggleSortDropdown(): void {
+    this.isSortDropdownOpen = !this.isSortDropdownOpen;
+
+    // Close filter dropdown if it's open
+    if (this.isSortDropdownOpen && this.isFilterDropdownOpen) {
+      this.isFilterDropdownOpen = false;
     }
   }
 
   public closeFilterDropdown(): void {
     this.isFilterDropdownOpen = false;
+    // No need to reset styles - let CSS handle it
+  }
 
-    // Reset dropdown styles when closing
-    const dropdown = document.querySelector('.filter-dropdown');
-    if (dropdown instanceof HTMLElement) {
-      dropdown.style.width = '';
-      dropdown.style.left = '';
-      dropdown.style.top = '';
-    }
+  public getActiveSortLabel(sortBy: string): string {
+    const sortLabels = {
+      'publication.title': 'Title',
+      'publication.authors': 'Authors',
+      'publication.year': 'Year',
+      'score': 'Score'
+    };
+
+    return sortLabels[sortBy] || 'Year';
   }
 
   public onPublicChange(event: boolean) {
@@ -231,13 +243,7 @@ export class ProfessionalSearchComponent implements OnInit, OnDestroy {
     this.filterCategory$.next(category);
     this.isFilterDropdownOpen = false;
 
-    // Reset dropdown styles when closing
-    const dropdown = document.querySelector('.filter-dropdown');
-    if (dropdown instanceof HTMLElement) {
-      dropdown.style.width = '';
-      dropdown.style.left = '';
-      dropdown.style.top = '';
-    }
+    // No need to reset styles - let CSS handle it
 
     // Update the button text
     const labelMap = {
@@ -311,22 +317,84 @@ export class ProfessionalSearchComponent implements OnInit, OnDestroy {
   }
 
   private handleOutsideClick(event: MouseEvent): void {
-    // Close dropdown if click is outside the dropdown
-    if (this.isFilterDropdownOpen) {
-      const target = event.target as HTMLElement;
-      const dropdown = document.querySelector('.filter-dropdown');
-      const button = document.querySelector('.filter-button');
+    const target = event.target as HTMLElement;
 
-      if (dropdown && button && !dropdown.contains(target) && !button.contains(target)) {
+    // Close filter dropdown if click is outside the dropdown
+    if (this.isFilterDropdownOpen) {
+      const filterDropdown = document.querySelector('.filter-dropdown');
+      const filterButton = document.querySelector('.filter-button');
+
+      if (filterDropdown && filterButton && !filterDropdown.contains(target) && !filterButton.contains(target)) {
         this.isFilterDropdownOpen = false;
-        // Reset any inline styles when closing
-        if (dropdown instanceof HTMLElement) {
-          dropdown.style.width = '';
-          dropdown.style.left = '';
-          dropdown.style.top = '';
-        }
       }
     }
+
+    // Close sort dropdown if click is outside the dropdown
+    if (this.isSortDropdownOpen) {
+      const sortDropdown = document.querySelector('.sort-dropdown');
+      const sortButton = document.querySelector('.sort-dropdown-button');
+
+      if (sortDropdown && sortButton && !sortDropdown.contains(target) && !sortButton.contains(target)) {
+        this.isSortDropdownOpen = false;
+      }
+    }
+  }
+
+  // Open citation modal for a given review
+  public openCiteModal(review: Review): void {
+    this.citeTargetReview = review;
+    this.currentPageUrl = `${window.location.origin}/review/${review.shortid}`;
+
+    const authors = review.publication.authors || 'Unknown Authors';
+    const title = review.publication.title || 'Untitled';
+    const year = review.publication.year || new Date().getFullYear();
+    const journal = review.publication.journal || 'DOME Registry';
+    const doi = review.publication.doi || '';
+
+    this.bibTexCitation = `@article{${review.shortid || 'dome'},
+  author = {${authors}},
+  title = {${title}},
+  journal = {${journal}},
+  year = {${year}},
+  doi = {${doi}},
+  url = {${this.currentPageUrl}}
+}`;
+
+    this.isCiteModalOpen = true;
+
+    setTimeout(() => {
+      const modalElement = document.querySelector('.cite-modal') as HTMLElement | null;
+      if (modalElement) {
+        const firstInput = modalElement.querySelector('input') as HTMLInputElement | null;
+        if (firstInput) firstInput.focus();
+      }
+    }, 100);
+  }
+
+  // Close citation modal
+  public closeCiteModal(): void {
+    this.isCiteModalOpen = false;
+  }
+
+  // Handle escape key press to close modal
+  @HostListener('document:keydown.escape')
+  public handleEscapeKey(): void {
+    if (this.isCiteModalOpen) {
+      this.closeCiteModal();
+    }
+  }
+
+  // Handle click outside modal to close it
+  public onModalOverlayClick(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.closeCiteModal();
+    }
+  }
+
+  // Copy text to clipboard
+  public copyToClipboard(element: HTMLInputElement | HTMLTextAreaElement): void {
+    element.select();
+    this._document.execCommand('copy');
   }
 
   ngOnDestroy(): void {

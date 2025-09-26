@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Inject, Renderer2 } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
-import { expand, map, merge, Observable, of, share, shareReplay, startWith, Subject, switchMap, takeUntil, tap, } from "rxjs";
+import { Component, ElementRef, EventEmitter, OnDestroy, OnInit, Inject, Renderer2 } from '@angular/core';
+import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { map, merge, Observable, of, shareReplay, Subject, switchMap, takeUntil, tap, } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
 
@@ -9,7 +9,6 @@ import { Review, computeDomeScore, isValidField } from "dome-registry-core";
 import { AuthService } from "../auth.service";
 import { DOCUMENT } from '@angular/common';
 import { take } from 'rxjs';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {ToastrService} from 'ngx-toastr';
 
 
@@ -265,7 +264,7 @@ export class PageEditComponent implements OnInit, OnDestroy {
     console.log( this.router.url);
     let full = this.router.url;
     let updatedString = full.replace("/review/", "");
-    
+
 
 
 

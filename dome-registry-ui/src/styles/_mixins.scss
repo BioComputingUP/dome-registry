@@ -419,3 +419,164 @@
     }
   }
 }
+
+@import 'variables';
+
+// Common mixins
+
+@mixin responsive-width($desktop-width, $tablet-width: 100%) {
+  width: $desktop-width;
+
+  @media (max-width: $breakpoint-lg) {
+    width: $tablet-width;
+  }
+}
+
+@mixin responsive-padding($desktop, $tablet, $mobile, $xs-mobile) {
+  padding: $desktop;
+
+  @media (max-width: $breakpoint-lg) {
+    padding: $tablet;
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    padding: $mobile;
+  }
+
+  @media (max-width: $breakpoint-xs) {
+    padding: $xs-mobile;
+  }
+}
+@mixin flex($direction: row, $justify: center, $align: center, $gap: 0) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  @if $gap != 0 {
+    gap: $gap;
+  }
+}
+
+@mixin font($size, $weight: 400, $line-height: normal, $style: normal) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $line-height;
+  font-style: $style;
+}
+
+@mixin position-absolute($top: auto, $right: auto, $bottom: auto, $left: auto, $z-index: auto) {
+  position: absolute;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+  left: $left;
+  @if $z-index != auto {
+    z-index: $z-index;
+  }
+}
+
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+}
+
+@mixin transition($property: all, $duration: 0.3s, $timing: ease) {
+  transition: $property $duration $timing;
+}
+
+// Media query mixins
+@mixin for-desktop {
+  @media (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+@mixin for-mobile {
+  @media (max-width: $breakpoint-lg - 1) {
+    @content;
+  }
+}
+
+@mixin for-small-mobile {
+  @media (max-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
+@mixin for-extra-small-mobile {
+  @media (max-width: 400px) {
+    @content;
+  }
+}
+
+@mixin page-background-with-gradient {
+  position: relative;
+  display: block;
+  @extend %full-width;
+  background: $primary;
+  min-height: 100vh;
+
+  &::before {
+    content: '';
+    @include position-absolute(0, auto, auto, 0, 0);
+    @include size(100%);
+    background: linear-gradient(180deg, $color-blue-gradient-start 0%, $color-blue-gradient-end 100%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    @include position-absolute(0, auto, auto, 0, 0);
+    @include size(100%);
+    background: url('../assets/about-page-background.svg') center center no-repeat;
+    background-size: cover;
+    opacity: 0.25;
+  }
+}
+
+// New shared mixin: floating particles decoration
+// Usage: include inside a container selector
+// Optionally set overflow value (e.g., visible/hidden)
+@mixin floating-particles($overflow: visible) {
+  overflow: $overflow;
+
+  .particle {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+
+    &:nth-child(1) {
+      width: 120px;
+      height: 120px;
+      top: 10%;
+      left: 5%;
+      animation: float 15s ease-in-out infinite;
+    }
+
+    &:nth-child(2) {
+      width: 80px;
+      height: 80px;
+      top: 20%;
+      right: 10%;
+      animation: float 12s ease-in-out infinite 2s;
+    }
+
+    &:nth-child(3) {
+      width: 60px;
+      height: 60px;
+      bottom: 15%;
+      left: 15%;
+      animation: float 18s ease-in-out infinite 1s;
+    }
+
+    &:nth-child(4) {
+      width: 40px;
+      height: 40px;
+      bottom: 25%;
+      right: 15%;
+      animation: float 10s ease-in-out infinite 3s;
+    }
+  }
+}

@@ -9,17 +9,12 @@ import {
     AfterViewInit,
 } from '@angular/core';
 import { AuthService } from '../auth.service';
-import { PageSearchComponent } from '../page-search/page-search.component';
 import { ReviewService,Review } from '../review.service';
-import { HttpClient } from '@angular/common/http';
-import { result } from 'lodash';
 import {
     Observable,
     Subject,
-    Subscription,
     interval,
     map,
-    share,
     shareReplay,
     switchMap,
     take,

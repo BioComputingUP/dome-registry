@@ -214,44 +214,45 @@
 
             <!-- Pagination controls -->
             <div class="d-flex justify-content-center mt-3" *ngIf="totalItems > itemsPerPage">
-              <nav aria-label="Page navigation">
-                <ul class="pagination">
-                  <!-- First page button -->
-                  <li class="page-item" [class.disabled]="currentPage === 1">
-                    <a class="page-link" (click)="goToPage(1)" aria-label="First">
-                      <span aria-hidden="true">&laquo;&laquo;</span>
-                    </a>
+              <nav class="pager" aria-label="Pagination">
+                <div class="pager__summary">Page {{ currentPage }} of {{ totalPages }}</div>
+                <ul class="pager__list">
+                  <li>
+                    <button class="pager__btn pager__btn--first" [disabled]="currentPage === 1"
+                            (click)="goToPage(1)" aria-label="First page">
+                      &laquo;&laquo;
+                    </button>
+                  </li>
+                  <li>
+                    <button class="pager__btn pager__btn--prev" [disabled]="currentPage === 1"
+                            (click)="goToPage(currentPage - 1)" aria-label="Previous page">
+                      &laquo; Prev
+                    </button>
                   </li>
 
-                  <!-- Previous page button -->
-                  <li class="page-item" [class.disabled]="currentPage === 1">
-                    <a class="page-link" (click)="goToPage(currentPage - 1)" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                    </a>
-                  </li>
-
-                  <!-- Page numbers -->
                   <ng-container *ngFor="let page of visiblePages">
-                    <li *ngIf="page === -1" class="page-item disabled">
-                      <span class="page-link">...</span>
-                    </li>
-                    <li *ngIf="page !== -1" class="page-item" [class.active]="page === currentPage">
-                      <a class="page-link" (click)="goToPage(page)">{{ page }}</a>
+                    <li *ngIf="page === -1" class="pager__ellipsis" aria-hidden="true">&hellip;</li>
+                    <li *ngIf="page !== -1">
+                      <button class="pager__btn pager__btn--number"
+                              [class.is-active]="page === currentPage"
+                              (click)="goToPage(page)"
+                              [attr.aria-current]="page === currentPage ? 'page' : null">
+                        {{ page }}
+                      </button>
                     </li>
                   </ng-container>
 
-                  <!-- Next page button -->
-                  <li class="page-item" [class.disabled]="currentPage === totalPages">
-                    <a class="page-link" (click)="goToPage(currentPage + 1)" aria-label="Next">
-                      <span aria-hidden="true">&raquo;</span>
-                    </a>
+                  <li>
+                    <button class="pager__btn pager__btn--next" [disabled]="currentPage === totalPages"
+                            (click)="goToPage(currentPage + 1)" aria-label="Next page">
+                      Next &raquo;
+                    </button>
                   </li>
-
-                  <!-- Last page button -->
-                  <li class="page-item" [class.disabled]="currentPage === totalPages">
-                    <a class="page-link" (click)="goToPage(totalPages)" aria-label="Last">
-                      <span aria-hidden="true">&raquo;&raquo;</span>
-                    </a>
+                  <li>
+                    <button class="pager__btn pager__btn--last" [disabled]="currentPage === totalPages"
+                            (click)="goToPage(totalPages)" aria-label="Last page">
+                      &raquo;&raquo;
+                    </button>
                   </li>
                 </ul>
               </nav>
