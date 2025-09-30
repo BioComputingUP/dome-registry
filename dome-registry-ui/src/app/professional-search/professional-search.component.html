@@ -182,10 +182,10 @@
           </div>
 
           <!-- Tags -->
-          <div class="info-row" *ngIf="review.publication.tags && review.publication.tags.length > 0">
+          <div class="info-row" *ngIf="(review.publication.tags | asArray).length > 0">
             <span class="info-label">Tags</span>
             <div class="tags-container">
-              <span class="tag" *ngFor="let tag of review.publication.tags">{{ tag || '-' }}</span>
+              <span class="tag" *ngFor="let tag of (review.publication.tags | asArray)">{{ tag || '-' }}</span>
             </div>
           </div>
 

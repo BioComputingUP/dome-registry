@@ -171,9 +171,9 @@
                     Private
                   </p>
 
-                  <p *ngIf="review.publication.tags && review.publication.tags.length > 0" class="mb-0 tags-container">
+                  <p *ngIf="(review.publication.tags | asArray).length > 0" class="mb-0 tags-container">
                     <strong>Tags:&nbsp;</strong>
-                    <span *ngFor="let tag of review.publication.tags; let last = last">
+                    <span *ngFor="let tag of (review.publication.tags | asArray); let last = last">
                       <span class="tag">{{ tag || '-' }}</span>
                       <span *ngIf="!last">, </span>
                     </span>

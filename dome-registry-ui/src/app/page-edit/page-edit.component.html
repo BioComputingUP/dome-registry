@@ -121,11 +121,11 @@
                     <div id="doi-help" class="form-text">DOI of the published article</div>
                   </div>
                   <!-- Annotation tags -->
-                  <div class="mb-3" *ngIf="review.publication.tags && review.publication.tags.length > 0">
+                  <div class="mb-3" *ngIf="(review.publication.tags | asArray).length > 0">
                     <label for="tags" class="form-label">Tags</label>
 
                     <div class="tags-container">
-                      <span *ngFor="let tag of review.publication.tags" class="tag">{{ tag | uppercase }}</span>
+                      <span *ngFor="let tag of (review.publication.tags | asArray)" class="tag">{{ tag | uppercase }}</span>
                     </div>
 
 
