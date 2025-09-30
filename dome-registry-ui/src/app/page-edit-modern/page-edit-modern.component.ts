@@ -147,7 +147,7 @@ export class PageEditModernComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private _document: Document
   ) {
     // Define initial form value
-    this.initial = this.updates.value;
+    this.initial = this.updates.value as unknown as Partial<Review>;
 
     // Define uuid retrieval pipeline
     this.fetch$ = this.activeRoute.paramMap.pipe(
@@ -165,8 +165,21 @@ export class PageEditModernComponent implements OnInit, OnDestroy {
 
     // Define update pipeline
     this.updated$ = this.update$.pipe(
-      // Define current review
-      map(() => ({ ...this.updates.value, shortid: this.review?.shortid } as Review)),
+      // Prepare partial review payload from form values with normalization
+      map(() => {
+        const value: any = { ...this.updates.value };
+        // Normalize publication.tags from comma-separated string to string[] for API
+        if (value.publication && typeof value.publication.tags === 'string') {
+          value.publication = value.publication || {};
+          value.publication.tags = (value.publication.tags as string)
+            .split(',')
+            .map((t: string) => t.trim())
+            .filter((t: string) => t.length > 0);
+        }
+        // Attach current shortid (required by API)
+        value.shortid = this.review?.shortid;
+        return value as unknown as Partial<Review>;
+      }),
       // Update current review
       switchMap((review) => this.reviewService.upsertReview(review)),
     );
@@ -192,7 +205,15 @@ export class PageEditModernComponent implements OnInit, OnDestroy {
         const route = this.router.createUrlTree(['./', shortid], { relativeTo: this.activeRoute });
       }),
       // Update form
-      tap((review?: Review) => this.updates.patchValue({ ...this.initial, ...review })),
+      tap((review?: Review) => {
+        const value: any = { ...this.initial, ...review };
+        // Normalize publication.tags from string[] (in Review) to comma-separated string for the form control
+        if (review && review.publication && Array.isArray(review.publication.tags)) {
+          value.publication = value.publication || {};
+          value.publication.tags = (review.publication.tags as string[]).join(', ');
+        }
+        this.updates.patchValue(value);
+      }),
       // Mark fields as touched
       tap((review?: Review) => review?.shortid ? this.updates.markAllAsTouched() : this.updates.markAsUntouched()),
       // Eventually, return default review
@@ -203,8 +224,8 @@ export class PageEditModernComponent implements OnInit, OnDestroy {
 
     // Define DOME score computation pipeline
     this.score$ = merge(this.fetched$, this.updates.valueChanges).pipe(
-      // Compute absolute DOME score
-      map((review) => computeDomeScore(this.updates.value)),
+      // Compute absolute DOME score – cast form value to Review for typing purposes
+      map(() => computeDomeScore(this.updates.value as unknown as Review)),
       // Compute relative DOME score
       map((scores) => new Map([...scores.entries()]
         .map(([key, [done, skip]]) => [key, {
@@ -265,10 +286,16 @@ export class PageEditModernComponent implements OnInit, OnDestroy {
 
   // Handle save click
   public onSaveClick($event: MouseEvent) {
-    // Just trigger save action
+    // Trigger save action and show toast based on API response
     try {
+      this.updated$.pipe(take(1)).subscribe({
+        next: () => this.toastr.success('Your changes have been saved.', 'Saved Successfully'),
+        error: (err) => {
+          this.toastr.error('Failed to save changes. Please try again.', 'Error');
+          console.error('Save error:', err);
+        }
+      });
       this.update$.emit();
-      this.toastr.success('Your changes have been saved.', 'Saved Successfully');
     } catch (error) {
       this.toastr.error('Failed to save changes. Please try again.', 'Error');
       console.error('Save error:', error);

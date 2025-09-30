@@ -172,7 +172,7 @@ export class PageDashboardComponent implements OnDestroy {
   ) {
 
     // Define initial form value
-    this.initial = this.updatesAnnotations.value;
+    this.initial = this.updatesAnnotations.value as unknown as Partial<Review>;
 
     // Define uuid retrieval pipeline
     this.fetch$ = this.activeRoute.paramMap.pipe(
@@ -190,8 +190,8 @@ export class PageDashboardComponent implements OnDestroy {
 
     // Define update pipeline
     this.updated$ = this.update$.pipe(
-      // Define current review
-      map(() => ({ ...this.updatesAnnotations.value, shortid: this.review?.shortid } as Review)),
+      // Prepare partial payload from form values
+      map(() => ({ ...this.updatesAnnotations.value, shortid: this.review?.shortid } as unknown as Partial<Review>)),
       // Update current review
       switchMap((review) => this.reviewService.upsertReview(review)),
     );
@@ -222,7 +222,19 @@ export class PageDashboardComponent implements OnDestroy {
       }),
 
       // Update form
-      tap((review?: Review) => this.updatesAnnotations.patchValue({ ...this.initial, ...review })),
+      tap((review?: Review) => {
+        const value: any = { ...this.initial, ...review };
+        // Normalize created/updated from number (Review) to string for the form controls
+        if (review) {
+          if (typeof (review as any).created === 'number') {
+            value.created = String((review as any).created);
+          }
+          if (typeof (review as any).updated === 'number') {
+            value.updated = String((review as any).updated);
+          }
+        }
+        this.updatesAnnotations.patchValue(value);
+      }),
       // Mark fields as touched
       tap((review?: Review) => review?.shortid ? this.updatesAnnotations.markAllAsTouched() : this.updatesAnnotations.markAsUntouched()),
       // Eventually, return default review
@@ -233,10 +245,8 @@ export class PageDashboardComponent implements OnDestroy {
 
     // Define DOME score computation pipeline
     this.score$ = merge(this.fetched$, this.updatesAnnotations.valueChanges).pipe(
-      // // Subscribe to form change
-      // expand(() => this.updates.valueChanges),
-      // Compute absolute DOME score
-      map((review) => computeDomeScore(this.updatesAnnotations.value)),
+      // Compute absolute DOME score – cast form value to Review for typing purposes
+      map(() => computeDomeScore(this.updatesAnnotations.value as unknown as Review)),
       // Compute relative DOME score
       map((scores) => new Map([...scores.entries()]
         .map(([key, [done, skip]]) => [key, {
