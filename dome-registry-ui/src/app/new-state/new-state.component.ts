@@ -15,6 +15,7 @@ import {ActivatedRoute} from "@angular/router";
 import {ReviewService, journalData} from '../review.service';
 import {StatService}  from "../stat.service";
 import {UserService} from '../user.service';
+import { Meta, Title } from '@angular/platform-browser';
 import * as d3 from 'd3';
 @Component({
   selector: 'app-new-state',
@@ -90,7 +91,9 @@ export class NewStateComponent implements OnInit, OnDestroy, AfterViewInit {
     private elementRef: ElementRef,
     private statService: StatService,
     private userService: UserService,
-    private reviewService:ReviewService
+    private reviewService: ReviewService,
+    private meta: Meta,
+    private title: Title
   ) {
   }
 
@@ -820,7 +823,19 @@ export class NewStateComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 ngOnInit(): void {
-    // Initialize the widget
+  const pageTitle = 'Statistics and Dataset | DOME Registry';
+  const description = 'Explore DOME Registry statistics: top annotated journals, curated papers per year, and distribution of DOME scores, with insights across data, optimization, model, and evaluation.';
+
+  // Set page title
+  this.title.setTitle(pageTitle);
+
+  // Update meta description and social tags for this page
+  this.meta.updateTag({ name: 'description', content: description });
+  this.meta.updateTag({ property: 'og:title', content: pageTitle });
+  this.meta.updateTag({ property: 'og:description', content: description });
+  this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
+  this.meta.updateTag({ name: 'twitter:title', content: pageTitle });
+  this.meta.updateTag({ name: 'twitter:description', content: description });
 }
 
 ngAfterViewInit(): void {
