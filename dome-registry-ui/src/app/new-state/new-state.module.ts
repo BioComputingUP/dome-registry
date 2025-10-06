@@ -3,15 +3,14 @@ import { CommonModule } from '@angular/common';
 import { NewStateComponent } from './new-state.component';
 import { ReviewService } from '../review.service';
 import { StatService } from '../stat.service';
-import { PlotlyViaCDNModule } from 'angular-plotly.js';
+import { PlotlyModule } from 'angular-plotly.js';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [NewStateComponent],
-  imports: [CommonModule, PlotlyViaCDNModule, RouterModule, SharedModule],
+  imports: [CommonModule, PlotlyModule, RouterModule, SharedModule],
   exports: [NewStateComponent],
-  providers: [ReviewService, StatService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class NewStateModule {}

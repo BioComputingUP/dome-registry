@@ -14,13 +14,13 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { PageIntroComponent } from './page-intro/page-intro.component';
 import { ScrollSpyDirective } from './scroll-spy.directive';
 ////import { PageStatsComponent } from './page-stats/page-stats.component';
-import { PlotlyViaCDNModule } from 'angular-plotly.js';
+import { PlotlyModule } from 'angular-plotly.js';
+import * as PlotlyJS from 'plotly.js-dist-min';
 import { CardSectionComponent } from './card-section/card-section.component';
 import { CardNavComponent } from './card-nav/card-nav.component';
 import { CardTemplateComponent } from './card-template/card-template.component';
 import { AuthInterceptor } from "./auth.interceptor";
 import { ScrollEndDirective } from './scroll-end.directive';
-import { CookieModule } from "ngx-cookie";
 import { SwaggerAPiComponent } from './swagger-api/swagger-api.component';
 import { AboutPageComponent } from './about-page/about-page.component';
 import { PageDashboardComponent } from './page-dashboard/page-dashboard.component';
@@ -42,10 +42,10 @@ import { StatService } from './stat.service';
 import { NewStateModule } from './new-state/new-state.module';
 import { SharedModule } from './shared/shared.module';
 import { SubmissionPageComponent } from './submission-page/submission-page.component';
+import { CookieService } from 'ngx-cookie-service';
 
-// Set Plotly.js from CDN
-PlotlyViaCDNModule.setPlotlyVersion('2.12.1'); // can be `latest` or any version number (i.e.: '1.40.0')
-PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for full) or 'basic', 'cartesian', 'geo', 'gl3d', 'gl2d', 'mapbox' or 'finance'
+// Configure Plotly to use the locally bundled Plotly.js distribution
+(PlotlyModule as any).plotlyjs = PlotlyJS;
 
 
 @NgModule({
@@ -75,7 +75,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
         SubmissionPageComponent,
     ],
     imports: [
-        PlotlyViaCDNModule,
+        PlotlyModule,
         BrowserModule,
         CommonModule,
         ReactiveFormsModule,
@@ -84,7 +84,6 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
         NgbPaginationModule,
         BrowserAnimationsModule,
         AppRoutingModule,
-        CookieModule.forRoot(),
         NgxMatomoTrackerModule.forRoot({
             trackerUrl: 'https://matomo.biocomputingup.it/',
             siteId: '23',
@@ -108,6 +107,7 @@ PlotlyViaCDNModule.setPlotlyBundle('cartesian'); // optional: can be null (for f
         {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
         ReviewService,
         StatService,
+        CookieService,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [
