@@ -36,7 +36,7 @@
             </svg>
             <div>
               <span>Users</span>
-              <p>{{ countPreson | async }}</p>
+              <p>{{ countUsers$ | async }}</p>
             </div>
           </div>
         </div>
@@ -58,7 +58,7 @@
             </svg>
             <div>
               <span>Entries</span>
-              <p>{{ countCounter$ | async }}</p>
+              <p>{{ count$ | async }}</p>
             </div>
           </div>
         </div>
@@ -68,7 +68,7 @@
             <i class="bi bi-file-earmark-lock bootstrap-icon"></i>
             <div>
               <span>Private</span>
-              <p>{{ countProgres$ | async }}</p>
+              <p>{{ countPr$ | async }}</p>
             </div>
           </div>
         </div>
@@ -88,22 +88,22 @@
     </div>
     <div class="custom-container">
 
-      <img class="brain" src="../../assets/logo-white-animated.svg" alt="DOME Registry Logo"/>
+      <img class="brain" src="../../assets/logo-white-animated.svg" alt="DOME Registry Logo" decoding="async"/>
       <div class="beams">
         <div class="beam-container" id="D">
-          <img class="beam" src="../../assets/Group-209.svg" alt="Data"/>
+          <img class="beam" src="../../assets/Group-209.svg" alt="Data" loading="lazy" decoding="async"/>
           <p>D<span>ATA</span></p>
         </div>
         <div class="beam-container" id="O">
-          <img class="beam" src="../../assets/Group-47.svg" alt="Optimization"/>
+          <img class="beam" src="../../assets/Group-47.svg" alt="Optimization" loading="lazy" decoding="async"/>
           <p>O<span>PTIMIZATION</span></p>
         </div>
         <div class="beam-container" id="M">
-          <img class="beam" src="../../assets/Group-45.svg" alt="Model"/>
+          <img class="beam" src="../../assets/Group-45.svg" alt="Model" loading="lazy" decoding="async"/>
           <p>M<span>ODEL</span></p>
         </div>
         <div class="beam-container" id="E">
-          <img class="beam" src="../../assets/Group-46.svg" alt="Evaluation"/>
+          <img class="beam" src="../../assets/Group-46.svg" alt="Evaluation" loading="lazy" decoding="async"/>
           <p>E<span>VALUATION</span></p>
         </div>
       </div>
@@ -113,11 +113,11 @@
   <div class="latest-publications">
     <h2>LATEST PUBLISHED ANNOTATIONS</h2>
     <div class="cards-container">
-      <button class="scroll-button scroll-left" (click)="scrollLeft()">
-        <i class="bi bi-chevron-left"></i>
+      <button class="scroll-button scroll-left" (click)="scrollLeft()" aria-label="Scroll left">
+        <i class="bi bi-chevron-left" aria-hidden="true"></i>
       </button>
       <div class="cards" #cardsContainer>
-        <div *ngFor="let review of latestReviews$ | async"
+        <div *ngFor="let review of latestReviews$ | async; trackBy: trackByShortId"
              class="publications-card"
              [routerLink]="['/review', review.shortid]">
           <div class="publication-header">
@@ -136,8 +136,8 @@
           </div>
         </div>
       </div>
-      <button class="scroll-button scroll-right" (click)="scrollRight()">
-        <i class="bi bi-chevron-right"></i>
+      <button class="scroll-button scroll-right" (click)="scrollRight()" aria-label="Scroll right">
+        <i class="bi bi-chevron-right" aria-hidden="true"></i>
       </button>
     </div>
   </div>
