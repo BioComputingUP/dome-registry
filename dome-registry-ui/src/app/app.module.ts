@@ -26,8 +26,8 @@ import { AboutPageComponent } from './about-page/about-page.component';
 import { PageDashboardComponent } from './page-dashboard/page-dashboard.component';
 import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { DSWCardComponent } from './dsw-card/dsw-card.component';
-import { NgxMatomoTrackerModule } from '@ngx-matomo/tracker';
-import { NgxMatomoRouterModule } from '@ngx-matomo/router'
+import { NgxMatomoTrackerModule } from 'ngx-matomo-client/core';
+import { NgxMatomoRouterModule } from 'ngx-matomo-client/router'
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {ToastrModule} from "ngx-toastr";
 import { SmallFooterComponent } from './small-footer/small-footer.component';

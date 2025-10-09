@@ -29,8 +29,9 @@ export class UserService {
   }
 
   async counUsers(): Promise<number> {
-    const bn = await this.userModel.count({ public: true });
-    return bn;
+    // Count all users in the collection (no filter)
+    const total = await this.userModel.countDocuments({}).exec();
+    return total;
   }
 
   async findById2(id: ObjectId) {
