@@ -1,6 +1,6 @@
 import {ConfigModule, ConfigService} from '@nestjs/config';
 import {Module} from '@nestjs/common';
-import {JwtModule, JwtService} from "@nestjs/jwt";
+import {JwtModule, JwtService, JwtModuleOptions} from "@nestjs/jwt";
 import {JwtAuthService} from './jwt-auth.service';
 import {JwtAuthStrategy} from "./jwt-auth.strategy";
 import { UserModule } from 'src/user/user.module';
@@ -12,12 +12,16 @@ import { UserModule } from 'src/user/user.module';
             imports: [ConfigModule],
             inject: [ConfigService],
             // Initializes JWT module
-            useFactory: async (configService: ConfigService) => ({
-                secret: configService.get<string>('auth.jwt.secret'),
-                signOptions: {
-                    expiresIn: configService.get<string>('auth.jwt.expires')
-                }
-            }),
+            useFactory: async (configService: ConfigService): Promise<JwtModuleOptions> => {
+                const expires = configService.get<string>('auth.jwt.expires');
+                return {
+                    secret: configService.get<string>('auth.jwt.secret'),
+                    signOptions: {
+                        // Cast to satisfy JwtModuleOptions typing (supports number or duration string)
+                        expiresIn: expires as unknown as JwtModuleOptions['signOptions']['expiresIn']
+                    }
+                };
+            },
         }),
         ConfigModule,
         UserModule

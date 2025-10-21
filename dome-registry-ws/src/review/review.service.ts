@@ -1,7 +1,6 @@
 import {BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException} from "@nestjs/common";
 import {InjectModel} from "@nestjs/mongoose";
 import {Types, Model, Query, QueryOptions, mongo} from "mongoose";
-import {v4 as UUID} from "uuid";
 import {Review, ReviewDocument} from "./review.schema";
 import {User, UserDocument} from "../user/user.schema";
 import {computeDomeScore} from "dome-registry-core";
@@ -10,7 +9,7 @@ import ShortUniqueId from "short-unique-id";
 import {timestamp} from "rxjs";
 import {ClientService} from "src/apicuron-sub/apicuron-client.service";
 import {EventEmitter2} from "@nestjs/event-emitter";
-import {randomBytes} from 'crypto';
+import {randomBytes, randomUUID} from 'crypto';
 
 
 import {ReviewCreatedEvent} from "./events/review-created.event";
@@ -1004,7 +1003,7 @@ export class ReviewService {
     const created = Date.now();
     const updated = created;
     // Define unique identifier
-    const uuid = UUID();
+    const uuid = randomUUID();
     const shortid = this.generateShortId(10);
     // Update review
     review = Object.assign(review, {

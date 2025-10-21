@@ -42,7 +42,8 @@
     "ngx-cookie-service": "^17.1.0",
     "ngx-toastr": "^17.0.2",
     "rxjs": "~7.8.1",
-    "zone.js": "~0.14.10"
+    "zone.js": "~0.14.10",
+    "dome-registry-core": "file:../dome-registry-core"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "17.3.17",
