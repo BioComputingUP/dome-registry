@@ -8,8 +8,8 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [NewStateComponent],
-  imports: [CommonModule, PlotlyModule, RouterModule, SharedModule],
+  declarations: [],
+  imports: [CommonModule, PlotlyModule, RouterModule, SharedModule, NewStateComponent],
   exports: [NewStateComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

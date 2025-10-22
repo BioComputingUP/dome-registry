@@ -16,6 +16,7 @@ import {ActivatedRoute} from "@angular/router";
 
 @Directive({
   selector: '[scroll-spy]',
+  standalone: true,
 })
 export class ScrollSpyDirective implements OnInit, AfterViewInit, OnDestroy {
 

@@ -33,8 +33,10 @@ import {
 } from '../review.service';
 import {AuthService} from '../auth.service';
 import {NgbPaginationModule} from '@ng-bootstrap/ng-bootstrap';
-import {DOCUMENT} from '@angular/common';
+import {CommonModule, DOCUMENT} from '@angular/common';
 import {take} from 'rxjs';
+import {AsArrayPipe} from '../shared/as-array.pipe';
+import {RouterLink} from '@angular/router';
 
 type Reviews = Array<Review>;
 
@@ -51,6 +53,15 @@ interface Score {
   templateUrl: './page-search.component.html',
   styleUrls: ['./page-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    // Angular common directives and pipes (*ngIf, *ngFor, async, date, etc.)
+    CommonModule,
+    // RouterLink directive used in template
+    RouterLink,
+    // Custom pipes
+    AsArrayPipe,
+  ],
 })
 export class PageSearchComponent implements OnInit, OnDestroy {
   @ViewChild('input') input: ElementRef<HTMLInputElement>;

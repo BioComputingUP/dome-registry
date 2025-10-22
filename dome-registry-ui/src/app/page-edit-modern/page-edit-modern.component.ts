@@ -2,7 +2,8 @@ import { Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, I
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { map, merge, Observable, of, shareReplay, Subject, switchMap, takeUntil, tap, } from "rxjs";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Location } from "@angular/common";
+import { Location, CommonModule } from "@angular/common";
+import { ReactiveFormsModule } from "@angular/forms";
 
 import { ReviewService } from "../review.service";
 import { Review, computeDomeScore, isValidField } from "dome-registry-core";
@@ -10,6 +11,8 @@ import { AuthService } from "../auth.service";
 import { DOCUMENT } from '@angular/common';
 import { take } from 'rxjs';
 import {ToastrService} from 'ngx-toastr';
+import { AsArrayPipe } from '../shared/as-array.pipe';
+import { ScrollSpyDirective } from '../scroll-spy.directive';
 
 
 // Define score entry
@@ -35,6 +38,17 @@ export function notDefinedValidator(): ValidatorFn {
   selector: 'app-page-edit-modern',
   templateUrl: './page-edit-modern.component.html',
   styleUrls: ['./page-edit-modern.component.scss'],
+  standalone: true,
+  imports: [
+    // Angular common directives and pipes (ngIf, ngFor, date, uppercase, etc.)
+    CommonModule,
+    // Reactive forms directives ([formGroup], formControlName, etc.)
+    ReactiveFormsModule,
+    // Custom pipes
+    AsArrayPipe,
+    // Custom directives
+    ScrollSpyDirective,
+  ],
 })
 export class PageEditModernComponent implements OnInit, OnDestroy {
 

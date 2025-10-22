@@ -7,16 +7,17 @@ declare const SwaggerUIBundle :any;
 @Component({
   selector: 'app-swagger-api',
   templateUrl: './swagger-api.component.html',
-  styleUrls: ['./swagger-api.component.scss']
+  styleUrls: ['./swagger-api.component.scss'],
+  standalone: true,
 })
 export class SwaggerAPiComponent implements OnInit {
 
   constructor(private http:HttpClient) { }
 
   ngOnInit(): void {
-    
+
   }
 
 
-  
+
 }

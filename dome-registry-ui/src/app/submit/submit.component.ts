@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-submit',
   templateUrl: './submit.component.html',
-  styleUrls: ['./submit.component.scss']
+  styleUrls: ['./submit.component.scss'],
+  standalone: true,
 })
 export class SubmitComponent implements OnInit {
 

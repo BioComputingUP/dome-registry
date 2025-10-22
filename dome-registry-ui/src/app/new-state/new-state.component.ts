@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, AfterViewInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, AfterViewInit, ViewChild, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {
   forkJoin,
@@ -17,11 +17,23 @@ import {StatService}  from "../stat.service";
 import {UserService} from '../user.service';
 import { Meta, Title } from '@angular/platform-browser';
 import * as d3 from 'd3';
+import { CommonModule } from '@angular/common';
+import { SubmitComponent } from '../submit/submit.component';
+import { BigFooterComponent } from '../big-footer/big-footer.component';
 @Component({
   selector: 'app-new-state',
   templateUrl: './new-state.component.html',
   styleUrls: ['./new-state.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    // Angular common directives and pipes (*ngIf, *ngFor, async, date, etc.)
+    CommonModule,
+    // Standalone components used in template
+    SubmitComponent,
+    BigFooterComponent,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NewStateComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('dbDistChart', { static: false }) private dbDistChartElement!: ElementRef;

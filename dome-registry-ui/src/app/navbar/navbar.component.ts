@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { switchMap } from 'rxjs';
 import { AuthService } from '../auth.service';
 
 @Component({
+  standalone: true,
   selector: 'app-navbar',
+  imports: [CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })

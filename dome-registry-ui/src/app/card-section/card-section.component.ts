@@ -1,12 +1,15 @@
 import {ChangeDetectionStrategy, Component, ElementRef, OnInit} from '@angular/core';
 import {FormGroup} from "@angular/forms";
 import {isValidField} from "dome-registry-core";
+import { CardTemplateComponent } from '../card-template/card-template.component';
 
 @Component({
   selector: 'card-section',
   templateUrl: './card-section.component.html',
   styleUrls: ['./card-section.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [CardTemplateComponent],
 })
 export class CardSectionComponent implements OnInit {
 

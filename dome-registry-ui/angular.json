@@ -84,10 +84,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "dome-registry:build:production"
+              "buildTarget": "dome-registry:build:production"
             },
             "development": {
-              "browserTarget": "dome-registry:build:development"
+              "buildTarget": "dome-registry:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -95,7 +95,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "dome-registry:build"
+            "buildTarget": "dome-registry:build"
           }
         },
         "test": {
@@ -120,6 +120,5 @@
         }
       }
     }
-  },
-  "defaultProject": "dome-registry"
+  }
 }

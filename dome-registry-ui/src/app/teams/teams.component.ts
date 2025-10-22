@@ -1,9 +1,14 @@
 import { Component, AfterViewInit, HostListener } from '@angular/core';
+import { BigFooterComponent } from '../big-footer/big-footer.component';
 
 @Component({
   selector: 'app-teams',
   templateUrl: './teams.component.html',
-  styleUrls: ['./teams.component.scss']
+  styleUrls: ['./teams.component.scss'],
+  standalone: true,
+  imports: [
+    BigFooterComponent,
+  ],
 })
 export class TeamsComponent implements AfterViewInit {
   private sections: HTMLElement[] = [];

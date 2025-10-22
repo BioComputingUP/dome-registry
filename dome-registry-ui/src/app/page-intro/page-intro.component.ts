@@ -23,13 +23,24 @@ import {
     tap,
 } from 'rxjs';
 import { UserService } from '../user.service';
-import { DOCUMENT } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ScoreComponent } from '../score/score.component';
 type Reviews = Array<Review>;
 @Component({
     selector: 'app-page-intro',
     templateUrl: './page-intro.component.html',
     styleUrls: ['./page-intro.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        // Angular common directives and pipes (*ngIf, *ngFor, async, etc.)
+        CommonModule,
+        // RouterLink directive used in template
+        RouterLink,
+        // Custom/standalone components
+        ScoreComponent,
+    ],
 })
 export class PageIntroComponent implements OnInit, OnDestroy, AfterViewInit {
 

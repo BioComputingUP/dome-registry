@@ -5,6 +5,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   templateUrl: './card-template.component.html',
   styleUrls: ['./card-template.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class CardTemplateComponent implements OnInit {
 

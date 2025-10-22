@@ -1,12 +1,17 @@
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
 import {Component} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {switchMap} from 'rxjs';
 import {AuthService} from './auth.service';
 import { ReviewService } from './review.service';
+import { NavbarComponent } from './navbar/navbar.component';
+import { SmallFooterComponent } from './small-footer/small-footer.component';
 
 
 @Component({
+  standalone: true,
   selector: 'app-root',
+  imports: [CommonModule, RouterOutlet, NavbarComponent, SmallFooterComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

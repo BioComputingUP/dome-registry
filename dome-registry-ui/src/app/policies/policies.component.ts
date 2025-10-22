@@ -1,9 +1,14 @@
 import { Component, AfterViewInit, HostListener } from '@angular/core';
+import {BigFooterComponent} from '../big-footer/big-footer.component';
 
 @Component({
   selector: 'app-policies',
   templateUrl: './policies.component.html',
-  styleUrls: ['./policies.component.scss']
+  styleUrls: ['./policies.component.scss'],
+  standalone: true,
+  imports: [
+    BigFooterComponent,
+  ]
 })
 export class PoliciesComponent implements AfterViewInit {
   private sections: HTMLElement[] = [];
