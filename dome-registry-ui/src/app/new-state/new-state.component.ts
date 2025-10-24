@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, AfterViewInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, AfterViewInit, ViewChild, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {
   forkJoin,
@@ -15,12 +15,25 @@ import {ActivatedRoute} from "@angular/router";
 import {ReviewService, journalData} from '../review.service';
 import {StatService}  from "../stat.service";
 import {UserService} from '../user.service';
+import { Meta, Title } from '@angular/platform-browser';
 import * as d3 from 'd3';
+import { CommonModule } from '@angular/common';
+import { SubmitComponent } from '../submit/submit.component';
+import { BigFooterComponent } from '../big-footer/big-footer.component';
 @Component({
   selector: 'app-new-state',
   templateUrl: './new-state.component.html',
   styleUrls: ['./new-state.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    // Angular common directives and pipes (*ngIf, *ngFor, async, date, etc.)
+    CommonModule,
+    // Standalone components used in template
+    SubmitComponent,
+    BigFooterComponent,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class NewStateComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('dbDistChart', { static: false }) private dbDistChartElement!: ElementRef;
@@ -90,7 +103,9 @@ export class NewStateComponent implements OnInit, OnDestroy, AfterViewInit {
     private elementRef: ElementRef,
     private statService: StatService,
     private userService: UserService,
-    private reviewService:ReviewService
+    private reviewService: ReviewService,
+    private meta: Meta,
+    private title: Title
   ) {
   }
 
@@ -820,7 +835,19 @@ export class NewStateComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 ngOnInit(): void {
-    // Initialize the widget
+  const pageTitle = 'Statistics and Dataset | DOME Registry';
+  const description = 'Explore DOME Registry statistics: top annotated journals, curated papers per year, and distribution of DOME scores, with insights across data, optimization, model, and evaluation.';
+
+  // Set page title
+  this.title.setTitle(pageTitle);
+
+  // Update meta description and social tags for this page
+  this.meta.updateTag({ name: 'description', content: description });
+  this.meta.updateTag({ property: 'og:title', content: pageTitle });
+  this.meta.updateTag({ property: 'og:description', content: description });
+  this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
+  this.meta.updateTag({ name: 'twitter:title', content: pageTitle });
+  this.meta.updateTag({ name: 'twitter:description', content: description });
 }
 
 ngAfterViewInit(): void {

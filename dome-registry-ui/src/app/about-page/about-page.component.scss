@@ -222,7 +222,7 @@
   @extend %full-width;
   height: 14px;
   margin-top: 72px;
-  @include flex(row, start);
+  @include flex(row, flex-start);
   z-index: 10;
   background-color: rgba(217, 217, 217, 0.15);
   overflow: hidden;
@@ -714,7 +714,7 @@
 // Documentation buttons container
 .full-documentation-button {
   @extend %full-width;
-  @include flex(row, end, center, 11px);
+  @include flex(row, flex-end, center, 11px);
 
   button,
   a {

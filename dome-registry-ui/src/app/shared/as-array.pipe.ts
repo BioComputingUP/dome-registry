@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'asArray' })
+@Pipe({ name: 'asArray', standalone: true })
 export class AsArrayPipe implements PipeTransform {
   transform<T>(value: T | T[] | null | undefined): T[] {
     if (Array.isArray(value)) {

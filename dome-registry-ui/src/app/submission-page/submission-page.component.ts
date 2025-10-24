@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { BigFooterComponent } from '../big-footer/big-footer.component';
 
 @Component({
   selector: 'app-submission-page',
   templateUrl: './submission-page.component.html',
-  styleUrls: ['./submission-page.component.scss']
+  styleUrls: ['./submission-page.component.scss'],
+  standalone: true,
+  imports: [
+    BigFooterComponent,
+  ],
 })
 export class SubmissionPageComponent implements OnInit {
 

@@ -7,6 +7,7 @@ import {
     ViewChild,
     ElementRef,
     AfterViewInit,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { ReviewService,Review } from '../review.service';
@@ -22,12 +23,24 @@ import {
     tap,
 } from 'rxjs';
 import { UserService } from '../user.service';
-import { DOCUMENT } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { ScoreComponent } from '../score/score.component';
 type Reviews = Array<Review>;
 @Component({
     selector: 'app-page-intro',
     templateUrl: './page-intro.component.html',
     styleUrls: ['./page-intro.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        // Angular common directives and pipes (*ngIf, *ngFor, async, etc.)
+        CommonModule,
+        // RouterLink directive used in template
+        RouterLink,
+        // Custom/standalone components
+        ScoreComponent,
+    ],
 })
 export class PageIntroComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -86,18 +99,17 @@ export class PageIntroComponent implements OnInit, OnDestroy, AfterViewInit {
         })
     );
 
+    // TrackBy to minimize DOM diffing for reviews list
+    trackByShortId = (_: number, review: Review) => review.shortid;
 
     handleHorizontalScroll = (event: WheelEvent): void => {
-        // Prevent the default vertical scroll
-        event.preventDefault();
-
         // Get the cards container element
         const cardsElement = this.cardsContainer.nativeElement;
 
-        // Determine scroll amount based on the wheel delta and multiply by 3 for faster scrolling
-        const scrollAmount = (event.deltaY || event.deltaX)*2;
+        // Determine scroll amount based on the wheel delta and multiply by 2 for consistent scrolling
+        const scrollAmount = (event.deltaY || event.deltaX) * 2;
 
-        // Scroll horizontally with auto behavior for faster response
+        // Scroll horizontally with smooth behavior
         cardsElement.scrollBy({
             left: scrollAmount,
             behavior: 'smooth',
@@ -143,7 +155,6 @@ export class PageIntroComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.allResults = [...results]; // Store all results
             })
         );
-        console.log(this.latestReviews$);
     }
 
 
@@ -178,7 +189,7 @@ export class PageIntroComponent implements OnInit, OnDestroy, AfterViewInit {
     ngAfterViewInit(): void {
         // Set up horizontal scroll for cards container
         if (this.cardsContainer && this.cardsContainer.nativeElement) {
-            this.cardsContainer.nativeElement.addEventListener('wheel', this.handleHorizontalScroll);
+            this.cardsContainer.nativeElement.addEventListener('wheel', this.handleHorizontalScroll, { passive: true });
         }
     }
 

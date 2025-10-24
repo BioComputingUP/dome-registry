@@ -20,7 +20,7 @@ async function bootstrap() {
     const savePromises = []
 
 for await (const iterator of all){
-    iterator.update({},{ $unset: { tags: 1 }})
+    await iterator.updateOne({ $unset: { tags: 1 }})
 }
 
 

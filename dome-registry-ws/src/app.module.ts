@@ -37,8 +37,12 @@ import {StatModule} from "./stat/stat.module";
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: async (configService: ConfigService) => ({
-                ttl: configService.get<number>('throttle.ttl'),
-                limit: configService.get<number>('throttle.limit'),
+                throttlers: [
+                    {
+                        ttl: configService.get<number>('throttle.ttl'),
+                        limit: configService.get<number>('throttle.limit'),
+                    },
+                ],
             }),
         }),
         // Initialize mongoose module (MongoDB)

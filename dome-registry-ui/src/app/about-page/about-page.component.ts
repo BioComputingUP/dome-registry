@@ -1,9 +1,16 @@
 import {Component, AfterViewInit} from '@angular/core';
+import { SubmitComponent } from '../submit/submit.component';
+import { BigFooterComponent } from '../big-footer/big-footer.component';
 
 @Component({
   selector: 'app-about-page',
   templateUrl: './about-page.component.html',
-  styleUrls: ['./about-page.component.scss']
+  styleUrls: ['./about-page.component.scss'],
+  standalone: true,
+  imports: [
+    SubmitComponent,
+    BigFooterComponent,
+  ],
 })
 export class AboutPageComponent implements AfterViewInit {
   private progressBar: HTMLElement | null = null;

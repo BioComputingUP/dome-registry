@@ -28,7 +28,9 @@ import {
   Sort,
 } from '../review.service';
 import {AuthService} from '../auth.service';
-import {DOCUMENT} from '@angular/common';
+import {CommonModule, DOCUMENT} from '@angular/common';
+import {RouterLink} from '@angular/router';
+import {AsArrayPipe} from '../shared/as-array.pipe';
 
 type Reviews = Array<Review>;
 
@@ -42,6 +44,15 @@ interface Score {
 
 @Component({
   selector: 'app-professional-search',
+  standalone: true,
+  imports: [
+    // Angular common directives and pipes (*ngIf, *ngFor, async, date, etc.)
+    CommonModule,
+    // RouterLink directive used in template
+    RouterLink,
+    // Custom pipes
+    AsArrayPipe,
+  ],
   templateUrl: './professional-search.component.html',
   styleUrls: ['./professional-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

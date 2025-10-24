@@ -912,7 +912,7 @@ header.page-header {
 
 // Left sidebar
 .left-sidebar {
-  @include flex(column, start, stretch);
+  @include flex(column, flex-start, stretch);
   gap: 1.5rem;
   width: 280px;
   flex-shrink: 0;

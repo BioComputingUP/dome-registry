@@ -6,8 +6,8 @@ import { RouterModule } from "@angular/router";
 import { AsArrayPipe } from './as-array.pipe';
 
 @NgModule({
-  declarations: [SubmitComponent, BigFooterComponent, AsArrayPipe],
-  imports: [CommonModule, RouterModule],
+  declarations: [],
+  imports: [CommonModule, RouterModule, SubmitComponent, BigFooterComponent, AsArrayPipe],
   exports: [SubmitComponent, BigFooterComponent, AsArrayPipe]
 })
 export class SharedModule {}

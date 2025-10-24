@@ -2,7 +2,7 @@ import {catchError, from, map, of, ReplaySubject, shareReplay, switchMap, tap} f
 import {EventEmitter, Injectable} from '@angular/core';
 import {User, UserService} from './user.service';
 import {environment as env} from '../environments/environment';
-import {CookieService} from 'ngx-cookie';
+import {CookieService} from 'ngx-cookie-service';
 
 
 export type Token = string;
@@ -80,7 +80,7 @@ export class AuthService {
   public logout() {
 
     // First, remove token
-    this.cookieService.remove('jwt');
+    this.cookieService.delete('jwt');
     sessionStorage.clear()
     // Then, emit it
     this.token$.next(this.token);

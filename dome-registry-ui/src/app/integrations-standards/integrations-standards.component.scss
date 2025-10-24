@@ -194,7 +194,7 @@
 .head, .head-future {
   @extend %full-width;
   margin-bottom: 22px;
-  @include flex(row, start);
+  @include flex(row, flex-start);
 
   p {
     @extend %full-width;
@@ -215,7 +215,7 @@
 // Future integrations container
 .future-integrations-container {
   margin-top: 50px;
-  @include flex(column, center, start);
+  @include flex(column, center, flex-start);
 }
 
 // Future text
@@ -228,14 +228,14 @@
 // Future items container
 .future-items {
   @extend %full-width;
-  @include flex(column, center, start);
+  @include flex(column, center, flex-start);
 }
 
 // Future item
 .future-item {
   @extend %full-width;
   margin-bottom: 40px;
-  @include flex(column, center, start);
+  @include flex(column, center, flex-start);
 }
 
 // Future header text

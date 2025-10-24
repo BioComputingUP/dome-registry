@@ -778,7 +778,7 @@
 
 .dataset-content {
   @extend %full-width;
-  @include flex(row, space-between, start);
+  @include flex(row, space-between, flex-start);
   margin-top: 50px;
   margin-bottom: 160px;
 
@@ -857,7 +857,7 @@
   border-radius: 0;
   width: 14px;
   height: 300px;
-  @include flex(column, start);
+  @include flex(column, flex-start);
   z-index: 10;
   background-color: rgba(217, 217, 217, 0.15);
   position: relative;
@@ -950,7 +950,7 @@
 // Dynamic content section
 .dynamic {
   width: 50%;
-  @include flex(column, center, start);
+  @include flex(column, center, flex-start);
   height: 600px; // Fixed height to maintain consistency
   position: relative; // For positioning child elements
   h2 {
@@ -1564,7 +1564,7 @@
   flex-shrink: 1; // Allow boxes to shrink when needed
   border-radius: 7px;
   background: #022940;
-  @include flex(column, start, start);
+  @include flex(column, flex-start, flex-start);
   gap:20px;
   padding: 12px 0 0 16px;
   transition: all 0.3s ease;
