@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ExtraOptions, Route, RouterModule, Routes } from '@angular/router';
-import { PageSearchComponent } from "./page-search/page-search.component";
-import { ProfessionalSearchComponent } from "./professional-search/professional-search.component";
+import { BrowsePageComponent } from "./browse-page/browse-page.component";
 import { PageEditModernComponent } from "./page-edit-modern/page-edit-modern.component";
 import { PageIntroComponent } from "./page-intro/page-intro.component";
 //import { PageStatsComponent } from "./page-stats/page-stats.component";
@@ -32,7 +31,7 @@ export const routes: Routes = [
     }
   },
   // Define path to search page
-  { ...params, path: 'search', component: ProfessionalSearchComponent },
+  { ...params, path: 'search', component: BrowsePageComponent },
   // Define path to list of reviews
   { ...params, path: 'review', component: SubmissionPageComponent },
   // Define path to edit page, with id

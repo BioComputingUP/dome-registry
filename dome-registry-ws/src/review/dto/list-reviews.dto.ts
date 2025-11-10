@@ -50,28 +50,29 @@ export class ListReviewsDto {
 
   @ApiProperty({
     description: "Type of sort",
-    example: "Year | Title | Authors | Score",
+    example: "created | publication.year | publication.title | publication.authors | score",
     default: "created",
   })
   @Type(() => String)
   @IsIn([
+    "created",
     "publication.year",
     "publication.title",
     "publication.authors",
     "score",
     "_id"
   ])
-  sort: string = "publication.year";
+  sort: string = "created";
 
   @ApiProperty({
-    description: "Async or not",
-    example: "True|False",
-    default: true,
+    description: "Ascending order or not",
+    example: "true | false",
+    default: false,
   })
   @IsBoolean()
   @Type(() => String)
   @Transform(({ value }) => value === "true")
-  asc: boolean = true;
+  asc: boolean = false;
 
   @IsOptional()
   @IsIn(["title", "authors", "publication","tags", "all"])

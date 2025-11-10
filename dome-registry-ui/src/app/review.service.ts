@@ -8,7 +8,8 @@ export type Field =
   | 'publication.title'
   | 'publication.year'
   | 'publication.authors'
-  | 'score';
+  | 'score'
+  | 'created';
 
 export interface Sort {
   by: Field;

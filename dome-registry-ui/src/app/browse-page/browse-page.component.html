@@ -96,10 +96,10 @@
                    [class.asc]="sort.asc === 'true'"></i>
               </div>
               <div class="sort-dropdown-item"
-                   [class.active]="sort.by === 'publication.year'"
-                   (click)="onSortChange('publication.year')">
+                   [class.active]="sort.by === 'created'"
+                   (click)="onSortChange('created')">
                 <span>Year</span>
-                <i class="sort-icon" *ngIf="sort.by === 'publication.year'"
+                <i class="sort-icon" *ngIf="sort.by === 'created'"
                    [class.asc]="sort.asc === 'true'"></i>
               </div>
               <div class="sort-dropdown-item"

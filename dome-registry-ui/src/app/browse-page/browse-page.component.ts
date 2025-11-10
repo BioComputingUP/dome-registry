@@ -1,15 +1,14 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   OnDestroy,
   OnInit,
   Renderer2,
   Inject,
   ViewChild,
   ElementRef,
+  HostListener,
 } from '@angular/core';
-import {FormControl} from '@angular/forms';
 import {
   Observable,
   BehaviorSubject,
@@ -19,24 +18,19 @@ import {
   debounceTime,
   map,
   tap,
-  startWith,
   Subject,
-  takeUntil, filter,
+  takeUntil,
 } from 'rxjs';
 import {
-  Field,
-  Offset,
-  Query,
+  Field, Query,
   Review,
   ReviewService,
   Sort,
 } from '../review.service';
 import {AuthService} from '../auth.service';
-import {NgbPaginationModule} from '@ng-bootstrap/ng-bootstrap';
 import {CommonModule, DOCUMENT} from '@angular/common';
-import {take} from 'rxjs';
-import {AsArrayPipe} from '../shared/as-array.pipe';
 import {RouterLink} from '@angular/router';
+import {AsArrayPipe} from '../shared/as-array.pipe';
 
 type Reviews = Array<Review>;
 
@@ -49,10 +43,7 @@ interface Score {
 }
 
 @Component({
-  selector: 'app-page-search',
-  templateUrl: './page-search.component.html',
-  styleUrls: ['./page-search.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-browse-page',
   standalone: true,
   imports: [
     // Angular common directives and pipes (*ngIf, *ngFor, async, date, etc.)
@@ -62,17 +53,26 @@ interface Score {
     // Custom pipes
     AsArrayPipe,
   ],
+  templateUrl: './browse-page.component.html',
+  styleUrls: ['./browse-page.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageSearchComponent implements OnInit, OnDestroy {
+export class BrowsePageComponent implements OnInit, OnDestroy {
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
   jsonLD: any;
-  //public page = 3 ;
+
+  // Citation modal state
+  public isCiteModalOpen = false;
+  public currentPageUrl: string = '';
+  public bibTexCitation: string = '';
+  public citeTargetReview: Review | null = null;
+
   // Search behavior subjects
   public readonly text$ = new BehaviorSubject<string>(''); // Search text input
   public readonly filterCategory$ = new BehaviorSubject<string>('all'); // Default to 'all'
   public readonly public$ = new BehaviorSubject<'true' | 'false'>('true'); // Public filter
   public readonly sort$ = new BehaviorSubject<Sort>({ // Sorting criteria
-    by: 'publication.year',
+    by: 'created',
     asc: 'false',
   });
 
@@ -97,10 +97,12 @@ export class PageSearchComponent implements OnInit, OnDestroy {
     pageSize: 10
   });
 
+  // UI state
+  public isFilterDropdownOpen = false;
+  public isSortDropdownOpen = false;
+  public activeFilter = 'All Categories';
 
   constructor(
-    // Dependency injection
-
     private _renderer2: Renderer2,
     @Inject(DOCUMENT) private _document: Document,
     private reviewService: ReviewService,
@@ -115,7 +117,7 @@ export class PageSearchComponent implements OnInit, OnDestroy {
 
     const [public$, sort$] = [this.public$, this.sort$];
 
-// Combine all query parameters into single observable
+    // Combine all query parameters into single observable
     this.query$ = combineLatest([text$, this.public$, this.sort$, this.filterCategory$]).pipe(
       map(([text, _public, sort, category]) => ({
         text,
@@ -128,7 +130,7 @@ export class PageSearchComponent implements OnInit, OnDestroy {
       tap(() => {
         // Reset to first page whenever query changes
         this.currentPage = 1;
-        this.page$.next({ page: 1, pageSize: this.itemsPerPage });
+        this.page$.next({page: 1, pageSize: this.itemsPerPage});
       })
     );
 
@@ -162,9 +164,8 @@ export class PageSearchComponent implements OnInit, OnDestroy {
   // Navigation to specific page
   public goToPage(page: number): void {
     if (page < 1 || page > this.totalPages || page === this.currentPage) return;
-    this.page$.next({ page, pageSize: this.itemsPerPage });
+    this.page$.next({page, pageSize: this.itemsPerPage});
   }
-
 
   // Calculate total pages for pagination controls
   public get totalPages(): number {
@@ -198,32 +199,62 @@ export class PageSearchComponent implements OnInit, OnDestroy {
     return pages;
   }
 
-  public onTextChange(event: KeyboardEvent) {
-    console.log((event.target as HTMLInputElement).value);
-    this.text$.next((event.target as HTMLInputElement).value);
-
-    // Visual feedback for active filter
-    this.updateFilterUI();
+  public getScorePercent(score: number): number {
+    if (score == null || Number.isNaN(score)) return 0;
+    const percent = score * 100;
+    return Math.max(0, Math.min(100, percent));
   }
 
-  private updateFilterUI() {
-    const activeCategory = this.filterCategory$.value;
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
+  public onTextChange(event: KeyboardEvent) {
+    this.text$.next((event.target as HTMLInputElement).value);
+  }
 
-    dropdownItems.forEach(item => {
-      item.classList.remove('active');
-      if (item.getAttribute('data-value') === activeCategory) {
-        item.classList.add('active');
-      }
-    });
+  public toggleFilterDropdown(): void {
+    this.isFilterDropdownOpen = !this.isFilterDropdownOpen;
+
+    // Close sort dropdown if it's open
+    if (this.isFilterDropdownOpen && this.isSortDropdownOpen) {
+      this.isSortDropdownOpen = false;
+    }
+
+    // Let CSS handle the positioning naturally
+    // No need to set explicit coordinates
+  }
+
+  public toggleSortDropdown(): void {
+    this.isSortDropdownOpen = !this.isSortDropdownOpen;
+
+    // Close filter dropdown if it's open
+    if (this.isSortDropdownOpen && this.isFilterDropdownOpen) {
+      this.isFilterDropdownOpen = false;
+    }
+  }
+
+  public closeFilterDropdown(): void {
+    this.isFilterDropdownOpen = false;
+    // No need to reset styles - let CSS handle it
+  }
+
+  public getActiveSortLabel(sortBy: string): string {
+    const sortLabels = {
+      'publication.title': 'Title',
+      'publication.authors': 'Authors',
+      'score': 'Score',
+      'created': 'Year'
+    } as const;
+
+    return sortLabels[sortBy as keyof typeof sortLabels] || 'Created';
   }
 
   public onPublicChange(event: boolean) {
     this.public$.next(event ? 'true' : 'false');
   }
 
-  updateFilter(category: string) {
+  public updateFilter(category: string) {
     this.filterCategory$.next(category);
+    this.isFilterDropdownOpen = false;
+
+    // No need to reset styles - let CSS handle it
 
     // Update the button text
     const labelMap = {
@@ -234,7 +265,7 @@ export class PageSearchComponent implements OnInit, OnDestroy {
       'tags': 'Tags'
     };
 
-    document.querySelector('.filter-label').textContent = labelMap[category] || 'All Categories';
+    this.activeFilter = labelMap[category] || 'All Categories';
 
     // Trigger search if there's existing text
     if (this.text$.value) {
@@ -264,7 +295,6 @@ export class PageSearchComponent implements OnInit, OnDestroy {
     }
   }
 
-
   public OnClickdownloadJSonfile($event: MouseEvent) {
     const json = JSON.stringify(this.allResults, null, 1);
     const blob = new Blob([json], {type: 'application/json'});
@@ -280,7 +310,6 @@ export class PageSearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // let script = this._renderer2.createElement('script');
     this.reviewService
       .GetSearchPageMarkup()
       .pipe(
@@ -294,17 +323,91 @@ export class PageSearchComponent implements OnInit, OnDestroy {
       )
       .subscribe();
 
-    // this.destroy$
-    //   .asObservable()
-    //   .pipe(
-    //     tap(() => {
-    //       // retirer markup
-    //       this._renderer2.removeChild(this._document.body, this.jsonLD);
-    //     }),
-    //     take(1)
-    //   )
-    //   .subscribe();
+    // Add click outside listener for dropdown
+    document.addEventListener('click', this.handleOutsideClick.bind(this));
   }
+
+  private handleOutsideClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    // Close filter dropdown if click is outside the dropdown
+    if (this.isFilterDropdownOpen) {
+      const filterDropdown = document.querySelector('.filter-dropdown');
+      const filterButton = document.querySelector('.filter-button');
+
+      if (filterDropdown && filterButton && !filterDropdown.contains(target) && !filterButton.contains(target)) {
+        this.isFilterDropdownOpen = false;
+      }
+    }
+
+    // Close sort dropdown if click is outside the dropdown
+    if (this.isSortDropdownOpen) {
+      const sortDropdown = document.querySelector('.sort-dropdown');
+      const sortButton = document.querySelector('.sort-dropdown-button');
+
+      if (sortDropdown && sortButton && !sortDropdown.contains(target) && !sortButton.contains(target)) {
+        this.isSortDropdownOpen = false;
+      }
+    }
+  }
+
+  // Open citation modal for a given review
+  public openCiteModal(review: Review): void {
+    this.citeTargetReview = review;
+    this.currentPageUrl = `${window.location.origin}/review/${review.shortid}`;
+
+    const authors = review.publication.authors || 'Unknown Authors';
+    const title = review.publication.title || 'Untitled';
+    const year = review.publication.year || new Date().getFullYear();
+    const journal = review.publication.journal || 'DOME Registry';
+    const doi = review.publication.doi || '';
+
+    this.bibTexCitation = `@article{${review.shortid || 'dome'},
+  author = {${authors}},
+  title = {${title}},
+  journal = {${journal}},
+  year = {${year}},
+  doi = {${doi}},
+  url = {${this.currentPageUrl}}
+}`;
+
+    this.isCiteModalOpen = true;
+
+    setTimeout(() => {
+      const modalElement = document.querySelector('.cite-modal') as HTMLElement | null;
+      if (modalElement) {
+        const firstInput = modalElement.querySelector('input') as HTMLInputElement | null;
+        if (firstInput) firstInput.focus();
+      }
+    }, 100);
+  }
+
+  // Close citation modal
+  public closeCiteModal(): void {
+    this.isCiteModalOpen = false;
+  }
+
+  // Handle escape key press to close modal
+  @HostListener('document:keydown.escape')
+  public handleEscapeKey(): void {
+    if (this.isCiteModalOpen) {
+      this.closeCiteModal();
+    }
+  }
+
+  // Handle click outside modal to close it
+  public onModalOverlayClick(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      this.closeCiteModal();
+    }
+  }
+
+  // Copy text to clipboard
+  public copyToClipboard(element: HTMLInputElement | HTMLTextAreaElement): void {
+    element.select();
+    this._document.execCommand('copy');
+  }
+
   ngOnDestroy(): void {
     // Cleanup
     this.destroy$.next();
@@ -312,5 +415,8 @@ export class PageSearchComponent implements OnInit, OnDestroy {
     if (this.jsonLD) {
       this._renderer2.removeChild(this._document.body, this.jsonLD);
     }
+
+    // Remove click outside listener
+    document.removeEventListener('click', this.handleOutsideClick.bind(this));
   }
 }
