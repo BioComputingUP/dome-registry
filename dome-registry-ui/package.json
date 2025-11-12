@@ -33,7 +33,7 @@
     "angular-plotly.js": "^5.1.1",
     "plotly.js-dist-min": "^2.12.1",
     "angular-swagger-ui": "^0.6.5",
-    "bootstrap": "^5.3.3",
+    "bootstrap": "^5.3.8",
     "bootstrap-icons": "^1.8.1",
     "chart.js": "^4.4.1",
     "d3": "^7.9.0",

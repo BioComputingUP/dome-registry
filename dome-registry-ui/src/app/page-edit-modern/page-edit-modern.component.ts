@@ -126,6 +126,9 @@ export class PageEditModernComponent implements OnInit, OnDestroy {
   public currentPageUrl: string = '';
   public bibTexCitation: string = '';
 
+  // Publishing state to prevent double clicks and disable button
+  public isPublishing: boolean = false;
+
   private readonly update$ = new EventEmitter<void>();
 
   public readonly updated$: Observable<Review>;
@@ -331,20 +334,25 @@ export class PageEditModernComponent implements OnInit, OnDestroy {
   // Make the annotation public
   public onPublishClick($event: MouseEvent) {
     try {
+      if (this.isPublishing) { return; }
+      this.isPublishing = true;
       this.reviewService.publishAnnotation(this.review?.uuid).pipe(
         takeUntil(this.destroy$)
       ).subscribe({
         next: () => {
           this.toastr.success('The annotation is now public!', 'Published');
+          this.router.navigate(['/search']);
         },
         error: (err) => {
           this.toastr.error('Failed to publish. Please try again.', 'Error');
           console.error('Publish error:', err);
+          this.isPublishing = false;
         }
       });
     } catch (error) {
       this.toastr.error('An unexpected error occurred.', 'Error');
       console.error('Publish error:', error);
+      this.isPublishing = false;
     }
   }
 

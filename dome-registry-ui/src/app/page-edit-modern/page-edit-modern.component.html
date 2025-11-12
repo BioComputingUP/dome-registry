@@ -570,7 +570,7 @@
               </button>
 
               <button class="publish-button" *ngIf="user.roles?.includes('admin') && review.public == false"
-                      type="button" [disabled]="!review.uuid" (click)="onPublishClick($event)">
+                      type="button" [disabled]="!review.uuid || isPublishing" (click)="onPublishClick($event)">
                 <i class="bi bi-check2-circle"></i>
                 <span>Publish</span>
               </button>
