@@ -70,10 +70,7 @@
     font-size: 3rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    background: linear-gradient(90deg, $color-white 0%, $color-cyan 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: $color-white;
 
     @media (max-width: $breakpoint-lg) {
       font-size: 2.5rem;
