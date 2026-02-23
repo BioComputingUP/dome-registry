@@ -1,5 +1,4 @@
 import {ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, AfterViewInit, ViewChild, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {
   forkJoin,
   map,
@@ -98,7 +97,6 @@ export class NewStateComponent implements OnInit, OnDestroy, AfterViewInit {
   private scoresData: {labels: string[], values: number[]} = {labels: [], values: []};
   private scoresSubscription: any;
   constructor(
-    private http: HttpClient,
     private activeRoute: ActivatedRoute,
     private elementRef: ElementRef,
     private statService: StatService,
@@ -835,7 +833,7 @@ export class NewStateComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
 ngOnInit(): void {
-  const pageTitle = 'Statistics and Dataset | DOME Registry';
+  const pageTitle = '';
   const description = 'Explore DOME Registry statistics: top annotated journals, curated papers per year, and distribution of DOME scores, with insights across data, optimization, model, and evaluation.';
 
   // Set page title

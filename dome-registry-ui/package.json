@@ -27,25 +27,26 @@
     "@angular/platform-browser-dynamic": "~20.3.6",
     "@angular/router": "~20.3.6",
     "@ng-bootstrap/ng-bootstrap": "^19.0.1",
-    "ngx-matomo-client": "^8.0.0",
     "@popperjs/core": "^2.10.2",
     "@syncfusion/ej2-angular-charts": "^24.2.3",
     "angular-plotly.js": "^5.1.1",
-    "plotly.js-dist-min": "^2.12.1",
     "angular-swagger-ui": "^0.6.5",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.8.1",
     "chart.js": "^4.4.1",
     "d3": "^7.9.0",
+    "dome-registry-core": "file:../dome-registry-core",
     "gsap": "^3.13.0",
     "lodash": "^4.17.21",
     "ngx-cookie-service": "^20.1.0",
+    "ngx-matomo-client": "^8.0.0",
     "ngx-toastr": "^17.0.2",
+    "plotly.js-dist-min": "^2.12.1",
     "rxjs": "~7.8.1",
-    "zone.js": "~0.15.1",
-    "dome-registry-core": "file:../dome-registry-core"
+    "zone.js": "~0.15.1"
   },
   "devDependencies": {
+    "typescript": "~5.x.x",
     "@angular-devkit/build-angular": "20.3.6",
     "@angular/cli": "~20.3.6",
     "@angular/compiler-cli": "~20.3.6",
@@ -58,7 +59,6 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "tslib": "^2.5.0",
-    "typescript": "~5.8.3"
+    "tslib": "^2.5.0"
   }
 }

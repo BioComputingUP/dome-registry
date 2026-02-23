@@ -14,8 +14,8 @@ export class ScoreComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // Calculate normalized score (divide by 26 and format to 2 decimal places)
+  // Calculate normalized score (divide by 21 and format to 2 decimal places)
   getNormalizedScore(): number {
-    return parseFloat((this.dataScore / 26).toFixed(2));
+    return parseFloat((this.dataScore / 21 ).toFixed(2));
   }
 }

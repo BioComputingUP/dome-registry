@@ -66,6 +66,7 @@ export class PageEditModernComponent implements OnInit, OnDestroy {
       authors: ['', [notDefinedValidator(),]],
       journal: ['', [notDefinedValidator(),]],
       year: ['', [notDefinedValidator(),]],
+      pmcid: ['', [notDefinedValidator(),]],
       tags : ['',[notDefinedValidator(),]],
     }),
     dataset: this.formBuilder.group({

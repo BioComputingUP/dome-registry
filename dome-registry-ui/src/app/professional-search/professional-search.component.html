@@ -134,7 +134,7 @@
         <div class="result-card" *ngFor="let review of results$ | async">
           <!-- Review title -->
           <h3 class="result-title" [routerLink]="['/review', review.shortid]">
-            {{ review.publication.title || "Undefined" }}
+              {{ review.publication.title || "Undefined" }}
           </h3>
 
           <!-- Matching fields -->
@@ -198,7 +198,7 @@
           </div>
 
           <!-- DOME-id + Cite -->
-          <div class="info-row dome-id-row">
+               <div class="info-row dome-id-row">
             <span class="info-label">DOME-id</span>
             <span class="info-value">{{ review.shortid }}</span>
             <button class="cite-button" type="button" (click)="openCiteModal(review)">

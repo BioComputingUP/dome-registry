@@ -23,7 +23,14 @@
                 <span class="value">{{review.shortid || 'New Entry'}}</span>
               </div>
             </div>
-
+             <div class="dome-id">
+              <i class="bi bi bi-box-arrow-up-right"></i>
+              <div class="dome-id-content">
+                <span class="label">PMID</span>
+                <span class="value"> <a href="https://europepmc.org/article/MED/{{review.publication.pmid}}" target="_blank">{{review.publication.pmid || 'New Entry'}}</a>  </span>
+              </div>
+            </div>
+  
             <div class="score-summary">
               <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
                 <ng-container *ngIf="kv.key === 'total'">
@@ -219,6 +226,15 @@
                   {{updates.get('publication')?.get('doi')?.value || 'No DOI provided'}}
                 </div>
                 <div class="field-help">DOI of the published article</div>
+              </div>
+
+              <div class="form-field">
+                <label for="EPMC">EPMC ID</label>
+                <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="pmcid" formControlName="pmcid" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('pmcid')?.value">
+                 {{updates.get('publication')?.get('pmcid')?.value || 'No EPMC provided'}}
+                </div>
+                <div class="field-help">EPMC link of the published article</div>
               </div>
 
               <div class="form-field" *ngIf="(review.publication.tags | asArray).length > 0">
@@ -455,7 +471,7 @@
                 <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('model')?.get('duration')?.value">
                   {{updates.get('model')?.get('duration')?.value || 'No execution time information provided'}}
                 </div>
-                <div class="field-help">How much time did it take for the model to run</div>
+                <div class="field-help">How much time did it take for the model to run (for example, seconds on a desktop PC or high-performance computing cluster)?</div>
               </div>
 
               <div class="form-field">
