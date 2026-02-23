@@ -46,7 +46,7 @@ export class ReviewController {
 
   @Patch(":shortid")
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: "Get updated review " })
+  @ApiOperation({ summary: " update review " })
   async update( @Param("shortid") shortid: string,@Body() updateReviewDto: UpdateReviewDto
   ) {
     try {

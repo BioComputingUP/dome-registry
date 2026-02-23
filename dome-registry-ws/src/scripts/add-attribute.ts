@@ -2,12 +2,8 @@ import {NestFactory} from "@nestjs/core"
 import {MongooseModule, getModelToken} from "@nestjs/mongoose";
 import mongoose from "mongoose";
 import {AppModule} from "src/app.module"
-//import { ReviewModule } from "src/review/review.module";
-//import { Review, ReviewDocument } from "src/review/review.schema";
-import {User, UserDocument} from "src/user/user.schema";
-//import { ReviewService } from "src/review/review.service";
-import {Role} from "src/roles/role.enum";
 import {Review, ReviewDocument} from "src/review/review.schema";
+import * as fs from "fs";
 
 // NODE_ENV= Developement node script.js
 
@@ -18,13 +14,45 @@ async function bootstrap() {
     const reviewModel: mongoose.Model<ReviewDocument> = app.get(getModelToken(Review.name));
 
     try {
-        // Add score field to all documents that don't have it
-        const updateResult = await reviewModel.updateMany(
-            { score: { $exists: false } },  // Find documents without score field
-            { $set: { score: 0 } }          // Set score to 0
-        );
+        // Read updates from pcidpmid.json
+        const updatesRaw = fs.readFileSync("/home/omar/Domebiocomp/dome-registry/dome-registry-ws/src/scripts/pcidpmid.json", "utf8");
+        const updates = JSON.parse(updatesRaw);
 
-        console.log(`Updated ${updateResult.modifiedCount} documents with score field`);
+        let updatedCount = 0;
+        const domeIdArray: string[] = [];
+        const duplicateDomeIds: string[] = [];
+        const domeIdSet = new Set<string>();
+        for (const update of updates) {
+            const domeId = update.domeshort_id;
+            const pmcid = update.PMCID;
+            const pmid = String(update.PMID);
+            console.log(`Processing domeId: ${domeId}, PMCID: ${pmcid}, PMID: ${pmid}`);
+            domeIdArray.push(domeId);
+            if (domeIdSet.has(domeId)) {
+                duplicateDomeIds.push(domeId);
+            } else {
+                domeIdSet.add(domeId);
+            }
+            // Find the review by domeId
+            const review = await reviewModel.findOne({ shortid: domeId });
+            if (review) {
+                // Set values directly and mark as modified
+                review.publication.pmcid = pmcid;
+                review.publication.pmid = pmid;
+        
+                review.markModified('publication.pmcid');
+                review.markModified('publication.pmid');
+                
+                await review.save();
+                updatedCount++;
+            }
+        }
+        console.log(`Updated ${updatedCount} documents with pmcid and pmid from updates.json`);
+        if (duplicateDomeIds.length > 0) {
+            console.log("Duplicate domeIds found:", duplicateDomeIds);
+        } else {
+            console.log("No duplicate domeIds found.");
+        }
     } catch (error) {
         console.error('Error updating documents:', error);
     } finally {
