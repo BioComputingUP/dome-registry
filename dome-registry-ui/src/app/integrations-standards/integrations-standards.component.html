@@ -110,10 +110,7 @@
     <div class="implementation-text">
       <p><strong>What it is:</strong> Matomo is an open-source web analytics platform that tracks and reports website traffic, user behavior, and engagement. Unlike third-party tools like Google Analytics, Matomo can be self-hosted, offering full data ownership and strong privacy compliance (e.g., GDPR). It’s widely used in environments that prioritize control, transparency, and ethical data handling.</p>
       <p><strong>How DOME integrates:</strong> The DOME registry integrates Matomo to monitor how users interact with digital objects and metadata. It embeds Matomo tracking code into its web interfaces to collect usage data such as page views, downloads, and navigation paths. This integration is typically configured to anonymize user data and respect consent preferences, aligning with the open science and privacy principles DOME supports.</p>
-      <p><strong>Benefit:</strong>
-
-
-      </p>
+      <p><strong>Benefit:</strong> This ensures full data ownership and privacy compliance (GDPR) for users while allowing the registry to gather essential usage analytics to improve its services.</p>
       <p><a href="https://matomo.org/" target="_blank" class="learn-more">Learn More</a></p>
     </div>
   </div>
@@ -130,5 +127,42 @@
       <p><a href="https://lifescience-ri.eu/ls-login/" target="_blank" class="learn-more">Learn More</a></p>
     </div>
   </div>
+
+  <div class="implementation-container">
+    <div class="title-row">
+      <img src="../../assets/zenodo.png" alt="Zenodo logo" class="implementation-logo">
+    </div>
+    <div class="implementation-text">
+      <p><strong>What it is:</strong> Zenodo is an open-access general-purpose repository developed under the European OpenAIRE programme and operated by CERN. It allows researchers to deposit research papers, datasets, software, and other research-related digital artefacts, providing them with persistent digital object identifiers (DOIs).</p>
+      <p><strong>How DOME integrates:</strong> The DOME Registry performs intermittent archival of the full resource data as a comprehensive dump via the APIs of both DOME and Zenodo. Unlike simple metadata harvesting, this process ensures that the complete dataset of the registry is captured in a versioned, static snapshot.</p>
+      <p><strong>Benefit:</strong> This integration provides robust long-term preservation and high availability for the registry's entire data collection. By archiving the full data on Zenodo, DOME ensures that the community has access to a permanent, citable record of the information, supporting the sustainability and reproducibility of the registered machine learning methods.</p>
+      <p><a href="https://doi.org/10.5281/zenodo.18301460" target="_blank" class="learn-more">Learn More</a></p>
+    </div>
+  </div>
+
+  <div class="implementation-container">
+    <div class="title-row">
+      <img src="../../assets/ebisearch.png" alt="EBI Search logo" class="implementation-logo">
+    </div>
+    <div class="implementation-text">
+      <p><strong>What it is:</strong> EBI Search is a scalable text-search engine that provides easy access to the biological data resources hosted at the European Bioinformatics Institute (EMBL-EBI). It allows users to search across a wide range of data types, from sequences and structures to literature and ontologies.</p>
+      <p><strong>How DOME integrates:</strong> DOME Registry content is indexed by EBI Search, making it discoverable through the EBI Search portal. This integration enables cross-linking between DOME entries and other EMBL-EBI resources, such as Europe PMC, by leveraging common literature sources and shared identifiers as a linker.</p>
+      <p><strong>Benefit:</strong> By appearing within the EBI Search ecosystem, DOME methods become visible to a much larger audience of life science researchers. It promotes cross-resource discovery, allowing users to find relevant machine learning models while exploring related biological datasets or publications.</p>
+      <p><a href="https://www.ebi.ac.uk/ebisearch/" target="_blank" class="learn-more">Learn More</a></p>
+    </div>
+  </div>
+
+  <div class="implementation-container">
+    <div class="title-row">
+      <img src="../../assets/EPMC.png" alt="Europe PMC logo" class="implementation-logo">
+    </div>
+    <div class="implementation-text">
+      <p><strong>What it is:</strong> Europe PMC is an open-science platform that provides access to a massive repository of biomedical literature, including millions of abstracts and full-text articles. It serves as a primary resource for researchers to discover and retrieve scientific publications and their associated metadata.</p>
+      <p><strong>How DOME integrates:</strong> The DOME Registry establishes bidirectional discovery with Europe PMC by resolving source literature via the common use of PubMed IDs (PMIDs) and PubMed Central IDs (PMCIDs). This metadata integration allows for the automated retrieval of full-text articles directly within the DOME environment whenever they are available.</p>
+      <p><strong>Benefit:</strong> This link ensures that the machine learning methods described in DOME are contextually grounded in their original research. It facilitates seamless navigation between method metadata and the underlying scientific evidence, enhancing the comprehensiveness and utility of the registry for researchers.</p>
+      <p><a href="https://europepmc.org/" target="_blank" class="learn-more">Learn More</a></p>
+    </div>
+  </div>
+
   <app-big-footer></app-big-footer>
 </div>

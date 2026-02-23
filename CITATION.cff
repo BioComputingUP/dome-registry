@@ -1,0 +1,77 @@
+cff-version: 1.2.0
+message: "If you use the DOME Registry, please cite the original GigaScience publication as follows."
+authors:
+  - family-names: Attafi
+    given-names: Omar Abdelghani
+    orcid: "https://orcid.org/0009-0002-2327-9430"
+title: "DOME Registry"
+version: 1.0.3
+date-released: 2024-12-11
+preferred-citation:
+  type: article
+  authors:
+    - family-names: Attafi
+      given-names: Omar Abdelghani
+      orcid: "https://orcid.org/0009-0002-2327-9430"
+    - family-names: Clementel
+      given-names: Damiano
+      orcid: "https://orcid.org/0000-0002-7395-2921"
+    - family-names: Kyritsis
+      given-names: Konstantinos
+      orcid: "https://orcid.org/0000-0001-8035-341X"
+    - family-names: Capriotti
+      given-names: Emidio
+      orcid: "https://orcid.org/0000-0002-2323-0963"
+    - family-names: Farrell
+      given-names: Gavin
+      orcid: "https://orcid.org/0000-0001-5166-8551"
+    - family-names: Fragkouli
+      given-names: Styliani-Christina
+      orcid: "https://orcid.org/0000-0003-4067-7123"
+    - family-names: Castro
+      given-names: Leyla Jael
+      orcid: "https://orcid.org/0000-0003-3986-0510"
+    - family-names: Hatos
+      given-names: András
+      orcid: "https://orcid.org/0000-0001-9224-9820"
+    - family-names: Lenaerts
+      given-names: Tom
+      orcid: "https://orcid.org/0000-0003-3645-1455"
+    - family-names: Mazurenko
+      given-names: Stanislav
+      orcid: "https://orcid.org/0000-0003-3659-4819"
+    - family-names: Mozaffari
+      given-names: Soroush
+    - family-names: Pradelli
+      given-names: Franco
+      orcid: "https://orcid.org/0000-0002-7152-5512"
+    - family-names: Ruch
+      given-names: Patrick
+      orcid: "https://orcid.org/0000-0002-3374-2962"
+    - family-names: Savojardo
+      given-names: Castrense
+      orcid: "https://orcid.org/0000-0002-7359-0633"
+    - family-names: Turina
+      given-names: Paola
+      orcid: "https://orcid.org/0000-0001-9174-511X"
+    - family-names: Zambelli
+      given-names: Federico
+      orcid: "https://orcid.org/0000-0003-3487-4331"
+    - family-names: Piovesan
+      given-names: Damiano
+      orcid: "https://orcid.org/0000-0001-8210-2390"
+    - family-names: Monzon
+      given-names: Alexander Miguel
+      orcid: "https://orcid.org/0000-0003-0362-8218"
+    - family-names: Psomopoulos
+      given-names: Fotis
+      orcid: "https://orcid.org/0000-0002-0222-4273"
+    - family-names: Tosatto
+      given-names: Silvio C E
+      orcid: "https://orcid.org/0000-0003-4525-7793"
+  title: "DOME Registry: implementing community-wide recommendations for reporting supervised machine learning in biology"
+  journal: "GigaScience"
+  volume: 13
+  year: 2024
+  doi: "10.1093/gigascience/giae094"
+  url: "https://doi.org/10.1093/gigascience/giae094"
