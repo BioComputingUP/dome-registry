@@ -80,6 +80,17 @@ export class CreatePublicationDto implements Publication {
     
     @IsOptional()
     tags?: string[] | undefined;
+
+
+     //**----------- Pubmed--------*/
+        @ApiProperty({
+            description:'Unique identifier of the reviewed article within PubMed',
+            example: '999999'
+        })
+        @IsString()
+        @IsDefined()
+        @Type(() => String)
+        pmcid: string = '';  
      
 
     
