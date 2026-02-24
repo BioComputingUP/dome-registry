@@ -1,4 +1,4 @@
-import {BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException} from "@nestjs/common";
+import {BadRequestException, ForbiddenException, HttpException, HttpStatus, Injectable, NotFoundException, Param} from "@nestjs/common";
 import {InjectModel} from "@nestjs/mongoose";
 import {Types, Model, Query, QueryOptions, mongo} from "mongoose";
 import {Review, ReviewDocument} from "./review.schema";
@@ -250,6 +250,7 @@ export class ReviewService {
               publication: 1,
               score: 1,
               shortid: 1,
+              
               // Remove these fields
               fields: "$$REMOVE",
               done: "$$REMOVE",
@@ -1221,7 +1222,7 @@ export class ReviewService {
   }
 
 
-
+//Get all the reviews for the homepage
 
   async FetchAll() {
 
@@ -1242,6 +1243,20 @@ export class ReviewService {
 
  
   }
+
+ async findOnePmid(pmid: string) {
+  let review = await this.reviewModel.findOne({ "publication.pmid": pmid , public: true}).exec();
+  if (review) {
+    if (review.public) {
+      return review;
+    }else {
+      throw new ForbiddenException();
+      }
+    }}
+
+  
+
+
 
 async fetchTenLatestReviews() {
   //_id somewhere 

@@ -196,6 +196,40 @@ async Fetchall() {
     // Otherwise, return 404 Not Found
     throw new NotFoundException(null, "Not found");
   }
+  
+  //**----------Get Review by pmid  ------------------**/
+@Get("pmid/:pmid")
+@ApiOperation({ summary: "Find review by pmid" })
+@ApiResponse({
+  status: 403,
+  description: "Forbidden",
+})
+@ApiResponse({
+  status: 404,
+  description: "Data not found",
+})
+@ApiResponse({
+  status: 200,
+  description: "Review",
+})
+async findOneByPmid(@Param("pmid") pmid: string) {
+  // Try retrieving review
+  let review = await this.reviewService.findOnePmid(pmid);
+  // Case review is found
+  if (review) {
+    if (review.public) {
+      return review;
+    }else {
+      throw new ForbiddenException();
+    }
+ }
+    }
+
+    
+
+
+
+
 
   // Insert a new review in the database
   @Post()
