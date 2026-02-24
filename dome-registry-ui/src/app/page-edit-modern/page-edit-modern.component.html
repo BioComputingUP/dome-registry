@@ -23,13 +23,16 @@
                 <span class="value">{{review.shortid || 'New Entry'}}</span>
               </div>
             </div>
-             <div class="dome-id">
-              <i class="bi bi bi-box-arrow-up-right"></i>
-              <div class="dome-id-content">
-                <span class="label">PMID</span>
-                <span class="value"> <a href="https://europepmc.org/article/MED/{{review.publication.pmid}}" target="_blank">{{review.publication.pmid || 'New Entry'}}</a>  </span>
+            @if (review.publication.pmid){
+
+              <div class="dome-id">
+                <i class="bi bi bi-box-arrow-up-right"></i>
+                <div class="dome-id-content">
+                  <span class="label">PMID</span>
+                  <span class="value"> <a href="https://europepmc.org/article/MED/{{review.publication.pmid}}" target="_blank">{{review.publication.pmid || 'New Entry'}}</a>  </span>
+                </div>
               </div>
-            </div>
+            }
   
             <div class="score-summary">
               <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
