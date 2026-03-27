@@ -133,9 +133,16 @@
       <div class="results-list">
         <div class="result-card" *ngFor="let review of results$ | async">
           <!-- Review title -->
-          <h3 class="result-title" [routerLink]="['/review', review.shortid]">
-              {{ review.publication.title || "Undefined" }}
-          </h3>
+           <div class="d-flex">
+
+             <h3 class="result-title" [routerLink]="['/review', review.shortid]">
+               {{ review.publication.title || "Undefined" }}
+              </h3>
+              @if (review.isAiGenerated) {
+
+                <img src="assets/ai-application.png" class="img-fluid"  style="width: 60px;height: 60px;" title="This Annotation is AI generated"/>
+              }
+            </div>
 
           <!-- Matching fields -->
           <ng-container *ngIf="review.matches!.size > 0">
@@ -185,7 +192,7 @@
           <div class="info-row" *ngIf="(review.publication.tags | asArray).length > 0">
             <span class="info-label">Tags</span>
             <div class="tags-container">
-              <span class="tag" *ngFor="let tag of (review.publication.tags | asArray)">{{ tag || '-' }}</span>
+              <span class="tag" *ngFor="let tag of (review.publication.tags | asArray| slice:0:4)">{{ tag || '-' }}</span>
             </div>
           </div>
 
@@ -206,12 +213,7 @@
               <span>Cite</span>
             </button>
           </div>
-          <!-- Is AI Generated -->
-          <div class="info-row" >
-            <span class="info-label">AI Generated</span>
-            <span class="info-value">
-              <i class="bi bi-robot"></i> {{ review.isAiGenerated }} </span>
-          </div>
+         
 
           <!-- Score -->
           <div class="score-row">

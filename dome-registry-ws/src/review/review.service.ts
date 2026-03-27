@@ -1017,7 +1017,7 @@ export class ReviewService {
       updated,
       created,
       public: false,
-      isAiGenerated: true,
+      
     });
     // Fill database with given review
     const inserted = new this.reviewModel(review);
