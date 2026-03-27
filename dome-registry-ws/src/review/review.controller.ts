@@ -82,13 +82,6 @@ export class ReviewController {
     return this.reviewService.findAll(_query, _sort, user);
   }
  
-@Get("all")
-@ApiOperation({ summary: "Get all reviews  " })
-async Fetchall() {
-  
- return await this.reviewService.FetchAll();
-
-}
 
 
 

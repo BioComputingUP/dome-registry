@@ -15,7 +15,7 @@ async function bootstrap() {
 
     try {
         // Read updates from pcidpmid.json
-        const updatesRaw = fs.readFileSync("/home/omar/Domebiocomp/dome-registry/dome-registry-ws/src/scripts/pcidpmid.json", "utf8");
+        const updatesRaw = fs.readFileSync("/home/omar/Domebiocomp/dome-registry/dome-registry-ws/src/scripts/output.json", "utf8");
         const updates = JSON.parse(updatesRaw);
 
         let updatedCount = 0;
@@ -23,7 +23,7 @@ async function bootstrap() {
         const duplicateDomeIds: string[] = [];
         const domeIdSet = new Set<string>();
         for (const update of updates) {
-            const domeId = update.domeshort_id;
+            const domeId = update.domeId;
             const pmcid = update.PMCID;
             const pmid = String(update.PMID);
             console.log(`Processing domeId: ${domeId}, PMCID: ${pmcid}, PMID: ${pmid}`);
@@ -37,11 +37,12 @@ async function bootstrap() {
             const review = await reviewModel.findOne({ shortid: domeId });
             if (review) {
                 // Set values directly and mark as modified
-                review.publication.pmcid = pmcid;
+              //  review.publication.pmcid = pmcid;
                 review.publication.pmid = pmid;
         
-                review.markModified('publication.pmcid');
+              
                 review.markModified('publication.pmid');
+                review.markModified('isAiGenerated');
                 
                 await review.save();
                 updatedCount++;

@@ -25,6 +25,8 @@ export interface Review {
     // Whether review is public or not
     // NOTE Private reviews can be accessed only by their owners or The Admin or the person in charge of the journal
     public: boolean,
+    isAiGenerated: boolean,
+
 }
 
 // Define invalid strings

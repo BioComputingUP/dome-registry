@@ -250,6 +250,7 @@ export class ReviewService {
               publication: 1,
               score: 1,
               shortid: 1,
+              isAiGenerated: 1,
               
               // Remove these fields
               fields: "$$REMOVE",
@@ -491,6 +492,7 @@ export class ReviewService {
               publication: 1,
               score: 1,
               shortid: 1,
+              isAiGenerated: 1,
               // Remove these fields
               fields: "$$REMOVE",
               done: "$$REMOVE",
@@ -764,6 +766,7 @@ export class ReviewService {
             publication: 1,
             score: 1,
             shortid: 1,
+            isAiGenerated: 1,
             // Remove these fields
             fields: "$$REMOVE",
             done: "$$REMOVE",
@@ -1014,6 +1017,7 @@ export class ReviewService {
       updated,
       created,
       public: false,
+      isAiGenerated: true,
     });
     // Fill database with given review
     const inserted = new this.reviewModel(review);

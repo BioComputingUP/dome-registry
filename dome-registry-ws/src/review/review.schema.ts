@@ -54,7 +54,8 @@ class Review {
     @Prop({ type: Number, required: false })
     score : number;
 
-    
+      @Prop({ type: Boolean, required: false })
+    isAiGenerated : boolean;
   
 }
 

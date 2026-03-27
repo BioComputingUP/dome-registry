@@ -24,11 +24,11 @@ async function bootstrap() {
     
   
     await userModel.updateOne(
-        { orcid: '' }, // Filter by Orcid.
+        { orcid: '0000-0002-2675-261X' }, // Filter by Orcid.
         {
           $addToSet: {
             organizations: {
-              $each: [''], // Add multiple values
+              $each: ['GigaScince','GigaByte'], // Add multiple values
             },
           },
         },

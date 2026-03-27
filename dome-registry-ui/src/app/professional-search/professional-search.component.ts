@@ -302,7 +302,7 @@ export class ProfessionalSearchComponent implements OnInit, OnDestroy {
     const a = this._document.createElement('a');
     a.style.display = 'none';
     a.href = url;
-    a.download = 'BulkDome.json';
+    a.download = 'dome-registry-export.json';
     this._document.body.appendChild(a);
     a.click();
 

@@ -1,10 +1,7 @@
 <!-- Modern Page Edit Component -->
 <div class="page-edit-modern" *ngIf="review$ | async as review">
   <!-- Floating particles for creative background -->
-  <div class="particle"></div>
-  <div class="particle"></div>
-  <div class="particle"></div>
-  <div class="particle"></div>
+
 
   <!-- User Authentication Check -->
   <ng-container *ngIf="user.auth || review.shortid; else signInFirst">
@@ -243,7 +240,7 @@
               <div class="form-field" *ngIf="(review.publication.tags | asArray).length > 0">
                 <label>Tags</label>
                 <div class="tags-container">
-                  <span *ngFor="let tag of (review.publication.tags | asArray)" class="tag">{{ tag | uppercase }}</span>
+                  <span class="tag" *ngFor="let tag of (review.publication.tags | asArray)" >{{ tag | uppercase }}</span>
                 </div>
                 <div class="field-help">Tags related to the published article</div>
               </div>
