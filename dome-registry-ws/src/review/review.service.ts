@@ -65,7 +65,7 @@ export class ReviewService {
 
   // @Cache({key:'Searche results'})
   async findAll(
-      query: { skip: number; limit: number; text: string; public: boolean; filter?: string },
+      query: { skip: number; limit: number; text: string; public: boolean; filter?: string, isAiGenerated?: boolean},
       sort: { by: string; asc: boolean },
       user?: User
   ) {
@@ -278,6 +278,7 @@ export class ReviewService {
                 },
                 // Filter reviews according to input query
                 {public: query.public},
+                {isAiGenerated: query.isAiGenerated}
               ],
             },
           },
@@ -516,27 +517,17 @@ export class ReviewService {
                     {public: true},
                     // Keep private reviews (organization only only)
                     {public: false, "publication.journal": {$in: user.organizations}},
+                    
                   ],
                 },
                 // Filter reviews according to input query
                 {public: query.public},
+                {isAiGenerated: query.isAiGenerated}
               ],
             },
           },
 
-          // $and: [
-          //     // Match public reviews (any user) and private ones (current user)
-          //     {
-          //         $or: [
-          //             // Keep public reviews
-          //             { 'public': true },
-          //             // Keep private reviews (current user only)
-          //             { 'public': false, 'user': new Types.ObjectId(user && user._id) },
-          //         ]
-          //     },
-          //     // Filter reviews according to input query
-          //     { 'public': query.public }
-          // ]
+          
 
           // Match public or private entries
 
@@ -792,6 +783,7 @@ export class ReviewService {
               },
               // Filter reviews according to input query
               {public: query.public},
+               {isAiGenerated: query.isAiGenerated}
             ],
           },
         },
@@ -1016,7 +1008,7 @@ export class ReviewService {
       user,
       updated,
       created,
-      public: false,
+      public:false ,
       
     });
     // Fill database with given review

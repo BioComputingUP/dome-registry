@@ -22,7 +22,7 @@ async function bootstrap() {
     const mySV = await app.get(ReviewService)
    try {
         // Read the JSON file
-        const jsonFilePath =  '/home/omar/Domebiocomp/dome-registry/dome-registry-ws/src/scripts/newdata2.json';
+        const jsonFilePath =  '/home/omar/data-fixed-dome/newdata2.json';
         
         if (!fs.existsSync(jsonFilePath)) {
             console.error(` Error: JSON file not found at ${jsonFilePath}`);

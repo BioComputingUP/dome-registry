@@ -71,6 +71,7 @@ export class ProfessionalSearchComponent implements OnInit, OnDestroy {
   public readonly text$ = new BehaviorSubject<string>(''); // Search text input
   public readonly filterCategory$ = new BehaviorSubject<string>('all'); // Default to 'all'
   public readonly public$ = new BehaviorSubject<'true' | 'false'>('true'); // Public filter
+  public readonly isAiGenerated$ = new BehaviorSubject<'true' | 'false'>('true'); // Public filter
   public readonly sort$ = new BehaviorSubject<Sort>({ // Sorting criteria
     by: 'publication.year',
     asc: 'false',
@@ -118,11 +119,12 @@ export class ProfessionalSearchComponent implements OnInit, OnDestroy {
     const [public$, sort$] = [this.public$, this.sort$];
 
     // Combine all query parameters into single observable
-    this.query$ = combineLatest([text$, this.public$, this.sort$, this.filterCategory$]).pipe(
-      map(([text, _public, sort, category]) => ({
+    this.query$ = combineLatest([text$, this.public$, this.sort$, this.filterCategory$, this.isAiGenerated$]).pipe(
+      map(([text, _public, sort, category,isAiGenerated]) => ({
         text,
         public: _public,
         filterCategory: category,
+        isAiGenerated,
         ...sort,
         skip: 0,
         limit: 100,
@@ -249,6 +251,11 @@ export class ProfessionalSearchComponent implements OnInit, OnDestroy {
   public onPublicChange(event: boolean) {
     this.public$.next(event ? 'true' : 'false');
   }
+
+  public onAiGeneratedChange(event: boolean) {
+    this.isAiGenerated$.next(event ? 'true' : 'false');
+  }
+
 
   public updateFilter(category: string) {
     this.filterCategory$.next(category);

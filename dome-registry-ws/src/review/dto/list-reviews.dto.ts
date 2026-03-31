@@ -48,6 +48,20 @@ export class ListReviewsDto {
   @Transform(({ value }) => value === "true")
   public: boolean = true;
 
+
+
+  @ApiProperty({
+    description: "Are the reviews public or not",
+    example: "True | False",
+    default: true,
+  })
+  @IsBoolean()
+  @Type(() => String)
+  @Transform(({ value }) => value === "false")
+  isAiGenerated : boolean = false;
+
+
+  
   @ApiProperty({
     description: "Type of sort",
     example: "Year | Title | Authors | Score",

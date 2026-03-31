@@ -74,7 +74,8 @@ export class ReviewController {
       public: query.public,
       skip: query.skip,
       limit: query.limit,
-      filter: query.filter
+      filter: query.filter,
+      isAiGenerated: query.isAiGenerated,
     };
     // Define sort parameters
     let _sort = { by: query.sort, asc: query.asc };

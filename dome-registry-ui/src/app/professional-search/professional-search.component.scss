@@ -1572,3 +1572,15 @@
     transform: translate(-50%, -50%) rotate(90deg);
   }
 }
+.ai-tag-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #FFF2EB; /* Very light orange */
+  color: #D9601A; /* Matches your progress bar roughly */
+  border: 1px solid #FAD1B8; /* Subtle border to define it */
+  font-size: 13px; /* Matches your existing tags */
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px; /* Matches your existing tag border-radius */
+}

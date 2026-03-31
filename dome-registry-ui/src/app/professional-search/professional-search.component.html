@@ -18,6 +18,9 @@
 
         <div class="search-panel-body">
           <div class="search-bar-container">
+            
+
+
             <!-- Public/Private toggle moved here -->
             <div class="toggle-container" *ngIf="public$ | async as public_">
               <label class="toggle-label">Public</label>
@@ -30,7 +33,30 @@
           </div>
         </div>
       </section>
+      <section class="auth-panel" >
+        <div class="search-panel-header">
+          
+          <p class="search-subtitle">Control access to AI Generated annotations</p>
+        </div>
 
+        <div class="search-panel-body">
+          <div class="search-bar-container">
+            
+
+
+            <!-- Public/Private toggle moved here -->
+            <div class="toggle-container" *ngIf="isAiGenerated$ | async as public_">
+              <label class="toggle-label">AI Generated</label>
+              <div class="toggle-switch">
+                <input type="checkbox" id="search-public-auth" class="toggle-input"
+                       (click)="onAiGeneratedChange(public_ !== 'true')" [checked]="public_ === 'false'">
+                <span class="toggle-slider" (click)="onAiGeneratedChange(public_ !== 'true')"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
       <!-- Search section - New Design -->
       <section class="search-panel">
       <div class="search-panel-header">
@@ -116,6 +142,8 @@
             <span>Bulk Download</span>
             <i class="download-icon"></i>
           </button>
+          
+
         </div>
       </div>
     </section>
