@@ -57,6 +57,7 @@ export class PageEditModernComponent implements OnInit, OnDestroy {
   public readonly updates = this.formBuilder.group({
     shortid: ['',],
     uuid: ['',],
+    isAiGenerated: [''],
     publication: this.formBuilder.group({
       pmid: ['', [notDefinedValidator(),]],
       created: ['',],

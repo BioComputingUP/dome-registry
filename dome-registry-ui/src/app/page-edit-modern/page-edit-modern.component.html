@@ -30,6 +30,16 @@
                 </div>
               </div>
             }
+
+           @if(review.isAiGenerated){
+               <div class="dome-id">
+                  <img src="assets/ai-application.png" class="img-fluid"   title="This Annotation is AI generated"/>
+                </div>
+                
+
+           }   
+
+
   
             <div class="score-summary">
               <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
