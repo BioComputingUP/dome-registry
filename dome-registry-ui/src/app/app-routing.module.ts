@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ExtraOptions, Route, RouterModule, Routes } from '@angular/router';
-import { PageSearchComponent } from "./page-search/page-search.component";
+
 import { ProfessionalSearchComponent } from "./professional-search/professional-search.component";
 import { PageEditModernComponent } from "./page-edit-modern/page-edit-modern.component";
 import { PageIntroComponent } from "./page-intro/page-intro.component";

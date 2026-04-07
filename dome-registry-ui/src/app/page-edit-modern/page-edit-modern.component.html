@@ -39,12 +39,14 @@
 
            }   
 
-
-  
-            <div class="score-summary">
-              <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
-                <ng-container *ngIf="kv.key === 'total'">
-                  <div class="total-score">
+           
+           
+           
+           <div class="score-summary">
+             <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
+               <ng-container *ngIf="kv.key === 'total'">
+                 <div class="total-score">
+                    @if (!review.isAiGenerated) {
                     <div class="score-circle" title="The DOME score is computed as the number of valid fields, divided by the total number of fields.">
                       <span class="score-value">{{kv.value.percentage!.toFixed(0)}}%</span>
                       <svg viewBox="0 0 36 36" class="circular-chart">
@@ -63,6 +65,7 @@
                       <div class="score-tooltip">The DOME score is computed as the number of valid fields, divided by the total number of fields.</div>
                     </div>
                     <span class="score-label">Total Score</span>
+                  }
                     <div class="download-json">
                       <button class="download-button" type="button" (click)="OnClickdownloadJSonfile($event)">
                         <i class="bi bi-save"></i>
@@ -80,18 +83,23 @@
           </header>
 
           <!-- Detailed Score Card -->
-          <div class="score-card">
-            <h3>Section Scores</h3>
-            <div class="score-grid">
-              <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
-                <ng-container *ngIf="kv.key as name">
-                  <ng-container *ngIf="name != 'publication' && name != 'total'">
-                    <ng-container *ngIf="kv.value as score">
-                      <div class="score-item" [class.active]="activeSection === name" (click)="setActiveSection(name)">
-                        <div class="score-name">{{name}}</div>
-                        <div class="score-details">
-                          <span class="score-fraction">{{score.done}} / {{score.done + score.skip}}</span>
-                          <span class="score-percentage">{{score.percentage!.toFixed(0)}}%</span>
+
+       @if (!review.isAiGenerated)  {
+
+
+         
+         <div class="score-card">
+           <h3>Section Scores</h3>
+           <div class="score-grid">
+             <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
+               <ng-container *ngIf="kv.key as name">
+                 <ng-container *ngIf="name != 'publication' && name != 'total'">
+                   <ng-container *ngIf="kv.value as score">
+                     <div class="score-item" [class.active]="activeSection === name" (click)="setActiveSection(name)">
+                       <div class="score-name">{{name}}</div>
+                       <div class="score-details">
+                         <span class="score-fraction">{{score.done}} / {{score.done + score.skip}}</span>
+                         <span class="score-percentage">{{score.percentage!.toFixed(0)}}%</span>
                         </div>
                         <div class="score-progress">
                           <div class="progress-fill" [style.width.%]="score.percentage"></div>
@@ -103,6 +111,7 @@
               </ng-container>
             </div>
           </div>
+        }
         </div>
 
         <!-- Form Content -->

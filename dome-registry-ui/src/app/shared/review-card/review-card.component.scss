@@ -1,0 +1,241 @@
+@import '../../../styles/variables';
+@import '../../../styles/mixins';
+@import '../../../styles/base';
+
+.result-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(17, 24, 39, 0.06); // subtle border for white card
+  border-left: 3px solid $navbar-orange; // keep accent
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+
+  &:hover {
+    background-color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.result-title {
+  color: #111827; // gray-900
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $navbar-orange;
+  }
+}
+
+// Match section
+.match-section {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #f9fafb; // light gray on white card
+  border-radius: 8px;
+}
+
+.match-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #374151; // gray-700
+}
+
+.match-item {
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.match-field {
+  font-weight: 600;
+  color: #111827; // gray-900
+  margin-right: 0.5rem;
+}
+
+.match-highlight {
+  background-color: rgba($navbar-orange, 0.3);
+  color: $color-white;
+  padding: 0 0.25rem;
+  border-radius: 2px;
+}
+
+// Info rows
+.info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #6b7280; // gray-500/600
+  min-width: 100px;
+}
+
+.info-value {
+  color: #111827; // gray-900
+
+  &.private {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #6b7280; // muted gray
+  }
+}
+
+.info-link {
+  color: $primary;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: darken($primary, 8%);
+    text-decoration: underline;
+  }
+
+  .link-icon {
+    position: relative;
+    width: 12px;
+    height: 12px;
+
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      background-color: currentColor;
+    }
+
+    &::before {
+      width: 8px;
+      height: 8px;
+      border: solid currentColor;
+      border-width: 0 1px 1px 0;
+      top: 0;
+      left: 0;
+    }
+
+    &::after {
+      width: 10px;
+      height: 1px;
+      transform: rotate(-45deg);
+      transform-origin: top left;
+      top: 0;
+      left: 0;
+    }
+  }
+}
+
+.lock-icon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    top: -5px;
+    left: 2px;
+  }
+}
+
+// Tags
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  padding: 0.25rem 0.75rem;
+  background-color: rgba($primary, 0.1);
+  color: $primary;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+// Score
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.score-value {
+  font-weight: 600;
+  color: #111827; // gray-900
+  min-width: 40px;
+}
+
+.score-bar-container {
+  flex: 1;
+  height: 12px;
+  background-color: $primary; // match page-intro score-wrapper
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.score-bar {
+  height: 100%;
+  background: linear-gradient(90deg, $navbar-orange, lighten($navbar-orange, 15%));
+  border-radius: 6px;
+  transition: width 0.5s ease;
+}
+
+.cite-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  background-color: #28a745; /* match Page Edit Modern */
+  border: none;
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: darken(#28a745, 10%);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  }
+
+  i {
+    font-size: 1rem;
+  }
+}
+
+
+/* Align Cite button on DOME-id row to the right */
+.result-card .dome-id-row .cite-button {
+  margin-left: auto;
+}

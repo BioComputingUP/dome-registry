@@ -31,6 +31,7 @@ import {AuthService} from '../auth.service';
 import {CommonModule, DOCUMENT} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {AsArrayPipe} from '../shared/as-array.pipe';
+import {ReviewCardComponent} from '../shared/review-card/review-card.component';
 
 type Reviews = Array<Review>;
 
@@ -48,11 +49,9 @@ interface Score {
   imports: [
     // Angular common directives and pipes (*ngIf, *ngFor, async, date, etc.)
     CommonModule,
-    // RouterLink directive used in template
-    RouterLink,
-    // Custom pipes
-    AsArrayPipe,
-  ],
+    // Custom components
+    ReviewCardComponent
+],
   templateUrl: './professional-search.component.html',
   styleUrls: ['./professional-search.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
