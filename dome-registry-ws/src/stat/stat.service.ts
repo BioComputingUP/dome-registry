@@ -27,7 +27,7 @@ export class StatService {
     async aggregateData(groupByField: any, sortCriteria: any): Promise<any[]> {
         try {
             return await this.reviewModel.aggregate([
-                { $match: { public: true } },
+                { $match: { public: true, isAiGenerated: false } },
                 {
                     $group: {
                         _id: groupByField,
