@@ -200,7 +200,14 @@
 
             <!-- Publication Section -->
             <section class="form-section" formGroupName="publication" [class.active]="activeSection === 'publication'">
-              <h2>Publication <i class="bi bi-file-earmark-text-fill"></i></h2>
+              <div class="d-flex  justify-content-between">
+
+                <h2>Publication <i class="bi bi-file-earmark-text-fill"></i></h2>
+                @if (review.isAiGenerated) {
+
+                  <img title="Metadata fetched from Crossref" src="https://assets.crossref.org/logo/metadata-from-crossref-logo-200.svg" width="200" alt="Metadata from Crossref logo">
+                }
+              </div>
 
               <div class="form-field">
                 <label for="title">Title</label>
