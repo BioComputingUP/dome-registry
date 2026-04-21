@@ -116,6 +116,19 @@
 
         <!-- Form Content -->
         <div class="form-content">
+          <!-- AI Generated Warning Banner -->
+          @if (review.isAiGenerated) {
+            <div class="ai-warning-banner">
+              <div class="banner-content">
+                <i class="bi bi-exclamation-triangle-fill banner-icon"></i>
+                <div class="banner-text">
+                  <strong>AI-Generated Annotation</strong>
+                  <p>This content was generated using AI — Verification recommended.</p>
+                </div>
+              </div>
+            </div>
+          }
+
           <!-- Navigation Bar with Progress Roadmap -->
           <div class="navigation-bar">
             <!-- Left Side - Progress Roadmap -->
@@ -592,7 +605,7 @@
             <div class="identifiers">
               
               <div class="identifier-item">
-                <span class="label">DOME-ID:</span>
+                <span class="">DOME-ID:</span>
                 <span class="value" [class.has-value]="!!review.shortid">{{ review.shortid || '-' }}</span>
               </div>
             </div>
