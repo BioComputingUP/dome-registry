@@ -590,12 +590,9 @@
           <!-- Action Footer -->
           <footer class="action-footer" *ngIf="(user.roles?.includes('user') && !review.public) || user.roles?.includes('admin')">
             <div class="identifiers">
+              
               <div class="identifier-item">
-                <span class="label">Unique Identifier:</span>
-                <span class="value" [class.has-value]="!!review.uuid">{{ review.uuid || '-' }}</span>
-              </div>
-              <div class="identifier-item">
-                <span class="label">Short Unique Identifier:</span>
+                <span class="label">DOME-ID:</span>
                 <span class="value" [class.has-value]="!!review.shortid">{{ review.shortid || '-' }}</span>
               </div>
             </div>
