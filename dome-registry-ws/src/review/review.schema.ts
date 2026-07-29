@@ -45,12 +45,9 @@ class Review {
     @Prop({ type: Object, required: true })
     evaluation: Evaluation;
 
-    @Prop({ type: String, enum:ReviewState ,default:ReviewState.Undefined})
-    reviewState?: ReviewState;
-   
-    @Prop({type:[{type: String}], required:false})
-    tags : any;
 
+   
+    
     @Prop({ type: Number, required: false })
     score : number;
 

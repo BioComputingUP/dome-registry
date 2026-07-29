@@ -4,6 +4,6 @@ export enum ReviewState {
     Submitted ='submitted',
     Accepted ='accepted',
     InPreparation ='inPreparation',
-    Undefined='undenfined'
+    Undefined='none'
 
 }

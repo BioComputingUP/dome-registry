@@ -4,7 +4,7 @@ import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 export function swaggerSetup(app:INestApplication, prefix: string) {
     
     const config = new DocumentBuilder()
-      .setTitle('DOME API Documentation')
+      .setTitle('DOME Registry API Documentation')
       // .addServer('http://localhost:8118/dome')
       .setVersion('2.0')
      

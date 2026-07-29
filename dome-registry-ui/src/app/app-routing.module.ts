@@ -3,6 +3,7 @@ import { ExtraOptions, Route, RouterModule, Routes } from '@angular/router';
 
 import { ProfessionalSearchComponent } from "./professional-search/professional-search.component";
 import { PageEditModernComponent } from "./page-edit-modern/page-edit-modern.component";
+
 import { PageIntroComponent } from "./page-intro/page-intro.component";
 //import { PageStatsComponent } from "./page-stats/page-stats.component";
 import { SwaggerAPiComponent } from "./swagger-api/swagger-api.component";
@@ -15,6 +16,7 @@ import { PoliciesComponent } from './policies/policies.component';
 import { TeamsComponent } from './teams/teams.component';
 import { GovernanceComponent } from './governance/governance.component';
 import { WidgetResolverService } from './services/widget-script.guard';
+import { PageEditNewComponent } from './page-edit-new/page-edit-new.component';
 
 // Define default parameters
 const params: Route = {
@@ -33,6 +35,8 @@ export const routes: Routes = [
   },
   // Define path to search page
   { ...params, path: 'search', component: ProfessionalSearchComponent },
+  // Define path to create new review
+ // { ...params, path: 'review-new/:shortid', component: PageEditNewComponent },
   // Define path to list of reviews
   { ...params, path: 'review', component: SubmissionPageComponent },
   // Define path to edit page, with id
@@ -68,3 +72,6 @@ export const options: ExtraOptions = {
 })
 export class AppRoutingModule {
 }
+
+
+

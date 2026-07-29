@@ -16,8 +16,8 @@ import { configuration } from "./config/configuration";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { ApicuronModule } from "./apicuron-sub/apicuron-sub.module";
 import { EmailModule } from "./Email-system/email-client.module";
- import { MailerModule } from "@nestjs-modules/mailer";
-
+import { MailerModule } from "@nestjs-modules/mailer";
+import {newReviewModule} from "./review-new/new-review.module";
 
 import {StatModule} from "./stat/stat.module";
 @Module({
@@ -73,6 +73,7 @@ import {StatModule} from "./stat/stat.module";
         MailerModule,
         EmailModule,
         jsonldModule,
+        newReviewModule,
   
        
         StatModule

@@ -1,0 +1,997 @@
+<!-- Modern Page Edit Component -->
+<div class="page-edit-modern" *ngIf="review$ | async as review">
+  <!-- Floating particles for creative background -->
+
+
+  <!-- User Authentication Check -->
+  <ng-container *ngIf="user.auth || review.shortid; else signInFirst">
+    <!-- Main Content Container -->
+    <div class="main-container" [root]="element" [target]="'.section-nav-item'" scroll-spy>
+      <!-- Main Content Area -->
+      <div class="content-area">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+          <!-- Header with DOME ID and Score -->
+          <header class="page-header">
+            <div class="dome-id">
+              <i class="bi bi-database-check"></i>
+              <div class="dome-id-content">
+                <span class="label">DOME-ID</span>
+                <span class="value">{{review.shortid || 'New Entry'}}</span>
+              </div>
+            </div>
+            @if (review.publication.pmid){
+
+              <div class="dome-id">
+                <i class="bi bi bi-box-arrow-up-right"></i>
+                <div class="dome-id-content">
+                  <span class="label">PMID</span>
+                  <span class="value"> <a href="https://europepmc.org/article/MED/{{review.publication.pmid}}" target="_blank">{{review.publication.pmid || 'New Entry'}}</a>  </span>
+                </div>
+              </div>
+            }
+
+           @if(review.isAiGenerated){
+               <div class="dome-id">
+                  <img src="assets/ai-application.png" class="img-fluid"   title="This Annotation is AI generated"/>
+                </div>
+                
+
+           }   
+
+           
+           
+           
+           <div class="score-summary">
+             <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
+               <ng-container *ngIf="kv.key === 'total'">
+                 <div class="total-score">
+                    @if (!review.isAiGenerated) {
+                    <div class="score-circle" title="The DOME score is computed as the number of valid fields, divided by the total number of fields.">
+                      <span class="score-value">{{kv.value.percentage!.toFixed(0)}}%</span>
+                      <svg viewBox="0 0 36 36" class="circular-chart">
+                        <path class="circle-bg"
+                          d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                        <path class="circle"
+                          [attr.stroke-dasharray]="kv.value.percentage + ', 100'"
+                          d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                        />
+                      </svg>
+                      <div class="score-tooltip">The DOME score is computed as the number of valid fields, divided by the total number of fields.</div>
+                    </div>
+                    <span class="score-label">Total Score</span>
+                  }
+                    <div class="download-json">
+                      <button class="download-button" type="button" (click)="OnClickdownloadJSonfile($event)">
+                        <i class="bi bi-save"></i>
+                        <span>Download JSON</span>
+                      </button>
+                      <button class="cite-button" type="button" (click)="openCiteModal()">
+                        <i class="bi bi-quote"></i>
+                        <span>Cite</span>
+                      </button>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </header>
+
+          <!-- Detailed Score Card -->
+
+       @if (!review.isAiGenerated)  {
+
+
+         
+         <div class="score-card">
+           <h3>Section Scores</h3>
+           <div class="score-grid">
+             <ng-container *ngFor="let kv of score$ | async | keyvalue: doNotSort">
+               <ng-container *ngIf="kv.key as name">
+                 <ng-container *ngIf="name != 'publication' && name != 'total'">
+                   <ng-container *ngIf="kv.value as score">
+                     <div class="score-item" [class.active]="activeSection === name" (click)="setActiveSection(name)">
+                       <div class="score-name">{{name}}</div>
+                       <div class="score-details">
+                         <span class="score-fraction">{{score.done}} / {{score.done + score.skip}}</span>
+                         <span class="score-percentage">{{score.percentage!.toFixed(0)}}%</span>
+                        </div>
+                        <div class="score-progress">
+                          <div class="progress-fill" [style.width.%]="score.percentage"></div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        }
+        </div>
+
+        <!-- Form Content -->
+        <div class="form-content">
+          <!-- AI Generated Warning Banner -->
+          @if (review.isAiGenerated) {
+            <div class="ai-warning-banner">
+              <div class="banner-content">
+                <i class="bi bi-exclamation-triangle-fill banner-icon"></i>
+                <div class="banner-text">
+                  <strong>AI-Generated Annotation</strong>
+                  <p>This content was generated using AI — Verification recommended.</p>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Navigation Bar with Progress Roadmap -->
+          <div class="navigation-bar">
+            <!-- Left Side - Progress Roadmap -->
+            <div class="progress-roadmap">
+              <div class="roadmap-step"
+                   [class.active]="activeSection === 'publication'"
+                   [class.completed]="activeSection !== 'publication'"
+                   (click)="setActiveSection('publication')">
+                <div class="step-icon"><i class="bi bi-file-earmark-text-fill"></i></div>
+                <div class="step-label">Publication</div>
+              </div>
+              <div class="roadmap-connector" [class.active]="activeSection !== 'publication'"></div>
+
+              <div class="roadmap-step"
+                   [class.active]="activeSection === 'data'"
+                   [class.completed]="activeSection !== 'publication' && activeSection !== 'data'"
+                   [class.upcoming]="activeSection === 'publication'"
+                   (click)="setActiveSection('data')">
+                <div class="step-icon"><i class="bi bi-server"></i></div>
+                <div class="step-label">Data</div>
+              </div>
+              <div class="roadmap-connector" [class.active]="activeSection !== 'publication' && activeSection !== 'data'"></div>
+
+              <div class="roadmap-step"
+                   [class.active]="activeSection === 'optimization'"
+                   [class.completed]="activeSection === 'model' || activeSection === 'evaluation'"
+                   [class.upcoming]="activeSection === 'publication' || activeSection === 'data'"
+                   (click)="setActiveSection('optimization')">
+                <div class="step-icon"><i class="bi bi-graph-up-arrow"></i></div>
+                <div class="step-label">Optimization</div>
+              </div>
+              <div class="roadmap-connector" [class.active]="activeSection === 'model' || activeSection === 'evaluation'"></div>
+
+              <div class="roadmap-step"
+                   [class.active]="activeSection === 'model'"
+                   [class.completed]="activeSection === 'evaluation'"
+                   [class.upcoming]="activeSection === 'publication' || activeSection === 'data' || activeSection === 'optimization'"
+                   (click)="setActiveSection('model')">
+                <div class="step-icon"><i class="bi bi-gear-wide-connected"></i></div>
+                <div class="step-label">Model</div>
+              </div>
+              <div class="roadmap-connector" [class.active]="activeSection === 'evaluation'"></div>
+
+              <div class="roadmap-step"
+                   [class.active]="activeSection === 'evaluation'"
+                   [class.upcoming]="activeSection !== 'evaluation'"
+                   (click)="setActiveSection('evaluation')">
+                <div class="step-icon"><i class="bi bi-clipboard2-check-fill"></i></div>
+                <div class="step-label">Evaluation</div>
+              </div>
+            </div>
+
+            <!-- Right Side - Navigation Buttons -->
+            <div class="navigation-buttons">
+              <button class="nav-button prev-button"
+                      [disabled]="activeSection === 'publication'"
+                      (click)="setActiveSection(
+                        activeSection === 'data' ? 'publication' :
+                        activeSection === 'optimization' ? 'data' :
+                        activeSection === 'model' ? 'optimization' :
+                        activeSection === 'evaluation' ? 'model' : 'publication'
+                      )">
+                <i class="bi bi-arrow-left"></i>
+                <span>Previous</span>
+              </button>
+
+              <button class="nav-button next-button"
+                      [disabled]="activeSection === 'evaluation'"
+                      (click)="setActiveSection(
+                        activeSection === 'publication' ? 'data' :
+                        activeSection === 'data' ? 'optimization' :
+                        activeSection === 'optimization' ? 'model' :
+                        activeSection === 'model' ? 'evaluation' : 'evaluation'
+                      )">
+                <span>Next</span>
+                <i class="bi bi-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+
+          <form [formGroup]="updates">
+
+            <!-- Publication Section -->
+            <section class="form-section" formGroupName="publication" [class.active]="activeSection === 'publication'">
+              <div class="d-flex  justify-content-between">
+
+                <h2>Publication <i class="bi bi-file-earmark-text-fill"></i></h2>
+                @if (review.isAiGenerated) {
+
+                  <img title="Metadata fetched from Crossref" src="https://assets.crossref.org/logo/metadata-from-crossref-logo-200.svg" width="200" alt="Metadata from Crossref logo">
+                }
+              </div>
+
+              <div class="form-field">
+                <label for="title">Title</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="title" formControlName="title" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('title')?.value">
+                  {{updates.get('publication')?.get('title')?.value || 'No title provided'}}
+                </div>
+                <div class="field-help">Title of the article</div>
+              </div>
+
+              <div class="form-field">
+                <label for="authors">Authors</label>
+                <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="authors" formControlName="authors" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('authors')?.value">
+                  {{updates.get('publication')?.get('authors')?.value || 'No authors provided'}}
+                </div>
+                <div class="field-help">Authors which contributes to the article</div>
+              </div>
+
+              <div class="form-field">
+                <label for="journal">Publication Journal</label>
+                <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="journal" formControlName="journal" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('journal')?.value">
+                  {{updates.get('publication')?.get('journal')?.value || 'No journal provided'}}
+                </div>
+                <div class="field-help">Name of the journal where the paper has been published</div>
+              </div>
+
+              <div class="form-field">
+                <label for="year">Publication Year</label>
+                <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="year" formControlName="year" [readonly]="!user.roles?.includes('admin') && review.public" [class.admin-input]="user.roles?.includes('admin')">
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('year')?.value">
+                  {{updates.get('publication')?.get('year')?.value || 'No year provided'}}
+                </div>
+                <div class="field-help">Year of publication, as a number</div>
+              </div>
+
+              <div class="form-field">
+                <label for="doi">DOI</label>
+                <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="doi" formControlName="doi" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('doi')?.value">
+                  {{updates.get('publication')?.get('doi')?.value || 'No DOI provided'}}
+                </div>
+                <div class="field-help">DOI of the published article</div>
+              </div>
+
+              <div class="form-field">
+                <label for="EPMC">EPMC ID</label>
+                <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="pmcid" formControlName="pmcid" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('publication')?.get('pmcid')?.value">
+                 {{updates.get('publication')?.get('pmcid')?.value || 'No EPMC provided'}}
+                </div>
+                <div class="field-help">EPMC link of the published article</div>
+              </div>
+
+              <div class="form-field" *ngIf="(review.publication.tags | asArray).length > 0">
+                <label>Tags</label>
+                <div class="tags-container">
+                  <span class="tag" *ngFor="let tag of (review.publication.tags | asArray)" >{{ tag | uppercase }}</span>
+                </div>
+                <div class="field-help">Tags related to the published article</div>
+              </div>
+
+              <div class="form-field dates">
+                <div class="date-item"><strong>Created:</strong> {{review.created | date}}</div>
+                <div class="date-item"><strong>Last update:</strong> {{review.updated | date}}</div>
+              </div>
+            </section>
+
+            <!-- Data Section -->
+            <section class="form-section" formGroupName="data" [class.active]="activeSection === 'data'">
+              <h2>Data <i class="bi bi-server"></i></h2>
+
+              <!-- Data Availability Subsection -->
+              <div class="form-subsection" formGroupName="availability">
+                <h3>Availability</h3>
+                <div class="form-field">
+                  <label>Is the Dataset released in a public forum?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="data-avail-public" [checked]="getControl('data', 'availability', 'isPublic')?.value === true" (change)="getControl('data', 'availability', 'isPublic')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="data-avail-public" [checked]="getControl('data', 'availability', 'isPublic')?.value === false" (change)="getControl('data', 'availability', 'isPublic')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="data-avail-licence">License</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-avail-licence" formControlName="licence" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('data')?.get('availability')?.get('licence')?.value">
+                    {{updates.get('data')?.get('availability')?.get('licence')?.value || 'No license information provided'}}
+                  </div>
+                  <div class="field-help">If yes, where and how (license)?</div>
+                </div>
+              </div>
+
+              <!-- Data Provenance Subsection -->
+              <div class="form-subsection" formGroupName="provenance">
+                <h3>Provenance</h3>
+                <div class="form-field">
+                  <label for="data-prov-source">Source</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-prov-source" formControlName="source" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('data')?.get('provenance')?.get('source')?.value">
+                    {{updates.get('data')?.get('provenance')?.get('source')?.value || 'No source provided'}}
+                  </div>
+                  <div class="field-help">Source of the dataset?</div>
+                </div>
+                <div class="form-field">
+                  <label for="data-prov-numpoints">Number of Data Points</label>
+                  <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="data-prov-numpoints" formControlName="numDataPoints" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('data')?.get('provenance')?.get('numDataPoints')?.value">
+                    {{updates.get('data')?.get('provenance')?.get('numDataPoints')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">Number of data points?</div>
+                </div>
+                <div class="form-field">
+                  <label>Data used in previous paper and/or by community?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="data-prov-prevuse" [checked]="getControl('data', 'provenance', 'isPrevUse')?.value === true" (change)="getControl('data', 'provenance', 'isPrevUse')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="data-prov-prevuse" [checked]="getControl('data', 'provenance', 'isPrevUse')?.value === false" (change)="getControl('data', 'provenance', 'isPrevUse')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Data Redundancy Subsection -->
+              <div class="form-subsection" formGroupName="redundancy">
+                <h3>Redundancy</h3>
+                <div class="form-field">
+                  <label for="data-red-splitmethod">Split Method</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-red-splitmethod" formControlName="splitMethod" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('data')?.get('redundancy')?.get('splitMethod')?.value">
+                    {{updates.get('data')?.get('redundancy')?.get('splitMethod')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How were the datasets split?</div>
+                </div>
+                <div class="form-field">
+                  <label>Are the training and test sets independent?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="data-red-indep" [checked]="getControl('data', 'redundancy', 'isIndependent')?.value === true" (change)="getControl('data', 'redundancy', 'isIndependent')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="data-red-indep" [checked]="getControl('data', 'redundancy', 'isIndependent')?.value === false" (change)="getControl('data', 'redundancy', 'isIndependent')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="data-red-enforce">Enforcement Method</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-red-enforce" formControlName="enforceMethod" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('data')?.get('redundancy')?.get('enforceMethod')?.value">
+                    {{updates.get('data')?.get('redundancy')?.get('enforceMethod')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How was this enforced?</div>
+                </div>
+                <div class="form-field">
+                  <label for="data-red-distcomp">Distribution Comparison</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-red-distcomp" formControlName="distributionComp" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('data')?.get('redundancy')?.get('distributionComp')?.value">
+                    {{updates.get('data')?.get('redundancy')?.get('distributionComp')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How does the distribution compare to previously published ML datasets?</div>
+                </div>
+              </div>
+
+              <!-- Data Splits Subsection -->
+              <div class="form-subsection" formGroupName="splits">
+                <h3>Splits</h3>
+                <div class="form-field">
+                  <label for="data-splits-num">Number of Splits</label>
+                  <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="data-splits-num" formControlName="numSplits" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('data')?.get('splits')?.get('numSplits')?.value">
+                    {{updates.get('data')?.get('splits')?.get('numSplits')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How many Data splits?</div>
+                </div>
+                <div class="form-field">
+                  <label for="data-splits-perpoint">Data Points Per Split</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-splits-perpoint" formControlName="dataPointsPerSplit" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('data')?.get('splits')?.get('dataPointsPerSplit')?.value">
+                    {{updates.get('data')?.get('splits')?.get('dataPointsPerSplit')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How many data points in each split?</div>
+                </div>
+                <div class="form-field">
+                  <label for="data-splits-other">Other Splits</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-splits-other" formControlName="otherSplits" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('data')?.get('splits')?.get('otherSplits')?.value">
+                    {{updates.get('data')?.get('splits')?.get('otherSplits')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">If the number of data splits is greater than two (2), what were other splits?</div>
+                </div>
+                <div class="form-field">
+                  <label for="data-splits-dist">Split Distribution</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="data-splits-dist" formControlName="splitDist" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('data')?.get('splits')?.get('splitDist')?.value">
+                    {{updates.get('data')?.get('splits')?.get('splitDist')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">What is the distribution of data points in each data split?</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Optimization Section -->
+            <section class="form-section" formGroupName="optimization" [class.active]="activeSection === 'optimization'">
+              <h2>Optimization <i class="bi bi-graph-up-arrow"></i></h2>
+
+              <!-- Algorithm Subsection -->
+              <div class="form-subsection" formGroupName="algorithm">
+                <h3>Algorithm</h3>
+                <div class="form-field">
+                  <label for="optim-alg-name">Algorithm Name</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-alg-name" formControlName="algName" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('algorithm')?.get('algName')?.value">
+                    {{updates.get('optimization')?.get('algorithm')?.get('algName')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">What is the ML Algorithm used?</div>
+                </div>
+                <div class="form-field">
+                  <label>Is the machine learning Algorithm new?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-alg-new" [checked]="getControl('optimization', 'algorithm', 'isNewAlg')?.value === true" (change)="getControl('optimization', 'algorithm', 'isNewAlg')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-alg-new" [checked]="getControl('optimization', 'algorithm', 'isNewAlg')?.value === false" (change)="getControl('optimization', 'algorithm', 'isNewAlg')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="optim-alg-pub">Algorithm Publication Justification</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-alg-pub" formControlName="algPrevPublished" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('algorithm')?.get('algPrevPublished')?.value">
+                    {{updates.get('optimization')?.get('algorithm')?.get('algPrevPublished')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">If it's a new ML Algorithm, why wasn't it published in a machine learning journal?</div>
+                </div>
+              </div>
+
+              <!-- Configuration Subsection -->
+              <div class="form-subsection" formGroupName="config">
+                <h3>Configuration</h3>
+                <div class="form-field">
+                  <label>Are the hyper-parameter configurations, optimization schedule, model files available?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-config-avail" [checked]="getControl('optimization', 'config', 'isAvailable')?.value === true" (change)="getControl('optimization', 'config', 'isAvailable')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-config-avail" [checked]="getControl('optimization', 'config', 'isAvailable')?.value === false" (change)="getControl('optimization', 'config', 'isAvailable')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="optim-config-licence">License</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-config-licence" formControlName="licence" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('config')?.get('licence')?.value">
+                    {{updates.get('optimization')?.get('config')?.get('licence')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">If yes, where and how (license)?</div>
+                </div>
+              </div>
+
+              <!-- Encoding Subsection -->
+              <div class="form-subsection" formGroupName="encoding">
+                <h3>Encoding</h3>
+                <div class="form-field">
+                  <label for="optim-enc-method">Encoding Method</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-enc-method" formControlName="encMethod" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('encoding')?.get('encMethod')?.value">
+                    {{updates.get('optimization')?.get('encoding')?.get('encMethod')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How was the data encoding and preprocessed for the machine learning algorithm?</div>
+                </div>
+              </div>
+
+              <!-- Features Subsection -->
+              <div class="form-subsection" formGroupName="features">
+                <h3>Features</h3>
+                <div class="form-field">
+                  <label for="optim-feat-num">Number of Features</label>
+                  <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="optim-feat-num" formControlName="numFeatures" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('features')?.get('numFeatures')?.value">
+                    {{updates.get('optimization')?.get('features')?.get('numFeatures')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How many features (f) are used as input?</div>
+                </div>
+                <div class="form-field">
+                  <label>Was feature selection performed?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-feat-select" [checked]="getControl('optimization', 'features', 'featSelection')?.value === true" (change)="getControl('optimization', 'features', 'featSelection')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-feat-select" [checked]="getControl('optimization', 'features', 'featSelection')?.value === false" (change)="getControl('optimization', 'features', 'featSelection')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label>If feature selection was performed, was it done using the training set only?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-feat-train" [checked]="getControl('optimization', 'features', 'trainingOnlySelection')?.value === true" (change)="getControl('optimization', 'features', 'trainingOnlySelection')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-feat-train" [checked]="getControl('optimization', 'features', 'trainingOnlySelection')?.value === false" (change)="getControl('optimization', 'features', 'trainingOnlySelection')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Fitting Subsection -->
+              <div class="form-subsection" formGroupName="fitting">
+                <h3>Fitting</h3>
+                <div class="form-field">
+                  <label>Is the number of parameters much larger than the number of training points?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-fit-params" [checked]="getControl('optimization', 'fitting', 'isParamsLarger')?.value === true" (change)="getControl('optimization', 'fitting', 'isParamsLarger')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-fit-params" [checked]="getControl('optimization', 'fitting', 'isParamsLarger')?.value === false" (change)="getControl('optimization', 'fitting', 'isParamsLarger')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="optim-fit-overfit">Over-fitting Prevention</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-fit-overfit" formControlName="noOverFit" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('fitting')?.get('noOverFit')?.value">
+                    {{updates.get('optimization')?.get('fitting')?.get('noOverFit')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">If yes to the previous question, how was over-fitting ruled out?</div>
+                </div>
+                <div class="form-field">
+                  <label for="optim-fit-underfit">Under-fitting Prevention</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-fit-underfit" formControlName="noUnderFit" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('fitting')?.get('noUnderFit')?.value">
+                    {{updates.get('optimization')?.get('fitting')?.get('noUnderFit')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How was under-fitting ruled out?</div>
+                </div>
+              </div>
+
+              <!-- Meta Subsection -->
+              <div class="form-subsection" formGroupName="meta">
+                <h3>Meta-predictor</h3>
+                <div class="form-field">
+                  <label>Does the model use data from other machine-learning algorithms as input?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-meta-is" [checked]="getControl('optimization', 'meta', 'isMeta')?.value === true" (change)="getControl('optimization', 'meta', 'isMeta')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-meta-is" [checked]="getControl('optimization', 'meta', 'isMeta')?.value === false" (change)="getControl('optimization', 'meta', 'isMeta')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="optim-meta-methods">Meta Methods</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-meta-methods" formControlName="metaMethods" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('meta')?.get('metaMethods')?.value">
+                    {{updates.get('optimization')?.get('meta')?.get('metaMethods')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">If it is a meta-predictor, which machine-learning methods constitute the whole?</div>
+                </div>
+                <div class="form-field">
+                  <label>If it is a meta-predictor, is it completely clear that training data is independent?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-meta-indep" [checked]="getControl('optimization', 'meta', 'metaIndep')?.value === true" (change)="getControl('optimization', 'meta', 'metaIndep')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-meta-indep" [checked]="getControl('optimization', 'meta', 'metaIndep')?.value === false" (change)="getControl('optimization', 'meta', 'metaIndep')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Parameters Subsection -->
+              <div class="form-subsection" formGroupName="parameters">
+                <h3>Parameters</h3>
+                <div class="form-field">
+                  <label for="optim-param-num">Number of Parameters</label>
+                  <input *ngIf="!review.public || user.roles?.includes('admin')" type="text" id="optim-param-num" formControlName="numParams" [readonly]="review.public" [class.admin-input]="user.roles?.includes('admin')">
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('parameters')?.get('numParams')?.value">
+                    {{updates.get('optimization')?.get('parameters')?.get('numParams')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How many parameters (p) are used in the model?</div>
+                </div>
+                <div class="form-field">
+                  <label for="optim-param-sel">Parameter Selection Method</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-param-sel" formControlName="pSelMeth" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('parameters')?.get('pSelMeth')?.value">
+                    {{updates.get('optimization')?.get('parameters')?.get('pSelMeth')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How was p selected?</div>
+                </div>
+              </div>
+
+              <!-- Regularisation Subsection -->
+              <div class="form-subsection" formGroupName="regularisation">
+                <h3>Regularisation</h3>
+                <div class="form-field">
+                  <label>Were any over-fitting prevention techniques performed?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-reg-has" [checked]="getControl('optimization', 'regularisation', 'hasReg')?.value === true" (change)="getControl('optimization', 'regularisation', 'hasReg')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="optim-reg-has" [checked]="getControl('optimization', 'regularisation', 'hasReg')?.value === false" (change)="getControl('optimization', 'regularisation', 'hasReg')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="optim-reg-tech">Regularization Techniques</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="optim-reg-tech" formControlName="regTechs" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('optimization')?.get('regularisation')?.get('regTechs')?.value">
+                    {{updates.get('optimization')?.get('regularisation')?.get('regTechs')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">If yes, which ones?</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Model Section -->
+            <section class="form-section" formGroupName="model" [class.active]="activeSection === 'model'">
+              <h2>Model <i class="bi bi-gear-wide-connected"></i></h2>
+
+              <!-- Model Availability Subsection -->
+              <div class="form-subsection" formGroupName="availability">
+                <h3>Availability</h3>
+                <div class="form-field">
+                  <label>Is the source code released?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="model-avail-code" [checked]="getControl('model', 'availability', 'isCodeAvail')?.value === true" (change)="getControl('model', 'availability', 'isCodeAvail')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="model-avail-code" [checked]="getControl('model', 'availability', 'isCodeAvail')?.value === false" (change)="getControl('model', 'availability', 'isCodeAvail')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label>Is a method to run the algorithm (executable, web server, container) released?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="model-avail-exec" [checked]="getControl('model', 'availability', 'isExecAvailable')?.value === true" (change)="getControl('model', 'availability', 'isExecAvailable')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="model-avail-exec" [checked]="getControl('model', 'availability', 'isExecAvailable')?.value === false" (change)="getControl('model', 'availability', 'isExecAvailable')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="model-avail-licence">License</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="model-avail-licence" formControlName="licence" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('model')?.get('availability')?.get('licence')?.value">
+                    {{updates.get('model')?.get('availability')?.get('licence')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">If yes to public release, where and how (license)?</div>
+                </div>
+              </div>
+
+              <!-- Model Duration Subsection -->
+              <div class="form-subsection" formGroupName="duration">
+                <h3>Duration</h3>
+                <div class="form-field">
+                  <label for="model-dur-runtime">Run Time</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="model-dur-runtime" formControlName="runTime" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('model')?.get('duration')?.get('runTime')?.value">
+                    {{updates.get('model')?.get('duration')?.get('runTime')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How much time did it take for the model to run (e.g., seconds on a desktop PC)?</div>
+                </div>
+              </div>
+
+              <!-- Model Interpretability Subsection -->
+              <div class="form-subsection" formGroupName="interpretability">
+                <h3>Interpretability</h3>
+                <div class="form-field">
+                  <label for="model-interp-type">Interpretability Type</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="model-interp-type" formControlName="interpType" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('model')?.get('interpretability')?.get('interpType')?.value">
+                    {{updates.get('model')?.get('interpretability')?.get('interpType')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">Is the model blackbox or transparent?</div>
+                </div>
+                <div class="form-field">
+                  <label for="model-interp-exp">Transparency Explanation</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="model-interp-exp" formControlName="transpExp" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('model')?.get('interpretability')?.get('transpExp')?.value">
+                    {{updates.get('model')?.get('interpretability')?.get('transpExp')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">If the model is transparent, can you give clear examples for this?</div>
+                </div>
+              </div>
+
+              <!-- Model Output Subsection -->
+              <div class="form-subsection" formGroupName="output">
+                <h3>Output</h3>
+                <div class="form-field">
+                  <label for="model-out-type">Output Type</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="model-out-type" formControlName="outType" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('model')?.get('output')?.get('outType')?.value">
+                    {{updates.get('model')?.get('output')?.get('outType')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">Is the model classification or regression?</div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Evaluation Section -->
+            <section class="form-section" formGroupName="evaluation" [class.active]="activeSection === 'evaluation'">
+              <h2>Evaluation <i class="bi bi-clipboard2-check-fill"></i></h2>
+
+              <!-- Evaluation Method Subsection -->
+              <div class="form-subsection" formGroupName="method">
+                <h3>Method</h3>
+                <div class="form-field">
+                  <label for="eval-method-eval">Evaluation Method</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="eval-method-eval" formControlName="evalMethod" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('evaluation')?.get('method')?.get('evalMethod')?.value">
+                    {{updates.get('evaluation')?.get('method')?.get('evalMethod')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">How was the method evaluated? (E.g. cross-validation, independent dataset, novel experiments)</div>
+                </div>
+              </div>
+
+              <!-- Evaluation Availability Subsection -->
+              <div class="form-subsection" formGroupName="availability">
+                <h3>Availability</h3>
+                <div class="form-field">
+                  <label>Are the raw evaluation files available?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-avail-raw" [checked]="getControl('evaluation', 'availability', 'isRawAvail')?.value === true" (change)="getControl('evaluation', 'availability', 'isRawAvail')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-avail-raw" [checked]="getControl('evaluation', 'availability', 'isRawAvail')?.value === false" (change)="getControl('evaluation', 'availability', 'isRawAvail')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="eval-avail-licence">License</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="eval-avail-licence" formControlName="licence" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('evaluation')?.get('availability')?.get('licence')?.value">
+                    {{updates.get('evaluation')?.get('availability')?.get('licence')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">If publicly released, where and how (license)?</div>
+                </div>
+              </div>
+
+              <!-- Evaluation Comparison Subsection -->
+              <div class="form-subsection" formGroupName="comparison">
+                <h3>Comparison</h3>
+                <div class="form-field">
+                  <label>Was a comparison to publicly available methods performed on benchmark datasets?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-comp-public" [checked]="getControl('evaluation', 'comparison', 'hasPublicComparison')?.value === true" (change)="getControl('evaluation', 'comparison', 'hasPublicComparison')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-comp-public" [checked]="getControl('evaluation', 'comparison', 'hasPublicComparison')?.value === false" (change)="getControl('evaluation', 'comparison', 'hasPublicComparison')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label>Was a comparison to simpler baselines performed?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-comp-base" [checked]="getControl('evaluation', 'comparison', 'hasBaseComparison')?.value === true" (change)="getControl('evaluation', 'comparison', 'hasBaseComparison')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-comp-base" [checked]="getControl('evaluation', 'comparison', 'hasBaseComparison')?.value === false" (change)="getControl('evaluation', 'comparison', 'hasBaseComparison')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Evaluation Confidence Subsection -->
+              <div class="form-subsection" formGroupName="confidance">
+                <h3>Confidence</h3>
+                <div class="form-field">
+                  <label>Do the performance metrics have confidence intervals?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-conf-interval" [checked]="getControl('evaluation', 'confidance', 'confidenceInterval')?.value === true" (change)="getControl('evaluation', 'confidance', 'confidenceInterval')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-conf-interval" [checked]="getControl('evaluation', 'confidance', 'confidenceInterval')?.value === false" (change)="getControl('evaluation', 'confidance', 'confidenceInterval')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label>Are the results statistically significant to claim that the method is superior?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-conf-sig" [checked]="getControl('evaluation', 'confidance', 'statSignificant')?.value === true" (change)="getControl('evaluation', 'confidance', 'statSignificant')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-conf-sig" [checked]="getControl('evaluation', 'confidance', 'statSignificant')?.value === false" (change)="getControl('evaluation', 'confidance', 'statSignificant')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Evaluation Measure Subsection -->
+              <div class="form-subsection" formGroupName="measure">
+                <h3>Measure</h3>
+                <div class="form-field">
+                  <label for="eval-meas-metrics">Performance Metrics</label>
+                  <textarea *ngIf="!review.public || user.roles?.includes('admin')" id="eval-meas-metrics" formControlName="metrics" [readonly]="review.public" [class.admin-textarea]="user.roles?.includes('admin')"></textarea>
+                  <div *ngIf="review.public && !user.roles?.includes('admin')" class="content-display" [class.empty]="!updates.get('evaluation')?.get('measure')?.get('metrics')?.value">
+                    {{updates.get('evaluation')?.get('measure')?.get('metrics')?.value || 'Not specified'}}
+                  </div>
+                  <div class="field-help">Which performance metrics are reported?</div>
+                </div>
+                <div class="form-field">
+                  <label>Is this set of metrics representative (e.g. compared to the literature)?</label>
+                  <div class="yes-no-field">
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-meas-rep" [checked]="getControl('evaluation', 'measure', 'isRepresentative')?.value === true" (change)="getControl('evaluation', 'measure', 'isRepresentative')?.setValue(true)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-check-circle"></i> Yes</span>
+                    </label>
+                    <label class="yes-no-option">
+                      <input type="radio" name="eval-meas-rep" [checked]="getControl('evaluation', 'measure', 'isRepresentative')?.value === false" (change)="getControl('evaluation', 'measure', 'isRepresentative')?.setValue(false)" [disabled]="review.public && !user.roles?.includes('admin')">
+                      <span class="yes-no-label"><i class="bi bi-x-circle"></i> No</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </form>
+
+          <!-- Action Footer -->
+          <footer class="action-footer" *ngIf="(user.roles?.includes('user') && !review.public) || user.roles?.includes('admin')">
+            <div class="identifiers">
+              
+              <div class="identifier-item">
+                <span class="">DOME-ID:</span>
+                <span class="value" [class.has-value]="!!review.shortid">{{ review.shortid || '-' }}</span>
+              </div>
+            </div>
+
+            <div class="action-buttons" *ngIf="review.public == false">
+              <button class="delete-button" type="button" [disabled]="!review.uuid" (click)="onDeleteClick($event)">
+                <i class="bi bi-x-square"></i>
+                <span>Delete</span>
+              </button>
+
+              <button class="save-button" type="button" (click)="onSaveClick($event)">
+                <i class="bi bi-floppy-fill"></i>
+                <span>Save</span>
+              </button>
+
+              <button class="publish-button" *ngIf="user.roles?.includes('admin') && review.public == false"
+                      type="button" [disabled]="!review.uuid" (click)="onPublishClick($event)">
+                <i class="bi bi-check2-circle"></i>
+                <span>Publish</span>
+              </button>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </ng-container> -->
+
+  <!-- Sign In Template -->
+  <ng-template #signInFirst>
+    <div class="sign-in-container">
+      <div class="sign-in-card">
+        <h2>Submit</h2>
+        <div class="card-content">
+          <p>
+            The DOME registry affords the opportunity for users to contribute annotations. These submitted
+            annotations will be subject to a rigorous manual review process,
+            culminating in eventual publication. Published annotations will be accessible to the public but
+            rendered immutable.
+            Conversely, unpublished annotations will remain subject to user-driven viewing, editing, and deletion.
+          </p>
+          <p>
+            It is essential to underscore that access to this functionality is restricted solely to authorized
+            users.
+            Hence, we kindly request that you authenticate through ORCID if you intend to engage with this service
+            in an academic capacity
+          </p>
+          <div class="sign-in-action">
+            <a class="sign-in-button" [href]="login">
+              <i class="bi bi-person-circle"></i>
+              <span>Sign in</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Citation Modal -->
+  <div class="cite-modal-overlay" *ngIf="isCiteModalOpen" (click)="onModalOverlayClick($event)">
+    <div class="cite-modal" role="dialog" aria-labelledby="cite-modal-title" aria-modal="true">
+      <div class="modal-header">
+        <h3 id="cite-modal-title">Citation Information</h3>
+        <button class="close-button" type="button" (click)="closeCiteModal()" aria-label="Close">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="modal-content">
+        <div class="citation-section">
+          <div class="section-header">
+            <h4>Direct Link</h4>
+            <button class="copy-button" type="button" (click)="copyToClipboard(directLinkInput)">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+          <div class="input-group">
+            <input #directLinkInput type="text" [value]="currentPageUrl" readonly class="citation-input" aria-label="Direct link URL">
+          </div>
+        </div>
+
+        <div class="citation-section">
+          <div class="section-header">
+            <h4>BibTeX</h4>
+            <button class="copy-button" type="button" (click)="copyToClipboard(bibtexTextarea)">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+          <div class="textarea-group">
+            <textarea #bibtexTextarea readonly class="citation-textarea" aria-label="BibTeX citation">{{bibTexCitation}}</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

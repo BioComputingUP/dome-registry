@@ -241,4 +241,32 @@ export class ReviewService {
     );
   }
 
+  // ReviewNew methods for new review schema
+  // Search for single review against database
+  public getReviewNew(shortid: string): Observable<core.ReviewNew> {
+    // Make request against database
+    return this.httpClient.get<core.ReviewNew>(this.url + '-new/' + shortid);
+  }
+
+  public upsertReviewNew(review: Partial<core.ReviewNew>): Observable<core.ReviewNew> {
+    if (!review.shortid) {
+      throw new Error('shortid is required for updating the review');
+    }
+    // Define endpoint URL according to review identifier
+    let url = this.url + '-new/' + (review.shortid || '');
+    // Define method according to review identifier
+    return this.httpClient.patch<core.ReviewNew>(url, review)
+  }
+
+  // Delete a review from the database
+  public deleteReviewNew(uuid: string): Observable<void> {
+    // Issue delete request to server
+    return this.httpClient.delete<void>(this.url + '-new/' + uuid);
+  }
+
+  public GetReviewNewMarkup(shortid: string) {
+    const url = this.urlMarkup + '-new/' + shortid;
+    return this.httpClient.get(url, {})
+  }
+
 }

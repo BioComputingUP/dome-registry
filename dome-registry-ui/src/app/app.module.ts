@@ -16,9 +16,14 @@ import { SmallFooterComponent } from './small-footer/small-footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ReviewService } from './review.service';
 import { StatService } from './stat.service';
+import { AuthInterceptor } from './auth.interceptor';
+import { AuthService } from './auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PageEditNewComponent } from './page-edit-new/page-edit-new.component';
 import { NewStateModule } from './new-state/new-state.module';
 import { SharedModule } from './shared/shared.module';
 import { CookieService } from 'ngx-cookie-service';
+import { ReviewNewService } from './review-new.service';
 
 // Configure Plotly to use the locally bundled Plotly.js distribution
 (PlotlyModule as any).plotlyjs = PlotlyJS;
@@ -35,14 +40,10 @@ import { CookieService } from 'ngx-cookie-service';
     HttpClientModule,
     NgbModule,
     NgbPaginationModule,
+    PageEditNewComponent,
     BrowserAnimationsModule, // Required for animations
     AppRoutingModule,
-    NgxMatomoTrackerModule.forRoot({
-      trackerUrl: 'https://matomo.biocomputingup.it/',
-      siteId: '23',
-      scriptUrl: 'https://matomo.biocomputingup.it/matomo.js'
-    }),
-    NgxMatomoRouterModule,
+
     ToastrModule.forRoot({// Toastr configuration
       timeOut: 3000,        // Default auto-close time (3 sec)
       positionClass: 'toast-top-right',
@@ -58,6 +59,7 @@ import { CookieService } from 'ngx-cookie-service';
   providers: [
     // Add authentication interceptor (set cookie)
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    ReviewNewService,
     ReviewService,
     StatService,
     CookieService,
